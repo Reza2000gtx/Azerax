@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- <link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.png" type="image/png"> -->
+	<title>Azerax</title>
+
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/bootstrap.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/linericon/style.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/font-awesome.min.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/owl-carousel/owl.carousel.min.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/lightbox/simpleLightbox.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/nice-select/<?php echo base_url();?>assets/site/css/nice-select.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/animate-<?php echo base_url();?>assets/site/css/animate.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/jquery-ui/jquery-ui.css">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/style2.css?time=<?php echo time(); ?>">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/responsive.css?time=<?php echo time(); ?>">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/custom.css?time=<?php echo time(); ?>">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+
+
+	<style type="text/css">
+
+	.img_top {
+		width: 35px;
+		height: 35px;
+		border: 1px solid #000;
+		border-radius: 50%;
+		margin-right: 5px;
+}
+
+	</style>
+
+	<script type="text/javascript"> 
+		var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.trust-provider.com/" : "http://www.trustlogo.com/");
+		document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
+
+	</script>
+</head>
+<body>
+
+	<header class="header_area">
+		<div class="main_menu">
+			<nav class="navbar navbar-expand-lg `navbar`-light">
+				<div class="container">
+					<a class="navbar-brand logo_h" href="<?php echo base_url();?>"><img src="<?php echo base_url();?>assets/site/img/logo.png" alt=""></a>
+					
+
+					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+						<ul class="nav navbar-nav menu_nav ml-auto">
+							<li class="nav-item active"><a class="nav-link" href="<?php echo base_url();?>">Home</a></li>
+							<li class="nav-item"><a class="nav-link" onclick="return alert('comming soon');" href="#">Services</a></li>
+							<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>search-listing">Devices</a></li>
+							<li class="nav-item <?php if($page=='contact-us'){echo 'active';}?>"><a class="nav-link" href="<?php echo base_url();?>contact-us">Contact Us</a></li>
+							
+							
+					<?php if(!$this->session->userdata('user_id')) { ?>
+						
+							<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>login">Login</a></li>
+							<li class="nav-item "><a class="btn main_btn signup_btn spance_nav" href="<?php echo base_url();?>signup">Sign Up</a></li>
+						
+					<?php } else{
+  						$user = $this->common_model->GetSingleData('users',array('user_id' =>$this->session->userdata('user_id')));
+					?>
+
+	<li class="nav-item submenu dropdown user_login">
+		<a href="conactus.php" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+			<img class="img_top" <?php 
+							if(!empty($user['profile'])){ ?>  src="<?php echo base_url();?>assets/profile/<?php echo $user['profile'];?>" <?php }
+							else { ?> src="<?php echo base_url();?>assets/profile/user.png"   <?php } ?> >
+								
+						<?php echo $user['fname'];?></a>
+							 <ul class="dropdown-menu">
+								<li class="nav-item main_menu_item bolde_onl">Profile</li>
+							 	
+								<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>profile">My Profile</a></li>
+
+								<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>change-password">Change Password</a></li>
+
+								<li class="nav-item"><a onclick="return (confirm('Are you sure?'))" class="nav-link" href="<?php echo base_url();?>logout">Logout</a></li>
+
+								<li class="nav-item main_menu_item border_font">Items management</li>
+
+								<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>add-product">Add Item</a></li>
+
+								<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>my-product-listing">My List</a></li>
+
+								<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>my-fav-listing">Favorite List</a></li>
+
+								<li class="nav-item main_menu_item border_font">Financials </li>
+
+								<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>transaction">Transaction History</a></li>
+
+								<li class="nav-item"><a class="nav-link" onclick="return alert('comming soon');" href="#">Payment details</a></li>
+
+								<li class="nav-item"><a class="nav-link" onclick="return alert('comming soon');" href="#">Credit cards</a></li>
+								
+							   						   
+							</ul> 
+						</li>
+						<?php } ?>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</header>
+					
