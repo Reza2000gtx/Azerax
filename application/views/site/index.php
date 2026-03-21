@@ -1,5 +1,4 @@
-<?php include_once 'include/header2.php';?><style type="text/css">
-
+<?php include_once 'include/header2.php';?>
 <style type="text/css">
 	#showSearchDiv.show_div {
 	display: block;

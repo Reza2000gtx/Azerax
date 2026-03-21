@@ -559,7 +559,7 @@ span.select2.select2-container.select2-container--default {
     <div class="container-flex">
       <div class="tab" id="progressbar">
       <button class="tablinks t1 active" onclick="openCity(event, 'menu1')">Device</button>
-      <button class="tablinks t2" onclick="openCity(event, 'menu2')">I.P.O</nutton>
+      <button class="tablinks t2" onclick="openCity(event, 'menu2')">I.P.O</button>
       <button class="tablinks t3" onclick="openCity(event, 'menu3')">Vendor </button>
    </div>
   <div class="filler"></div>
