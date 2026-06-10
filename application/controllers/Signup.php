@@ -662,9 +662,9 @@ public function signup_success(){
 			 $New_Password = $this->input->post('New_Password');
 			 $Confirm_Password = $this->input->post('Confirm_Password');
  
-			  if($userdata['view_password'] == $user_pass){
- 
-				  $run = $this->common_model->UpdateData('users',array('user_id' =>$user_id),array('password' =>md5($New_Password),'view_password' =>$New_Password));
+			  if(password_verify($user_pass, $userdata['password'])){
+
+    $run = $this->common_model->UpdateData('users',array('user_id' =>$user_id),array('password' =>password_hash($New_Password, PASSWORD_BCRYPT),'view_password' =>''));
  
 				  if($run){
 
