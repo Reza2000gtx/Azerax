@@ -150,7 +150,8 @@ $route['reply-action'] = 'Signup/reply_action';
 //forgot
 $route['forgot-password'] = 'Login/forgot_password';
 $route['send-password-mail'] = 'Login/send_password_on_mail';
-
+$route['reset-password/(:any)'] = 'Login/reset_password';
+$route['reset-password-action'] = 'Login/reset_password_action';
 
 
 //pages
