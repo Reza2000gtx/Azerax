@@ -425,7 +425,7 @@ $sqlInsert1="insert into input_output set product_id = '".$product_id."' , input
 
 	$p_id=$this->input->post('cancel_id'); 
     
-    $qry = $this->db->query("SELECT * FROM product WHERE id = '".$p_id."'")->row_array();
+    $qry = $this->db->query("SELECT * FROM product WHERE id = ".$this->db->escape($p_id))->row_array();
 	
 // 	if($qry)
 // 	{
@@ -1613,7 +1613,7 @@ if($_REQUEST['process']){
         $i=1;
         foreach($str_process as $row){
 
-            $process_where.=" FIND_IN_SET('$row',input_output.process) ";
+            $process_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.process) ";
             if(count($str_process)>1 && $i<count($str_process)){
             $process_where.=' or';
             }
@@ -1635,7 +1635,7 @@ $process_stand_where='';
         $i=1;
         foreach($str_process_stand as $row){
 
-            $process_stand_where.=" FIND_IN_SET('$row',input_output.process_stand) ";
+            $process_stand_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.process_stand) ";
             if(count($str_process_stand)>1 && $i<count($str_process_stand)){
             $process_stand_where.=' or';
             }
@@ -1947,7 +1947,7 @@ public function processsuggestion()
 			    
 			 echo   $product_id = $row['id'];
 				$user_id = $row['user_id']; 
-                $query2 = $this->db->query("SELECT * FROM users WHERE user_id = '".$user_id."' and status = 1 ")->row_array();
+               $query2 = $this->db->query("SELECT * FROM users WHERE user_id = ".$this->db->escape($user_id)." and status = 1 ")->row_array();
                 if($query2){
                 $email = $query2["email"];
 				//$email = "deepshikha.webwiders@gmail.com";
@@ -1989,7 +1989,7 @@ public function processsuggestion()
 			        
 			    $product_id = $row['id'];
 				$user_id = $row['user_id'];
-                $query2 = $this->db->query("SELECT * FROM users WHERE user_id = '".$user_id."' and status = 1 ")->row_array();
+                $query2 = $this->db->query("SELECT * FROM users WHERE user_id = ".$this->db->escape($user_id)." and status = 1 ")->row_array();
                 $email = $query2["email"];
 
                 $subject="Your Product Expire in One Week";
