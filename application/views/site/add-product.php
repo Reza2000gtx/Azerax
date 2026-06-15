@@ -602,6 +602,20 @@ span.select2.select2-container.select2-container--default {
   <fieldset id="menu1" class="display_block" style="display: block;">
    <h3></h3>
     <div class="row">
+     <div class="col-sm-12">
+      <div class="form-group">
+        <label>Product Type</label>
+          <select required class="form-control" name="product_type" id="product_type">
+          <option value="Hardware" selected>Hardware</option>
+          <option value="Software">Software / Application</option>
+          <option value="Cloud Service">Cloud Service (SaaS)</option>
+          <option value="AI Tool">AI Tool</option>
+          <option value="Hybrid">Hybrid (Hardware + Software)</option>
+        </select>
+      </div>
+     </div>
+    </div>
+    <div class="row">
      <div class="col-sm-6">
       <div class="form-group">
         <label>Device Model</label>
@@ -612,8 +626,7 @@ span.select2.select2-container.select2-container--default {
         </div>
 
     <div class="form-group">
-     <label for="title">Mechanical dimensions
-      <span style="float:right;">( Software Only <input type="checkbox" value="1" name="latest_firmware_version" id="checkme" style="width:auto !important" /> )</span></label> 
+     <label for="title">Mechanical dimensions</label> 
        <input type="text"class="form-control sets_hidden1" name="mechanical_demension_mounting"  id="sendNewSms">
        <!-- <input type="text"  class="form-control" name="mechanical_demension_mounting" autocomplete="off" onkeyup="getprocess_mechanical_demension_mounting()" id="mechanical_demension_mounting"> -->
        <!-- <input type="hidden" name="mechanical_demension_mountingid" id="mechanical_demension_mountingid" /> 
