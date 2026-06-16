@@ -196,7 +196,7 @@ form label {
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://www.webwiders.com/WEB01/marketplace/assets/site/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url();?>assets/site/js/bootstrap.min.js"></script>
 <section class="banner_area add_product_img">
 	<div class="banner_inner d-flex align-items-center">
 		<div class="container">
@@ -381,6 +381,11 @@ $imageFirst = $this->common_model->GetSingleData('product_gallery_image',array('
 
 		
 		</div>
+	</div>
+<?php } ?>
+	</div>
+	</div>
+	</div>
 	</div>
 </section><input type="hidden" id="productRenewId" value="0">
 

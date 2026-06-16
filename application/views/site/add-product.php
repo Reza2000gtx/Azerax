@@ -1633,7 +1633,7 @@ $(document).on('click','#process_standSugguestion li',function(){
       beforeSend: function() {
         /*$(".submitBtn").html('<i class="fa fa-spinner"></i> Processing...');*/
         $(".submitBtn").prop('disabled', true);
-        $("#Error").getelementbyhide();
+        $("#Error").hide();
       }
     })
     .fail(function(response) {

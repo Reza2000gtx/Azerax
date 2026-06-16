@@ -158,6 +158,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
 
 
   //// Group 1: Device ////
+  $product_type = htmlentities($_REQUEST['product_type'], ENT_QUOTES);
   $device_model = htmlentities($_REQUEST['device_model'], ENT_QUOTES);
   $device_brand = htmlentities($_REQUEST['device_brand'], ENT_QUOTES);
   $latest_firmware_version = htmlentities($_REQUEST['latest_firmware_version'], ENT_QUOTES);
@@ -215,7 +216,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
       $device_manual_brochure = $filename;
 
 }
-        $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`order_code`,`date_released`,`dealer_web_cont`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`release_version`,`paymentIntent_id`)
+       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`order_code`,`date_released`,`dealer_web_cont`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`release_version`,`paymentIntent_id`,`product_type`)
       VALUES(
         '" .$cdate ."',
         '" .$session_id ."',
@@ -234,8 +235,9 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         '" .$cdate ."' ,
         '" .$dealer_contact ."' ,
         '" .$release_version ."',
-		'" .$paymentIntent_id."'
-      )";   
+		    '" .$paymentIntent_id."',
+		    '" .$product_type."'
+      )";
   
     $run = $this->db->query($sql);
 
