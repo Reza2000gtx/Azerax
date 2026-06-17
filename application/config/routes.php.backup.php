@@ -154,7 +154,6 @@ $route['reset-password/(:any)'] = 'Login/reset_password';
 $route['reset-password-action'] = 'Login/reset_password_action';
 
 
-
 //pages
 $route['about'] = 'Home/about';
 $route['services'] = 'Home/services';
@@ -163,8 +162,121 @@ $route['legal'] = 'Home/legal';
 $route['support'] = 'Home/support';
 
 
+
+
+
+
+$route['signup-phone-check'] = 'Teacher/phone_check';
+
+$route['signup-email-check'] = 'Teacher/email_check';
+
+$route['signup-password-check'] = 'Teacher/password_check';
+
+$route['signup-password-confirm-password-check'] = 'Teacher/password_confirm_password_check';
+
+
+
+$route['signup-student-action-payment'] = 'Student/signup_action_payment';
+$route['signup-student-success'] = 'Student/signup_success';
+$route['verify-email/(:any)'] = 'Signup/verify_email';
+$route['already-verified'] = 'Signup/signup_success';
+
+
+
+
+
+
+
+$route['send-sms-for-verification'] = 'Login/send_sms_for_verification';
+$route['verify-phonenumber'] = 'Login/verify_phone_number';
+
+//categories actions route
+$route['addMoreSpecilities'] = 'Teacher/addMoreSpecilities';
+$route['getSubCategory'] = 'Teacher/get_SubCategory';
+$route['get_SubSubCategory'] = 'Teacher/get_SubSubCategory';
+$route['searching'] = 'Teacher/searching';
+
+
+
+//category action teacher 
+$route['addMoreSpecilities1'] = 'TeacherSession/addMoreSpecilities';
+$route['getSubCategory1'] = 'TeacherSession/get_SubCategory';
+$route['get_SubSubCategory1'] = 'TeacherSession/get_SubSubCategory';
+
+
+//category action teacher 
+$route['addMoreSpecilities2'] = 'TeacherSession/addMoreSpecilities';
+$route['getSubCategory2'] = 'TeacherSession/get_SubCategory';
+$route['get_SubSubCategory2'] = 'TeacherSession/get_SubSubCategory';
+
+
+//student setting
+$route['student-setting'] = 'Student/profile_update';
+
+
+//teacher professional details
+$route['professional'] = 'Teacher/professional_update';
+$route['add-professional-subtitle-action'] = 'Teacher/add_professional_subtitle_action';
+$route['add-professional-experience-action'] = 'Teacher/add_professional_experience_action';
+$route['add-professional-education-action'] = 'Teacher/add_professional_education_action';
+$route['add-professional-certification-action'] = 'Teacher/add_professional_certification_action';
+
+$route['delete-subtitle/(:any)'] = 'Teacher/delete_subtitle';
+$route['delete-experience/(:any)'] = 'Teacher/delete_experience';
+$route['delete-education/(:any)'] = 'Teacher/delete_education';
+$route['delete-certification/(:any)'] = 'Teacher/delete_certification';
+
+$route['edit-professional-subtitle-action/(:any)'] = 'Teacher/edit_professional_subtitle_action';
+$route['edit-professional-experience-action/(:any)'] = 'Teacher/edit_professional_experience_action';
+$route['edit-professional-education-action/(:any)'] = 'Teacher/edit_professional_education_action';
+$route['edit-professional-certification-action/(:any)'] = 'Teacher/edit_professional_certification_action';
+
+//student professional details
+$route['student-professional'] = 'Student/professional_update';
+$route['student-add-professional-subtitle-action'] = 'Student/add_professional_subtitle_action';
+$route['student-add-professional-education-action'] = 'Student/add_professional_education_action';
+
+$route['student-delete-subtitle/(:any)'] = 'Student/delete_subtitle';
+$route['student-delete-education/(:any)'] = 'Student/delete_education';
+
+$route['student-edit-professional-subtitle-action'] = 'Student/edit_professional_subtitle_action';
+$route['student-edit-professional-education-action'] = 'Student/edit_professional_education_action';
+
 //plan route
 $route['plans'] = 'Plans/index';
+
+//sessions
+$route['My-sessions'] = 'TeacherSession/user_sessions';
+$route['create-sessions'] = 'TeacherSession/create_sessions';
+$route['delete-session/(:any)'] = 'TeacherSession/delete_sessions';
+$route['update-sessions'] = 'TeacherSession/update_sessions';
+
+//price calculation
+$route['calculateInternationPriceForSession'] = 'TeacherSession/calculateInternationPriceForSession';
+$route['calculateInternationPriceForSession1'] = 'TeacherRecordedSession/calculateInternationPriceForSession';
+
+
+//recorded session
+$route['create-recorded-sessions'] = 'TeacherRecordedSession/create_recorded_sessions';
+$route['my-videos'] = 'TeacherRecordedSession/recorded_sessions';
+$route['delete-recorded-session/(:any)'] = 'TeacherRecordedSession/delete_recorded_sessions';
+$route['update-recorded-sessions'] = 'TeacherRecordedSession/update_recorded_sessions';
+$route['file-recorded-sessions'] = 'TeacherRecordedSession/create_recorded_sessions_file';
+
+//session payment
+$route['payment-success'] = 'TeacherSession/stripe_payment';
+
+//$route['stripe-payment/(:any)/(:any)'] = 'TeacherSession/stripe_payment';
+$route['action-payment'] = 'TeacherSession/action_payment';
+
+
+$route['all-sessions'] = 'TeacherSession/all_sessions';
+$route['searchFilter/(:any)'] = 'TeacherSession/searchFilter';
+
+
+//student session
+$route['student-session'] = 'TeacherSession/student_session';
+$route['purchase-session'] = 'TeacherSession/purchase_session';
 
 
 //logout
@@ -185,6 +297,17 @@ $route['how-it-work'] = 'Home/how_it_work';
 
 $route['fav-device-remove/(:any)'] = 'Product/remove_from_fav_device';
 $route['fav-device/(:any)'] = 'Product/fav_device';
+
+//fav teacher
+$route['fav-teacher/(:any)'] = 'Teacher/fav_teacher';
+$route['fav-teacher-remove/(:any)'] = 'Teacher/remove_from_fav_teacher';
+$route['favorite-teacher'] = 'Teacher/favorite_teacher_list';
+
+
+$route['remove-fav-teacher/(:any)'] = 'Teacher/remove_fav_teacher';
+
+
+
 
 
 // Admin Route
@@ -244,6 +367,12 @@ $route['Admin/update_post_package'] = 'Admin/post/update_post_package';
 $route['Admin/posts/delete/(:any)'] = 'Admin/post/delete';
 
 $route['Admin/posts/delete/(:any)/(:any)'] = 'Admin/post/delete';
+$route['Admin/membership-list'] = 'Membership/admin_membershiplist';
+$route['Admin/add-membership'] = 'Membership/admin_add_membership';
+$route['Admin/edit-membership'] = 'Membership/admin_edit_membership';
+$route['Admin/delete-membership/(:any)'] = 'Membership/admin_delete_membership';
+$route['Admin/deactivate_membership/(:any)'] = 'Membership/deactivate_package';
+$route['Admin/activate_membership/(:any)'] = 'Membership/activate_package';
 
 $route['Admin/about_us'] = 'Admin/Footer_content';
 $route['Admin/terms-condition'] = 'Admin/Footer_content/terms_condition';
@@ -276,6 +405,10 @@ $route['Admin/update_settings_option'] = 'Admin/Home/update_settings_option';
 $route['Admin/update_mail_settings_option'] = 'Admin/Home/update_mail_settings_option';
 $route['Admin/default_messages'] = 'Admin/Home/default_messages';
 $route['Admin/update_default_message'] = 'Admin/Home/update_default_message';
+$route['Admin/site_meta'] = 'SiteMeta/index';
+$route['Admin/update_site_meta'] = 'SiteMeta/update_site_meta';
+$route['Admin/site_map'] = 'SiteMeta/site_map_option';
+$route['Admin/update_site_map'] = 'SiteMeta/update_site_map';
 
 $route['Admin/notifications/(:any)'] = 'Admin/Home/notifications';
 $route['Admin/admin_list'] = 'Admin/Home/admin_list';
@@ -296,3 +429,6 @@ $route['Admin/WithdrawalRequest'] = 'Admin/Users/WithdrawalRequest';
 $route['Admin/requestchangestatus/(:any)/(:any)'] = 'Admin/Users/requestchangestatus';
 $route['Admin/chat-box'] = 'Admin/Home/chat_box';
 $route['Admin/reply-action'] = 'Admin/Home/reply_action';
+
+
+
