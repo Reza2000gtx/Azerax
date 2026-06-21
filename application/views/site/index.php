@@ -102,7 +102,7 @@
              <div class="container">
               <form method="get" class="search-form" action="<?php echo base_url();?>search-listing">
 					   		<h1 id="search-form-title">search for devices, components, services</h1>
-                 	<div class="search-container">
+                 	<div class="search-container" style="max-width:150%;margin:0 auto;">
 										<div class="search-inner-container" style="z-index: 1;">
 											<div class="search-inner-container" style="z-index: 1;">
 												<div class="search-input-container" id="inps">

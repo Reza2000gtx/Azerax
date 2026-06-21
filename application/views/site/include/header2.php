@@ -20,7 +20,8 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/responsive.css?time=<?php echo time(); ?>">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/custom.css?time=<?php echo time(); ?>">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
-
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
 
 	<style type="text/css">
 
@@ -46,7 +47,21 @@
 		<div class="main_menu">
 			<nav class="navbar navbar-expand-lg `navbar`-light">
 				<div class="container">
-					<a class="navbar-brand logo_h" href="<?php echo base_url();?>"><img src="<?php echo base_url();?>assets/site/img/logo.png" alt=""></a>
+					<a class="navbar-brand logo_h" href="<?php echo base_url();?>" style="display:flex;align-items:center;gap:10px;">
+					<svg width="36" height="36" viewBox="0 0 56 56" fill="none">
+					<rect width="56" height="56" rx="13" fill="#FCA311"/>
+					<rect x="11" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
+					<rect x="22" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+					<rect x="33" y="9" width="11" height="11" rx="2.5" fill="#14213D"/>
+					<rect x="11" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+					<rect x="22" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.8"/>
+					<rect x="33" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+					<rect x="9" y="33" width="11" height="11" rx="2.5" fill="#14213D"/>
+					<rect x="22" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+					<rect x="33" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
+				</svg>
+	<span style="font-family:'Outfit',sans-serif;font-size:24px;font-weight:600;letter-spacing:-0.5px;color:#14213D;">azera<span style="color:#FCA311;">X</span></span>
+</a>
 					
 
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
