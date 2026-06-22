@@ -136,11 +136,16 @@
     z-index: 2 !important;
 }
 
+.home_banner_area {
+    padding-top: 80px !important;
+}
+
+
  </style>
 
  
 
-      <section class="home_banner_area" style="background:#14213D;padding:90px 20px 70px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <section class="home_banner_area" style="background:#14213D;min-height:100vh;padding:90px 20px 70px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
 				<div class="container" style="text-align:center;">
 
 					<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px;">
