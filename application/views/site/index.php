@@ -14,6 +14,8 @@
 	width: 100%;
   
 }
+
+
 .autocomplete-items {
 	position: absolute;
 	z-index: 99;
@@ -22,10 +24,14 @@
 	max-height: 250px;
 	overflow-y: auto;
 	overflow-x: hidden;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	margin-top: 0;
 }
+  
+
 .autocomplete-items > div {
 	width: 100%;
 	color: #666;
@@ -64,6 +70,34 @@
    width: 100%;
 
 }
+
+#inps {
+    border-radius: 32px !important;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.25) !important;
+    position: relative !important;
+    height: 64px !important;
+}
+#inps.open {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+#inps .rui-input {
+    height: 50px !important;
+    font-size: 16px !important;
+    border-radius: 32px !important;
+    padding: 18px 52px !important;
+    border: none !important;
+    outline: none !important;
+    width: 100% !important;
+    background: #fff !important;
+}
+#inps.open .rui-input {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+
+
 .space {
   position:relative;
   min-height: 230px;
@@ -92,50 +126,70 @@
   
  }
 
+#inps .lnr-magnifier {
+    position: absolute !important;
+    top: 40% !important;
+    left: 20px !important;
+    transform: translateY(-50%) !important;
+    font-size: 20px !important;
+    color: #999 !important;
+    z-index: 2 !important;
+}
+
  </style>
 
+ 
 
-      <section class="home_banner_area">
-       	<div class="banner_inner d-flex align-items-center">
-					<!--<div class="container">-->
-						<div class="search-form-container">
-             <div class="container">
-              <form method="get" class="search-form" action="<?php echo base_url();?>search-listing">
-					   		<h1 id="search-form-title">search for devices, components, services</h1>
-                 	<div class="search-container" style="max-width:150%;margin:0 auto;">
-										<div class="search-inner-container" style="z-index: 1;">
-											<div class="search-inner-container" style="z-index: 1;">
-												<div class="search-input-container" id="inps">
-												 <i class="lnr lnr-magnifier"></i>
-                        <div class="autocomplete">
-  											<input data-toggle="#hidden1" class="rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_name" name="keyword" />												
-                        </div>
+      <section class="home_banner_area" style="background:#14213D;padding:90px 20px 70px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+				<div class="container" style="text-align:center;">
 
-                        <!--<div class="clear-text-container">
-                        <a class="rui-icon rui-icon-cross" title="Clear text"></a>
-                        </div>-->
-                        <button type="submit" hidden id="submit" class="btn main_btn signup_btn"><!-- rui-search-button -->
-                        <span class="rui-visually">Search</span>
-                        </button>
-                        <div class="focus-border" style="display: none;"></div>
-                      </div>
-												
-                      <input type="hidden" name="productid" id="productid" />
-                      <div class="hidden" id="hidden1" style="display: none;" data-hidden="true">
-                      <ul style="color: white;" id="processSugguestion" ></ul>
-                    </div>  
-                  </div>
-                      <center>
-						        	<input type="button"  class="btn main_btn signup_btn spance_nav" value="Advanced Search" id="btnShowHide" style="margin-top:30px;"/>
-					          	</center>  
-    
-                      </div>
-								    </div>
-								  <div class="rui-clearfix"></div>
-								<!--</form>-->
+					<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px;">
+						<svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+							<rect width="56" height="56" rx="13" fill="#FCA311"/>
+							<rect x="11" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
+							<rect x="22" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+							<rect x="33" y="9" width="11" height="11" rx="2.5" fill="#14213D"/>
+							<rect x="11" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+							<rect x="22" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.8"/>
+							<rect x="33" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+							<rect x="9" y="33" width="11" height="11" rx="2.5" fill="#14213D"/>
+							<rect x="22" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
+							<rect x="33" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
+						</svg>
+						<span style="font-family:'Outfit',sans-serif;font-size:38px;font-weight:600;letter-spacing:-1px;color:#fff;">azera<span style="color:#FCA311;">X</span></span>
+					</div>
+
+					<form method="get" class="search-form" action="<?php echo base_url();?>search-listing">
+						<div class="search-container" style="max-width:780px;margin:0 auto;">
+							<div class="search-inner-container" style="z-index: 1;">
+								<div class="search-inner-container" style="z-index: 1;">
+									<div class="search-input-container" id="inps">
+									 <i class="lnr lnr-magnifier"></i>
+										<div class="autocomplete">
+											<input data-toggle="#hidden1" class="rui-input rui-location-box rui-auto-complete-input" autocomplete="off" placeholder="Search broadcast devices, platforms, AI tools…" id="device_name" name="keyword" style="width:100% !important;" />
+										</div>
+										<button type="submit" hidden id="submit" class="btn main_btn signup_btn">
+										<span class="rui-visually">Search</span>
+										</button>
+										<div class="focus-border" style="display: none;"></div>
+									</div>
+
+									<input type="hidden" name="productid" id="productid" />
+									<div class="hidden" id="hidden1" style="display: none;" data-hidden="true">
+										<ul style="color: white;" id="processSugguestion" ></ul>
+									</div>
+								</div>
 							</div>
 						</div>
+					</form>
+
+					<div style="margin-top:24px;">
+						<a href="<?php echo base_url();?>search-listing" style="color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;font-family:'Inter',sans-serif;">
+							Advanced Search — filter by I/O type, standards, connectors and more →
+						</a>
 					</div>
+
+				</div>
         </section>
 
         
