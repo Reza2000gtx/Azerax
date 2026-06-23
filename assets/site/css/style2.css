@@ -294,7 +294,7 @@ button:focus {
 }
 
 .header_area.navbar_fixed .main_menu {
-	/*position: fixed;*/
+	position: fixed;
 	width: 100%;
 	top: -70px;
 	left: 0;
@@ -311,7 +311,7 @@ button:focus {
 	-webkit-transition: transform 500ms ease, background 500ms ease;
 	-webkit-box-shadow: 0 3px 16px 0 rgba(0, 0, 0, .1);
 	box-shadow: 0 3px 16px 0 rgba(0, 0, 0, .1);
-	z-index: +1;
+	z-index: 9999;
 }
 
 .header_area.navbar_fixed .main_menu .navbar .nav .nav-item .nav-link {
