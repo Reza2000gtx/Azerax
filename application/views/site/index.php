@@ -192,7 +192,7 @@
 					</form>
 
 					<div style="margin-top:24px;">
-						<a href="<?php echo base_url();?>search-listing" style="color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;font-family:'Inter',sans-serif;">
+						<a href="javascript:void(0);" onclick="$('#divShowHide').toggle();" style="color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;font-family:'Inter',sans-serif;">
 							Advanced Search — filter by I/O type, standards, connectors and more →
 						</a>
 					</div>
