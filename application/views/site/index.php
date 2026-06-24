@@ -145,10 +145,9 @@
 
  
 
-      <section class="home_banner_area" style="background:#14213D;min-height:100vh;padding:90px 20px 70px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-				<div class="container" style="text-align:center;">
-
-					<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px;">
+      <section class="home_banner_area" style="background:#14213D;min-height:100vh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+				<div class="container" style="text-align:center;margin-top:-240px;">
+					<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;">
 						<svg width="48" height="48" viewBox="0 0 56 56" fill="none">
 							<rect width="56" height="56" rx="13" fill="#FCA311"/>
 							<rect x="11" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
@@ -161,8 +160,12 @@
 							<rect x="22" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
 							<rect x="33" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
 						</svg>
-						<span style="font-family:'Outfit',sans-serif;font-size:38px;font-weight:600;letter-spacing:-1px;color:#fff;">azera<span style="color:#FCA311;">X</span></span>
+						<span style="font-family:'Outfit',sans-serif;font-size:62px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1;display:flex;align-items:center;"><span style="color:#FCA311;">a</span>zera<span style="color:#FCA311;">X</span></span>
 					</div>
+
+				
+
+					<div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:3px;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:36px;">Find it.&nbsp;&nbsp;Spec it.&nbsp;&nbsp;Build it.</div>
 
 					<form method="get" class="search-form" action="<?php echo base_url();?>search-listing">
 						<div class="search-container" style="max-width:780px;margin:0 auto;">
