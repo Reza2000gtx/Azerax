@@ -140,6 +140,18 @@
     padding-top: 80px !important;
 }
 
+#advSearchPanel .loop_inp {
+    width: 100%;
+}
+#advSearchPanel .loop_inp .col-sm-4 {
+    width: 33.333% !important;
+    max-width: 33.333% !important;
+    flex: 0 0 33.333% !important;
+    margin-bottom: 10px;
+}
+#advSearchPanel .btn_usch {
+    margin-bottom: 8px;
+}
 
  </style>
 
@@ -191,8 +203,8 @@
 						</div>
 					</form>
 
-					<div style="margin-top:24px;">
-						<a href="javascript:void(0);" onclick="$('#divShowHide').toggle();" style="color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;font-family:'Inter',sans-serif;">
+					<div style="margin-top:24px;position:relative;">
+						<a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;font-family:'Inter',sans-serif;">
 							Advanced Search — filter by I/O type, standards, connectors and more →
 						</a>
 					</div>
@@ -201,9 +213,11 @@
 	     </section>
 
         
-         <div class="space"> 
+         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:80%;max-width:900px;max-height:80vh;overflow-y:auto;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+          <div style="margin:5px;border:2px solid #14213D;border-radius:12px;padding:24px;position:relative;width:calc(100% - 10px);">
+          <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:10px;right:16px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
 					<!--<nav class="search-channel-container">-->
-					   <div class="search_new_des2" id="divShowHide" style="display: none; ">
+					   <div class="search_new_des2" id="divShowHide" style="display:block;">
 							 <div class="anim">
 					  		 	<ul class="list">
                      <li class="">
@@ -615,9 +629,30 @@
 						</div>
 					</div>
 	 </section>-->
-
+</div>
    <div class="spacer"></div>
-              
+     
+   <script>
+// Advanced search toggle
+  $('#advSearchToggle').click(function(e){
+    e.stopPropagation();
+    $('#advSearchPanel').fadeToggle(300);
+});
+
+// Click outside to close
+  $(document).click(function(e){
+    if(!$(e.target).closest('#advSearchPanel').length && !$(e.target).closest('#advSearchToggle').length){
+        $('#advSearchPanel').fadeOut(300);
+    }
+});
+
+// Stop clicks inside panel from closing it
+$('#advSearchPanel').click(function(e){
+    e.stopPropagation();
+});
+</script>
+
+<?php include_once 'include/footer2.php' ; ?>
 
    <?php include_once 'include/footer2.php' ; ?> 
    <script type="text/javascript">
