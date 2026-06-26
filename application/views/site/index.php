@@ -140,18 +140,63 @@
     padding-top: 80px !important;
 }
 
-#advSearchPanel .loop_inp {
+#advSearchPanel ul.list {
+    list-style: none;
+    padding: 0;
     width: 100%;
+}
+#advSearchPanel li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 6px !important;
+    gap: 56px;
+}
+#advSearchPanel .btn_usch {
+    width: calc(20% - 3px);
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+#advSearchPanel .loop_inp {
+    width: 80%;
+    flex: 1;
+    margin-left: 50px;
 }
 #advSearchPanel .loop_inp .col-sm-4 {
     width: 33.333% !important;
     max-width: 33.333% !important;
     flex: 0 0 33.333% !important;
-    margin-bottom: 10px;
+    padding: 0 4px;
+    margin-bottom: 0 !important;
 }
-#advSearchPanel .btn_usch {
-    margin-bottom: 8px;
+#advSearchPanel .search_new_des2 {
+    width: 100% !important;
 }
+#advSearchPanel .select2-container--default .select2-selection--multiple {
+    min-height: 24px !important;
+    height: 34px !important;
+}
+#advSearchPanel .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 0 4px !important;
+    line-height: 22px !important;
+}
+
+#advSearchPanel .btn_serch_bo1 .btn {
+    background:#FCA311;
+    color:#14213D;
+    border:none;
+    padding:8px 28px;
+    border-radius:6px;
+    font-weight:600;
+    font-size:14px;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    transition:background 0.15s;
+}
+#advSearchPanel .btn_serch_bo1 .btn:hover {
+    background:#e8940a;
+}
+
 
  </style>
 
@@ -213,11 +258,13 @@
 	     </section>
 
         
-         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:80%;max-width:900px;max-height:80vh;overflow-y:auto;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:80%;max-width:900px;overflow:visible;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);background:#E5E5E5;">
           <div style="margin:5px;border:2px solid #14213D;border-radius:12px;padding:24px;position:relative;width:calc(100% - 10px);">
-          <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:10px;right:16px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
+          <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:1px;right:9px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
 					<!--<nav class="search-channel-container">-->
-					   <div class="search_new_des2" id="divShowHide" style="display:block;">
+					   <form method="get" action="<?php echo base_url();?>search-listing">
+              <form method="get" action="<?php echo base_url();?>search-listing">
+              <div class="search_new_des2" id="divShowHide" style="display:block;">
 							 <div class="anim">
 					  		 	<ul class="list">
                      <li class="">
@@ -609,7 +656,7 @@
 			  </div>
 			<div class="col-sm-4">
 				<div class="form-group btn_serch_bo1">
-					<button class="btn main_btn signup_btn">Search</button>
+					<button type="submit" class="btn signup_btn">Search</button>
 				</div>
 			</div>
 		</div>
@@ -664,26 +711,17 @@ $('#advSearchPanel').click(function(e){
 	</script>
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
-$(".catA").select2({placeholder: "Main Category",tags: true, tokenSeparators: [';'], separator: ";", multiple: true,});
-$(".catB").select2({tags: true,placeholder: "Sub-Category A", tokenSeparators: [','] });
-$(".catC").select2({tags: true,placeholder: "Sub-Category B", tokenSeparators: [',', ''] });
-</script>
-
-<script type="text/javascript" class="js-code-example-tokenizer"> 
-$(".inputF").select2({placeholder: "Input Type",tags: true, tokenSeparators: [';'], separator: ";", multiple: true,});
-$(".instand").select2({tags: true,placeholder: "Input Standard", tokenSeparators: [','] });
-$(".inprocessConnection").select2({ tags: true,placeholder: "Input Connection Type", tokenSeparators: [',', ''] });
-</script>
-
-<script type="text/javascript" class="js-code-example-tokenizer"> 
-$(".outputF").select2({tags: true,placeholder: "Output Type", tokenSeparators: [',', ' '] });
-$(".otstand").select2({tags: true, placeholder: "Output Standard",tokenSeparators: [',', ' '] });
-$(".otprocessConnection").select2({ tags: true, placeholder: "Output Connection Type",tokenSeparators: [',', ' '] });
-</script>
-
-<script type="text/javascript" class="js-code-example-tokenizer"> 
-$(".processsuggestion").select2({tags: true,placeholder: "Process Type", tokenSeparators: [',', ' '] });
-$(".processsuggestionStand").select2({tags: true,placeholder: "Process Standard", tokenSeparators: [',', ' '] });
+$(".catA").select2({placeholder: "Main Category", tags: true, tokenSeparators: [';'], separator: ";", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".catB").select2({tags: true, placeholder: "Sub-Category A", tokenSeparators: [','], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".catC").select2({tags: true, placeholder: "Sub-Category B", tokenSeparators: [',', ''], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".inputF").select2({placeholder: "Input Type", tags: true, tokenSeparators: [';'], separator: ";", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".instand").select2({tags: true, placeholder: "Input Standard", tokenSeparators: [','], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".inprocessConnection").select2({tags: true, placeholder: "Input Connection Type", tokenSeparators: [',', ''], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".outputF").select2({tags: true, placeholder: "Output Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".otstand").select2({tags: true, placeholder: "Output Standard", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".otprocessConnection").select2({tags: true, placeholder: "Output Connection Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".processsuggestion").select2({tags: true, placeholder: "Process Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".processsuggestionStand").select2({tags: true, placeholder: "Process Standard", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
 </script> 
 
 <script type="text/javascript">
