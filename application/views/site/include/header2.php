@@ -43,9 +43,9 @@
 </head>
 <body>
 
-	<header class="header_area">
+	<header class="header_area" style="position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(13,25,41,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);">
 		<div class="main_menu">
-			<nav class="navbar navbar-expand-lg `navbar`-light">
+			<nav class="navbar navbar-expand-lg navbar-dark">
 				<div class="container">
 					<a class="navbar-brand logo_h" href="<?php echo base_url();?>" style="display:flex;align-items:center;gap:10px;">
 					<svg width="36" height="36" viewBox="0 0 56 56" fill="none">

@@ -17,20 +17,16 @@
 
 
 .autocomplete-items {
-	position: absolute;
-	z-index: 99;
-	background: #e5e5e5;
-	width: 100%;
-	max-height: 250px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	border-bottom-left-radius: 8px;
-	border-bottom-right-radius: 8px;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-	margin-top: 0;
+    position: absolute;
+    z-index: 99;
+    background: #e5e5e5;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0 0 32px 32px;
+    margin-top: 0;
 }
-  
 
 .autocomplete-items > div {
 	width: 100%;
@@ -77,10 +73,11 @@
     position: relative !important;
     height: 64px !important;
 }
+
 #inps.open {
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
+    border-radius: 32px 32px 0 0 !important;
 }
+
 #inps .rui-input {
     height: 50px !important;
     font-size: 16px !important;
@@ -99,14 +96,14 @@
 
 
 .space {
-  position:relative;
+  position: relative;
   min-height: 230px;
   background-color: #fff;
   width: 100%;
   display: grid;
   place-items: center;
- 
- }
+  overflow: visible;
+}
 
  @keyframes SlideIn {
    0% {left: -1000px;
@@ -173,8 +170,8 @@
     width: 100% !important;
 }
 #advSearchPanel .select2-container--default .select2-selection--multiple {
-    min-height: 24px !important;
-    height: 34px !important;
+    min-height: 34px !important;
+    height: auto !important;
 }
 #advSearchPanel .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     padding: 0 4px !important;
@@ -197,28 +194,49 @@
     background:#e8940a;
 }
 
+/* Ensure select2 dropdowns always appear above other elements */
+.select2-dropdown {
+  z-index: 9999 !important;
+}
 
+
+/* ── QUICK FILTER CHIPS ── */
+#quickChips {
+    margin-top: 14px;
+}
+.qchip {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.65);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+}
+.qchip:hover {
+    background: rgba(252,163,17,0.15);
+    border-color: #FCA311;
+    color: #FCA311;
+}
+.qchip.active {
+    background: rgba(252,163,17,0.2);
+    border-color: #FCA311;
+    color: #FCA311;
+}
  </style>
 
  
 
       <section class="home_banner_area" style="background:#14213D;min-height:100vh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
 				<div class="container" style="text-align:center;margin-top:-240px;">
-					<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;">
-						<svg width="48" height="48" viewBox="0 0 56 56" fill="none">
-							<rect width="56" height="56" rx="13" fill="#FCA311"/>
-							<rect x="11" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
-							<rect x="22" y="11" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
-							<rect x="33" y="9" width="11" height="11" rx="2.5" fill="#14213D"/>
-							<rect x="11" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
-							<rect x="22" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.8"/>
-							<rect x="33" y="22" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
-							<rect x="9" y="33" width="11" height="11" rx="2.5" fill="#14213D"/>
-							<rect x="22" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.55"/>
-							<rect x="33" y="33" width="9" height="9" rx="2" fill="#14213D" opacity="0.3"/>
-						</svg>
-						<span style="font-family:'Outfit',sans-serif;font-size:62px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1;display:flex;align-items:center;"><span style="color:#FCA311;">a</span>zera<span style="color:#FCA311;">X</span></span>
-					</div>
+			<div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+    <span style="font-family:'Outfit',sans-serif;font-size:62px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1;display:flex;align-items:center;"><span style="color:#FCA311;">a</span>zera<span style="color:#FCA311;">X</span></span>
+</div>
 
 				
 
@@ -249,16 +267,30 @@
 					</form>
 
 					<div style="margin-top:24px;position:relative;">
-						<a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="color:rgba(255,255,255,0.45);font-size:13px;text-decoration:none;font-family:'Inter',sans-serif;">
-							Advanced Search — filter by I/O type, standards, connectors and more →
+						<a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="display:inline-block;margin-top:16px;padding:8px 22px;border:1.5px solid #FCA311;border-radius:20px;color:#FCA311;font-size:13px;font-weight:500;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.3px;">
+					
+					Advanced Search — filter by I/O type, standards, connectors and more →
 						</a>
+
+                        <!-- QUICK FILTER CHIPS -->
+                        <div id="quickChips" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px;max-width:700px;margin-left:auto;margin-right:auto;">
+                            <span class="qchip" data-type="product_type" data-value="Hardware">Hardware</span>
+                            <span class="qchip" data-type="product_type" data-value="Software">Software</span>
+                            <span class="qchip" data-type="product_type" data-value="Cloud Service">Cloud Service</span>
+                            <span class="qchip" data-type="product_type" data-value="AI Tool">AI Tool</span>
+                            <span class="qchip" data-type="input_stand" data-value="SMPTE ST 2110">SMPTE ST 2110</span>
+                            <span class="qchip" data-type="input_stand" data-value="AES67">AES67</span>
+                            <span class="qchip" data-type="input_stand" data-value="DVB">DVB</span>
+                            <span class="qchip" data-type="input_stand" data-value="OTT">OTT</span>
+                        </div>
+
 					</div>
 
 				</div>
 	     </section>
 
         
-         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;width:80%;max-width:900px;overflow:visible;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);background:#E5E5E5;">
+         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:560px;left:50%;transform:translateX(-50%);z-index:9999;width:80%;max-width:900px;overflow:visible;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);background:#E5E5E5;">
           <div style="margin:5px;border:2px solid #14213D;border-radius:12px;padding:24px;position:relative;width:calc(100% - 10px);">
           <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:1px;right:9px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
 					<!--<nav class="search-channel-container">-->
@@ -699,15 +731,56 @@ $('#advSearchPanel').click(function(e){
 });
 </script>
 
+
+<script>
+window.addEventListener('load', function(){
+    $(document).off('click').on('click', function(e){
+        var panel = document.getElementById('advSearchPanel');
+        var openBtn = document.getElementById('advSearchToggle');
+        if(panel && panel.style.display !== 'none'){
+            if(!panel.contains(e.target) && !openBtn.contains(e.target)){
+                panel.style.setProperty('display', 'none', 'important');
+                document.getElementById('divShowHide').style.setProperty('display', 'none', 'important');
+            }
+        }
+    });
+});
+</script>
+
 <?php include_once 'include/footer2.php' ; ?>
 
-   <?php include_once 'include/footer2.php' ; ?> 
    <script type="text/javascript">
 		$(document).ready(function(){
-         $("#btnShowHide").click(function(){
-		    	$("#divShowHide").toggle();
-        });
-			});
+    var panel = document.getElementById('advSearchPanel');
+
+    function lockScroll(){
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+    }
+    function unlockScroll(){
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+    }
+
+    // Button class is advSearchToggle (not btnShowHide)
+    $(document).on('click', '.advSearchToggle', function(){
+        panel.style.display = 'block';
+        lockScroll();
+    });
+
+    // Close button
+    $(document).on('click', '[onclick*="advSearchPanel"]', function(){
+        unlockScroll();
+    });
+
+    // Escape key closes and unlocks
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+            panel.style.display = 'none';
+            unlockScroll();
+        }
+    });
+});
 	</script>
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
