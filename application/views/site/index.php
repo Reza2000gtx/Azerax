@@ -1,4 +1,4 @@
-<?php include_once 'include/header2.php';?>
+<?php include_once 'include/header2.php';?><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style type="text/css">
 	#showSearchDiv.show_div {
 	display: block;
@@ -18,7 +18,7 @@
 
 .autocomplete-items {
     position: absolute;
-    z-index: 99;
+    z-index: 10000;
     background: #e5e5e5;
     width: 100%;
     max-height: 250px;
@@ -228,11 +228,101 @@
     border-color: #FCA311;
     color: #FCA311;
 }
+
+/* ── ADVANCED SEARCH GLOW ── */
+.adv-search-wrap {
+    position: relative;
+    display: inline-block;
+    margin-top: 6px;
+}
+.adv-search-wrap::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 120px;
+    background: radial-gradient(ellipse at center, rgba(252,163,17,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 0;
+    animation: advGlow 2.5s ease-in-out infinite;
+}
+#advSearchToggle {
+    position: relative;
+    z-index: 0;
+    border: none !important;
+}
+@keyframes advGlow {
+    0%   { opacity: 0.5; transform: translate(-50%, -50%) scale(1);    }
+    50%  { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
+    100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1);    }
+}
+
+/* ── FEATURE CARDS ── */
+.az-fcard {
+    background: #fff;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s, transform 0.2s;
+}
+.az-fcard:hover {
+    border-color: #FCA311;
+    transform: translateY(-2px);
+}
+.az-fcard-icon {
+    width: 48px;
+    height: 48px;
+    background: #FFF3D6;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    color: #FCA311;
+    font-size: 24px;
+}
+.az-fcard h3 {
+    color: #14213D;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+}
+.az-fcard p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.65;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+.az-fcard-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+.az-ftag {
+    background: #F0F0F0;
+    color: #555;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(6px); }
+}
  </style>
 
  
 
-      <section class="home_banner_area" style="background:#14213D;min-height:100vh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <section class="home_banner_area" style="background:#14213D;position:relative;min-height:100vh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
 				<div class="container" style="text-align:center;margin-top:-240px;">
 			<div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
     <span style="font-family:'Outfit',sans-serif;font-size:62px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1;display:flex;align-items:center;"><span style="color:#FCA311;">a</span>zera<span style="color:#FCA311;">X</span></span>
@@ -267,10 +357,10 @@
 					</form>
 
 					<div style="margin-top:24px;position:relative;">
-						<a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="display:inline-block;margin-top:16px;padding:8px 22px;border:1.5px solid #FCA311;border-radius:20px;color:#FCA311;font-size:13px;font-weight:500;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.3px;">
+						<div class="adv-search-wrap"><a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="display:inline-block;margin-top:2px;padding:8px 22px;border:1.5px solid #FCA311;border-radius:20px;color:#FCA311;font-size:13px;font-weight:500;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.3px;">
 					
 					Advanced Search — filter by I/O type, standards, connectors and more →
-						</a>
+						</a></div>
 
                         <!-- QUICK FILTER CHIPS -->
                         <div id="quickChips" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px;max-width:700px;margin-left:auto;margin-right:auto;">
@@ -287,6 +377,10 @@
 					</div>
 
 				</div>
+	     <div style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.25);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:'Inter',sans-serif;">
+            <span>Scroll to explore</span>
+            <i class="ti ti-chevron-down" style="font-size:18px;animation:bounce 2s infinite;"></i>
+        </div>
 	     </section>
 
         
@@ -709,27 +803,9 @@
 					</div>
 	 </section>-->
 </div>
-   <div class="spacer"></div>
+  
      
-   <script>
-// Advanced search toggle
-  $('#advSearchToggle').click(function(e){
-    e.stopPropagation();
-    $('#advSearchPanel').fadeToggle(300);
-});
-
-// Click outside to close
-  $(document).click(function(e){
-    if(!$(e.target).closest('#advSearchPanel').length && !$(e.target).closest('#advSearchToggle').length){
-        $('#advSearchPanel').fadeOut(300);
-    }
-});
-
-// Stop clicks inside panel from closing it
-$('#advSearchPanel').click(function(e){
-    e.stopPropagation();
-});
-</script>
+  
 
 
 <script>
@@ -746,6 +822,55 @@ window.addEventListener('load', function(){
     });
 });
 </script>
+
+<!-- ══════════════════════════════════════════════════════════
+     HOMEPAGE SECTIONS
+     ══════════════════════════════════════════════════════════ -->
+
+<!-- SECTION 2 — WHAT YOU CAN SEARCH -->
+<section style="padding:72px 60px;background:#F5F5F5;" id="what">
+  <div style="text-align:center;">
+    <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">What you can search</div>
+    <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
+    <h2 style="color:#14213D;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Everything broadcast. In one place.</h2>
+    <p style="color:#666;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">Hardware, software, cloud platforms, and AI tools — all searchable by real technical criteria, maintained directly by the vendors themselves.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;">
+    <div class="az-fcard">
+      <div class="az-fcard-icon"><i class="ti ti-cpu"></i></div>
+      <h3>Hardware devices</h3>
+      <p>Routers, encoders, frame synchronisers, multiviewers, audio processors and more — searchable by I/O type, connector, rack units and broadcast standards.</p>
+      <div class="az-fcard-tags">
+        <span class="az-ftag">SDI</span>
+        <span class="az-ftag">ST 2110</span>
+        <span class="az-ftag">AES67</span>
+        <span class="az-ftag">BNC / SFP</span>
+      </div>
+    </div>
+    <div class="az-fcard">
+      <div class="az-fcard-icon"><i class="ti ti-cloud"></i></div>
+      <h3>Software &amp; cloud platforms</h3>
+      <p>SaaS tools, virtualised systems, and cloud-native broadcast platforms — searchable by deployment model, API type, and integration protocols.</p>
+      <div class="az-fcard-tags">
+        <span class="az-ftag">SaaS</span>
+        <span class="az-ftag">On-premise</span>
+        <span class="az-ftag">REST API</span>
+        <span class="az-ftag">NDI / SRT</span>
+      </div>
+    </div>
+    <div class="az-fcard">
+      <div class="az-fcard-icon"><i class="ti ti-brain"></i></div>
+      <h3>AI tools</h3>
+      <p>Captioning, transcription, upscaling, content moderation, automated QC and more — searchable by capability, processing mode and language support.</p>
+      <div class="az-fcard-tags">
+        <span class="az-ftag">Real-time</span>
+        <span class="az-ftag">Batch</span>
+        <span class="az-ftag">Captioning</span>
+        <span class="az-ftag">QC</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <?php include_once 'include/footer2.php' ; ?>
 
@@ -779,9 +904,20 @@ window.addEventListener('load', function(){
             panel.style.display = 'none';
             unlockScroll();
         }
-    });
+  });
+
+    // Pulse glow on Advanced Search button
+    var advBtn = document.getElementById('advSearchToggle');
+    var glowUp = true;
+    var glowVal = 0;
+    setInterval(function(){
+        if(glowUp){ glowVal += 2; if(glowVal >= 18) glowUp = false; }
+        else { glowVal -= 2; if(glowVal <= 0) glowUp = true; }
+        advBtn.style.boxShadow = '0 0 ' + glowVal + 'px rgba(252,163,17,' + (glowVal/36) + ')';
+    }, 50);
+
 });
-	</script>
+</script>
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
 $(".catA").select2({placeholder: "Main Category", tags: true, tokenSeparators: [';'], separator: ";", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
@@ -873,6 +1009,45 @@ $(document).on('click','#processSugguestion li',function(){
         }
     }, false);
 })();
+
+/* ── ADVANCED SEARCH BUTTON GLOW ── */
+.adv-search-wrap {
+    position: relative;
+    display: inline-block;
+    margin-top: 6px;
+}
+.adv-search-wrap::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 340px;
+    height: 80px;
+    background: radial-gradient(ellipse at center, rgba(252,163,17,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+    animation: advGlow 2.5s ease-in-out infinite;
+}
+@keyframes advGlow {
+    0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1);   }
+    50%  { opacity: 1;   transform: translate(-50%, -50%) scale(1.08);}
+    100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1);   }
+}
+.adv-search-wrap {
+    animation: btnPulse 2.5s ease-in-out infinite;
+}
+@keyframes btnPulse {
+    0%   { filter: drop-shadow(0 0 0px rgba(252,163,17,0));    }
+    50%  { filter: drop-shadow(0 0 12px rgba(252,163,17,0.7));}
+    100% { filter: drop-shadow(0 0 0px rgba(252,163,17,0));    }
+}
+@keyframes btnPulse {
+    0%   { box-shadow: 0 0 0px rgba(252,163,17,0);    }
+    50%  { box-shadow: 0 0 18px rgba(252,163,17,0.45);}
+    100% { box-shadow: 0 0 0px rgba(252,163,17,0);    }
+}
+
 </script>
 
 <?php 
