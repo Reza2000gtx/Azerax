@@ -79,7 +79,6 @@
 
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
-                        <li class="nav-item active"><a class="nav-link" href="<?php echo base_url();?>">Home</a></li>
                         <li class="nav-item"><a class="nav-link" onclick="return alert('coming soon');" href="#">Services</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>search-listing">Devices</a></li>
                         <li class="nav-item <?php if($page=='contact-us'){echo 'active';}?>"><a class="nav-link" href="<?php echo base_url();?>contact-us">Contact Us</a></li>

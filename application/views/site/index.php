@@ -318,6 +318,93 @@
     0%, 100% { transform: translateY(0); }
     50%       { transform: translateY(6px); }
 }
+
+/* ── HOW IT WORKS STEPS ── */
+.az-step {
+    text-align: center;
+    padding: 32px 24px;
+}
+.az-step-num {
+    width: 52px;
+    height: 52px;
+    background: #FCA311;
+    color: #14213D;
+    font-size: 22px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Inter', sans-serif;
+}
+.az-step h3 {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+}
+.az-step p {
+    color: #9AAFC4;
+    font-size: 14px;
+    line-height: 1.65;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── VENDOR PILLS ── */
+.az-vendor-pill {
+    background: #fff;
+    border: 1.5px solid #EBEBEB;
+    color: #14213D;
+    padding: 11px 26px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: border-color 0.15s, color 0.15s;
+    font-family: 'Inter', sans-serif;
+}
+.az-vendor-pill:hover {
+    border-color: #FCA311;
+    color: #FCA311;
+}
+
+/* ── CTA BUTTONS ── */
+.az-cta-btn-dark {
+    background: #14213D;
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.15s;
+    text-decoration: none;
+    display: inline-block;
+}
+.az-cta-btn-dark:hover {
+    background: #0D1929;
+    color: #fff;
+}
+.az-cta-btn-outline {
+    background: transparent;
+    color: #14213D;
+    border: 2px solid #14213D;
+    padding: 14px 36px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.15s;
+    text-decoration: none;
+    display: inline-block;
+}
+.az-cta-btn-outline:hover {
+    background: rgba(20,33,61,0.08);
+    color: #14213D;
+}
  </style>
 
  
@@ -869,6 +956,63 @@ window.addEventListener('load', function(){
         <span class="az-ftag">QC</span>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SECTION 3 — HOW IT WORKS -->
+<section style="padding:72px 60px;background:#14213D;" id="how">
+  <div style="text-align:center;">
+    <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">How it works</div>
+    <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
+    <h2 style="color:#fff;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">From search to specification in minutes</h2>
+    <p style="color:#9AAFC4;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">No more trawling vendor websites. No more outdated PDFs. Just accurate, searchable product intelligence — exactly when you need it.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:8px;">
+    <div class="az-step">
+      <div class="az-step-num">1</div>
+      <h3>Search by what matters</h3>
+      <p>Filter by standards, I/O type, product category, connector type and more — in any combination you need.</p>
+    </div>
+    <div class="az-step">
+      <div class="az-step-num">2</div>
+      <h3>Compare real products</h3>
+      <p>View accurate, vendor-maintained specs side by side. Multiple vendors, multiple prices, one screen.</p>
+    </div>
+    <div class="az-step">
+      <div class="az-step-num">3</div>
+      <h3>Build your system</h3>
+      <p>Save favourites, generate BOMs, and archive your design documents — all in one place.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 — TRUSTED VENDORS -->
+<section style="padding:72px 60px;background:#F5F5F5;text-align:center;" id="vendors">
+  <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">Founding vendors</div>
+  <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
+  <h2 style="color:#14213D;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Trusted by broadcast industry leaders</h2>
+  <p style="color:#666;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 8px;font-family:'Inter',sans-serif;">Leading manufacturers list their products directly on AzeraX — so architects always get specs straight from the source.</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:32px;">
+    <div class="az-vendor-pill">AJA Video</div>
+    <div class="az-vendor-pill">Tektronix</div>
+    <div class="az-vendor-pill">Blackmagic Design</div>
+    <div class="az-vendor-pill">Lawo</div>
+    <div class="az-vendor-pill">Ross Video</div>
+    <div class="az-vendor-pill">Matrox</div>
+    <div class="az-vendor-pill">Ateme</div>
+    <div class="az-vendor-pill">TVU Networks</div>
+  </div>
+  <p style="color:#999;font-size:13px;margin-top:28px;font-family:'Inter',sans-serif;">Are you a broadcast vendor? <a href="<?php echo base_url(); ?>signup" style="color:#FCA311;text-decoration:none;font-weight:500;">List your products free for one year &rarr;</a></p>
+</section>
+
+<!-- SECTION 5 — CTA AMBER -->
+<section style="padding:72px 60px;background:#FCA311;text-align:center;">
+  <div style="color:rgba(20,33,61,0.55);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">Get started</div>
+  <h2 style="color:#14213D;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Ready to find your next broadcast solution?</h2>
+  <p style="color:rgba(20,33,61,0.65);font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 32px;font-family:'Inter',sans-serif;">Search free. List your products and reach broadcast architects worldwide.</p>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="<?php echo base_url(); ?>search-listing" class="az-cta-btn-dark">Search devices now</a>
+    <a href="<?php echo base_url(); ?>signup" class="az-cta-btn-outline">List your product &rarr;</a>
   </div>
 </section>
 

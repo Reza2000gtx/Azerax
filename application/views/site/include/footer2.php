@@ -13,33 +13,10 @@
   }
   
   .footer-area {
-	background-color: #fff;
+	background-color: #0E1A2C;
 	position: relative;
 	bottom: 0;
 	width: 100%;
-  	
-  }
-
-  .rowall{
-	height:100px;
-	width: 100%;
-	background-color: #fff;
-	
-  }
-
-  .containerbig{
-	height: 45px;
-	background-color: #14213D;
-  }
-
-  .lower-footer{
-	padding: 8px;
-	margin: 0px;
-	height: 40px;
-	width: 100%;
-	background-color: #fff;
-
-
   }
 
   .row1{
@@ -48,6 +25,31 @@
 	min-height: 40px;  
   }
 
+
+.list_foo {
+    list-style: none;
+    padding: 0;
+    flex: 0 1 auto;
+    margin: 0;
+    width: auto !important;
+}
+.footer-area .list_foo {
+    width: auto !important;
+}
+.list_foo li {
+    display: inline-block;
+}
+.list_foo a {
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.15s;
+    white-space: nowrap;
+}
+.list_foo a:hover {
+    color: rgba(255,255,255,0.85);
+}
 </style>
 <?php 
 $product1 = $this->common_model->GetAllData('product',array('status'=>1));
@@ -69,67 +71,24 @@ $result=$active+$pending;
   </div>
 </div>-->
 	<footer class="footer-area">
-		<div class="containerbig">
-			<div class="container">
-				<div class="row1">
-												
-	<?php  $resultFooter = $this->common_model->GetAllData('ContentManagement');
- 			foreach ($resultFooter as $valueFoo) {
-	}
-?> 
-					<ul class="list list_foo">
-                       <li><a  href="<?php echo base_url();?>about" >About</a>
-                        <a href="<?php echo base_url();?>fee-charges" >Fees & Charges</a>
-                        <a href="<?php echo base_url();?>privacy" >Terms Of Use</a>
-                        <a href="<?php echo base_url();?>how_its_work" >How it works</a>
-                    	<a href="<?php echo base_url();?>support" >Help and Support</a>
-						<a href="<?php echo base_url();?>sitemap" >Sitemap</a>
-                    	<a href="<?php echo base_url();?>contact-us" >Contact Us</a></li>
-					</ul></li>
-                        
-                  </div>
-			</div>
-									<!-- <div class="col-lg-4 col-md-6 col-sm-6">
-										<div class="single-footer-widget">
-											<h6 class="footer_title">Newsletter</h6>
-<?php  
-$resultFooter = $this->common_model->GetAllData('ContentManagement');
-foreach ($resultFooter as $valueFoo) {
-echo $valueFoo["newLetter"];
-}
-?> 
-											<div id="mc_embed_signup">
-												<form target="_blank" action="" class="subscribe_form relative">
-													<div class="input-group d-flex flex-row">
-														<input name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '" type="email">
-														<button onclick="alert('comming soon');" class="btn sub-btn"><span class="lnr lnr-arrow-right"></span></button>
-													</div>
-													<div class="mt-10 info"></div>
-												</form>
-											</div>
-										</div>
-									</div> -->
-									
-									</div>
-								</div>
-								<!-- <style>
-    									#ssl a{
-        								  float:right;
-  										  }
-									</style>
-									<div id="ssl">
-									<script language="JavaScript" type="text/javascript">
-									TrustLogo("https://azerax.com/sectigo_trust_seal_sm_82x32.png", "CL1", "none");
-									</script>
-									<a href="https://ssl.comodo.com" id="comodoTL">Comodo SSL</a>
-									</div> 
-								<div class="row footer-bottom d-flex justify-content-between align-items-center"> -->
-								<div class="lower-footer">	
-									<p class="col-lg-12 footer-text text-center">
-										Copyright &copy; 2021 AzeraX, All Rights Reserved.</a>
-									</p>
-								</div>
-							</footer>
+		<div style="display:flex;align-items:center;justify-content:space-between;padding:24px 40px;flex-wrap:nowrap;gap:24px;max-width:100%;">
+			<a href="<?php echo base_url();?>" style="font-family:'Outfit',sans-serif;font-size:18px;font-weight:600;color:#fff;text-decoration:none;">azera<span style="color:#FCA311;">X</span></a>
+
+			<ul class="list list_foo" style="display:flex;gap:14px;flex-wrap:nowrap;margin:0;flex:0 1 auto;min-width:0;">
+				<li><a href="<?php echo base_url();?>about">About</a></li>
+				<li><a href="<?php echo base_url();?>how_its_work">How it works</a></li>
+				<li><a href="<?php echo base_url();?>signup">For vendors</a></li>
+				<li><a href="<?php echo base_url();?>fee-charges">Fees & charges</a></li>
+				<li><a href="<?php echo base_url();?>privacy">Terms of use</a></li>
+				<li><a href="<?php echo base_url();?>privacy">Privacy</a></li>
+				<li><a href="<?php echo base_url();?>contact-us">Contact</a></li>
+			</ul>
+
+			<p style="margin:0;color:rgba(255,255,255,0.3);font-size:12px;white-space:nowrap;">
+				&copy; <?php echo date('Y'); ?> AzeraX. All rights reserved.
+			</p>
+		</div>
+	</footer>
 
 
 
