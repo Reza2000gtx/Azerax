@@ -964,7 +964,7 @@ window.addEventListener('load', function(){
   <div style="text-align:center;">
     <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">How it works</div>
     <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
-    <h2 style="color:#fff;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">From search to specification in minutes</h2>
+    <h2 style="color:#fff;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">From search to specification in seconds</h2>
     <p style="color:#9AAFC4;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">No more trawling vendor websites. No more outdated PDFs. Just accurate, searchable product intelligence — exactly when you need it.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:8px;">

@@ -31,11 +31,24 @@
     border-radius: 50%;
     margin-right: 5px;
 }
-.header_area .navbar .nav .nav-item .nav-link {
+.header_area .navbar .nav .nav-item:not(.submenu) .nav-link,
+.header_area .navbar .nav .nav-item.submenu > a.nav-link {
     color: rgba(255,255,255,0.75) !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 14px !important;
     font-weight: 500 !important;
+}
+.header_area .navbar .nav .nav-item.submenu ul .nav-item .nav-link {
+    color: #333 !important;
+    font-size: 13px !important;
+}
+.header_area .navbar .nav .nav-item.submenu ul .nav-item:hover .nav-link {
+    color: #FCA311 !important;
+    background: transparent !important;
+}
+.header_area .navbar .nav .nav-item.submenu ul .main_menu_item {
+    color: #999 !important;
+    font-size: 11px !important;
 }
 .header_area .navbar .nav .nav-item .nav-link:hover {
     color: #fff !important;
@@ -43,6 +56,21 @@
 .header_area .navbar .nav .nav-item.active .nav-link {
     color: #fff !important;
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+.header_area .dropdown-menu .nav-link {
+    color: #333 !important;
+}
+.header_area .dropdown-menu .nav-item .nav-link:hover {
+    color: #FCA311 !important;
+}
+.header_area .dropdown-menu .main_menu_item {
+    color: #333 !important;
+}
+
 </style>
 
 	<script type="text/javascript"> 
@@ -79,13 +107,14 @@
 
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
-                        <li class="nav-item"><a class="nav-link" onclick="return alert('coming soon');" href="#">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>search-listing">Devices</a></li>
-                        <li class="nav-item <?php if($page=='contact-us'){echo 'active';}?>"><a class="nav-link" href="<?php echo base_url();?>contact-us">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>#what">What you can search</a></li>
+						<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>#how">How it works</a></li>
+						<li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>#vendors">Vendors</a></li>
+						<li class="nav-item <?php if($page=='contact-us'){echo 'active';}?>"><a class="nav-link" href="<?php echo base_url();?>contact-us">Contact</a></li>
 
                         <?php if(!$this->session->userdata('user_id')) { ?>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>login">Log in</a></li>
-                            <li class="nav-item"><a class="btn spance_nav" href="<?php echo base_url();?>signup" style="background:#FCA311;color:#14213D;padding:8px 20px;border-radius:6px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;margin-left:8px;">List your product</a></li>
+                            <li class="nav-item" style="display:flex;align-items:center;margin-left:auto;"><a class="btn" href="<?php echo base_url();?>login" style="border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:10px 20px;color:#fff;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color 0.15s;line-height:1;">Log in</a></li>
+							<li class="nav-item" style="display:flex;align-items:center;margin-left:8px;"><a class="btn spance_nav" href="<?php echo base_url();?>signup" style="background:#FCA311;color:#14213D;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;margin-left:8px;line-height:1;">List your product</a></li>
                         <?php } else {
                             $user = $this->common_model->GetSingleData('users',array('user_id' =>$this->session->userdata('user_id')));
                         ?>
