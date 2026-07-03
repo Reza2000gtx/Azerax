@@ -405,6 +405,28 @@
     background: rgba(20,33,61,0.08);
     color: #14213D;
 }
+
+/* ── PRODUCT TYPE BUTTONS ── */
+.pt-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid #14213D;
+    background: transparent;
+    color: #14213D;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.pt-btn.active {
+    background: #FCA311;
+    border-color: #FCA311;
+    color: #14213D;
+}
+.pt-btn:hover {
+    border-color: #FCA311;
+}
  </style>
 
  
@@ -481,14 +503,31 @@
 							 <div class="anim">
 					  		 	<ul class="list">
                      <li class="">
-  								 			<div class="btn_usch" >
-									 				<div class="" >
-	    										 	<!--<input type="checkbox" name="by_input" value=1>-->
-											 			By Category
-											 		</div>
-											  </div>
-                                
+                        <div class="btn_usch">
+                            <div class="">
+                                By Product Type
+                            </div>
+                        </div>
+                        <div class="loop_inp" style="margin-left:50px;">
+                            <div class="pt-btns" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                                <button type="button" class="pt-btn" data-value="Hardware">Hardware</button>
+                                <button type="button" class="pt-btn" data-value="Software">Software</button>
+                                <button type="button" class="pt-btn" data-value="Cloud Service">Cloud Service</button>
+                                <button type="button" class="pt-btn" data-value="AI Tool">AI Tool</button>
+                                <button type="button" class="pt-btn" data-value="Hybrid">Hybrid</button>
+                            </div>
+                            <!-- hidden inputs to carry selected values to form submit -->
+                            <div id="pt-hidden-inputs"></div>
+                        </div>
+                    </li>
 
+                    <li class="">
+                        <li class="">
+                        <div class="btn_usch">
+                            <div class="">
+                                By Category
+                            </div>
+                        </div>
           <div class="loop_inp">
             <div class="row">
               <div class="col-sm-4">
@@ -908,6 +947,23 @@ window.addEventListener('load', function(){
         }
     });
 });
+
+// Product type toggle buttons
+    document.querySelectorAll('.pt-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+            btn.classList.toggle('active');
+            // rebuild hidden inputs
+            var container = document.getElementById('pt-hidden-inputs');
+            container.innerHTML = '';
+            document.querySelectorAll('.pt-btn.active').forEach(function(active){
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'product_type[]';
+                input.value = active.getAttribute('data-value');
+                container.appendChild(input);
+            });
+        });
+    });
 </script>
 
 <!-- ══════════════════════════════════════════════════════════

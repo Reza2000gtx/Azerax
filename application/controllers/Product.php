@@ -1660,6 +1660,21 @@ $where.=" and (".$where3.")";
 $whereorder ='ORDER by product.device_model DESC';
 }
 
+if(isset($_REQUEST['product_type']) && !empty($_REQUEST['product_type'])){
+    $product_type_where = '';
+    $str_product_type = $_REQUEST['product_type'];
+    $i = 1;
+    foreach($str_product_type as $row){
+        $product_type_where .= " product.product_type = ".$this->db->escape($row)." ";
+        if(count($str_product_type) > 1 && $i < count($str_product_type)){
+            $product_type_where .= ' or';
+        }
+        $i++;
+    }
+    $where .= " and (".$product_type_where.")";
+    $whereorder = 'ORDER by product.device_model DESC';
+}
+
 if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
     $where.='ORDER by product.id DESC';
   }elseif(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==2){
