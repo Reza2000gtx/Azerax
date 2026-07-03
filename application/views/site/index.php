@@ -936,13 +936,20 @@
 
 <script>
 window.addEventListener('load', function(){
-    $(document).off('click').on('click', function(e){
+    var lastSelect2Click = 0;
+   $(document).on('select2:unselect', function(){
+       lastSelect2Click = Date.now();
+   });
+
+   $(document).off('click').on('click', function(e){
         var panel = document.getElementById('advSearchPanel');
         var openBtn = document.getElementById('advSearchToggle');
         if(panel && panel.style.display !== 'none'){
             if(!panel.contains(e.target) && !openBtn.contains(e.target)){
-                panel.style.setProperty('display', 'none', 'important');
-                document.getElementById('divShowHide').style.setProperty('display', 'none', 'important');
+                if(Date.now() - lastSelect2Click > 300){
+                    panel.style.setProperty('display', 'none', 'important');
+                    document.getElementById('divShowHide').style.setProperty('display', 'none', 'important');
+                }
             }
         }
     });
