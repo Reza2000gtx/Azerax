@@ -1,4 +1,4 @@
-<?php include_once 'include/header.php' ; ?>
+<?php include_once 'include/header2.php' ; ?>
 <style type="text/css">
 	.banner_name_page{
 		width: 100%;
@@ -45,23 +45,279 @@
         background-color: #0a66c2;
     color: #fff;
 }
+
+/* ── SIDEBAR REDESIGN ── */
+.left_sidebar_area { background: transparent; }
+.left_widgets {
+    background: #fff;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+.left_widgets .widgets_inner { padding: 0; }
+.chex_li > a {
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 0 12px 0 !important;
+    border-bottom: none !important;
+    margin-bottom: 12px;
+}
+.chex_li > a:hover { color: #FCA311 !important; }
+.chex_li > a .lnr-chevron-down {
+    font-size: 14px !important;
+    color: #14213D !important;
+    margin-left: auto;
+}
+.chex_li input[type="checkbox"] { display: none; }
+/* Select2 styling */
+.select2-container--default .select2-selection--multiple {
+    border: 1.5px solid #EBEBEB !important;
+    border-radius: 8px !important;
+    min-height: 38px !important;
+    height: auto !important;
+}
+.select2-container--default .select2-selection--multiple:hover {
+    border-color: #FCA311 !important;
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #FCA311 !important;
+    box-shadow: none !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: #14213D !important;
+    border: none !important;
+    color: #fff !important;
+    border-radius: 4px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 11px !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: rgba(255,255,255,0.7) !important;
+}
 </style>
 
 <style type="text/css">
 	#showSearchDiv.show_div {
 	display: block;
 }
+
+.mobile-show {
+    display: none !important;
+}
+
+body {
+    background: #F5F5F5 !important;
+}
+.cat_product_area {
+    background: #F5F5F5;
+}
+
+/* ── PRODUCT CARDS ── */
+.boder_image {
+    background: #fff;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 12px;
+    padding: 16px !important;
+    margin-bottom: 16px;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 20px;
+    align-items: center;
+    transition: border-color 0.2s;
+    position: static !important;
+    padding-left: 16px !important;
+    min-height: auto !important;
+}
+.boder_image:hover {
+    border-color: #FCA311;
+}
+.boder_image .f_p_img {
+    width: 160px !important;
+    height: 120px !important;
+    flex-shrink: 0 !important;
+    position: static !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #F5F5F5;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-left: 3px;
+    box-shadow: 3px 3px 12px rgba(0,0,0,0.18);
+}
+.boder_image .f_p_img img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    width: auto !important;
+    height: auto !important;
+}
+.boder_image .contt {
+    flex: 1 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    padding-left: 0 !important;
+}
+.boder_image .contt h4 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.boder_image .contt h4 a {
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+.boder_image .contt h4 a:hover { color: #FCA311 !important; }
+.contt h4 a:hover { color: #FCA311 !important; }
+.az-product-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+}
+.badge-hw { background: #E8F0FE; color: #1A56DB; }
+.badge-sw { background: #E3FCEF; color: #057A55; }
+.badge-ai { background: #FDF6EC; color: #C27803; }
+.card-label {
+    color: #999;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+}
+.card-value {
+    color: #14213D;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+.az-view-btn {
+    background: #FCA311 !important;
+    color: #14213D !important;
+    border: none !important;
+    padding: 8px 20px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    font-family: 'Inter', sans-serif !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    margin-top: 12px !important;
+    transition: background 0.15s !important;
+}
+.az-view-btn:hover {
+    background: #e8940a !important;
+    color: #14213D !important;
+}
+
+.lnr-chevron-down {
+    transition: transform 0.2s ease;
+}
+
+/* ── SORT BAR ── */
+.product_top_bar {
+    background: #fff !important;
+    border: 1.5px solid #EBEBEB !important;
+    border-radius: 12px !important;
+    padding: 12px 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 16px !important;
+}
+.left_dorp {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+.left_dorp form {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+.item_drop1, .item_drop2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.item_drop1 label, .item_drop2 label {
+    color: #666;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    margin: 0;
+}
+.item_drop1 .sorting, .item_drop2 .sorting {
+    border: 1.5px solid #EBEBEB !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    font-family: 'Inter', sans-serif !important;
+    color: #14213D !important;
+    background: #fff !important;
+    cursor: pointer;
+}
+.item_drop1 .sorting:focus, .item_drop2 .sorting:focus {
+    border-color: #FCA311 !important;
+    outline: none !important;
+}
+/* Pagination */
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 0 0 auto !important;
+}
+.pagination a, .pagination strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px !important;
+    border: 1.5px solid #EBEBEB !important;
+    color: #14213D !important;
+    font-size: 13px !important;
+    font-family: 'Inter', sans-serif !important;
+    text-decoration: none !important;
+    background: #fff !important;
+    transition: all 0.15s;
+}
+.pagination strong {
+    background: #FCA311 !important;
+    border-color: #FCA311 !important;
+    color: #14213D !important;
+    font-weight: 700 !important;
+}
+.pagination a:hover {
+    border-color: #FCA311 !important;
+    color: #FCA311 !important;
+}
+
+.latest_product_inner {
+    display: block !important;
+}
+
+
 </style>
 
 <section class="cat_product_area p_120" >
 	<div class="container-fluid">
 		<div class="row flex-row-reverse Search_list_page">
-			<div class="col-lg-2">
-				<div class="google_ad">
-					<img src="<?php echo base_url();?>assets/site/img/google_ad.png">
-				</div>
-			</div>
-			<div class="col-lg-7">
+			<div class="col-lg-9">
 				<div class="product_top_bar">
 					<div class="left_dorp">
 
@@ -129,34 +385,33 @@
 					
 					
 						<div class="col-sm-12">
-						<div class="boder_image">
-							<div class="f_p_img">
+						<div class="boder_image" style="display:flex;flex-direction:row;align-items:center;gap:20px;">
+							<div class="f_p_img" style="flex-shrink:0;">
+								<a href="<?php echo base_url();?>details/<?=$row['id']?>">
 								<?php if($imageFirst['gallery_image']){ ?>
 								<img class="img-fluid" src="<?php echo base_url(); ?>assets/product_image/<?=$imageFirst['gallery_image']?>" alt="">
 								<?php } else { ?>
 								<img class="img-fluid" src="<?php echo base_url(); ?>assets/product_image/no.jpg" alt="">
 								<?php } ?>
+								</a>
 							</div>
-							<div class="contt">
+							<div class="contt" style="flex:1;min-width:0;overflow:hidden;">
 								<!-- ?php $manufacturer = $this->common_model->GetSingleData('manufacturer',array('id'=>$row['manufacturer_id']));  ?> -->
 							<!-- <h4><a href="<?php echo base_url();?>details/<?=$row['id']?>"><?=$manufacturer['name']?></a></h4> -->
 							<h4>
 								<a href="<?php echo base_url();?>details/<?=$row['id']?>"><?=$row['device_model']?></a>
-								<!--<span>Brand :-->
-								<!--	<?=$row['device_brand']?><br>-->
-									<!--<?=substr($row['dealer_notes'],0,200)?>...<br>-->
-								<!--</span>-->
+								
 							</h4>
 							<div class="setseardata">
 							<div class="row">
 							    	<div class="col-sm-4">
-									<?php echo '<span>Brand</span>'. $row['device_brand'] ; ?>
+									<?php echo '<span class="card-label">Brand: </span><span class="card-value">'. $row['device_brand'].'</span>' ; ?>
 								</div>
 								<div class="col-sm-4">
-									<?php echo '<span>Model</span>'. $row['device_model'] ; ?>
+									<?php echo '<span class="card-label">Model: </span><span class="card-value">'. $row['device_model'].'</span>' ; ?>
 								</div>
 								<div class="col-sm-4">										
-									<?php echo '<span>Release Date</span>'. $row['date_released'] ;?>
+									<?php echo '<span class="card-label">Release Date: </span><span class="card-value">'. $row['date_released'].'</span>' ;?>
 								</div>
 							
 							</div>
@@ -282,7 +537,9 @@
 							</div>
 							</div>
 							<p class="nomargin">
-								<a href="<?php echo base_url();?>details/<?=$row['id']?>" class="btn main_btn signup_btn ">View Details</a>
+								<?php if(!empty($row['dealer_notes'])){ ?>
+								<p style="color:#666;font-size:13px;font-family:'Inter',sans-serif;line-height:1.6;margin:8px 0 0 0;"><?=substr($row['dealer_notes'],0,120)?>...</p>
+								<?php } ?>
 							</p>
 							</div>
 						</div>
@@ -310,21 +567,6 @@
 				<div class="close-filter mobile-show">
 					<span>Filter</span> <i class="fa fa-times-circle"></i>
 				</div>
-
-					<aside class="left_widgets cat_widgets side_bar_nw">
-						<div class="widgets_inner">
-					<input data-toggle="#hidden1" class="form-control" value="<?php if($_GET['keyword']){ echo $_GET['keyword']; } ?>" 
-					name="keyword" id="process"  autocomplete="off" onkeyup="getprocess()" placeholder="Search for devices" >
-
-					  <input type="hidden" name="productid" id="productid" />
-					  <div class="hidden" id="hidden1" style="display: none;" data-hidden="true">
-						<ul id="processSugguestion" ></ul>
-						</div>
-
-
-						</div>
-					</aside>
-
 
 					<aside class="left_widgets cat_widgets side_bar_nw">
 						<div class="widgets_inner">
@@ -472,9 +714,9 @@
 					<aside class="left_widgets cat_widgets side_bar_nw">
 						<div class="widgets_inner">
 							<ul class="list">
-						<li>
+						<li class="chex_li">
 							<input type="checkbox" name="by_output" value=1 <?php if($_GET['by_output'] == 1) { echo 'checked' ; } ?> >
-							<a href="javascript:void(0);" class="listClick2" onclick="toggleClose('list2','listClick2')"> By Output  <span class="lnr lnr-chevron-down"></span></a>
+							<a href="javascript:void(0);" class="listClick2" onclick="toggleClose('list2','listClick2')">By Output<span class="lnr lnr-chevron-down"></span></a>
 							
                            <ul class="list list2" style="display: block;">
 
@@ -620,8 +862,8 @@
 					<aside class="left_widgets cat_widgets side_bar_nw">
 						<div class="widgets_inner">
 							<ul class="list">
-						<li><input type="checkbox" name="by_process" value=1 <?php if($_GET['by_process'] == 1) { echo 'checked' ; } ?>>
-							<a href="javascript:void(0);" class="listClick3" onclick="toggleClose('list3','listClick3')"> By Process  <span class="lnr lnr-chevron-down"></span></a>
+						<li class="chex_li"><input type="checkbox" name="by_process" value=1 <?php if($_GET['by_process'] == 1) { echo 'checked' ; } ?>>
+							<a href="javascript:void(0);" class="listClick3" onclick="toggleClose('list3','listClick3')">By Process<span class="lnr lnr-chevron-down"></span></a>
                            <ul class="list list3" style="display: block;">
 
 							<li class="d-flex justify-content-between align-items-center">
@@ -869,20 +1111,31 @@ function myFunction() {
   alert("comming Soon");
 }
 function toggleClose(classid,listClick) {
-    
-    
         $('.'+classid).slideUp(200);
         $('.'+listClick).attr('onclick','toggleOpen("'+classid+'","'+listClick+'")');
-        
-        
+        $('.'+listClick).find('.lnr-chevron-down').css('transform','rotate(0deg)');
     }
 
 function toggleOpen(classid,listClick) {
-    
-    
         $('.'+classid).slideDown(200);
         $('.'+listClick).attr('onclick','toggleClose("'+classid+'","'+listClick+'")');
-        
-        
+        $('.'+listClick).find('.lnr-chevron-down').css('transform','rotate(180deg)');
     }
+</script>
+
+<script>
+$(document).ready(function(){
+    $('.listClick1, .listClick2, .listClick3').find('.lnr-chevron-down').css('transform','rotate(180deg)');
+    $(".catA").select2({placeholder: "Main Category", tags: true, width: '100%'});
+    $(".catB").select2({placeholder: "Sub-Category A", tags: true, width: '100%'});
+    $(".catC").select2({placeholder: "Sub-Category B", tags: true, width: '100%'});
+    $(".inputF").select2({placeholder: "Input Type", tags: true, width: '100%'});
+    $(".instand").select2({placeholder: "Input Standard", tags: true, width: '100%'});
+    $(".inprocessConnection").select2({placeholder: "Input Connection Type", tags: true, width: '100%'});
+    $(".outputF").select2({placeholder: "Output Type", tags: true, width: '100%'});
+    $(".otstand").select2({placeholder: "Output Standard", tags: true, width: '100%'});
+    $(".otprocessConnection").select2({placeholder: "Output Connection Type", tags: true, width: '100%'});
+    $(".processsuggestion").select2({placeholder: "Process Type", tags: true, width: '100%'});
+    $(".processsuggestionStand").select2({placeholder: "Process Standard", tags: true, width: '100%'});
+});
 </script>
