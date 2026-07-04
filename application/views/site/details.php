@@ -1,5 +1,43 @@
-<?php include_once 'include/header.php' ; ?>
+<?php include_once 'include/header2.php' ; ?>
 
+
+<style>
+.carousel-indicators {
+    position: relative;
+    bottom: auto;
+    margin: 10px 0 0 0;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.carousel-indicators li {
+    width: 60px !important;
+    height: 60px !important;
+    text-indent: 0 !important;
+    background: #F5F5F5;
+    border-radius: 6px;
+    overflow: hidden;
+    opacity: 0.6;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.carousel-indicators li.active {
+    opacity: 1;
+    border: 2px solid #FCA311;
+}
+.carousel-indicators li img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+.carousel-item img {
+    max-height: 350px;
+    object-fit: contain;
+    background: #F5F5F5;
+    border-radius: 12px;
+}
+</style>
 
 <?php echo $product_detail['id'];?>
 
@@ -41,29 +79,24 @@
                               }
                               ?>
 							</div>
+							<?php if(count($product_gallery) > 1) { ?>
 							<ol class="carousel-indicators">
 								<?php
 $i = 1;
                               foreach ($product_gallery as $key => $gallery) {
                               	$active = '';
-                              	if($i==1 || count($product_gallery)==1){
+                              	if($i==1){
                               		$active = 'active';
                               	}
                                 ?>
-
 								<li data-target="#carouselExampleIndicators" data-slide-to="<?=$i-1;?>" class="<?php echo $active ?>">
 									<img src="<?php echo base_url(); ?>assets/product_image/<?php echo $gallery['gallery_image'];?>" alt="">
 								</li>
-								<!-- <li data-target="#carouselExampleIndicators" data-slide-to="1">
-									<img src="img/pro2.png" alt="">
-								</li>
-								<li data-target="#carouselExampleIndicators" data-slide-to="2">
-									<img src="img/pro3.jpg" alt="">
-								</li> -->
 								<?php  $i++;
                               }
                               ?>
 							</ol>
+<?php } ?>
 
 						</div>
 					</div>
@@ -646,4 +679,4 @@ foreach ($inputOutput as $Input) {
 
 
 
-<?php include_once 'include/footer.php' ; ?>
+<?php include_once 'include/footer2.php' ; ?>
