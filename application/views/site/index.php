@@ -38,11 +38,11 @@
 	color: #333;
 }
 .autocomplete-items > div:hover {
-	background: #14213d;
-	color: #ccc;
+    background: #c8c8c8;
+    color: #14213D;
 }
 .autocomplete-items > div:hover strong {
-	color: #fff;
+	color: #14213D;
 }
 #processSugguestion {
 	display: none;

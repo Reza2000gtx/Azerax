@@ -41,6 +41,7 @@ class Product extends CI_Controller
 
   $data['product_detail'] = $this->common_model->GetSingleData('product',array('id'=>$product_id));
   $data['inputOutput'] = $this->common_model->GetAllData('input_output',array('product_id'=>$product_id));
+  $data['reviews'] = $this->common_model->GetAllData('review',array('device_id'=>$product_id,'status'=>1));
      	$this->load->view('site/details',$data);
 	}
 
