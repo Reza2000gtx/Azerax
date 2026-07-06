@@ -17,6 +17,7 @@
 									<?php echo $this->session->flashdata('msg'); ?>
 
 					<form class="row login_form" action="<?php echo base_url();?>do-login"  method="post" id="contactForm" >
+						<input type="hidden" name="redirect_url" value="<?php echo $this->session->userdata('redirect_after_login'); ?>">
 						<div class="col-md-12 form-group">
 							<input type="text" required name="email" placeholder="Email"  class="form-control" id="name" >
 						<div class="errorMessage" id="email_error" ><?php echo form_error('email'); ?></div>

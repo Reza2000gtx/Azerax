@@ -1,3 +1,4 @@
+<?php $azerax_brand = 'azera<span style="color:#FCA311;">X</span>'; ?>
 <!doctype html>
 <html lang="en">
 

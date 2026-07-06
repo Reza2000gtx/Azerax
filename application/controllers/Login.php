@@ -75,8 +75,13 @@ class Login extends CI_Controller
 					// $update = $this->common_model->UpdateData('users',array('user_id'=>$run['user_id']),$update);
 
 
-                    	//redirect('success');
-                    	redirect('home');
+                    	$redirect_url = $this->input->post('redirect_url');
+                    	if(!empty($redirect_url)){
+                    	    $this->session->unset_userdata('redirect_after_login');
+                    	    redirect($redirect_url);
+                    	} else {
+                    	    redirect('home');
+                    	}
                     
 					
 				}

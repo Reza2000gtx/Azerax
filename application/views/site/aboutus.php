@@ -1,246 +1,382 @@
 <?php include_once 'include/header2.php'; ?>
-<style type="text/css">
-	/*.about-area .text-heading.title_color {
-	font-size: 35px;
-	text-align: center;
-	color: #0a66c2;
-}*/
-/*.about-area .sample-text {
-	font-size: 18px;
-	line-height: 35px !important;
-	color: #333;
-	text-align: center;
-	width: 70%;
-	margin: 0 auto;
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+/* ── ABOUT PAGE ── */
+.az-page-hero {
+    background: #14213D;
+    padding: 60px 40px;
+    text-align: center;
 }
-*/
-.home_banner_area.home_banner_area_about {
-	background: #fff;
+.az-page-hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
 }
-.img_right_side img {
-	width: 100%;
-	box-shadow: 0 10px 29px rgba(0, 0, 0, 0.09);
-	height: 300px;
-	object-fit: cover;
-	border-radius: 30px;
+.az-page-hero p {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    margin: 0;
 }
-.sample-text-area p {
-	color: #777;
+
+/* Sections */
+.az-about-section {
+    padding: 72px 40px;
 }
-/*.sample-text-area.about-area {
-	background: #e8f0f2;
-}*/
-.clients_logo_area .clients_logo_area_about_area  {
-	background: #fff;
-	padding: 70px 0;
+.az-about-section.grey { background: #F5F5F5; }
+.az-about-section.white { background: #fff; }
+.az-about-section.navy { background: #14213D; }
+
+.az-about-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
 }
-.right_img img {
-	width: 100%;
-	margin-top: 20px;
-	border-radius: 25px;
+.az-about-inner.reverse { direction: rtl; }
+.az-about-inner.reverse > * { direction: ltr; }
+
+.az-about-text h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #14213D;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
 }
-.sample-text-area.about-area.about_values {
-	background: #fff;
+.az-about-section.navy .az-about-text h2 { color: #fff; }
+.az-about-text p {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 16px;
 }
-.sample-text-area.about-area.about_values p {
-	line-height: 20px;
-	font-size: 15px;
-	color: #777;
-} 
-.sample-text-area.about-area.about_values h4 {
-	font-size: 16px;
-	color: #000;
+.az-about-section.navy .az-about-text p { color: #9AAFC4; }
+
+.az-about-divider {
+    width: 48px;
+    height: 3px;
+    background: #FCA311;
+    border-radius: 2px;
+    margin-bottom: 24px;
 }
-.clients_logo_area.clients_logo_area_about_area.animated.fadeIn {
-	/*background-image: url('img/banner222.jpg') !important;*/
-	background: #e5ecee !important;
-	background: #fff;
-	padding-top: 50px;
-	padding-bottom: 50px;
+
+.az-about-img img {
+    width: 100%;
+    border-radius: 14px;
+    object-fit: cover;
+    height: 320px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
-.sample-text-area.about-area .title_color {
-	color: #14213D;
-font-size: 30px;
+
+/* Services cards */
+.az-services-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.az-service-card {
+    background: #fff;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 14px;
+    padding: 28px;
+    transition: border-color 0.2s, transform 0.2s;
+}
+.az-service-card:hover {
+    border-color: #FCA311;
+    transform: translateY(-2px);
+}
+.az-service-icon {
+    width: 48px;
+    height: 48px;
+    background: #FFF3D6;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FCA311;
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+.az-service-card h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #14213D;
+    margin-bottom: 10px;
+}
+.az-service-card p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* Section label */
+.az-section-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #FCA311;
+    margin-bottom: 12px;
+    text-align: center;
+}
+.az-section-centered {
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+}
+.az-section-centered h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #14213D;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+.az-section-centered p {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: #666;
+    line-height: 1.75;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Contact form */
+.az-contact-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    align-items: flex-start;
+}
+.az-contact-info {
+    background: #14213D;
+    border-radius: 14px;
+    padding: 36px;
+}
+.az-contact-info h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+.az-contact-info p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    margin-bottom: 32px;
+}
+.az-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.az-contact-item-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(252,163,17,0.15);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FCA311;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.az-contact-item-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+    font-family: 'Inter', sans-serif;
+}
+.az-contact-item-text span {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Inter', sans-serif;
+}
+.az-contact-form-panel {
+    background: #fff;
+    border-radius: 14px;
+    padding: 36px;
+    border: 1.5px solid #EBEBEB;
+}
+.az-contact-form-panel h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #14213D;
+    margin-bottom: 24px;
+}
+.az-contact-form-panel .form-control {
+    border: 1.5px solid #EBEBEB;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #14213D;
+    padding: 10px 14px;
+    transition: border-color 0.15s;
+}
+.az-contact-form-panel .form-control:focus {
+    border-color: #FCA311;
+    box-shadow: none;
+}
+.az-contact-form-panel textarea.form-control { min-height: 140px; resize: vertical; }
+.az-submit-btn {
+    background: #FCA311;
+    color: #14213D;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.az-submit-btn:hover { background: #e8940a; }
+.errorMessage {
+    color: #dc3545;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
 }
 </style>
-<!--section class="home_banner_area banner_services">
-	<div class="banner_inner d-flex align-items-center" style="padding-bottom: 30px;">
-		<div class="container">
-			<div class="banner_content row">
-				 <div class="col-lg-6">
-					<div class="halemet_img">
-						<img src="<?php echo base_url();?>assets/site/img/about.png" alt="">
-					</div>
-				</div> 
-				<div class="col-lg-5">
-					<h3>About</h3>
-					<p style="text-align: justify;">
-<?php  
-/*$resultFooter = $this->common_model->GetAllData('ContentManagement');
- foreach ($resultFooter as $valueFoo) {
-echo $valueFoo["about"];
-}*/
-?> 						
 
-					</p>
-					<!--<a class="main_btn" href="#">Read More</a>
-				</div>
-				<div class="col-lg-1"></div>
-				
-			</div>
-		</div>
-	</div>
-</section>-->
+<!-- Hero -->
+<div class="az-page-hero">
+    <h1>About azera<span style="color:#FCA311;">X</span></h1>
+    <p>Broadcast-native product intelligence — built by architects, for architects.</p>
+</div>
 
-<section class="sample-text-area about-area">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6">
-				<h3 class="text-heading title_color">Why Azerax?</h3>
-				<p class="sample-text" style="text-align: justify;">
-<?php  
-$resultFooter = $this->common_model->GetAllData('ContentManagement');
- foreach ($resultFooter as $valueFoo) {
-echo $valueFoo["who_we_are"];
-}
-?>					
-				</p>
-			</div>
-			<div class="col-lg-6">
-				<div class="img_right_side">
-						<img src="<?php echo base_url();?>assets/site/img/about_us.png" alt="">
-					</div>
-			</div>
-		</div>
-		
-	</div>
-</section>
+<!-- Section 1: Why Azerax -->
+<div class="az-about-section white">
+    <div class="az-about-inner">
+        <div class="az-about-text">
+            <div class="az-about-divider"></div>
+            <h2>Why <?php echo $azerax_brand; ?>?</h2>
+            <?php
+            $resultFooter = $this->common_model->GetAllData('ContentManagement');
+            foreach ($resultFooter as $valueFoo) {
+                echo $valueFoo["who_we_are"];
+            }
+            ?>
+        </div>
+        <div class="az-about-img">
+            <img src="<?php echo base_url(); ?>assets/site/img/mcr.jpg" alt="About AzeraX">
+        </div>
+    </div>
+</div>
 
-<section class="sample-text-area about-area about_values">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6">
-				<div class="right_img">
-						<img src="<?php echo base_url();?>assets/site/img/Wide_Broadcast.jpg" alt="">
-					</div>
-			</div>
+<!-- Section 2: Our Services -->
+<div class="az-about-section grey">
+    <div class="az-section-label">What we offer</div>
+    <div class="az-section-centered">
+        <h2>Built for broadcast professionals</h2>
+        <p>AzeraX serves every stakeholder in the broadcast ecosystem — from architects specifying systems to vendors listing their products.</p>
+    </div>
+    <div class="az-services-grid">
+        <div class="az-service-card">
+            <div class="az-service-icon"><i class="ti ti-search"></i></div>
+            <h4>For Architects</h4>
+            <p>A smart search mechanism that helps broadcast architects find the exact product match for their technical criteria — standards, I/O, connectors and more.</p>
+        </div>
+        <div class="az-service-card">
+            <div class="az-service-icon"><i class="ti ti-building-store"></i></div>
+            <h4>For Vendors</h4>
+            <p>List your broadcast products directly on AzeraX and make them discoverable to architects worldwide. Vendor-maintained specs mean accurate data, always.</p>
+        </div>
+        <div class="az-service-card">
+            <div class="az-service-icon"><i class="ti ti-device-tv"></i></div>
+            <h4>For Broadcasters</h4>
+            <p>Designing an end-to-end broadcast solution is easier when you can search, compare and spec products across hardware, software and AI tools in one place.</p>
+        </div>
+    </div>
+</div>
 
-			<div class="col-lg-6">
-				<h3 class="text-heading title_color">Our Servises</h3>
-				<h4>For Professionals</h4>
-				<p class="sample-text" style="text-align: justify;">
-					Azerax provides a smart search mechanism that helps professionals find the exact match for the search criteria.
-				</p>
-				<br>
-
-				<h4>For Suppliers</h4>
-				<p class="sample-text" style="text-align: justify;">
-					Thanks to the powerful search mechanism, listing devices with Azerax makes them discoverable faster and easier.
-				</p>
-				<br>
-
-				<h4>For Broadcasters</h4>
-				<p class="sample-text" style="text-align: justify;">
-					Designing an E2E solution with Azerax is easy!
-				</p>
-			</div>
-			
-		</div>
-		
-	</div>
-</section>
-
-<!--<section class="clients_logo_area clients_logo_area_about_area animated fadeIn">-->
-<!--	<div class="container">-->
-<!--		<div class="main_title">-->
-<!--			<h2 class="no-marg">Top Brands</h2>-->
-<!--			<p >Who are in extremely love with eco friendly system.</p>-->
-<!--		</div>-->
-<!--		<div class="clients_slider owl-carousel">-->
-<!--			<div class="item">-->
-<!--				<img src="<?php echo base_url();?>assets/site/img/clients-logo/c-logo-1.png" alt="">-->
-<!--			</div>-->
-<!--			<div class="item">-->
-<!--				<img src="<?php echo base_url();?>assets/site/img/clients-logo/c-logo-2.png" alt="">-->
-<!--			</div>-->
-<!--			<div class="item">-->
-<!--				<img src="<?php echo base_url();?>assets/site/img/clients-logo/c-logo-3.png" alt="">-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--</section>-->
-
-<section class="contact_area p_80" id="contactRequestFormDiv">
-	<div class="container">
-		
-		<div class="row">
-			<div class="col-lg-3">
-				<div class="contact_info">
-					
-					<div class="info_item">
-						<i class="lnr lnr-envelope"></i>
-						<h6><a href="#"><span class="__cf_email__" data-cfemail="4a393f3a3a25383e0a292526253826232864292527">info@azerax.com</span></a></h6>
-						<p>Send us your query anytime!</p>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-9">
-		
-			<?php echo $this->session->flashdata('msg'); ?>
-
-				<form action="<?php echo base_url();?>about-us-action" method="post">
-			     <div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<input type="text" required name="username"  value="<?php echo set_value('username'); ?>" class="form-control" placeholder="Your Name">
-    					    <div class="errorMessage"><?php echo form_error('username'); ?></div>
-						</div>
-						<div class="form-group">
-						    <input type="email" required name="email"  value="<?php echo set_value('email'); ?>" class="form-control" placeholder="Email address">
-							<div class="errorMessage"><?php echo form_error('email'); ?></div>
-						</div>
-						<div class="form-group">
-						 <input type="text" required name="subject"  value="<?php echo set_value('subject'); ?>" class="form-control" placeholder="Subject">
-						 <div class="errorMessage"><?php echo form_error('subject'); ?></div>
-						</div>
-					</div>
-					
-					<div class="col-md-6">
-						<div class="form-group">
-				   	      <textarea class="form-control" required name="message" style="margin-top: 0px; margin-bottom: 0px; height: 147px;" placeholder="Tell us something here..."><?php echo set_value('message'); ?></textarea>
-			              <div class="errorMessage"><?php echo form_error('message'); ?></div>
-						</div>
-					</div>
-				  </div>	
-					
-					<div class="col-md-12 text-right">
-						<button type="submit" value="submit" class="btn submit_btn">Send</button>
-					</div>
-				</form>
-			</div>
-		</div>
-
-	</div>
-</section>
-<div class="spacer"></div>
-
-
-
-
-
-
-
+<!-- Section 3: Contact -->
+<div class="az-about-section white" id="contactRequestFormDiv">
+    <div class="az-contact-inner">
+        <div class="az-contact-info">
+            <h3>Get in touch</h3>
+            <p>Have a question about AzeraX or want to list your products? We'd love to hear from you.</p>
+            <div class="az-contact-item">
+                <div class="az-contact-item-icon"><i class="ti ti-mail"></i></div>
+                <div class="az-contact-item-text">
+                    <strong>Email</strong>
+                    <span>info@azerax.com</span>
+                </div>
+            </div>
+            <div class="az-contact-item">
+                <div class="az-contact-item-icon"><i class="ti ti-clock"></i></div>
+                <div class="az-contact-item-text">
+                    <strong>Response time</strong>
+                    <span>We aim to respond within 24 hours</span>
+                </div>
+            </div>
+        </div>
+        <div class="az-contact-form-panel">
+            <h3>Send us a message</h3>
+            <?php echo $this->session->flashdata('msg'); ?>
+            <form action="<?php echo base_url(); ?>about-us-action" method="post">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" required name="username" value="<?php echo set_value('username'); ?>" class="form-control" placeholder="Your name">
+                            <div class="errorMessage"><?php echo form_error('username'); ?></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="email" required name="email" value="<?php echo set_value('email'); ?>" class="form-control" placeholder="Email address">
+                            <div class="errorMessage"><?php echo form_error('email'); ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" required name="subject" value="<?php echo set_value('subject'); ?>" class="form-control" placeholder="Subject">
+                    <div class="errorMessage"><?php echo form_error('subject'); ?></div>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" required name="message" placeholder="Tell us something here..."><?php echo set_value('message'); ?></textarea>
+                    <div class="errorMessage"><?php echo form_error('message'); ?></div>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="az-submit-btn">Send message →</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php include_once 'include/footer2.php'; ?>
-<?php if($_REQUEST['success']==1) {?>
+
+<?php if(isset($_REQUEST['success']) && $_REQUEST['success']==1) { ?>
 <script>
 $(document).ready(function(){
-        $('html, body').animate({
-      scrollTop: $("#contactRequestFormDiv").offset().top
-    }, 1000)
-
-  
+    $('html, body').animate({
+        scrollTop: $("#contactRequestFormDiv").offset().top
+    }, 1000);
 });
 </script>
-
-<?php  }?>
+<?php } ?>

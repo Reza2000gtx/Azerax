@@ -162,6 +162,9 @@
     border-bottom: 1px solid #F0F0F0;
     vertical-align: top;
 }
+.tab-content table tr:has(td h5:empty) {
+    display: none;
+}
 .tab-content table td:first-child {
     color: #999;
     font-size: 12px;
@@ -181,10 +184,24 @@
 #carouselExampleIndicators {
     max-width: 500px;
 }
+
+#myTab {
+    display: inline-flex !important;
+}
+
+.tab-content table tr:first-child td {
+    border-top: none;
+}
+.tab-content table {
+    border-collapse: collapse;
+}
+.tab-content table tbody tr:first-child td {
+    border-top: none !important;
+}
 </style>
 
 <div style="background:#fff;padding:40px 0;">
-    <div class="container-fluid" style="padding:0 40px;">
+    <div class="container-fluid" style="padding:0 40px;max-width:1400px;margin:0 auto;">
         <div class="row">
 
             <!-- LEFT COL: Image + Specs Grid -->
@@ -305,16 +322,10 @@
 
 <!-- TABS SECTION -->
 <div class="az-tabs-section">
-    <div class="container-fluid" style="padding:0 40px;">
+    <div class="container-fluid" style="padding:0 40px;max-width:1400px;margin:0 auto;">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab">Description</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab">Specification</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab">Comments</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab">Reviews</a>
@@ -322,70 +333,100 @@
         </ul>
         <div class="tab-content" id="myTabContent">
 
-            <!-- Description Tab -->
-            <div class="tab-pane fade" id="home" role="tabpanel">
-                <?php if ($product_detail['warranty_detail']) { ?>
-                <p style="font-family:'Inter',sans-serif;font-size:14px;color:#555;margin-bottom:8px;"><strong>Warranty:</strong> <?php echo $product_detail['warranty_detail']; ?></p>
-                <?php } ?>
-                <?php if ($product_detail['support_detail']) { ?>
-                <p style="font-family:'Inter',sans-serif;font-size:14px;color:#555;"><strong>Support:</strong> <?php echo $product_detail['support_detail']; ?></p>
-                <?php } ?>
-            </div>
-
-            <!-- Specification Tab -->
+           <!-- Specification Tab -->
             <div class="tab-pane fade show active" id="profile" role="tabpanel">
                 <div class="table-responsive">
                     <table class="table">
                         <tbody>
-                            <tr><td>Ordering Information</td><td><h5><?php echo $product_detail['order_code']; ?></h5></td></tr>
-                            <tr><td>Release Notes</td><td><h5><?php echo $product_detail['release_version']; ?></h5></td></tr>
-                            <tr><td>Device Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
-                            <tr><td>Device Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>
-                            <tr><td>Latest Firmware</td><td><h5><?php echo $product_detail['latest_firmware_version']; ?></h5></td></tr>
-                            <tr><td>Dimensions</td><td><h5><?php echo $product_detail['mechanical_demension_mounting']; ?></h5></td></tr>
-                            <tr><td>Rack Units</td><td><h5><?php echo $product_detail['rack_unit']; ?></h5></td></tr>
-                            <tr><td>Dealer Website</td><td><h5><?php if($product_detail['dealer_web_cont']){ ?><a href="<?php echo $product_detail['dealer_web_cont']; ?>" target="_blank" style="color:#FCA311;">Visit</a><?php } ?></h5></td></tr>
-                            <tr><td>Dealer Contact</td><td><h5><?php echo $product_detail['dealer_contact']; ?></h5></td></tr>
-                            <tr><td>Dealer Notes</td><td><h5><?php echo $product_detail['dealer_notes']; ?></h5></td></tr>
-                            <tr>
-                                <td>Process Standard</td>
-                                <td><h5><?php $process_stand = explode(",", $product_detail['process_stand']); foreach ($process_stand as $stand) { echo htmlspecialchars(trim($stand))."<br>"; } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Process</td>
-                                <td><h5><?php $parts = explode(",", $product_detail['process']); foreach ($parts as $process) { echo htmlspecialchars(trim($process))."<br>"; } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Input Details</td>
-                                <td><h5><?php foreach ($inputOutput as $Input) { $parts = explode(",", $Input["input_conn"]); foreach ($parts as $value) { echo htmlspecialchars(trim($value))."<br>"; } } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Input Standard</td>
-                                <td><h5><?php foreach ($inputOutput as $Input) { $parts = explode(",", $Input["input_process_stand"]); foreach ($parts as $value) { echo htmlspecialchars(trim($value))."<br>"; } } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Input Connection Type</td>
-                                <td><h5><?php foreach ($inputOutput as $Input) { $parts = explode(",", $Input["process_connection"]); foreach ($parts as $value) { echo htmlspecialchars(trim($value))."<br>"; } } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Output Details</td>
-                                <td><h5><?php foreach ($inputOutput as $Input) { $parts = explode(",", $Input["out_conn"]); foreach ($parts as $value) { echo htmlspecialchars(trim($value))."<br>"; } } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Output Standard</td>
-                                <td><h5><?php foreach ($inputOutput as $Input) { $parts = explode(",", $Input["out_process_stand"]); foreach ($parts as $value) { echo htmlspecialchars(trim($value))."<br>"; } } ?></h5></td>
-                            </tr>
-                            <tr>
-                                <td>Output Connection Type</td>
-                                <td><h5><?php foreach ($inputOutput as $Input) { $parts = explode(",", $Input["out_process_connection"]); foreach ($parts as $value) { echo htmlspecialchars(trim($value))."<br>"; } } ?></h5></td>
-                            </tr>
-                        </tbody>
+    <?php if($product_detail['order_code']){ ?>
+    <tr><td>Ordering Information</td><td><h5><?php echo $product_detail['order_code']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['release_version']){ ?>
+    <tr><td>Release Notes</td><td><h5><?php echo $product_detail['release_version']; ?></h5></td></tr>
+    <?php } ?>
+    <tr><td>Device Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
+    <tr><td>Device Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>
+    <?php if($product_detail['latest_firmware_version']){ ?>
+    <tr><td>Latest Firmware</td><td><h5><?php echo $product_detail['latest_firmware_version']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['mechanical_demension_mounting']){ ?>
+    <tr><td>Dimensions</td><td><h5><?php echo $product_detail['mechanical_demension_mounting']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['rack_unit']){ ?>
+    <tr><td>Rack Units</td><td><h5><?php echo $product_detail['rack_unit']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['dealer_web_cont']){ ?>
+    <tr><td>Vendor Website</td><td><h5><a href="<?php echo $product_detail['dealer_web_cont']; ?>" target="_blank" style="color:#FCA311;">Visit</a></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['dealer_contact']){ ?>
+    <tr><td>Dealer Contact</td><td><h5><?php echo $product_detail['dealer_contact']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['warranty_detail']){ ?>
+    <tr><td>Warranty</td><td><h5><?php echo $product_detail['warranty_detail']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if($product_detail['support_detail']){ ?>
+    <tr><td>Support</td><td><h5><?php echo $product_detail['support_detail']; ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $process_stand = array_filter(array_map('trim', explode(",", $product_detail['process_stand'])));
+    if(!empty($process_stand)){ ?>
+    <tr><td>Process Standard</td><td><h5><?php foreach($process_stand as $s){ echo $s."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $process = array_filter(array_map('trim', explode(",", $product_detail['process'])));
+    if(!empty($process)){ ?>
+    <tr><td>Process</td><td><h5><?php foreach($process as $p){ echo $p."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $input_conn = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'input_conn')))));
+    if(!empty($input_conn)){ ?>
+    <tr><td>Input Details</td><td><h5><?php foreach($input_conn as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $input_stand = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'input_process_stand')))));
+    if(!empty($input_stand)){ ?>
+    <tr><td>Input Standard</td><td><h5><?php foreach($input_stand as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $input_conn_type = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'process_connection')))));
+    if(!empty($input_conn_type)){ ?>
+    <tr><td>Input Connection Type</td><td><h5><?php foreach($input_conn_type as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $out_conn = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_conn')))));
+    if(!empty($out_conn)){ ?>
+    <tr><td>Output Details</td><td><h5><?php foreach($out_conn as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $out_stand = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_process_stand')))));
+    if(!empty($out_stand)){ ?>
+    <tr><td>Output Standard</td><td><h5><?php foreach($out_stand as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $out_conn_type = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_process_connection')))));
+    if(!empty($out_conn_type)){ ?>
+    <tr><td>Output Connection Type</td><td><h5><?php foreach($out_conn_type as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+</tbody>
                     </table>
                 </div>
             </div>
  <!-- Reviews Tab -->
             <div class="tab-pane fade" id="review" role="tabpanel">
-                <?php if(!empty($reviews)){ ?>
+                <?php if(!empty($reviews)){
+                    $total = count($reviews);
+                    $sum = 0;
+                    foreach($reviews as $r){ $sum += $r['rating']; }
+                    $avg = round($sum / $total, 1);
+                    $avgRounded = round($avg);
+                ?>
+                <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:2px solid #EBEBEB;margin-bottom:16px;">
+                    <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:700;color:#14213D;line-height:1;"><?php echo $avg; ?></div>
+                    <div>
+                        <div style="color:#FCA311;font-size:24px;"><?php echo str_repeat('★', $avgRounded) . str_repeat('☆', 5 - $avgRounded); ?></div>
+                        <div style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">Based on <?php echo $total; ?> review<?php echo $total > 1 ? 's' : ''; ?></div>
+                    </div>
+                </div>
                 <div style="padding:20px 0;">
                     <?php foreach($reviews as $review){ ?>
                     <div style="border-bottom:1px solid #F0F0F0;padding:16px 0;">
@@ -400,8 +441,12 @@
                 <?php } else { ?>
                 <p style="font-family:'Inter',sans-serif;font-size:14px;color:#999;padding:20px 0;">No reviews yet — be the first to review this product.</p>
                 <?php } ?>
+                <!-- Add Review Form -->
                 <div style="margin-top:24px;padding-top:24px;border-top:2px solid #EBEBEB;">
                     <h4 style="font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:#14213D;margin-bottom:16px;">Add a Review</h4>
+                    <?php if(!$this->session->userdata('user_id')){ ?>
+                    <p style="font-family:'Inter',sans-serif;font-size:14px;color:#999;">Please <a href="<?php echo base_url(); ?>login" style="color:#FCA311;font-weight:500;">log in</a> to leave a review.</p>
+                    <?php } else { ?>
                     <form method="post" action="<?php echo base_url(); ?>Product/add_review/<?php echo $product_detail['id']; ?>">
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
                             <input type="text" name="name" placeholder="Your name" class="form-control">
@@ -422,14 +467,9 @@
                         </div>
                         <button type="submit" style="background:#FCA311;color:#14213D;border:none;padding:10px 28px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;">Submit Review</button>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
-
-            <!-- Comments Tab -->
-            <div class="tab-pane fade" id="contact" role="tabpanel">
-                <p style="font-family:'Inter',sans-serif;font-size:14px;color:#999;padding:20px 0;">Comments functionality coming soon.</p>
-            </div>
-
         </div>
     </div>
 </div>

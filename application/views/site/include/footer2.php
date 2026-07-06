@@ -76,8 +76,6 @@ $result=$active+$pending;
 
 			<ul class="list list_foo" style="display:flex;gap:14px;flex-wrap:nowrap;margin:0;flex:0 1 auto;min-width:0;">
 				<li><a href="<?php echo base_url();?>about">About</a></li>
-				<li><a href="<?php echo base_url();?>how_its_work">How it works</a></li>
-				<li><a href="<?php echo base_url();?>signup">For vendors</a></li>
 				<li><a href="<?php echo base_url();?>fee-charges">Fees & charges</a></li>
 				<li><a href="<?php echo base_url();?>privacy">Terms of use</a></li>
 				<li><a href="<?php echo base_url();?>privacy">Privacy</a></li>
