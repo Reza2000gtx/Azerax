@@ -244,6 +244,14 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
 
     $product_id=$this->db->insert_id();
 
+    // Save categories
+    if(!empty($_REQUEST['main_cat'])){
+        $cat_a = implode(',', $_REQUEST['main_cat']);
+        $cat_b = !empty($_REQUEST['sub1_cat']) ? implode(',', $_REQUEST['sub1_cat']) : '';
+        $cat_c = !empty($_REQUEST['sub2_cat']) ? implode(',', $_REQUEST['sub2_cat']) : '';
+        $this->db->query("INSERT INTO product_category (product_id, cat_a, cat_b, cat_c) VALUES ('".$product_id."', '".$cat_a."', '".$cat_b."', '".$cat_c."')");
+    }
+
     if($run){      
 
 for($i=0; $i<$input_conn; $i++){
@@ -1676,6 +1684,37 @@ if(isset($_REQUEST['product_type']) && !empty($_REQUEST['product_type'])){
     $whereorder = 'ORDER by product.device_model DESC';
 }
 
+// Category filter
+if(!empty($_REQUEST['main_cat']) || !empty($_REQUEST['sub1_cat']) || !empty($_REQUEST['sub2_cat'])){
+    $cat_where = '';
+    if(!empty($_REQUEST['main_cat'])){
+        $cats = array_map(array($this->db, 'escape'), $_REQUEST['main_cat']);
+        $cat_where .= " AND (";
+        $cat_parts = [];
+        foreach($_REQUEST['main_cat'] as $cat){
+            $cat_parts[] = "FIND_IN_SET(".$this->db->escape($cat).",product_category.cat_a)";
+        }
+        $cat_where .= implode(' OR ', $cat_parts) . ")";
+    }
+    if(!empty($_REQUEST['sub1_cat'])){
+        $cat_where .= " AND (";
+        $cat_parts = [];
+        foreach($_REQUEST['sub1_cat'] as $cat){
+            $cat_parts[] = "FIND_IN_SET(".$this->db->escape($cat).",product_category.cat_b)";
+        }
+        $cat_where .= implode(' OR ', $cat_parts) . ")";
+    }
+    if(!empty($_REQUEST['sub2_cat'])){
+        $cat_where .= " AND (";
+        $cat_parts = [];
+        foreach($_REQUEST['sub2_cat'] as $cat){
+            $cat_parts[] = "FIND_IN_SET(".$this->db->escape($cat).",product_category.cat_c)";
+        }
+        $cat_where .= implode(' OR ', $cat_parts) . ")";
+    }
+    $where .= $cat_where;
+}
+
 if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
     $where.='ORDER by product.id DESC';
   }elseif(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==2){
@@ -1709,7 +1748,7 @@ if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
         $data['nav_class']='trasnparent';
         $config = array();
         $config["base_url"] = base_url()."search-listing";       
-        $config["total_rows"] = count($this->db->query('SELECT DISTINCT product.id , product.* FROM `product` left JOIN `input_output` ON `product`.`id`= `input_output`.`product_id`' .$where)->result_array());
+        $config["total_rows"] = count($this->db->query('SELECT DISTINCT product.id , product.* FROM `product` left JOIN `input_output` ON `product`.`id`= `input_output`.`product_id` LEFT JOIN `product_category` ON `product`.`id`= `product_category`.`product_id`' .$where)->result_array());
         $config["per_page"] = $perpage;
         $config["uri_segment"] = 2;
         $this->pagination->initialize($config);
@@ -1717,7 +1756,7 @@ if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
         //$data['productlist'] = $this->common_model->GetAllData($config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
 
-        $data['productlist'] = $this->db->query('SELECT DISTINCT product.id , product.* FROM `product` left JOIN `input_output` ON `product`.`id`= `input_output`.`product_id`' .$where.' Limit '.$page.','.$config["per_page"])->result_array();
+        $data['productlist'] = $this->db->query('SELECT DISTINCT product.id , product.* FROM `product` left JOIN `input_output` ON `product`.`id`= `input_output`.`product_id` LEFT JOIN `product_category` ON `product`.`id`= `product_category`.`product_id`' .$where.' Limit '.$page.','.$config["per_page"])->result_array();
  
        //echo $this->db->last_query(); 
 // die;
