@@ -90,10 +90,6 @@ $result=$active+$pending;
 
 
 
-						<script src="<?php echo base_url();?>assets/site/js/jquery-3.2.1.min.js"></script>
-						<script src="<?php echo base_url();?>assets/site/js/popper.js"></script>
-						<script src="<?php echo base_url();?>assets/site/js/bootstrap.min.js"></script>
-						<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 						<script src="<?php echo base_url();?>assets/site/js/stellar.js"></script>
 						<script src="<?php echo base_url();?>assets/site/vendors//lightbox/simpleLightbox.min.js"></script>
 						<script src="<?php echo base_url();?>assets/site/vendors//nice-select/<?php echo base_url();?>assets/site/js/jquery.nice-select.min.js"></script>

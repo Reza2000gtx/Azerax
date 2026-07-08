@@ -1,4 +1,4 @@
-<?php include_once 'include/header.php' ; ?>
+<?php include_once 'include/header2.php' ; ?>
 
 <style type="text/css">
 p.has-error {
@@ -192,6 +192,31 @@ p.has-error {
     margin-bottom: 15px;
     padding-top: 16px;
     border-radius: 5px;
+}
+
+body {
+    overflow-x: hidden;
+}
+section.add_product {
+    min-height: calc(100vh - 280px) !important;
+    padding-bottom: 40px;
+    padding-top: 20px;
+}
+section.Progress {
+    padding-top: 40px;
+}
+section.add_product {
+    min-height: calc(100vh - 320px) !important;
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
+.header_area {
+    margin-bottom: 0 !important;
+}
+
+div[style*="background:#14213D"] {
+    margin-top: -20px;
 }
 
 </style> 
@@ -537,22 +562,19 @@ span.select2.select2-container.select2-container--default {
 	color: #444;
 	line-height: 35px;
 }
+
+select.form-control {
+    height: 38px !important;
+    line-height: 38px !important;
+}
 </style>
 
-<section class="banner_area add_product_img">
-	<div class="banner_inner d-flex align-items-center">
-		<div class="container">
-			<div class="banner_content text-center">
-				<h2>Add Item </h2>
-				<div class="page_link">
-					<a href="<?php echo base_url();?>">Home</a>
-					<a href="<?php echo base_url();?>add-product">Add Item</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 
+
+<div style="background:#14213D;padding:40px;text-align:center;">
+    <h1 style="font-family:'Inter',sans-serif;font-size:30px;font-weight:700;color:#fff;margin-bottom:6px;">Add Product</h1>
+    <p style="font-family:'Inter',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);margin:0;">List your broadcast product on azera<span style="color:#FCA311;">X</span></p>
+</div>
 
 <section class="Progress">
   <div class= "container">
@@ -602,7 +624,7 @@ span.select2.select2-container.select2-container--default {
   <fieldset id="menu1" class="display_block" style="display: block;">
    <h3></h3>
     <div class="row">
-     <div class="col-sm-12">
+     <div class="col-sm-6">
       <div class="form-group">
         <label>Product Type</label>
           <select required class="form-control" name="product_type" id="product_type">
@@ -639,19 +661,12 @@ span.select2.select2-container.select2-container--default {
       <select required class="form-control sets_hidden1" name="rack_unit" style="height: calc(3.25rem + 2px);" >
        <option value="">Select</option>
     
-       <?php 
-        for ($i = 1; $i <= 50; $i++){
-        $selected='';
-        if($i==1){
-        $selected='selected';
-        }
-        ?>
-                                   
-       <option value="<?php echo "$i"; ?> RU" ><?php echo "$i"; ?> RU</option> 
-
-        <?php    };
-
-        ?>
+      <?php 
+      for ($i = 1; $i <= 10; $i++){
+      ?>
+      <option value="<?php echo "$i"; ?> RU"><?php echo "$i"; ?> RU</option> 
+      <?php } ?>
+      <option value="10+ RU">10+ RU</option>
       </select>
     </div>
 
@@ -730,7 +745,7 @@ span.select2.select2-container.select2-container--default {
    <div class="form-group">
     <label>Main Category</label>
     <!--<input type="text"   id="input_conn" name="input_conn[]"  placeholder="" class="typeahead inputF tm-input form-control "  />-->
-      <select id="e2_2" required name="Cat_A[0][]" id="Cat_A" required="" class="typeahead inputF tm-input form-control sets_hidden2" multiple="multiple" style="width:300px" class="populate placeholder">
+      <select id="e2_2" required name="main_cat[]" id="Cat_A" required="" class="typeahead inputF tm-input form-control sets_hidden2" multiple="multiple" style="width:300px" class="populate placeholder">
        <div id="responsemenu2"></div>
 
       <?php     
@@ -763,7 +778,7 @@ span.select2.select2-container.select2-container--default {
   <div class="col-md-3 set-44">
    <div class="form-group">
     <label>Sub-Category A</label>
-     <select required name="Cat_B[0][]" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
+     <select required name="sub1_cat[]" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
        <?php     
          $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_B'); 
          foreach($Input as $InputSugg){
@@ -795,7 +810,7 @@ span.select2.select2-container.select2-container--default {
   <div class="col-md-3  set-44">
    <div class="form-group">
     <label for="title">Sub-Category B</label>
-     <select required name="Cat_C[0][]" class="sets_hidden2 typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+     <select required name="sub2_cat[]" class="sets_hidden2 typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
        <?php     
         $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_C');
         foreach($Input as $InputSugg){
@@ -2318,6 +2333,16 @@ $(".processsuggestionStand").select2({ tags: true, tokenSeparators: [','] });
 
 <script  async  src="https://js.stripe.com/v3/"  ></script>
 	<?php  include_once 'include/footer2.php' ; ?>
+<script>
+$(document).ready(function(){
+    $('.nice-select').each(function(){
+        var $select = $(this).prev('select');
+        $(this).remove();
+        $select.show();
+    });
+    $('select[name="rack_unit"]').select2({placeholder: "Select", width: '100%'});
+});
+</script>
 
 <script src="<?php echo base_url();?>assets/site/js/popper.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/bootstrap.min.js"></script>
@@ -3144,12 +3169,10 @@ function payment_process_paypal(paymentType,actual_amt,paymentIntent_id){
    });
    if(counter3)
    { 
-  // alert('Success 3'); 
    $('#menu1').hide();
    $('#menu2').hide();
    $(".Error3").html('');
-   show_payment_option();
-  // $('#menu2').show();
+   add_function();
    }
     else
    {

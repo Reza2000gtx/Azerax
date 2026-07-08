@@ -79,6 +79,11 @@ html {
 		document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
 
 	</script>
+
+<script src="<?php echo base_url();?>assets/site/js/jquery-3.2.1.min.js"></script>
+<script src="<?php echo base_url();?>assets/site/js/popper.js"></script>
+<script src="<?php echo base_url();?>assets/site/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
 </head>
 <body>
 
