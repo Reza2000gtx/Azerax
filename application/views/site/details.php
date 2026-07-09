@@ -1,4 +1,9 @@
 <?php include_once 'include/header2.php' ; ?>
+<?php if($this->session->userdata('user_id')){ ?>
+<div style="background:#F5F5F5;padding:10px 40px;border-bottom:1px solid #EBEBEB;">
+    <a href="<?php echo base_url(); ?>my-product-listing" style="font-family:'Inter',sans-serif;font-size:13px;color:#14213D;text-decoration:none;">← Back to My Products</a>
+</div>
+<?php } ?>
 
 <style>
 /* ── CAROUSEL ── */
@@ -292,7 +297,7 @@
             <div class="col-lg-6">
                 <div class="az-detail-info">
                     <h2 class="az-detail-model"><?php echo $product_detail['device_model']; ?></h2>
-                    <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?></div>
+                    <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?> <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
 
                     <?php if ($product_detail['dealer_notes']) { ?>
                     <div class="az-detail-notes">
