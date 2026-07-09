@@ -372,7 +372,11 @@ public function signup_success(){
 			$update['fname'] = $this->input->post('username');
             $update['email'] = $this->input->post('email');
             $update['address'] = $this->input->post('address');
+            $update['company'] = $this->input->post('company');
+            $update['job_title'] = $this->input->post('job_title');
+            $update['country'] = $this->input->post('country');
 
+   		
    		$run = $this->common_model->UpdateData('users',array('user_id'=>$user),$update);
 	    if($run)
 		$this->session->set_flashdata('msg','<div class="alert alert-success"><p>Profile updated successfully!</p></div>');
