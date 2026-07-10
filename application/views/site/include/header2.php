@@ -72,6 +72,44 @@ html {
     color: #333 !important;
 }
 
+/* ── USER DROPDOWN ── */
+.az-user-dropdown {
+    border: 1.5px solid #EBEBEB !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+    padding: 8px 0 !important;
+    min-width: 220px !important;
+    margin-top: 8px !important;
+}
+.az-dd-section {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    color: #FCA311 !important;
+    padding: 12px 16px 4px !important;
+}
+.az-user-dropdown .az-dd-link {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #14213D !important;
+    padding: 8px 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-decoration: none !important;
+    transition: background 0.15s !important;
+}
+.az-user-dropdown .az-dd-link:hover {
+    background: #FFF3D6 !important;
+    color: #FCA311 !important;
+}
+.az-dd-link i {
+    font-size: 16px !important;
+    width: 18px !important;
+}
 </style>
 
 	<script type="text/javascript"> 
@@ -129,19 +167,19 @@ html {
                                 <img class="img_top" <?php if(!empty($user['profile'])){ ?> src="<?php echo base_url();?>assets/profile/<?php echo $user['profile'];?>" <?php } else { ?> src="<?php echo base_url();?>assets/profile/user.png" <?php } ?>>
                                 <?php echo $user['fname'];?>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li class="nav-item main_menu_item bolde_onl">Profile</li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>profile">My Profile</a></li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>change-password">Change Password</a></li>
-                                <li class="nav-item"><a onclick="return (confirm('Are you sure?'))" class="nav-link" href="<?php echo base_url();?>logout">Logout</a></li>
-                                <li class="nav-item main_menu_item border_font">Items management</li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>add-product">Add Item</a></li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>my-product-listing">My List</a></li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>my-fav-listing">Favorite List</a></li>
-                                <li class="nav-item main_menu_item border_font">Financials</li>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo base_url();?>transaction">Transaction History</a></li>
-                                <li class="nav-item"><a class="nav-link" onclick="return alert('coming soon');" href="#">Payment details</a></li>
-                                <li class="nav-item"><a class="nav-link" onclick="return alert('coming soon');" href="#">Credit cards</a></li>
+                           <ul class="dropdown-menu az-user-dropdown">
+                                <li class="az-dd-section">Profile</li>
+                                <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>profile"><i class="ti ti-user"></i> My Profile</a></li>
+                                <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>change-password"><i class="ti ti-lock"></i> Change Password</a></li>
+                                <li class="az-dd-section">Products</li>
+                                <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>add-product"><i class="ti ti-plus"></i> Add Product</a></li>
+                                <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>my-product-listing"><i class="ti ti-list"></i> My Products</a></li>
+                                <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>my-fav-listing"><i class="ti ti-heart"></i> My Favourites</a></li>
+                                <li class="az-dd-section">Financials</li>
+                                <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>transaction"><i class="ti ti-receipt"></i> Transaction History</a></li>
+                                <li style="border-top:1px solid #EBEBEB;margin-top:8px;padding-top:4px;">
+                                    <a class="az-dd-link" style="color:#dc3545 !important;" onclick="document.getElementById('logoutModal').style.display='flex';return false;" href="#"><i class="ti ti-logout" style="color:#dc3545;"></i> Logout</a>
+                                </li>
                             </ul>
                         </li>
                         <?php } ?>
@@ -150,5 +188,19 @@ html {
             </div>
         </nav>
     </div>
+    <!-- Logout Modal -->
+<div id="logoutModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:14px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <div style="width:56px;height:56px;background:#FFF3D6;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <i class="ti ti-logout" style="font-size:28px;color:#FCA311;"></i>
+        </div>
+        <h3 style="font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#14213D;margin-bottom:8px;">Sign out?</h3>
+        <p style="font-family:'Inter',sans-serif;font-size:14px;color:#999;margin-bottom:24px;">You'll need to sign back in to access your products and favourites.</p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <button onclick="document.getElementById('logoutModal').style.display='none'" style="flex:1;padding:11px;border-radius:8px;border:1.5px solid #EBEBEB;background:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#14213D;cursor:pointer;">Cancel</button>
+            <a href="<?php echo base_url();?>logout" style="flex:1;padding:11px;border-radius:8px;background:#dc3545;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center;">Sign out</a>
+        </div>
+    </div>
+</div>
 </header>
 					

@@ -52,12 +52,7 @@ class Login extends CI_Controller
             // echo $this->db->last_query();
 			if($run){
 
-				if($run['email_verified']==0) {
-					
-					$this->session->set_flashdata('msg','<div class="alert alert-danger">Email verification is pending.</div>');
-					redirect('login');
-				
-				} else if($run['status']==0){
+				if($run['status']==0){
 
 					$this->session->set_flashdata('msg','<div class="alert alert-danger">Administrator has been blocked your account.For more info please contact to admin.</div>');
 					
@@ -66,7 +61,8 @@ class Login extends CI_Controller
 				} else {
 					$this->session->set_userdata('user_id',$run['user_id']);
 					$this->session->set_userdata('email',$run['email']);
-					$this->session->set_userdata('username',$run['fname']);   
+					$this->session->set_userdata('username',$run['fname']);
+					$this->session->set_userdata('email_verified',$run['email_verified']);   
 					$this->session->set_flashdata('msg','<div class="alert alert-success">Welcome back <br>'.$run['fname'].'</div>');
 
 					// $update['last_logged_in_time']=date('Y-m-d H:i:s');

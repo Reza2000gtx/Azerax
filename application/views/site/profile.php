@@ -110,12 +110,20 @@
 
         <form action="<?php echo base_url(); ?>edit-profile-action" method="post" enctype="multipart/form-data">
 
-            <?php if(!empty($user['profile'])): ?>
-            <div class="form-group" style="text-align:center;">
+            <div class="form-group" style="text-align:center;position:relative;display:inline-block;margin-bottom:20px;width:100%;">
+                <?php if(!empty($user['profile'])): ?>
                 <img src="<?php echo base_url(); ?>assets/profile/<?php echo $user['profile']; ?>" class="az-profile-avatar" alt="Profile image">
                 <input type="hidden" name="oldprofile" value="<?php echo $user['profile']; ?>">
+                <?php else: ?>
+                <div style="width:80px;height:80px;border-radius:50%;background:#E5E5E5;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;">
+                    <i class="fa fa-user" style="font-size:32px;color:#999;"></i>
+                </div>
+                <?php endif; ?>
+                <label for="file-upload" style="position:absolute;bottom:8px;left:calc(50% + 24px);width:28px;height:28px;background:#FCA311;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+                    <i class="fa fa-camera" style="font-size:12px;color:#14213D;"></i>
+                </label>
+                <input type="file" name="profile" id="file-upload" accept="image/*" style="display:none;">
             </div>
-            <?php endif; ?>
 
             <div class="form-group">
                 <label>Full Name</label>
@@ -142,12 +150,7 @@
                 <input type="text" name="country" value="<?php echo $user['country']; ?>" placeholder="e.g. Australia, United Kingdom" class="form-control">
             </div>
 
-            <div class="form-group">
-                <label>Profile Photo</label>
-                <input type="file" name="profile" id="file-upload" accept="image/*" class="form-control" style="padding:8px;">
-            </div>
-
-            <div class="form-group" style="margin-top:8px;">
+           		 <div class="form-group" style="margin-top:8px;">
                 <button class="az-submit-btn">Update Profile</button>
             </div>
 

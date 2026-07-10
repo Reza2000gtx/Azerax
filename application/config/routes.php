@@ -119,6 +119,7 @@ $route['expired_product'] = 'Product/expired_product';
 $route['signup'] = 'Signup/index';
 
 $route['signup-action'] = 'Signup/signup_action';
+$route['verify-email/(:any)'] = 'Signup/verify_email/$1';
 
 
 

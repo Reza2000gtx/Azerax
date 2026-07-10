@@ -30,8 +30,7 @@ public function signup_action(){
 				 $this->form_validation->set_rules('password','Password','required|min_length[6]');
 		         $this->form_validation->set_rules('cpassword','Confirm Password','required|matches[password]');
 		         $this->form_validation->set_message('is_unique', ' Already exist');
-               $this->form_validation->set_rules('address','address','required');
-
+               
 
  		if($this->form_validation->run()==false){
 
@@ -82,8 +81,7 @@ public function signup_action(){
     	}
 
 }
-
-		public function signup(){
+			public function signup(){
 
 		 $this->custom->getCurrencyByIP();
 		

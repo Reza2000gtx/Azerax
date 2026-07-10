@@ -1,4 +1,10 @@
 <?php include_once 'include/header2.php';?><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<?php if($this->session->userdata('user_id') && $this->session->userdata('email_verified') == 0): ?>
+<div style="background:#FFF3D6;border-bottom:2px solid #FCA311;padding:10px 40px;text-align:center;font-family:'Inter',sans-serif;font-size:13px;color:#14213D;">
+    ⚠️ Please verify your email address to access all features. 
+    <a href="<?php echo base_url(); ?>resend-verification" style="color:#FCA311;font-weight:600;text-decoration:none;margin-left:8px;">Resend verification email →</a>
+</div>
+<?php endif; ?>
 <style type="text/css">
 	#showSearchDiv.show_div {
 	display: block;
