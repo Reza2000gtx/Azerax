@@ -37,8 +37,9 @@
 .autocomplete-items > div {
 	width: 100%;
 	color: #666;
-	padding: 6px 15px;
+	padding: 6px 15px 6px 52px;
 	cursor: pointer;
+	text-align: left;
 }
 .autocomplete-items > div strong{
 	color: #333;
@@ -153,7 +154,8 @@
     align-items: center;
     width: 100%;
     margin-bottom: 6px !important;
-    gap: 56px;
+    gap: 8px;
+    padding-left: 0 !important;
 }
 #advSearchPanel .btn_usch {
     width: calc(20% - 3px);
@@ -163,7 +165,7 @@
 #advSearchPanel .loop_inp {
     width: 80%;
     flex: 1;
-    margin-left: 50px;
+    margin-left: 16px;
 }
 #advSearchPanel .loop_inp .col-sm-4 {
     width: 33.333% !important;
@@ -180,7 +182,7 @@
     height: auto !important;
 }
 #advSearchPanel .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    padding: 0 4px !important;
+    padding: 0 8px !important;
     line-height: 22px !important;
 }
 
@@ -433,6 +435,38 @@
 .pt-btn:hover {
     border-color: #FCA311;
 }
+
+/* ── ADVANCED SEARCH LABEL ICONS ── */
+#advSearchPanel .btn_usch {
+    position: relative !important;
+    background: transparent !important;
+    clip-path: none !important;
+    width: 110px !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+#advSearchPanel .btn_usch::after {
+    display: none !important;
+    border: none !important;
+    content: none !important;
+}
+#advSearchPanel .btn_usch > div {
+    background: transparent !important;
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    white-space: nowrap;
+    justify-content: flex-start !important;
+}
+
+#advSearchPanel .select2-results__option {
+    padding: 6px 12px !important;
+}
  </style>
 
  
@@ -499,7 +533,7 @@
 	     </section>
 
         
-         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:560px;left:50%;transform:translateX(-50%);z-index:9999;width:80%;max-width:900px;overflow:visible;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);background:#E5E5E5;">
+         <div class="space" id="advSearchPanel" style="display:none;position:fixed;top:400px;left:50%;transform:translateX(-50%);z-index:9999;width:80%;max-width:900px;overflow:visible;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);background:#E5E5E5;">
           <div style="margin:5px;border:2px solid #14213D;border-radius:12px;padding:24px;position:relative;width:calc(100% - 10px);">
           <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:1px;right:9px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
 					<!--<nav class="search-channel-container">-->
@@ -511,7 +545,7 @@
                      <li class="">
                         <div class="btn_usch">
                             <div class="">
-                                By Product Type
+                                <i class="ti ti-layout-grid"></i> Product Type
                             </div>
                         </div>
                         <div class="loop_inp" style="margin-left:50px;">
@@ -531,7 +565,7 @@
                         <li class="">
                         <div class="btn_usch">
                             <div class="">
-                                By Category
+                                <i class="ti ti-folder"></i> Category
                             </div>
                         </div>
           <div class="loop_inp">
@@ -627,10 +661,9 @@
 
 <li class="">
   <div class="btn_usch" >
-		<div class="" >
-	     <!--<input type="checkbox" name="by_input" value=1>-->
-				By Input
-		</div>
+		<div class="">
+     <i class="ti ti-arrow-bar-to-right"></i> Input
+    </div>
 	</div>
   <div class="loop_inp">
 		<div class="row">
@@ -734,10 +767,9 @@
 
 	<li class="">
 	  <div class="btn_usch">
-			<div class="">
-		  	 <!--<input type="checkbox" name="by_output" value=1 > -->
-				By output
-			</div>
+		<div class="">
+     <i class="ti ti-arrow-bar-right"></i> Output
+    </div>
 		</div>
 
 <div class="loop_inp">
@@ -841,10 +873,9 @@
 
 	    <li class="">
 	      <div class="btn_usch">
-					<div class="">
-					<!--<input type="checkbox" name="by_process" value=1 >-->
-					By process
-					</div>
+				<div class="">
+         <i class="ti ti-settings"></i> Process
+        </div>
 				</div>
 
 <div class="loop_inp">

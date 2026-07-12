@@ -94,6 +94,265 @@ p.has-error {
 #box4{
   margin-top: 360px;
 }
+
+/* ══════════════════════════════════════════
+   PREMIUM ADD PRODUCT DESIGN
+   ══════════════════════════════════════════ */
+
+/* Step progress bar */
+.az-steps-bar {
+    background: #fff;
+    border-bottom: 1px solid #EBEBEB;
+    padding: 0 40px;
+}
+.az-steps-inner {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+.az-step {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer;
+    padding: 8px 12px !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+    width: auto !important;
+    float: none !important;
+}
+.az-step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #E5E5E5;
+    color: #999;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+.az-step-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #999;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.az-step.active .az-step-num {
+    background: #FCA311;
+    color: #14213D;
+}
+.az-step.active .az-step-label {
+    color: #14213D;
+    font-weight: 600;
+}
+.az-step.completed .az-step-num {
+    background: #14213D;
+    color: #fff;
+}
+.az-step.completed .az-step-label {
+    color: #14213D;
+}
+.az-step-connector {
+    flex: 1;
+    height: 2px;
+    background: #EBEBEB;
+    margin: 0 4px;
+    transition: background 0.2s;
+}
+.az-step-connector.active {
+    background: #14213D;
+}
+
+/* Override old tab styles */
+section.Progress {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.tab { display: none !important; }
+.filler { display: none !important; }
+
+/* Layout */
+section.add_product {
+    background: #F5F5F5;
+}
+.container-flex {
+    display: flex;
+    align-items: flex-start;
+    min-height: calc(100vh - 220px);
+}
+
+/* Dark navy sidebar */
+.col-lg-2 {
+    width: 280px !important;
+    min-width: 280px;
+    height: auto !important;
+    margin: 0 !important;
+    background: #14213D;
+    min-height: calc(100vh - 220px);
+    padding: 32px 24px;
+    position: sticky;
+    top: 0;
+}
+.col-box {
+    display: none;
+    background: transparent !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+}
+.col-box.active-box { display: block; }
+.col-box p:first-child strong {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+    margin-bottom: 12px;
+}
+.col-box p {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    margin-bottom: 8px;
+}
+
+/* Sidebar step mini indicators */
+.az-sidebar-steps {
+    margin-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+}
+.az-sidebar-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+}
+.az-sidebar-step.active { opacity: 1; }
+.az-sidebar-step.done { opacity: 0.7; }
+.az-sidebar-step-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.az-sidebar-step.active .az-sidebar-step-dot {
+    background: #FCA311;
+    color: #14213D;
+}
+.az-sidebar-step.done .az-sidebar-step-dot {
+    background: rgba(255,255,255,0.3);
+    color: #fff;
+}
+.az-sidebar-step-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+.az-sidebar-step.active .az-sidebar-step-label {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Form area */
+.container-ipo {
+    flex: 1;
+    margin: 0 !important;
+    padding: 32px 40px;
+}
+#msform fieldset {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 32px;
+}
+
+/* Form labels */
+.form-group label {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    color: #555 !important;
+}
+
+/* Action buttons */
+#msform .action-button {
+    background: #14213D;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 11px 28px;
+    font-size: 14px;
+    color: #fff;
+}
+#msform .action-button.next {
+    background: #FCA311 !important;
+    color: #14213D !important;
+}
+#msform .action-button.next:hover {
+    background: #e8940a !important;
+}
+.actionButtonSubmit {
+    background: #dc3545 !important;
+}
+.next {
+    background: #FCA311 !important;
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 11px 28px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+.next:hover { background: #e8940a !important; color: #14213D !important; }
+.next:hover { background: #e8940a !important; }
+
+/* Input type label in I.P.O */
+.input_box {
+    border: 1.5px solid #EBEBEB !important;
+    border-radius: 10px !important;
+    background: #FAFAFA !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+}
+
+.container-ipo {
+    background: #F5F5F5;
+}
+
+section.add_product #msform fieldset#menu1,
+section.add_product #msform fieldset#menu2,
+section.add_product #msform fieldset#menu3 {
+    border-radius: 16px !important;
+}
+
+.header_area .navbar .nav .nav-item .nav-link:hover {
+    background: transparent !important;
+}
 </style>
 
 <style>
@@ -577,42 +836,65 @@ select.form-control {
 </div>
 
 <section class="Progress">
-  <div class= "container">
-    <div class="container-flex">
-      <div class="tab" id="progressbar">
-      <button class="tablinks t1 active" onclick="openCity(event, 'menu1')">Device</button>
-      <button class="tablinks t2" onclick="openCity(event, 'menu2')">I.P.O</button>
-      <button class="tablinks t3" onclick="openCity(event, 'menu3')">Vendor </button>
-   </div>
-  <div class="filler"></div>
- </div> 
-</div>
+  <div class="az-steps-bar">
+    <div class="az-steps-inner">
+      <button class="tablinks t1 az-step active" onclick="openCity(event, 'menu1')" data-step="1">
+        <span class="az-step-num">1</span>
+        <span class="az-step-label">Device</span>
+      </button>
+      <div class="az-step-connector"></div>
+      <button class="tablinks t2 az-step" onclick="openCity(event, 'menu2')" data-step="2">
+        <span class="az-step-num">2</span>
+        <span class="az-step-label">I/O &amp; Process</span>
+      </button>
+      <div class="az-step-connector"></div>
+      <button class="tablinks t3 az-step" onclick="openCity(event, 'menu3')" data-step="3">
+        <span class="az-step-num">3</span>
+        <span class="az-step-label">Vendor Info</span>
+      </button>
+    </div>
+  </div>
 </section>
     
 
 <section class="add_product">
  <div class="container-flex">
-  <div class="col-lg-2 ">
-   <div class="col-box" id="box1">
-    <p><strong>Device Category</strong></p>
-    <p>Select best describing categories for the device</p>
-    <p>This Selection is Optional</p>
-  </div>
-   <div class="col-box" id="box2">
-   <p><strong>Physical Inputs</strong></p>
-    <p>Select the Input Type, Industry Standard and Connection Type for each input.</p>
-    <p>Click on "+" to add more Inputs.</p>
-   </div>
-   <div class="col-box" id="box3">
-   <p><strong>Physical Outputs</strong></p>
-    <p>Select the Output Type, Industry Standard and Connection Type for each output.</p>
-    <p>Click on "+" to add more Outputs.</p>
-   </div>
-   <div class="col-box" id="box4">
-   <p><strong>Internal Process</strong></p>
-    <p>Select the Type and Standard on the Process within the box.</p>
-    <p>Click on "+" to add as many processes as required.</p>
-   </div>
+  <div class="col-lg-2">
+    <!-- Step 1 help -->
+    <div class="col-box active-box" id="box1">
+        <p><strong>Device Details</strong></p>
+        <p>Enter the core information about your broadcast device — model, brand, dimensions and release date.</p>
+        <p>The more detail you provide, the easier architects can find your product.</p>
+    </div>
+    <!-- Step 2 help -->
+    <div class="col-box" id="box2">
+        <p><strong>Inputs, Outputs &amp; Process</strong></p>
+        <p>Specify the technical I/O capabilities of your device — input types, standards, connector types, outputs and internal processing.</p>
+        <p>Click <strong style="color:#FCA311;">+</strong> to add multiple inputs or outputs.</p>
+    </div>
+    <!-- Step 3 help -->
+    <div class="col-box" id="box3">
+        <p><strong>Vendor Information</strong></p>
+        <p>Add your contact details, warranty information, support notes and product images.</p>
+        <p>This information will appear on your product page for architects to view.</p>
+    </div>
+    <div class="col-box" id="box4" style="display:none;"></div>
+
+    <!-- Mini step tracker in sidebar -->
+    <div class="az-sidebar-steps">
+        <div class="az-sidebar-step active" id="sidebar-step1">
+            <div class="az-sidebar-step-dot">1</div>
+            <div class="az-sidebar-step-label">Device Details</div>
+        </div>
+        <div class="az-sidebar-step" id="sidebar-step2">
+            <div class="az-sidebar-step-dot">2</div>
+            <div class="az-sidebar-step-label">I/O &amp; Process</div>
+        </div>
+        <div class="az-sidebar-step" id="sidebar-step3">
+            <div class="az-sidebar-step-dot">3</div>
+            <div class="az-sidebar-step-label">Vendor Info</div>
+        </div>
+    </div>
   </div>
   <div class="container-ipo">
     <div class="container">
@@ -1821,6 +2103,32 @@ function preview_image(oInput) {
 
 <!--  <script>
 // function openCity(evt, cityName) {
+    // Update progress bar and sidebar steps
+    var stepNum = cityName.replace('menu','');
+    // Update top progress bar
+    document.querySelectorAll('.az-step').forEach(function(btn){
+        var s = btn.getAttribute('data-step');
+        btn.classList.remove('active','completed');
+        if(parseInt(s) < parseInt(stepNum)) btn.classList.add('completed');
+        if(s === stepNum) btn.classList.add('active');
+    });
+    // Update connectors
+    document.querySelectorAll('.az-step-connector').forEach(function(c,i){
+        c.classList.remove('active');
+        if(i < parseInt(stepNum)-1) c.classList.add('active');
+    });
+    // Update sidebar help boxes
+    document.querySelectorAll('.col-box').forEach(function(b){ b.classList.remove('active-box'); });
+    var activeBox = document.getElementById('box' + stepNum);
+    if(activeBox) activeBox.classList.add('active-box');
+    // Update sidebar step indicators
+    document.querySelectorAll('[id^="sidebar-step"]').forEach(function(s){
+        s.classList.remove('active','done');
+        var sNum = s.id.replace('sidebar-step','');
+        if(parseInt(sNum) < parseInt(stepNum)) s.classList.add('done');
+        if(sNum === stepNum) s.classList.add('active');
+    });
+
 //   var i, display_block, tablinks;
 //   display_block = document.getElementsByClassName("display_block");
 //   for (i = 0; i < display_block.length; i++) {

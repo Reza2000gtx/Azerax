@@ -1,4 +1,4 @@
-<?php include_once 'include/header.php' ;
+<?php include_once 'include/header2.php' ;
    $id = $_REQUEST['id'];
     ?>
 <style type="text/css">
@@ -18,6 +18,62 @@
    .has-error .form-control {
    border-color: #f00 !important;
    }
+
+/* ── EDIT PRODUCT BRAND STYLING ── */
+section.add_product {
+    background: #F5F5F5;
+    padding: 32px 0;
+    min-height: calc(100vh - 220px);
+}
+section.add_product .form_add_product {
+    overflow: visible !important;
+}
+#msform {
+    max-width: 960px;
+    margin: 0 auto;
+}
+section.add_product #msform fieldset#menu1,
+section.add_product #msform fieldset#menu2,
+section.add_product #msform fieldset#menu3 {
+    background: #fff;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 32px;
+}
+.form-group label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+.form-control:focus {
+    border-color: #FCA311 !important;
+    box-shadow: none !important;
+}
+/* Action buttons */
+#msform .action-button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 11px 28px;
+    font-size: 14px;
+    color: #fff;
+    background: #14213D;
+    border: none;
+    cursor: pointer;
+}
+#msform .action-button.next {
+    background: #FCA311 !important;
+    color: #14213D !important;
+}
+#msform .action-button.next:hover { background: #e8940a !important; }
+#msform .action-button.actionButtonSubmit { background: #dc3545; }
+/* Fix nav hover on this page */
+.header_area .navbar .nav .nav-item .nav-link:hover {
+    background: transparent !important;
+}
+/* Old progressbar hidden - using new one */
+#progressbar { display: none !important; }
 </style>
 <style type="text/css">
    .upload-btn-wrapper {
@@ -289,19 +345,10 @@
 }
    /*delete*/
 </style>
-<section class="banner_area add_product_img">
-   <div class="banner_inner d-flex align-items-center">
-      <div class="container">
-         <div class="banner_content text-center">
-            <h2>Edit Product </h2>
-            <div class="page_link">
-               <a href="<?php echo base_url();?>">Home</a>
-               <a href="<?php echo base_url();?>edit-my-product/<?=$product_detail['id']?>">Edit Product</a>
-            </div>
-         </div>
-      </div>
-   </div>
-</section>
+<div style="background:#14213D;padding:40px;text-align:center;margin-top:-20px;">
+    <h1 style="font-family:'Inter',sans-serif;font-size:30px;font-weight:700;color:#fff;margin-bottom:6px;">Edit Product</h1>
+    <p style="font-family:'Inter',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);margin:0;">Update your broadcast product listing on azera<span style="color:#FCA311;">X</span></p>
+</div>
 <section class="add_product">
    <div class="container">
       <div class="form_add_product contact_form">
@@ -309,12 +356,25 @@
          <form method="post" name="editForm" id="msform" onsubmit="return edit_function(event);">
             <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id');?>" >
             <input type="hidden" name="id" value="<?=$product_detail['id']?>" >
-            <!-- progressbar -->
-            <ul id="progressbar">
-               <li class="tablinks active" onclick="openCity(event, 'menu1')">Device Info</li>
-               <li class="tablinks" onclick="openCity(event, 'menu2')">IPO Info</li>
-               <li class="tablinks" onclick="openCity(event, 'menu3')">Dealer Info</li>
-            </ul>
+            <!-- premium step indicator -->
+            <div class="az-steps-bar" style="background:#fff;border-bottom:1px solid #EBEBEB;padding:0 20px;margin-bottom:24px;">
+                <div style="display:flex;align-items:center;max-width:600px;margin:0 auto;padding:20px 0;">
+                    <button type="button" class="tablinks az-step active" onclick="openCity(event, 'menu1')" data-step="1" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
+                        <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#FCA311;color:#14213D;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">1</span>
+                        <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#14213D;white-space:nowrap;">Device Info</span>
+                    </button>
+                    <div class="az-step-connector" style="flex:1;height:2px;background:#EBEBEB;margin:0 4px;"></div>
+                    <button type="button" class="tablinks az-step" onclick="openCity(event, 'menu2')" data-step="2" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
+                        <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#E5E5E5;color:#999;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">2</span>
+                        <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#999;white-space:nowrap;">I/O & Process</span>
+                    </button>
+                    <div class="az-step-connector" style="flex:1;height:2px;background:#EBEBEB;margin:0 4px;"></div>
+                    <button type="button" class="tablinks az-step" onclick="openCity(event, 'menu3')" data-step="3" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
+                        <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#E5E5E5;color:#999;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">3</span>
+                        <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#999;white-space:nowrap;">Dealer Info</span>
+                    </button>
+                </div>
+            </div>
             <!-- fieldsets -->
             <fieldset id="menu1" class="display_block" style="display: block;">
                <h3></h3>
@@ -403,7 +463,7 @@
                         <label for="title">Date released</label>
                         <!-- <input type="date" class="form-control" name="date_released" > -->
                         <div class='' data-date-format="yyyy-mm-dd">
-                           <input   type="date"  id=""  min="<?php echo date('Y-m-d');?>" value="<?=$product_detail['date_released']?>"  name="date_released" placeholder="" class="form-control">
+                           <input   type="date"  id="" value="<?=$product_detail['date_released']?>"  name="date_released" placeholder="" class="form-control">
                         </div>
                      </div>
                      <div class="form-group">
@@ -1436,7 +1496,7 @@ $i++;
       </div>
    </div>
 </section>
-<?php //include_once 'include/footer.php' ; ?>
+<?php include_once 'include/footer2.php' ; ?>
 <script>
    $("#Error").hide();
    
@@ -1449,7 +1509,7 @@ $i++;
     let formData = new FormData(form);
     $.ajax({
       method: "POST",
-      url: site_url+"Product/edit_product_action?action=update_shop_product",
+      url: "<?php echo base_url(); ?>Product/edit_product_action?action=update_shop_product",
       data: formData,
       dataType: "JSON",
       mimeType: 'multipart/form-data',
@@ -1511,6 +1571,32 @@ $i++;
 </script>
 <script>
    function openCity(evt, cityName) {
+    var stepNum = cityName.replace('menu','');
+    document.querySelectorAll('.az-step').forEach(function(btn){
+        var s = btn.getAttribute('data-step');
+        var numEl = btn.querySelector('.az-step-num');
+        var labelEl = btn.querySelector('.az-step-label');
+        if(parseInt(s) < parseInt(stepNum)){
+            numEl.style.background = '#14213D';
+            numEl.style.color = '#fff';
+            labelEl.style.color = '#14213D';
+            labelEl.style.fontWeight = '600';
+        } else if(s === stepNum){
+            numEl.style.background = '#FCA311';
+            numEl.style.color = '#14213D';
+            labelEl.style.color = '#14213D';
+            labelEl.style.fontWeight = '600';
+        } else {
+            numEl.style.background = '#E5E5E5';
+            numEl.style.color = '#999';
+            labelEl.style.color = '#999';
+            labelEl.style.fontWeight = '500';
+        }
+    });
+    document.querySelectorAll('.az-step-connector').forEach(function(c,i){
+        c.style.background = i < parseInt(stepNum)-1 ? '#14213D' : '#EBEBEB';
+    });
+
      var i, display_block, tablinks;
      display_block = document.getElementsByClassName("display_block");
      for (i = 0; i < display_block.length; i++) {
@@ -1604,8 +1690,11 @@ $i++;
      current_fs = $(this).parent();
      next_fs = $(this).parent().next();
      
-     //activate next step on progressbar using the index of next_fs
-     $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+      //activate next step on progressbar using the index of next_fs
+      $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+      // Update premium step indicators
+      var nextStepNum = $("fieldset").index(next_fs) + 1;
+      updateAzSteps(nextStepNum);
      
      //show the next fieldset
      next_fs.show(); 
@@ -1643,8 +1732,11 @@ $i++;
      previous_fs = $(this).parent().prev();
      
      //de-activate current step on progressbar
-     $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-     $("#progressbar li").eq($("fieldset").index(previous_fs)).addClass("active");
+      $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+      $("#progressbar li").eq($("fieldset").index(previous_fs)).addClass("active");
+      // Update premium step indicators
+      var prevStepNum = $("fieldset").index(previous_fs) + 1;
+      updateAzSteps(prevStepNum);
      //show the previous fieldset
      previous_fs.show(); 
      //hide the current fieldset with style
@@ -1673,6 +1765,33 @@ $i++;
    $(".submit").click(function(){
      //return false;
    })
+
+   function updateAzSteps(activeStep){
+    document.querySelectorAll('.az-step').forEach(function(btn){
+        var s = parseInt(btn.getAttribute('data-step'));
+        var numEl = btn.querySelector('.az-step-num');
+        var labelEl = btn.querySelector('.az-step-label');
+        if(s < activeStep){
+            numEl.style.background = '#14213D';
+            numEl.style.color = '#fff';
+            labelEl.style.color = '#14213D';
+            labelEl.style.fontWeight = '600';
+        } else if(s === activeStep){
+            numEl.style.background = '#FCA311';
+            numEl.style.color = '#14213D';
+            labelEl.style.color = '#14213D';
+            labelEl.style.fontWeight = '600';
+        } else {
+            numEl.style.background = '#E5E5E5';
+            numEl.style.color = '#999';
+            labelEl.style.color = '#999';
+            labelEl.style.fontWeight = '500';
+        }
+    });
+    document.querySelectorAll('.az-step-connector').forEach(function(c, i){
+        c.style.background = i < activeStep - 1 ? '#14213D' : '#EBEBEB';
+    });
+}
 </script>
 <script> 
 //$.noConflict();
@@ -2193,81 +2312,7 @@ if($connections){
 <script  async  src="https://js.stripe.com/v3/"  ></script>
 	<?php  include_once 'include/footer2.php' ; ?>
 
-<footer class="footer-area hide" >
-   <div class="container">
-      <div class="row">
-         <div class="col-lg-3  col-md-6 col-sm-6">
-            <div class="single-footer-widget">
-               <h6 class="footer_title">About</h6>
-               <p style="text-align: justify;">
-                  <?php  
-                     $resultFooter = $this->common_model->GetAllData('ContentManagement');
-                      foreach ($resultFooter as $valueFoo) {
-                     echo $valueFoo["aboutFooter"];
-                     }
-                     ?>                        
-               </p>
-            </div>
-         </div>
-         <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="single-footer-widget">
-               <h6 class="footer_title">Newsletter</h6>
-               <p>
-                  <?php  
-                     $resultFooter = $this->common_model->GetAllData('ContentManagement');
-                      foreach ($resultFooter as $valueFoo) {
-                     echo $valueFoo["newLetter"];
-                     }
-                     ?> 
-               </p>
-               <div id="mc_embed_signup">
-                  <form target="_blank" action="" class="subscribe_form relative">
-                     <div class="input-group d-flex flex-row">
-                        <input name="EMAIL" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address '" type="email">
-                        <button class="btn sub-btn" onclick="alert('comming soon');" ><span class="lnr lnr-arrow-right"></span></button>
-                     </div>
-                     <!--<div class="mt-10 info"></div>-->
-                  </form>
-               </div>
-            </div>
-         </div>
-         <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="single-footer-widget instafeed">
-               <h6 class="footer_title">Quick Links</h6>
-               <ul class="list list_foo">
-                  <li><a onclick="return alert('comming soon');" href="#" >About</a></li>
-                  <li><a onclick="return alert('comming soon');" href="#" >Help and support</a></li>
-                  <li><a onclick="return alert('comming soon');" href="#" >Contact</a></li>
-                  <li><a onclick="return alert('comming soon');" href="#" >Legal</a></li>
-                  <li><a onclick="return alert('comming soon');" href="#" >Services</a></li>
-                  <!--<li><a onclick="return alert('comming soon');" href="#" href="<?php echo base_url();?>about">About</a></li>
-                     <li><a onclick="return alert('comming soon');" href="#" href="<?php echo base_url();?>support">Help and support</a></li>
-                     <li><a onclick="return alert('comming soon');" href="#" href="<?php echo base_url();?>contactUs">Contact</a></li>
-                     <li><a onclick="return alert('comming soon');" href="#" href="<?php echo base_url();?>legal">Legal</a></li>
-                     <li><a onclick="return alert('comming soon');" href="#" href="<?php echo base_url();?>services">Services</a></li>-->
-               </ul>
-            </div>
-         </div>
-         <div class="col-lg-2 col-md-6 col-sm-6">
-            <div class="single-footer-widget f_social_wd">
-               <h6 class="footer_title">Follow Us</h6>
-               <p>Let us be social</p>
-               <div class="f_social">
-                  <a href="#"><i class="fa fa-facebook"></i></a>
-                  <a href="#"><i class="fa fa-twitter"></i></a>
-                  <a href="#"><i class="fa fa-dribbble"></i></a>
-                  <a href="#"><i class="fa fa-behance"></i></a>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="row footer-bottom d-flex justify-content-between align-items-center">
-         <p class="col-lg-12 footer-text text-center">
-            Copyright &copy; 2021 All Rights Reserved..</a>
-         </p>
-      </div>
-   </div>
-</footer>
+
 <script src="<?php echo base_url();?>assets/site/js/popper.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/stellar.js"></script>
@@ -2667,9 +2712,8 @@ autocomplete(document.getElementById("device_name"), countries);
 
 $process_12= $this->db->query('SELECT device_brand FROM `product`  GROUP BY device_brand')->result_array();
    $array_brand=array();
-echo $this->db->last_query();
    foreach($process_12 as $process_brand){ 
-$array_brand[]=$process_brand['device_brand'];
+   $array_brand[]=$process_brand['device_brand'];
 
     }
 
