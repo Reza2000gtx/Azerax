@@ -106,6 +106,8 @@ $route['addanotheroutput'] = 'Product/addanotheroutput';
 $route['addanotherprocess'] = 'Product/addanotherprocess';
 
 $route['search-listing'] = 'Product/devicefilter';
+$route['get-cat-b'] = 'Product/get_cat_b';
+$route['get-cat-c'] = 'Product/get_cat_c';
 $route['search-listing/(:any)'] = 'Product/devicefilter';
 
 $route['get_month_expiry'] = 'Product/get_month_expiry';

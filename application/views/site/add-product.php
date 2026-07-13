@@ -1027,7 +1027,7 @@ select.form-control {
    <div class="form-group">
     <label>Main Category</label>
     <!--<input type="text"   id="input_conn" name="input_conn[]"  placeholder="" class="typeahead inputF tm-input form-control "  />-->
-      <select id="e2_2" required name="main_cat[]" id="Cat_A" required="" class="typeahead inputF tm-input form-control sets_hidden2" multiple="multiple" style="width:300px" class="populate placeholder">
+      <select id="main_cat_select" required name="main_cat[]" class="typeahead inputF tm-input form-control sets_hidden2" style="width:300px">
        <div id="responsemenu2"></div>
 
       <?php     
@@ -1060,27 +1060,8 @@ select.form-control {
   <div class="col-md-3 set-44">
    <div class="form-group">
     <label>Sub-Category A</label>
-     <select required name="sub1_cat[]" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
-       <?php     
-         $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_B'); 
-         foreach($Input as $InputSugg){
-         $key= explode(',',$InputSugg['Cat_B']);
-         foreach($key as $k){
-         if($k){
-         // echo '<option>'.$k.'</option>';
-         }
-         $data[] =$k ;  
-         }  
-          }
-         $data=array_unique($data);
-         foreach($data as $k){
-         if($k){
-         echo '<option>'.$k.'</option>';
-         }
-          }
-         $data=array();
-   
-        ?>
+     <select required name="sub1_cat[]" id="sub_cat_a" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple">
+    <option value="">-- Select Sub-Category A --</option>
          
    </select>
  </div>
@@ -1092,29 +1073,9 @@ select.form-control {
   <div class="col-md-3  set-44">
    <div class="form-group">
     <label for="title">Sub-Category B</label>
-     <select required name="sub2_cat[]" class="sets_hidden2 typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
-       <?php     
-        $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_C');
-        foreach($Input as $InputSugg){
-        $key= explode(',',$InputSugg['Cat_C']);
-        foreach($key as $k){
-        if($k){
-        // echo '<option>'.$k.'</option>';
-        }
-        $data[] =$k ;  
-        }  
-         }
-        $data=array_unique($data);
-        foreach($data as $k){
-        if($k){
-        echo '<option>'.$k.'</option>';
-        }
-         }
-        $data=array();
-               
-        ?>
-              
-    </select>
+     <select required name="sub2_cat[]" id="sub_cat_b" class="sets_hidden2 typeahead inprocessConnection tm-input form-control" style="width:300px" multiple="multiple">
+    <option value="">-- Select Sub-Category B --</option>
+</select>
    
   </div>
  </div>
@@ -2636,7 +2597,51 @@ $(".processsuggestionStand").select2({ tags: true, tokenSeparators: [','] });
 //       }
 //     });
     
-   });
+   // Cascading category dropdowns
+$('#main_cat_select').on('change', function(){
+    var cat_a = $(this).val();
+    if(cat_a && cat_a.length > 0){
+        cat_a = cat_a[0];
+        $.ajax({
+            url: '<?php echo base_url(); ?>get-cat-b',
+            method: 'POST',
+            data: {cat_a: cat_a},
+            dataType: 'json',
+            success: function(data){
+                var opts = '<option value="">-- Select Sub-Category A --</option>';
+                $.each(data, function(i, item){
+                    opts += '<option value="'+item.Cat_B+'">'+item.Cat_B+'</option>';
+                });
+                $('#sub_cat_a').html(opts).trigger('change');
+                $('#sub_cat_b').html('<option value="">-- Select Sub-Category B --</option>');
+            }
+        });
+    }
+});
+
+$('#sub_cat_a').on('change', function(){
+    var cat_b = $(this).val();
+    var cat_a = $('#main_cat_select').val();
+    if(cat_b && cat_b.length > 0 && cat_a && cat_a.length > 0){
+        cat_b = cat_b[0];
+        cat_a = cat_a[0];
+        $.ajax({
+            url: '<?php echo base_url(); ?>get-cat-c',
+            method: 'POST',
+            data: {cat_a: cat_a, cat_b: cat_b},
+            dataType: 'json',
+            success: function(data){
+                var opts = '<option value="">-- Select Sub-Category B --</option>';
+                $.each(data, function(i, item){
+                    opts += '<option value="'+item.Cat_C+'">'+item.Cat_C+'</option>';
+                });
+                $('#sub_cat_b').html(opts);
+            }
+        });
+    }
+});
+
+  });
 </script>
 
 <script  async  src="https://js.stripe.com/v3/"  ></script>

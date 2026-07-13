@@ -1400,6 +1400,19 @@ $process_stand_2 = $this->common_model->GetAllData('product',array('process_stan
 
 
 
+  public function get_cat_b(){
+    $cat_a = $this->input->post('cat_a');
+    $results = $this->db->query("SELECT DISTINCT Cat_B_ID, Cat_B FROM category WHERE Cat_A = ? ORDER BY Cat_B_ID ASC", array($cat_a))->result_array();
+    echo json_encode($results);
+}
+
+public function get_cat_c(){
+    $cat_b = $this->input->post('cat_b');
+    $cat_a = $this->input->post('cat_a');
+    $results = $this->db->query("SELECT DISTINCT Cat_C_ID, Cat_C FROM category WHERE Cat_B = ? AND Cat_A = ? ORDER BY Cat_C_ID ASC", array($cat_b, $cat_a))->result_array();
+    echo json_encode($results);
+}
+
   public function devicefilter()
   {
     

@@ -467,6 +467,30 @@
 #advSearchPanel .select2-results__option {
     padding: 6px 12px !important;
 }
+
+/* Checkbox style for select2 options */
+.catB-dropdown .select2-results__option::before,
+.catC-dropdown .select2-results__option::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #EBEBEB;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+.catB-dropdown .select2-results__option[aria-selected="true"]::before,
+.catC-dropdown .select2-results__option[aria-selected="true"]::before {
+    background: #FCA311;
+    border-color: #FCA311;
+    content: '✓';
+    color: #14213D;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+}
  </style>
 
  
@@ -574,7 +598,8 @@
                 <div class="form-group">
                   <!-- <input type="text" data-role="tagsinput" name="input_name" placeholder="Input Type" class="form-control"> -->
 
-                  <select name="main_cat[]" class="catA form-control" multiple="multiple">
+                  <select name="main_cat[]" id="search_main_cat" class="catA form-control">
+                    <option value="">-- Select Category --</option>
                     <?php     
                       $data = array();
                       $Input = $this->common_model->GetAllData('category','','Cat_A','asc'); 
@@ -602,60 +627,17 @@
           <div class="col-sm-4">
             <div class="form-group">
               <!-- <input type="text" data-role="tagsinput" name="input_stand" placeholder="Input Standard" class="form-control"> -->
-              <select name="sub1_cat[]" class="catB form-control" multiple="multiple">
-                <?php     
-                $Input = $this->common_model->GetAllData('category','','Cat_B','asc'); 
-                foreach($Input as $InputSugg){
-                $key= explode(',',$InputSugg['Cat_B']);
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-              }
-                $data=array_unique($data);
-               foreach($data as $k){
-                   if($k){
-                   echo '<option>'.$k.'</option>';
-                   }
-                
-               }
-               $data=array();
-               
-            ?>
+              <select name="sub1_cat[]" id="search_sub_cat_a" class="catB form-control" multiple="multiple">
+                <option value="">-- Select Sub-Category A --</option>
           </select>
 				</div>
 			</div>
       <div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" data-role="tagsinput" name="input_conn" placeholder="Input Connection Type" class="form-control"> -->
-					<select name="sub2_cat[]" class="catC form-control" multiple="multiple">
-
-             <?php     
-
-                $Input = $this->common_model->GetAllData('category','','Cat_C','asc');
-                foreach($Input as $InputSugg){
-                $key= explode(',',$InputSugg['Cat_C']);
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                   if($k){
-                   echo '<option>'.$k.'</option>';
-                   }
-                  
-               }
-               $data=array();
-               
-               ?>
-            
-          </select>
+				<select name="sub2_cat[]" id="search_sub_cat_b" class="catC form-control" multiple="multiple">
+        <option value="">-- Select Sub-Category B --</option>
+      </select>
 				</div>
 			</div>
 
@@ -1164,9 +1146,93 @@ window.addEventListener('load', function(){
 </script>
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
-$(".catA").select2({placeholder: "Main Category", tags: true, tokenSeparators: [';'], separator: ";", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
-$(".catB").select2({tags: true, placeholder: "Sub-Category A", tokenSeparators: [','], width: '100%', dropdownParent: $('#advSearchPanel')});
-$(".catC").select2({tags: true, placeholder: "Sub-Category B", tokenSeparators: [',', ''], width: '100%', dropdownParent: $('#advSearchPanel')});
+// ── CATEGORY DROPDOWNS ──
+$(".catA").select2({placeholder: "Main Category", multiple: false, width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".catB").select2({placeholder: "Sub-Category A", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".catC").select2({placeholder: "Sub-Category B", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
+
+function initSubCatA(){
+    $('#search_sub_cat_a').select2({
+        placeholder: "Sub-Category A",
+        multiple: true,
+        width: '100%',
+        dropdownParent: $('#advSearchPanel'),
+        closeOnSelect: false,
+        templateResult: function(state){
+            if(!state.id) return state.text;
+            return $('<span style="display:flex;align-items:center;gap:8px;"><input type="checkbox" style="width:14px;height:14px;accent-color:#FCA311;flex-shrink:0;">' + state.text + '</span>');
+        },
+        templateSelection: function(state){
+            var vals = $('#search_sub_cat_a').val();
+            var count = vals ? vals.length : 0;
+            return count > 1 ? count + ' selected' : state.text;
+        }
+    });
+}
+
+function initSubCatB(){
+    $('#search_sub_cat_b').select2({
+        placeholder: "Sub-Category B",
+        multiple: true,
+        width: '100%',
+        dropdownParent: $('#advSearchPanel'),
+        closeOnSelect: false,
+        templateResult: function(state){
+            if(!state.id) return state.text;
+            return $('<span style="display:flex;align-items:center;gap:8px;"><input type="checkbox" style="width:14px;height:14px;accent-color:#FCA311;flex-shrink:0;">' + state.text + '</span>');
+        },
+        templateSelection: function(state){
+            var vals = $('#search_sub_cat_b').val();
+            var count = vals ? vals.length : 0;
+            return count > 1 ? count + ' selected' : state.text;
+        }
+    });
+}
+
+// Cascade: Main → Sub-A
+$('#search_main_cat').on('change', function(){
+    var cat_a = $(this).val();
+    if(cat_a){
+        $.ajax({
+            url: '<?php echo base_url(); ?>get-cat-b',
+            method: 'POST',
+            data: {cat_a: cat_a},
+            dataType: 'json',
+            success: function(data){
+                var opts = '<option value="">-- Select Sub-Category A --</option>';
+                $.each(data, function(i, item){
+                    opts += '<option value="'+item.Cat_B+'">'+item.Cat_B+'</option>';
+                });
+                $('#search_sub_cat_a').html(opts);
+                $('#search_sub_cat_b').html('<option value="">-- Select Sub-Category B --</option>');
+                initSubCatA();
+                initSubCatB();
+            }
+        });
+    }
+});
+
+// Cascade: Sub-A → Sub-B
+$('#search_sub_cat_a').on('change', function(){
+    var cat_b = $(this).val();
+    var cat_a = $('#search_main_cat').val();
+    if(cat_b && cat_b.length > 0 && cat_a){
+        $.ajax({
+            url: '<?php echo base_url(); ?>get-cat-c',
+            method: 'POST',
+            data: {cat_a: cat_a, cat_b: cat_b},
+            dataType: 'json',
+            success: function(data){
+                var opts = '<option value="">-- Select Sub-Category B --</option>';
+                $.each(data, function(i, item){
+                    opts += '<option value="'+item.Cat_C+'">'+item.Cat_C+'</option>';
+                });
+                $('#search_sub_cat_b').html(opts);
+                initSubCatB();
+            }
+        });
+    }
+});
 $(".inputF").select2({placeholder: "Input Type", tags: true, tokenSeparators: [';'], separator: ";", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".instand").select2({tags: true, placeholder: "Input Standard", tokenSeparators: [','], width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".inprocessConnection").select2({tags: true, placeholder: "Input Connection Type", tokenSeparators: [',', ''], width: '100%', dropdownParent: $('#advSearchPanel')});
