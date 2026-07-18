@@ -441,9 +441,12 @@
     position: relative !important;
     background: transparent !important;
     clip-path: none !important;
-    width: 110px !important;
+    width: 132px !important;
     padding-left: 0 !important;
     margin-left: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
 }
 #advSearchPanel .btn_usch::after {
     display: none !important;
@@ -491,6 +494,93 @@
     line-height: 14px;
     text-align: center;
 }
+
+#advSearchPanel .select2-dropdown {
+    background: #fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
+    overflow: hidden !important;
+}
+#advSearchPanel .select2-results__option {
+    background: #fff !important;
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+    padding: 9px 14px !important;
+    border-bottom: 1px solid #F5F5F5 !important;
+}
+#advSearchPanel .select2-results__option:last-child {
+    border-bottom: none !important;
+}
+#advSearchPanel .select2-results__option--highlighted {
+    background: #E8E8E8 !important;
+    color: #14213D !important;
+}
+#advSearchPanel .select2-results__option[aria-selected="true"] {
+    background: #14213D !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+#advSearchPanel .select2-search--dropdown {
+    padding: 8px !important;
+    border-bottom: 1px solid #EBEBEB !important;
+}
+#advSearchPanel .select2-search--dropdown input {
+    border: 1.5px solid #EBEBEB !important;
+    border-radius: 6px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13px !important;
+}
+
+/* ── ROW ON/OFF SLIDER ── */
+.row-toggle {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 18px;
+    margin-left: auto;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.row-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.row-toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ccc;
+    border-radius: 18px;
+    transition: background 0.15s;
+}
+.row-toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.row-toggle-input:checked + .row-toggle-slider {
+    background: #FCA311;
+}
+.row-toggle-input:checked + .row-toggle-slider::before {
+    transform: translateX(16px);
+}
+.loop_inp .row-disabled-field {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
  </style>
 
  
@@ -591,8 +681,12 @@
                             <div class="">
                                 <i class="ti ti-folder"></i> Category
                             </div>
+                            <label class="row-toggle">
+                                <input type="checkbox" class="row-toggle-input" data-row="category">
+                                <span class="row-toggle-slider"></span>
+                            </label>
                         </div>
-          <div class="loop_inp">
+          <div class="loop_inp" data-row-content="category">
             <div class="row">
               <div class="col-sm-4">
                 <div class="form-group">
@@ -640,14 +734,21 @@
       </select>
 				</div>
 			</div>
+        </div><!-- /.row (category) -->
+          </div><!-- /.loop_inp (category) -->
+        </li><!-- /Category row -->
 
 <li class="">
   <div class="btn_usch" >
 		<div class="">
      <i class="ti ti-arrow-bar-to-right"></i> Input
     </div>
+    <label class="row-toggle">
+        <input type="checkbox" class="row-toggle-input" data-row="input">
+        <span class="row-toggle-slider"></span>
+    </label>
 	</div>
-  <div class="loop_inp">
+  <div class="loop_inp" data-row-content="input">
 		<div class="row">
       <div class="col-sm-4">
 				<div class="form-group">
@@ -752,9 +853,13 @@
 		<div class="">
      <i class="ti ti-arrow-bar-right"></i> Output
     </div>
+    <label class="row-toggle">
+        <input type="checkbox" class="row-toggle-input" data-row="output">
+        <span class="row-toggle-slider"></span>
+    </label>
 		</div>
 
-<div class="loop_inp">
+<div class="loop_inp" data-row-content="output">
 		<div class="row">
 			<div class="col-sm-4">
 				<div class="form-group">
@@ -858,9 +963,13 @@
 				<div class="">
          <i class="ti ti-settings"></i> Process
         </div>
+        <label class="row-toggle">
+            <input type="checkbox" class="row-toggle-input" data-row="process">
+            <span class="row-toggle-slider"></span>
+        </label>
 				</div>
 
-<div class="loop_inp">
+<div class="loop_inp" data-row-content="process">
 		<div class="row justify-content-end">
 			<div class="col-sm-4">
 				<div class="form-group">
@@ -1147,7 +1256,7 @@ window.addEventListener('load', function(){
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
 // ── CATEGORY DROPDOWNS ──
-$(".catA").select2({placeholder: "Main Category", multiple: false, width: '100%', dropdownParent: $('#advSearchPanel')});
+$(".catA").select2({placeholder: "Main Category", multiple: false, width: '100%', dropdownParent: $('#advSearchPanel'), allowClear: true});
 $(".catB").select2({placeholder: "Sub-Category A", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".catC").select2({placeholder: "Sub-Category B", multiple: true, width: '100%', dropdownParent: $('#advSearchPanel')});
 
@@ -1241,6 +1350,35 @@ $(".otstand").select2({tags: true, placeholder: "Output Standard", tokenSeparato
 $(".otprocessConnection").select2({tags: true, placeholder: "Output Connection Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".processsuggestion").select2({tags: true, placeholder: "Process Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".processsuggestionStand").select2({tags: true, placeholder: "Process Standard", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
+
+// ── ROW ON/OFF TOGGLE ──
+function setRowState(rowName, enabled){
+    var $content = $('[data-row-content="' + rowName + '"]');
+    // exclude the Search button's wrapper (.btn_serch_bo1) - it lives inside
+    // the Process row's markup but must always stay active
+    var $fields = $content.find('.form-group').not('.btn_serch_bo1');
+    if(enabled){
+        $fields.removeClass('row-disabled-field');
+        $fields.find('select, input').prop('disabled', false);
+    } else {
+        $fields.addClass('row-disabled-field');
+        // clear any values already picked in this row
+        $fields.find('select').each(function(){
+            $(this).val(null).trigger('change');
+        });
+        $fields.find('input[type="text"], input[type="hidden"]').val('');
+        $fields.find('select, input').prop('disabled', true);
+    }
+}
+
+$('.row-toggle-input').on('change', function(){
+    setRowState($(this).data('row'), this.checked);
+});
+
+// default state: all 4 rows start OFF/greyed until switched on
+$('.row-toggle-input').each(function(){
+    setRowState($(this).data('row'), false);
+});
 </script> 
 
 <script type="text/javascript">
