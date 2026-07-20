@@ -542,6 +542,7 @@
     margin-left: auto;
     flex-shrink: 0;
     cursor: pointer;
+    margin-top: 8px;
 }
 .row-toggle-input {
     opacity: 0;
@@ -652,8 +653,7 @@
           <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:1px;right:9px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
 					<!--<nav class="search-channel-container">-->
 					   <form method="get" action="<?php echo base_url();?>search-listing">
-              <form method="get" action="<?php echo base_url();?>search-listing">
-              <div class="search_new_des2" id="divShowHide" style="display:block;">
+                          <div class="search_new_des2" id="divShowHide" style="display:block;">
 							 <div class="anim">
 					  		 	<ul class="list">
                      <li class="">
