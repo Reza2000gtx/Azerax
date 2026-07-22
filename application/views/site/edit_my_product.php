@@ -22,7 +22,7 @@
 /* ── EDIT PRODUCT BRAND STYLING ── */
 section.add_product {
     background: #F5F5F5;
-    padding: 32px 0;
+    padding: 32px 0 250px;
     min-height: calc(100vh - 220px);
 }
 section.add_product .form_add_product {
@@ -31,6 +31,24 @@ section.add_product .form_add_product {
 #msform {
     max-width: 960px;
     margin: 0 auto;
+}
+.pt-pill-btn {
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1.5px solid #14213D;
+    background: transparent;
+    color: #14213D;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 6px;
+}
+.pt-pill-btn.active {
+    background: #FCA311;
+    border-color: #FCA311;
+    color: #14213D;
 }
 section.add_product #msform fieldset#menu1,
 section.add_product #msform fieldset#menu2,
@@ -377,6 +395,12 @@ section.add_product #msform fieldset#menu3 {
             </div>
             <!-- fieldsets -->
             <fieldset id="menu1" class="display_block" style="display: block;">
+               <div>
+                 <label>Product Type: </label>
+                 <?php $pt = $product_detail['product_type'] ?: 'Hardware'; ?>
+                 <span class="pt-pill-btn <?php if($pt=='Hardware')echo 'active';?>" data-value="Hardware">Hardware</span><span class="pt-pill-btn <?php if($pt=='Software')echo 'active';?>" data-value="Software">Software</span><span class="pt-pill-btn <?php if($pt=='Cloud Service')echo 'active';?>" data-value="Cloud Service">Cloud Service</span><span class="pt-pill-btn <?php if($pt=='AI Tool')echo 'active';?>" data-value="AI Tool">AI Tool</span><span class="pt-pill-btn <?php if($pt=='Hybrid')echo 'active';?>" data-value="Hybrid">Hybrid</span><input type="hidden" name="product_type" id="product_type" value="<?=$pt?>">
+               </div>
+
                <h3></h3>
                <div class="row">
                   <div class="col-sm-6">
@@ -1796,7 +1820,15 @@ $i++;
 <script> 
 //$.noConflict();
    $(document).ready(function() { 
-        
+
+        document.querySelectorAll('.pt-pill-btn').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                document.querySelectorAll('.pt-pill-btn').forEach(function(b){ b.classList.remove('active'); });
+                btn.classList.add('active');
+                document.getElementById('product_type').value = btn.getAttribute('data-value');
+            });
+        });
+
           $(function() { 
               $( "#my_date_picker" ).datepicker({
                   changeMonth: true,
