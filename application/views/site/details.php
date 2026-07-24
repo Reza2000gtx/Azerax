@@ -318,6 +318,16 @@
                         <?php } ?>
                         <?php } ?>
                     </div>
+
+                    <div style="margin-top:16px;">
+                        <?php if (!$this->session->userdata('user_id')) { ?>
+                        <p style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">Please <a href="<?php echo base_url(); ?>login" style="color:#FCA311;font-weight:500;">log in</a> to request a purchase.</p>
+                        <?php } elseif (!$this->session->userdata('email_verified')) { ?>
+                        <p style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">Please verify your email address to request a purchase.</p>
+                        <?php } else { ?>
+                        <a href="<?php echo base_url(); ?>request-to-buy/<?php echo $product_detail['id']; ?>" style="display:inline-block;background:#FCA311;color:#14213D;padding:11px 28px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;text-decoration:none;">Request to Buy</a>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
 

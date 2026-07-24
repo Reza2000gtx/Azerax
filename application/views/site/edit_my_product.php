@@ -417,29 +417,12 @@ section.add_product #msform fieldset#menu3 {
                      </div>
                  
                      <div class="form-group">
-                        <label for="title">Mechanical dimensions
-                        <span style="float:right;"> Software only <?php 
-                           if($product_detail['latest_firmware_version']==0) { 
-                           echo '<input  id="checkme" type="checkbox" value="0" name="latest_firmware_version" style="width: auto !important;">';
-                           }else{
-                           echo '<input checked id="checkme" type="checkbox" value="1" name="latest_firmware_version" >';
-                           }?>
-                        </span></label>
-                        <input type="text" class="form-control" <?php 
-                           if($product_detail['latest_firmware_version']==1) { 
-                           echo 'disabled';
-                           }else{
-                           echo '';
-                           }?> name="mechanical_demension_mounting"   id="sendNewSms" value="<?=$product_detail['mechanical_demension_mounting']?>" >
+                        <label for="title">Mechanical dimensions</label>
+                        <input type="text" class="form-control" name="mechanical_demension_mounting" id="sendNewSms" value="<?=$product_detail['mechanical_demension_mounting']?>" >
                      </div>
                      <div class="form-group" style="margin-bottom:0 !important;">
                         <label for="title">Rack Units</label>
-                        <select class="form-control" <?php 
-                           if($product_detail['latest_firmware_version']==1) { 
-                           echo 'disabled';
-                           }else{
-                           echo '';
-                           } ?> name="rack_unit" id="sendNewSms1">
+                        <select class="form-control" name="rack_unit" id="sendNewSms1">
                            <option value="">Select</option>
                            <?php 
                               for ($i = 1; $i <= 60; $i++){ ?>
@@ -449,18 +432,7 @@ section.add_product #msform fieldset#menu3 {
                         </select>
                      </div>
                      <script type="text/javascript">
-
                                 $("#sendNewSms1").select2();
-
-                        var checker = document.getElementById('checkme');
-                        var sendbtn = document.getElementById('sendNewSms');
-                        var sendbtn1 = document.getElementById('sendNewSms1');
-                        checker.onchange = function() {
-                        
-                        
-                          sendbtn.disabled = !!this.checked;
-                          sendbtn1.disabled = !!this.checked;
-                        };
                      </script>
                      <div class="form-group">
                         <label for="title">Manual/Brochure (PDF)</label>

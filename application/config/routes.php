@@ -181,7 +181,6 @@ $route['getCities'] = 'Home/get_cities';
 //footer content in site
 $route['help-support'] = 'Home/help_support';
 $route['careers'] = 'Home/careers';
-$route['terms-condition'] = 'Home/terms_condition';
 $route['privacy-policy'] = 'Home/privacy_policy';
 $route['how-it-work'] = 'Home/how_it_work';
 
@@ -260,7 +259,6 @@ $route['Admin/social-media'] = 'Admin/Footer_content/social_media';
 $route['Admin/footer-text'] = 'Admin/Footer_content/footer_text';
 
 
-$route['Admin/advertisement'] = 'Admin/Home/advertisement';
 $route['Admin/add_advertisement'] = 'Admin/Home/add_advertisement';
 $route['Admin/update_advertisement'] = 'Admin/Home/update_advertisement';
 $route['Admin/activate_advertisement/(:any)'] = 'Admin/Home/activate_ads';
@@ -299,3 +297,10 @@ $route['Admin/WithdrawalRequest'] = 'Admin/Users/WithdrawalRequest';
 $route['Admin/requestchangestatus/(:any)/(:any)'] = 'Admin/Users/requestchangestatus';
 $route['Admin/chat-box'] = 'Admin/Home/chat_box';
 $route['Admin/reply-action'] = 'Admin/Home/reply_action';
+
+$route['request-to-buy/(:any)'] = 'PurchaseRequest/new_request';
+$route['my-purchase-requests'] = 'PurchaseRequest/my_requests';
+$route['accept-quote/(:any)'] = 'PurchaseRequest/accept_quote';
+$route['vendor-requests'] = 'PurchaseRequest/vendor_requests';
+$route['cancel-purchase-request/(:any)'] = 'PurchaseRequest/cancel_request';
+$route['delete-purchase-request/(:any)'] = 'PurchaseRequest/delete_request';
