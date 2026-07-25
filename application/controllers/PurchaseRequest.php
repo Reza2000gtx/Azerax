@@ -238,7 +238,6 @@ class PurchaseRequest extends CI_Controller {
 
         $insert['request_id'] = $this->input->post('request_id');
         $insert['vendor_id']  = $vendor_id;
-        $insert['price']      = $this->input->post('price');
         $insert['lead_time']  = htmlentities($this->input->post('lead_time'), ENT_QUOTES);
         $insert['notes']      = htmlentities($this->input->post('notes'), ENT_QUOTES);
         $insert['status']     = 'pending';
@@ -246,7 +245,7 @@ class PurchaseRequest extends CI_Controller {
 
         $this->common_model->InsertData('purchase_request_quotes', $insert);
 
-        $this->session->set_flashdata('msg', '<div class="alert alert-success">Your quote has been submitted.</div>');
+        $this->session->set_flashdata('msg', '<div class="alert alert-success">Your response has been submitted.</div>');
         redirect('vendor-requests');
     }
 }

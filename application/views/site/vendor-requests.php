@@ -45,7 +45,7 @@
 }
 .vr-quote-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr auto;
+    grid-template-columns: 1fr 2fr auto;
     gap: 12px;
     align-items: end;
 }
@@ -90,7 +90,7 @@
     <?php } else { ?>
         <?php foreach ($requests as $req) { ?>
         <div class="vr-card">
-            <div class="vr-device"><?php echo $req['device_model']; ?> — <?php echo $req['device_brand']; ?></div>
+            <div class="vr-device"><?php echo $req['device_model']; ?> — <?php echo $req['device_brand']; ?> <span style="color:#BCC0C4;font-size:13px;font-weight:500;">(Device ID: <?php echo $req['device_id']; ?>)</span></div>
             <div class="vr-meta">
                 Qty: <?php echo $req['quantity']; ?> &nbsp;•&nbsp;
                 Timeline: <?php echo $req['timeline']; ?> &nbsp;•&nbsp;
@@ -101,15 +101,11 @@
             <?php } ?>
 
             <?php if ($req['my_quote']) { ?>
-            <div class="vr-already-quoted">✓ You quoted $<?php echo $req['my_quote']['price']; ?> on <?php echo date('d M Y', strtotime($req['my_quote']['created_at'])); ?></div>
+            <div class="vr-already-quoted">✓ You responded on <?php echo date('d M Y', strtotime($req['my_quote']['created_at'])); ?></div>
             <?php } else { ?>
             <form method="post" action="<?php echo base_url(); ?>PurchaseRequest/submit_quote">
                 <input type="hidden" name="request_id" value="<?php echo $req['id']; ?>">
                 <div class="vr-quote-row">
-                    <div>
-                        <label class="vr-label">Price ($)</label>
-                        <input type="number" name="price" min="0" step="0.01" class="form-control" required>
-                    </div>
                     <div>
                         <label class="vr-label">Lead time</label>
                         <input type="text" name="lead_time" class="form-control" placeholder="e.g. 2 weeks">
@@ -118,7 +114,7 @@
                         <label class="vr-label">Notes</label>
                         <input type="text" name="notes" class="form-control" placeholder="Optional">
                     </div>
-                    <button type="submit" class="vr-submit-btn">Submit Quote</button>
+                    <button type="submit" class="vr-submit-btn">Respond</button>
                 </div>
             </form>
             <?php } ?>

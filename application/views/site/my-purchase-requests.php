@@ -144,17 +144,17 @@
                 <?php foreach ($req['quotes'] as $quote) { ?>
                 <div class="mpr-quote-row">
                     <div>
-                        <div class="mpr-quote-price">$<?php echo $quote['price']; ?></div>
                         <div class="mpr-quote-detail">
-                            <?php if ($quote['lead_time']) { echo 'Lead time: ' . $quote['lead_time']; } ?>
+                            <?php if ($quote['lead_time']) { echo '<strong>Lead time:</strong> ' . $quote['lead_time']; } ?>
                             <?php if ($quote['notes']) { echo ' — ' . $quote['notes']; } ?>
+                            <?php if (!$quote['lead_time'] && !$quote['notes']) { echo 'Vendor is available to fulfil this request.'; } ?>
                         </div>
                     </div>
                     <div>
                         <?php if ($quote['status'] == 'accepted') { ?>
                         <span class="mpr-accepted-badge">✓ Accepted</span>
                         <?php } elseif ($req['status'] == 'open') { ?>
-                        <a href="<?php echo base_url(); ?>accept-quote/<?php echo $quote['id']; ?>" class="mpr-accept-btn" onclick="return confirm('Accept this quote? This will close your request.');">Accept</a>
+                        <a href="<?php echo base_url(); ?>accept-quote/<?php echo $quote['id']; ?>" class="mpr-accept-btn" onclick="return confirm('Accept this response? This will close your request.');">Accept</a>
                         <?php } ?>
                     </div>
                 </div>
