@@ -31,9 +31,9 @@ class Login extends CI_Controller
 			$admin_email = $this->input->post('admin_email');
 			$admin_pass = $this->input->post('admin_password');
 
-			$run = $this->common_model->GetSingleData('admin',array('admin_email' =>$admin_email ,'admin_password'=>$admin_pass));
+			$run = $this->common_model->GetSingleData('admin',array('admin_email' =>$admin_email));
 
-			if($run){
+			if($run && password_verify($admin_pass, $run['admin_password'])){
 
 				$this->session->set_userdata('admin_id',$run['id']);
 
@@ -53,7 +53,7 @@ class Login extends CI_Controller
 
 
 	}
-	
+
 }
 
 ?>

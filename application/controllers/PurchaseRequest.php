@@ -3,6 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class PurchaseRequest extends CI_Controller {
 
+    // Price to unlock all quotes on a request (placeholder - real payment not wired up yet)
+    const UNLOCK_PRICE = 1;
+
     public function __construct() {
         parent::__construct();
     }
@@ -71,10 +74,17 @@ class PurchaseRequest extends CI_Controller {
         $requests = $this->common_model->GetAllData('purchase_requests', array('buyer_id' => $buyer_id), 'created_at', 'desc');
 
         foreach ($requests as &$req) {
-            $req['quotes'] = $this->common_model->GetAllData('purchase_request_quotes', array('request_id' => $req['id']), 'price', 'asc');
+            $req['quotes'] = $this->common_model->GetAllData('purchase_request_quotes', array('request_id' => $req['id']), 'created_at', 'asc');
+            foreach ($req['quotes'] as &$quote) {
+                $vendor = $this->common_model->GetSingleData('users', array('user_id' => $quote['vendor_id']));
+                $quote['vendor_name'] = $vendor ? ($vendor['company'] ?: $vendor['fname']) : 'Vendor';
+                $quote['vendor_contact_name'] = $vendor ? $vendor['fname'] : '';
+                $quote['vendor_email'] = $vendor ? $vendor['email'] : '';
+            }
         }
 
         $data['requests'] = $requests;
+        $data['unlock_price'] = self::UNLOCK_PRICE;
         $this->load->view('site/my-purchase-requests', $data);
     }
 
@@ -187,6 +197,29 @@ class PurchaseRequest extends CI_Controller {
         ));
 
         $this->session->set_flashdata('msg', '<div class="alert alert-success">Request reopened.</div>');
+        redirect('my-purchase-requests');
+    }
+
+    // route: unlock-purchase-request/(:any) -> request id in segment 2
+    // placeholder: flags request as unlocked so buyer sees all quotes.
+    // TODO: wire up real payment before this goes live - currently free.
+    public function unlock_request() {
+        $request_id = $this->uri->segment(2);
+
+        if (!$this->session->userdata('user_id')) {
+            redirect('login');
+            return;
+        }
+
+        $request = $this->common_model->GetSingleData('purchase_requests', array('id' => $request_id));
+        if (!$request || $request['buyer_id'] != $this->session->userdata('user_id')) {
+            show_404();
+            return;
+        }
+
+        $this->common_model->UpdateData('purchase_requests', array('id' => $request_id), array('unlocked' => 1));
+
+        $this->session->set_flashdata('msg', '<div class="alert alert-success">All quotes unlocked for this request.</div>');
         redirect('my-purchase-requests');
     }
 

@@ -83,7 +83,7 @@
 </style>
 
 <div class="vr-wrap">
-    <div class="vr-title">Purchase Requests</div>
+    <div class="vr-title">Purchase Requests Received</div>
 
     <?php if (empty($requests)) { ?>
     <p class="vr-empty">No open purchase requests for your listed devices right now.</p>

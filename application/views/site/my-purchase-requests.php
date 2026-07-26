@@ -141,22 +141,67 @@
             <?php if (empty($req['quotes'])) { ?>
             <div class="mpr-no-quotes">No quotes yet — vendors offering this device will respond here.</div>
             <?php } else { ?>
-                <?php foreach ($req['quotes'] as $quote) { ?>
+                <?php
+                    $visible_quotes = $req['quotes'];
+                    $locked_count = 0;
+                    if (count($req['quotes']) > 1 && !$req['unlocked']) {
+                        $visible_quotes = array(reset($req['quotes']));
+                        $locked_count = count($req['quotes']) - 1;
+                    }
+                ?>
+                <?php foreach ($visible_quotes as $quote) { ?>
                 <div class="mpr-quote-row">
                     <div>
+                        <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#14213D;margin-bottom:4px;"><?php echo $quote['vendor_name']; ?></div>
                         <div class="mpr-quote-detail">
                             <?php if ($quote['lead_time']) { echo '<strong>Lead time:</strong> ' . $quote['lead_time']; } ?>
-                            <?php if ($quote['notes']) { echo ' — ' . $quote['notes']; } ?>
-                            <?php if (!$quote['lead_time'] && !$quote['notes']) { echo 'Vendor is available to fulfil this request.'; } ?>
                         </div>
                     </div>
                     <div>
                         <?php if ($quote['status'] == 'accepted') { ?>
                         <span class="mpr-accepted-badge">✓ Accepted</span>
-                        <?php } elseif ($req['status'] == 'open') { ?>
-                        <a href="<?php echo base_url(); ?>accept-quote/<?php echo $quote['id']; ?>" class="mpr-accept-btn" onclick="return confirm('Accept this response? This will close your request.');">Accept</a>
+                        <?php } else { ?>
+                        <button type="button" class="mpr-accept-btn" style="border:none;cursor:pointer;" onclick="document.getElementById('quoteModal<?php echo $quote['id']; ?>').style.display='flex';">View</button>
                         <?php } ?>
                     </div>
+                </div>
+
+                <!-- Quote detail modal -->
+                <div id="quoteModal<?php echo $quote['id']; ?>" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99999;align-items:center;justify-content:center;">
+                    <div style="background:#fff;border-radius:14px;padding:32px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);font-family:'Inter',sans-serif;">
+                        <div style="font-size:18px;font-weight:700;color:#14213D;margin-bottom:4px;"><?php echo $quote['vendor_name']; ?></div>
+                        <?php if ($quote['vendor_contact_name'] && $quote['vendor_contact_name'] != $quote['vendor_name']) { ?>
+                        <div style="font-size:13px;color:#999;margin-bottom:16px;">Contact: <?php echo $quote['vendor_contact_name']; ?></div>
+                        <?php } else { ?>
+                        <div style="margin-bottom:16px;"></div>
+                        <?php } ?>
+
+                        <?php if ($quote['lead_time']) { ?>
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Lead Time</div>
+                            <div style="font-size:14px;color:#14213D;"><?php echo $quote['lead_time']; ?></div>
+                        </div>
+                        <?php } ?>
+                        <?php if ($quote['notes']) { ?>
+                        <div style="margin-bottom:20px;">
+                            <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Notes</div>
+                            <div style="font-size:14px;color:#14213D;line-height:1.6;"><?php echo $quote['notes']; ?></div>
+                        </div>
+                        <?php } ?>
+
+                        <div style="display:flex;gap:12px;">
+                            <button type="button" onclick="document.getElementById('quoteModal<?php echo $quote['id']; ?>').style.display='none';" style="flex:1;padding:11px;border-radius:8px;border:1.5px solid #EBEBEB;background:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#14213D;cursor:pointer;">Close</button>
+                            <?php if ($req['status'] == 'open') { ?>
+                            <a href="<?php echo base_url(); ?>accept-quote/<?php echo $quote['id']; ?>" onclick="return confirm('Accept this response? This will close your request.');" style="flex:1;padding:11px;border-radius:8px;background:#FCA311;color:#14213D;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;text-decoration:none;text-align:center;">Accept Quote</a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+                <?php if ($locked_count > 0) { ?>
+                <div style="border-top:1px solid #F0F0F0;padding:14px 0;display:flex;align-items:center;justify-content:space-between;">
+                    <span style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">🔒 <?php echo $locked_count; ?> more response<?php echo $locked_count > 1 ? 's' : ''; ?> available</span>
+                    <a href="<?php echo base_url(); ?>unlock-purchase-request/<?php echo $req['id']; ?>" style="background:#FCA311;color:#14213D;padding:8px 18px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;text-decoration:none;">Unlock All — $<?php echo $unlock_price; ?></a>
                 </div>
                 <?php } ?>
             <?php } ?>

@@ -305,3 +305,4 @@ $route['vendor-requests'] = 'PurchaseRequest/vendor_requests';
 $route['cancel-purchase-request/(:any)'] = 'PurchaseRequest/cancel_request';
 $route['delete-purchase-request/(:any)'] = 'PurchaseRequest/delete_request';
 $route['reopen-purchase-request/(:any)'] = 'PurchaseRequest/reopen_request';
+$route['unlock-purchase-request/(:any)'] = 'PurchaseRequest/unlock_request';
