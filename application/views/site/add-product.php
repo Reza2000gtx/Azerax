@@ -906,6 +906,114 @@ select.form-control {
   <fieldset id="menu1" class="display_block" style="display: block;">
    <h3></h3>
     <div class="row">
+     <div class="col-sm-12">
+      <div id="ai-autofill-box" style="background:#FFF8E8;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;margin-bottom:20px;">
+        <div id="ai-autofill-toggle" style="cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;color:#14213D;font-size:14px;">
+          🪄 Auto-fill with AI &nbsp;<span style="font-weight:400;color:#999;font-size:12px;">— paste a product page link or upload a brochure PDF</span>
+        </div>
+        <div id="ai-autofill-panel" style="display:none;margin-top:14px;">
+          <div class="form-group">
+            <label style="font-size:12px;">Product page URL</label>
+            <input type="text" id="ai_source_url" class="form-control" placeholder="https://manufacturer.com/product-page">
+          </div>
+          <div class="form-group">
+            <label style="font-size:12px;">Or upload a brochure/spec PDF</label>
+            <input type="file" id="ai_source_pdf" accept="application/pdf" class="form-control" style="height:auto;padding:10px 12px;line-height:normal;">
+          </div>
+          <button type="button" id="ai_extract_btn" class="btn btn-warning" style="background:#FCA311;border-color:#FCA311;color:#14213D;font-weight:600;">Extract Info</button>
+          <span id="ai_extract_status" style="margin-left:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;"></span>
+          <div style="font-size:12px;color:#999;margin-top:8px;">This only fills in the fields below for you to review — nothing is submitted until you check everything and click Submit.</div>
+        </div>
+      </div>
+     </div>
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+        $('#ai-autofill-toggle').on('click', function(){
+            $('#ai-autofill-panel').slideToggle(200);
+        });
+
+        function setSelect2Value(selector, value){
+            if(!value) return;
+            var $el = $(selector);
+            if($el.length === 0) return;
+            if($el.find("option[value='"+value.replace(/'/g,"\\'")+"']").length === 0){
+                $el.append(new Option(value, value, true, true));
+            } else {
+                $el.val(value);
+            }
+            $el.trigger('change');
+        }
+
+        $('#ai_extract_btn').on('click', function(){
+            var url = $('#ai_source_url').val();
+            var pdfFile = $('#ai_source_pdf')[0].files[0];
+
+            if(!url && !pdfFile){
+                $('#ai_extract_status').text('Please enter a URL or choose a PDF first.').css('color','#dc3545');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('source_url', url);
+            if(pdfFile){
+                formData.append('source_pdf', pdfFile);
+            }
+
+            $('#ai_extract_status').text('Reading and extracting... this can take a few seconds.').css('color','#666');
+            $('#ai_extract_btn').prop('disabled', true);
+
+            $.ajax({
+                url: '<?php echo base_url(); ?>Product/ai_extract',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res){
+                    $('#ai_extract_btn').prop('disabled', false);
+                    if(res.status == 1){
+                        var d = res.data;
+                        if(d.product_type) $('#product_type').val(d.product_type).trigger('change');
+                        if(d.device_model) $('#device_name').val(d.device_model);
+                        if(d.device_brand) $('#device_brand').val(d.device_brand);
+                        if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
+                        if(d.order_code) $('#order_code').val(d.order_code);
+                        if(d.release_version) $('#release_version').val(d.release_version);
+                        if(d.date_released) $('input[name="date_released"]').val(d.date_released);
+                        if(d.rack_unit){
+                            $('select[name="rack_unit"]').val(d.rack_unit).trigger('change');
+                        }
+                        // note: this field's name has a pre-existing trailing space in the HTML
+                        if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
+                        if(d.warranty_detail) $('textarea[name="warranty_detail"]').val(d.warranty_detail);
+                        if(d.support_detail) $('textarea[name="support_detail"]').val(d.support_detail);
+
+                        setSelect2Value('select[name="input_conn[0][]"]', d.input_type);
+                        setSelect2Value('select[name="input_process_stand[0][]"]', d.input_standard);
+                        setSelect2Value('select[name="process_connection[0][]"]', d.input_connection_type);
+                        setSelect2Value('select[name="out_conn[0][]"]', d.output_type);
+                        setSelect2Value('select[name="out_process_stand[0][]"]', d.output_standard);
+                        setSelect2Value('select[name="out_process_connection[0][]"]', d.output_connection_type);
+                        setSelect2Value('select[name="process[0][]"]', d.process_type);
+                        setSelect2Value('select[name="process_stand[0][]"]', d.process_standard);
+
+                        $('#ai_extract_status').text('Done - please review every field below before submitting.').css('color','#28a745');
+                    } else {
+                        $('#ai_extract_status').text(res.message || 'Something went wrong.').css('color','#dc3545');
+                    }
+                },
+                error: function(){
+                    $('#ai_extract_btn').prop('disabled', false);
+                    $('#ai_extract_status').text('Request failed. Please try again.').css('color','#dc3545');
+                }
+            });
+        });
+
+    });
+    </script>
+    <div class="row">
      <div class="col-sm-6">
       <div class="form-group">
         <label>Product Type</label>
@@ -3006,13 +3114,15 @@ function autocomplete(inp, arr) {
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
       for (i = 0; i < arr.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+        /*check if the item CONTAINS the typed text anywhere (not just at the start):*/
+        var idx = arr[i].toUpperCase().indexOf(val.toUpperCase());
+        if (idx > -1) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
-          /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+          /*make the matching letters bold, wherever they actually occur:*/
+          b.innerHTML = arr[i].substr(0, idx);
+          b.innerHTML += "<strong>" + arr[i].substr(idx, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(idx + val.length);
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/
@@ -3132,13 +3242,15 @@ function autocompleteForBrand(inp, arr){
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
       for (i = 0; i < arr.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+        /*check if the item CONTAINS the typed text anywhere (not just at the start):*/
+        var idx = arr[i].toUpperCase().indexOf(val.toUpperCase());
+        if (idx > -1) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
-          /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+          /*make the matching letters bold, wherever they actually occur:*/
+          b.innerHTML = arr[i].substr(0, idx);
+          b.innerHTML += "<strong>" + arr[i].substr(idx, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(idx + val.length);
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/

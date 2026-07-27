@@ -1162,7 +1162,7 @@ window.addEventListener('load', function(){
     <div class="az-step">
       <div class="az-step-num">1</div>
       <h3>Search by what matters</h3>
-      <p>Filter by standards, I/O type, product category, connector type and more — in any combination you need.</p>
+      <p>Filter by type, category, standards, connector type and more — in any combination you need.</p>
     </div>
     <div class="az-step">
       <div class="az-step-num">2</div>

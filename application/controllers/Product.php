@@ -79,17 +79,14 @@ class Product extends CI_Controller
             
                     $run = $this->common_model->InsertData('fav_device_list',$insert);
 
-//echo $this->db->last_query(); die;
                     if($run){
 
-             
-				//$this->session->set_flashdata('msg','<div class="alert alert-success"><p style="margin-bottom: 0rem!important;">Like Teacher successfully...</p></div>');
 
 
 
 			} else {
 
-				 //$this->session->set_flashdata('msg','<div class="alert alert-danger">Something went wrong.</div>');
+
              
 	}
 
@@ -110,14 +107,12 @@ class Product extends CI_Controller
 
 		             	if($run){
 
-             
-				//$this->session->set_flashdata('msg','<div class="alert alert-danger"><p style="margin-bottom: 0rem!important;">Dislike Teacher successfully...</p></div>');
 
 
 
 			} else {
 
-				 //$this->session->set_flashdata('msg','<div class="alert alert-danger">Something went wrong.</div>');
+
              
 	}
 		 redirect('details/'.$this->uri->segment(2));
@@ -174,15 +169,12 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
 
   //// Group 2: IOP ////
 
-  //$input_conn = count($_REQUEST['hidden-input_conn']);
   $input_conn = count($_REQUEST['input_conn']);
 
   $input_conn1 = $_REQUEST['input_conn'];
    $input_process_stand = $_REQUEST['input_process_stand'];
    $process_connection = $_REQUEST['process_connection'];
-//print_r($input_conn1); die;
 
-  //$out_conn = $_REQUEST['hidden-out_conn'];
   $out_conn = $_REQUEST['out_conn'];
   $out_process_stand = $_REQUEST['out_process_stand'];
   $out_process_connection = $_REQUEST['out_process_connection'];
@@ -195,13 +187,9 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   $dealer_notes = htmlentities($_REQUEST['dealer_notes'], ENT_QUOTES);
   $warranty_detail = htmlentities($_REQUEST['warranty_detail'], ENT_QUOTES);
   $support_detail = htmlentities($_REQUEST['support_detail'], ENT_QUOTES);
-  //$out_process_stand = htmlentities(implode(',',$_REQUEST['out_process_stand']), ENT_QUOTES);
- // $input_process_stand = htmlentities(implode(',',$_REQUEST['input_process_stand']), ENT_QUOTES);
  
   $dealer_contact = htmlentities($_REQUEST['dealer_contact'], ENT_QUOTES);
   $release_version = htmlentities($_REQUEST['release_version'], ENT_QUOTES);
-  //$process_connection = htmlentities(implode(',',$_REQUEST['process_connection']), ENT_QUOTES);
-  //$out_process_connection = htmlentities(implode(',',$_REQUEST['out_process_connection']), ENT_QUOTES);
   $cdate = date('Y-m-d H:i:s');
   
 
@@ -217,27 +205,30 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
       $device_manual_brochure = $filename;
 
 }
+       // SECURITY FIX: every value now passed through $this->db->escape()
+       // instead of raw string concatenation. rack_unit and
+       // paymentIntent_id previously had ZERO escaping at all.
        $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`order_code`,`date_released`,`dealer_web_cont`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`release_version`,`paymentIntent_id`,`product_type`)
       VALUES(
-        '" .$cdate ."',
-        '" .$session_id ."',
-        '" .$device_model ."',
-        '" .$device_brand ."',  
-        '" .$latest_firmware_version ."',
-        '" .$device_manual_brochure ."',
-        '" .$mechanical_demension_mounting ."',
-        '". $rack_unit."',
-        '" .$order_code ."',
-        '" .$date_released ."',
-        '" .$dealer_web_cont ."',
-        '" .$dealer_notes ."',
-        '" .$warranty_detail ."',
-        '" .$support_detail ."',
-        '" .$cdate ."' ,
-        '" .$dealer_contact ."' ,
-        '" .$release_version ."',
-		    '" .$paymentIntent_id."',
-		    '" .$product_type."'
+        " .$this->db->escape($cdate) .",
+        " .$this->db->escape($session_id) .",
+        " .$this->db->escape($device_model) .",
+        " .$this->db->escape($device_brand) .",
+        " .$this->db->escape($latest_firmware_version) .",
+        " .$this->db->escape($device_manual_brochure) .",
+        " .$this->db->escape($mechanical_demension_mounting) .",
+        " .$this->db->escape($rack_unit) .",
+        " .$this->db->escape($order_code) .",
+        " .$this->db->escape($date_released) .",
+        " .$this->db->escape($dealer_web_cont) .",
+        " .$this->db->escape($dealer_notes) .",
+        " .$this->db->escape($warranty_detail) .",
+        " .$this->db->escape($support_detail) .",
+        " .$this->db->escape($cdate) .",
+        " .$this->db->escape($dealer_contact) .",
+        " .$this->db->escape($release_version) .",
+        " .$this->db->escape($paymentIntent_id) .",
+        " .$this->db->escape($product_type) ."
       )";
   
     $run = $this->db->query($sql);
@@ -249,15 +240,12 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         $cat_a = implode(',', $_REQUEST['main_cat']);
         $cat_b = !empty($_REQUEST['sub1_cat']) ? implode(',', $_REQUEST['sub1_cat']) : '';
         $cat_c = !empty($_REQUEST['sub2_cat']) ? implode(',', $_REQUEST['sub2_cat']) : '';
-        $this->db->query("INSERT INTO product_category (product_id, cat_a, cat_b, cat_c) VALUES ('".$product_id."', '".$cat_a."', '".$cat_b."', '".$cat_c."')");
+        $this->db->query("INSERT INTO product_category (product_id, cat_a, cat_b, cat_c) VALUES (".$this->db->escape($product_id).", ".$this->db->escape($cat_a).", ".$this->db->escape($cat_b).", ".$this->db->escape($cat_c).")");
     }
 
     if($run){      
 
 for($i=0; $i<$input_conn; $i++){
-// echo '<pre>';
-// print_r($_REQUEST);
-// echo '</pre>';
  $input_data = implode(',',$input_conn1[$i]);
 $input_process_stand_data = implode(',',$input_process_stand[$i]);
 $process_connection_data = implode(',',$process_connection[$i]);
@@ -270,13 +258,9 @@ $out_process_connection_data = implode(',',$out_process_connection[$i]);
 $process_stand_data = implode(',',$process_stand[$i]);
 $process_data = implode(',',$process[$i]);
 
-
-
-
-$sqlInsert1="insert into input_output set product_id = '".$product_id."' , input_conn = '".$input_data."' , input_process_stand = '".$input_process_stand_data."' , process_connection = '".$process_connection_data."' , out_conn = '".$out_conn_data."' , out_process_stand = '".$out_process_stand_data."' , out_process_connection = '".$out_process_connection_data."' , process_stand = '".$process_stand_data."' , process = '".$process_data."' ";
+$sqlInsert1="insert into input_output set product_id = ".$this->db->escape($product_id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." ";
 
                    $run21 = $this->db->query($sqlInsert1);
-//echo $this->db->last_query(); die;
 }
 
       if (isset($_FILES['gallery-image-orignal']['name'])) {
@@ -287,7 +271,7 @@ $sqlInsert1="insert into input_output set product_id = '".$product_id."' , input
                      $uploadImage = true;
                    }
                    $fileD = $filename;
-                   $sqlInsert="insert into product_gallery_image set product_id= '".$product_id."',gallery_image = '".$fileD."' ";
+                   $sqlInsert="insert into product_gallery_image set product_id= ".$this->db->escape($product_id).",gallery_image = ".$this->db->escape($fileD)." ";
                    $run2 = $this->db->query($sqlInsert);
                   }
    
@@ -295,7 +279,6 @@ $sqlInsert1="insert into input_output set product_id = '".$product_id."' , input
        $where =" user_id='".$session_id."' ";
        $user_type = $this->common_model->UpdateData('users',$where,array('user_type'=>1));
        
-       //$response['message'] = 'Your Product amount will be paid successfully. And your product will be add successfully.';
        $response['message'] = 'Payment successful! Your item will be added shortly.';
        $response['url'] = base_url().'my-product-listing';
 
@@ -351,7 +334,6 @@ $sqlInsert1="insert into input_output set product_id = '".$product_id."' , input
 				$insert['currency']= $currency;
 				$insert['tr_date']= date("Y-m-d H:i:s");
 				
-			    //print_r($insert);
 				$run = $this->common_model->InsertData('transactions',$insert);
 				
 			
@@ -391,7 +373,6 @@ $sqlInsert1="insert into input_output set product_id = '".$product_id."' , input
 				$insert['currency']= $currency;
 				$insert['tr_date']= date("Y-m-d H:i:s");
 				
-			    //print_r($insert);
 				$run = $this->common_model->InsertData('transactions',$insert);
 				
 			
@@ -438,8 +419,6 @@ $sqlInsert1="insert into input_output set product_id = '".$product_id."' , input
     
     $qry = $this->db->query("SELECT * FROM product WHERE id = ".$this->db->escape($p_id))->row_array();
 	
-// 	if($qry)
-// 	{
 		require_once('application/libraries/stripe-php-7.49.0/init.php');
         header('Content-Type: application/json');
         $secret_key = $this->config->item('stripe_secret');
@@ -458,20 +437,14 @@ $success = 1;
 } catch(Stripe_CardError $e) {
   $error1 = $e->getMessage();
 } catch (Stripe_InvalidRequestError $e) {
-  // Invalid parameters were supplied to Stripe's API
   $error1 = $e->getMessage();
 } catch (Stripe_AuthenticationError $e) {
-  // Authentication with Stripe's API failed
   $error1 = $e->getMessage();
 } catch (Stripe_ApiConnectionError $e) {
-  // Network communication with Stripe failed
   $error1 = $e->getMessage();
 } catch (Stripe_Error $e) {
-  // Display a very generic error to the user, and maybe send
-  // yourself an email
   $error1 = $e->getMessage();
 } catch (Exception $e) {
-  // Something else happened, completely unrelated to Stripe
   $error1 = $e->getMessage();
 }
  
@@ -483,7 +456,6 @@ $success = 1;
 
 		
 			
-			$output->data->id; 
 			$insert['user_id'] = $this->session->userdata('user_id');
 			$insert['device_id'] = $p_id;
 			$insert['canceled_date'] = date('Y-m-d H:i:s');
@@ -493,7 +465,6 @@ $success = 1;
 			$insert['feedback'] = $this->input->post('feedback');
 			
 			$run = $this->common_model->InsertData('request',$insert);
-				//if($run){
 
             $insert1['status'] = 3;
 			$run1 = $this->common_model->UpdateData('product',array('id'=>$p_id),$insert1);
@@ -513,8 +484,7 @@ $success = 1;
             
 			$send = $this->common_model->SendMail($email,$subject,$body);
 			
-			$this->session->set_flashdata('msg','<div class="alert alert-success"><p style="margin-bottom: 0rem!important;">Your item has been successfully removed and you’ll receive a refund in 3-5 business days.</p></div>');
-		//	} 
+			$this->session->set_flashdata('msg','<div class="alert alert-success"><p style="margin-bottom: 0rem!important;">Your item has been successfully removed and you will receive a refund in 3-5 business days.</p></div>');
 		 }	
 			else{
 					$this->session->set_flashdata('msg','<div class="alert alert-danger">'.$error1.'</div>');
@@ -535,18 +505,6 @@ $success = 1;
   
   $response['status'] = 0;
 
-  /*$title = htmlentities($_REQUEST['title'],ENT_QUOTES);
-  $description = htmlentities($_REQUEST['description'], ENT_QUOTES);
-  $price = htmlentities($_REQUEST['price'],ENT_QUOTES);
-  $manufacturer_id = htmlentities($_REQUEST['manufacturer_id'],ENT_QUOTES);
-  $manufacturer_part_no = htmlentities($_REQUEST['manufacturer_part_no'],ENT_QUOTES);
-  $order_code = htmlentities($_REQUEST['order_code'],ENT_QUOTES);
-  $product_range = htmlentities($_REQUEST['product_range'],ENT_QUOTES);
-  $input_voltage_max = htmlentities($_REQUEST['input_voltage_max'],ENT_QUOTES);
-  $availability = htmlentities($_REQUEST['availability'],ENT_QUOTES);
-  $update = date('Y-m-d H:i:s');*/
-
-
   //// Group 1: Device ////
   $device_model = htmlentities($_REQUEST['device_model'], ENT_QUOTES);
   $device_brand = htmlentities($_REQUEST['device_brand'], ENT_QUOTES);
@@ -559,15 +517,12 @@ $success = 1;
   $date_released = date('Y-m-d',$date);
 
 
-   //$input_conn = count($_REQUEST['hidden-input_conn']);
   $input_conn = count($_REQUEST['input_conn']);
 
   $input_conn1 = $_REQUEST['input_conn'];
    $input_process_stand = $_REQUEST['input_process_stand'];
    $process_connection = $_REQUEST['process_connection'];
-//print_r($input_conn1); die;
 
-  //$out_conn = $_REQUEST['hidden-out_conn'];
   $out_conn = $_REQUEST['out_conn'];
   $out_process_stand = $_REQUEST['out_process_stand'];
   $out_process_connection = $_REQUEST['out_process_connection'];
@@ -575,17 +530,6 @@ $success = 1;
   $process = $_REQUEST['process'];
   $process_stand = $_REQUEST['process_stand'];
 
-  //// Group 2: IOP ////
-
-  //$input_conn = htmlentities(implode(',',$_REQUEST['input_conn']), ENT_QUOTES);
-  //$out_conn = htmlentities(implode(',',$_REQUEST['out_conn']), ENT_QUOTES);
- 
-
-
-  //$input_conn = count($_REQUEST['input_conn']);
-  //$input_conn1 = $_REQUEST['input_conn'];
-  //$input_process_stand = $_REQUEST['input_process_stand'];
-  //$process_connection = $_REQUEST['process_connection'];
   $Connection_id = $_REQUEST['Connection_id'];
 
   //// Group 3: Dealer //// 
@@ -593,25 +537,21 @@ $success = 1;
   $dealer_notes = htmlentities($_REQUEST['dealer_notes'], ENT_QUOTES);
   $warranty_detail = htmlentities($_REQUEST['warranty_detail'], ENT_QUOTES);
   $support_detail = htmlentities($_REQUEST['support_detail'], ENT_QUOTES);
-  //$out_process_stand = htmlentities(implode(',',$_REQUEST['out_process_stand']), ENT_QUOTES);
- // $input_process_stand = htmlentities(implode(',',$_REQUEST['input_process_stand']), ENT_QUOTES);
   
   $dealer_contact = htmlentities($_REQUEST['dealer_contact'], ENT_QUOTES);
   $release_version = htmlentities($_REQUEST['release_version'], ENT_QUOTES);
- // $process_connection = htmlentities(implode(',',$_REQUEST['process_connection']), ENT_QUOTES);
-  //$out_process_connection = htmlentities(implode(',',$_REQUEST['out_process_connection']), ENT_QUOTES);
   $update = date('Y-m-d H:i:s');
  
   $id= $_REQUEST['id'];
-  $condition = "`id` = '" .$id ."'";
+  $condition = "`id` = ".$this->db->escape($id)."";
   $product_detail = $this->common_model->GetSingleData('product', $condition);
 
   if(!empty($product_detail)){
     $product_detail = $product_detail[0];
    
-        $sql = "UPDATE `product` SET  `device_model` = '" .$device_model ."',`device_brand` = '" .$device_brand ."' ,`latest_firmware_version` = '" .$latest_firmware_version ."' ,`mechanical_demension_mounting` = '" .$mechanical_demension_mounting ."' ,`rack_unit` = '" .$rack_unit ."' ,`manufacturer_part_no` = '" .$manufacturer_part_no ."' ,`order_code` = '" .$order_code ."' ,`date_released` = '" .$date_released ."' ,`dealer_web_cont` = '" .$dealer_web_cont ."' ,`dealer_notes` = '" .$dealer_notes ."' ,`warranty_detail` = '" .$warranty_detail ."' ,`support_detail` = '" .$support_detail ."'  ,`dealer_contact` = '" .$dealer_contact ."' ,`release_version` = '" .$release_version ."',`updated_at` = '" .$update ."' ";
-
-        //print_r($_FILES);
+        // SECURITY FIX: every value escaped via $this->db->escape().
+        // rack_unit previously had zero escaping.
+        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`order_code` = ".$this->db->escape($order_code)." ,`date_released` = ".$this->db->escape($date_released)." ,`dealer_web_cont` = ".$this->db->escape($dealer_web_cont)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact)." ,`release_version` = ".$this->db->escape($release_version).",`updated_at` = ".$this->db->escape($update)." ";
 
         if(!empty($_FILES["product_image"]['name'])){
           $uploadImage = false;
@@ -623,27 +563,26 @@ $success = 1;
             $uploadImage = true;
           }
           $product_image = $filename;
-           $sql .= ", `product_image` = '" .$product_image ."'";
+           $sql .= ", `product_image` = ".$this->db->escape($product_image)."";
         }
   
     
-    $sql .= " WHERE `id` = " .$id.";";
+    $sql .= " WHERE `id` = " .$this->db->escape($id).";";
 
      
 
     $run = $this->db->query($sql);
  
      
-//echo $this->db->last_query();
 
     if($run){
 
 
-	$qry = $this->db->query("SELECT * FROM fav_device_list WHERE device_id = '".$id."'")->row_array();
+	$qry = $this->db->query("SELECT * FROM fav_device_list WHERE device_id = ".$this->db->escape($id)."")->row_array();
 	if($qry)
 	{
         $uid = $qry["user_id"];
-		$qry1 = $this->db->query("SELECT * FROM users WHERE user_id = '".$uid."'")->row_array();
+		$qry1 = $this->db->query("SELECT * FROM users WHERE user_id = ".$this->db->escape($uid)."")->row_array();
 		if($qry1)
 		{
 			$email = $qry1["email"];
@@ -653,26 +592,18 @@ $success = 1;
 			<p>Please be informed that your favorite device is updated.</p><br>
 			<p>';
 
-			//$body .='To avoid losing a listing please renew registration via: <b>Items Management/My List/Renew</b>.';
-
 			$send = $this->common_model->SendMail($email,$subject,$body);
 			if($send){
-				   //$update['monthly_mail'] = 1;
-				   //$this->common_model->UpdateData('product',array('id'=>$product_id),$update);
 		    }
 			
 		}
 	}
 	
-$input_output = " DELETE FROM `input_output` WHERE product_id='".$id."' ";
+$input_output = " DELETE FROM `input_output` WHERE product_id=".$this->db->escape($id)."";
 
 $run3 = $this->db->query($input_output);
 
 for($i=0; $i<$input_conn; $i++){
-// echo '<pre>';
-// print_r($_REQUEST);
-// echo '</pre>';
-// die;
  $input_data = implode(',',$input_conn1[$i]);
 $input_process_stand_data = implode(',',$input_process_stand[$i]);
 $process_connection_data = implode(',',$process_connection[$i]);
@@ -685,13 +616,9 @@ $out_process_connection_data = implode(',',$out_process_connection[$i]);
 $process_stand_data = implode(',',$process_stand[$i]);
 $process_data = implode(',',$process[$i]);
 
-
-
-
-$sqlInsert1="insert into input_output set product_id = '".$id."' , input_conn = '".$input_data."' , input_process_stand = '".$input_process_stand_data."' , process_connection = '".$process_connection_data."' , out_conn = '".$out_conn_data."' , out_process_stand = '".$out_process_stand_data."' , out_process_connection = '".$out_process_connection_data."' , process_stand = '".$process_stand_data."' , process = '".$process_data."' ";
+$sqlInsert1="insert into input_output set product_id = ".$this->db->escape($id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." ";
 
                    $run21 = $this->db->query($sqlInsert1);
-//echo $this->db->last_query(); die;
 }
 
 
@@ -705,7 +632,7 @@ $sqlInsert1="insert into input_output set product_id = '".$id."' , input_conn = 
               $abc_id=$abc;
             }
    
-             $delete="delete from product_gallery_image  where product_id='".$id."' and id NOT IN ($abc_id)";
+             $delete="delete from product_gallery_image  where product_id=".$this->db->escape($id)." and id NOT IN ($abc_id)";
             $this->db->query($delete);
    
             
@@ -719,7 +646,7 @@ $sqlInsert1="insert into input_output set product_id = '".$id."' , input_conn = 
                 $uploadImage = true;
               }
               $fileD = $filename;
-              $sqlInsert="insert into product_gallery_image set product_id= '".$id."',gallery_image = '".$fileD."' ";
+              $sqlInsert="insert into product_gallery_image set product_id= ".$this->db->escape($id).",gallery_image = ".$this->db->escape($fileD)." ";
               $run2 = $this->db->query($sqlInsert);
             }
           }
@@ -750,21 +677,13 @@ $sqlInsert1="insert into input_output set product_id = '".$id."' , input_conn = 
 
       $id=$_REQUEST['id']; 
       $run = $this->common_model->DeleteData('product',array('id'=>$id));
-            //echo $this->db->last_query();
       if($run){
-
-       // $run2 = $this->common_model->DeleteData('input_output',array('product_id'=>$id));
 
         $run3 = $this->common_model->DeleteData('product_gallery_image',array('product_id'=>$id));
         
 
-      //  $this->session->set_flashdata('msg','<div class="alert alert-success">Success! Product has been deleted successfully.</div>');
-
-       // redirect('my-product-listing');
         
       } else {
-       //   $this->session->set_flashdata('msg','<div class="alert alert-danger">Something is Worng.</div>');
-          //redirect('my-product-listing');
       }
   
   }
@@ -775,13 +694,9 @@ $sqlInsert1="insert into input_output set product_id = '".$id."' , input_conn = 
           $run = $this->common_model->DeleteData('fav_device_list',array('id'=>$id));
             if($run)
            {
-          //  $run2 = $this->common_model->DeleteData('input_output',array('product_id'=>$id));
-           // $run3 = $this->common_model->DeleteData('product_gallery_image',array('product_id'=>$id));
-       //     $this->session->set_flashdata('message','<div class="alert alert-success">Success! Product has been Removed successfully.</div>');
             }
             else
             {
-           //   $this->session->set_flashdata('message','<div class="alert alert-danger">Something is Worng.</div>');
             }
   
   }
@@ -812,9 +727,6 @@ $count=$_REQUEST['count'];
                $key= explode(',',$InputSugg['input_conn']);
                
                 foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -848,9 +760,6 @@ $count=$_REQUEST['count'];
                $key= explode(',',$InputSugg['input_process_stand']);
                
                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -885,9 +794,6 @@ $count=$_REQUEST['count'];
                $key= explode(',',$InputSugg['process_connection']);
                
               foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -915,7 +821,6 @@ $count=$_REQUEST['count'];
 
                      <input type="button" class="btn btn-danger RemoveInput" value="-">
 
-                      <!-- <input type="checkbox" class="form-control" onclick="addanotherinput() ;"  > -->
                   </div>
 
             </div>
@@ -924,8 +829,6 @@ $count=$_REQUEST['count'];
 
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
-
-//input scrip select
 
 $(".inputF<?php echo $classid;?>").select2({ tags: true, tokenSeparators: [';'],
                             separator: ";",     multiple: true,
@@ -973,9 +876,6 @@ $count1=$_REQUEST['count1'];
                $key= explode(',',$InputSugg['out_conn']);
                
                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -1010,9 +910,6 @@ $count1=$_REQUEST['count1'];
                $key= explode(',',$InputSugg['out_process_stand']);
                
                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k;  
                }  
                 }
@@ -1047,9 +944,6 @@ $count1=$_REQUEST['count1'];
                $key= explode(',',$InputSugg['out_process_connection']);
                
                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -1075,7 +969,6 @@ $count1=$_REQUEST['count1'];
 
               <div class="form-group">
                       <label for="title"></label><br>
-                      <!-- <input type="checkbox" class="form-control" onclick="addanotheroutput() ;"  > -->
                       <input type="button" class="btn btn-danger RemoveOutput" value="-">
                   </div>
 
@@ -1083,8 +976,6 @@ $count1=$_REQUEST['count1'];
 </div>
 
 <script type="text/javascript" class="js-code-example-tokenizer"> 
-
-//output scrip select
 
 $(".outputF<?php echo $classid;?>").select2({ tags: true, tokenSeparators: [','] });
 
@@ -1125,9 +1016,6 @@ $count2=$_REQUEST['count2'];
                $key= explode(',',$InputSugg['process']);
                
                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -1162,9 +1050,6 @@ $count2=$_REQUEST['count2'];
                $key= explode(',',$InputSugg['process_stand']);
                
                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
                  $data[] =$k ;  
                }  
                 }
@@ -1189,14 +1074,11 @@ $count2=$_REQUEST['count2'];
               <div class="form-group">
                       <label for="title"></label><br>
                       <input type="button" class="btn btn-danger RemoveProcess" value="-">
-                      <!-- <input type="checkbox" class="form-control" onclick="addanotherprocess() ;" > -->
                   </div>
 
             </div>
 </div>
 <script type="text/javascript" class="js-code-example-tokenizer"> 
-
-//process scrip select
 
 $(".processsuggestion<?php echo $classid;?>").select2({ tags: true, tokenSeparators: [','] });
 
@@ -1216,16 +1098,14 @@ public function getprocess(){
 
     if(!$process){
      }else{
-$process_1 = $this->db->query('SELECT * FROM `product` WHERE device_model LIKE "'.$seachprocess.'" OR device_brand LIKE "'.$seachprocess.'" GROUP BY device_model')->result_array();
+$process_1 = $this->db->query('SELECT * FROM `product` WHERE device_model LIKE '.$this->db->escape($seachprocess).' OR device_brand LIKE '.$this->db->escape($seachprocess).' GROUP BY device_model')->result_array();
 
 
 
     }
-  //  echo $this->db->last_query();
 
     foreach($process_1 as $process_sugg){ ?>
-<!--     <li data-value="<?php echo $process_sugg['id'];?>" ><?php echo $process_sugg['device_model'];?></li>
- -->    <li data-value="<?php echo $process_sugg['id'];?>" ><?php echo $process_sugg['device_model'];?></li>
+    <li data-value="<?php echo $process_sugg['id'];?>" ><?php echo $process_sugg['device_model'];?></li>
     <?php    }
   }
 
@@ -1417,7 +1297,6 @@ public function get_cat_c(){
   {
     
     $data['input_name_set'] = $_REQUEST['input_name'];
-    //print_r($_REQUEST['input_name']);
     $data['input_stand_set'] = $_REQUEST['input_stand'];
     $data['input_conn_set'] = $_REQUEST['input_conn'];
     $data['out_conn_set'] = $_REQUEST['out_conn'];
@@ -1433,30 +1312,25 @@ public function get_cat_c(){
     $whereorder ='ORDER by product.device_model ASC';
     //keyword///
     if(isset($_REQUEST['keyword']) && $_REQUEST['keyword']!='' ){
-      $where.=' and (product.device_model LIKE "'. $_REQUEST['keyword'].'%" OR  product.device_model LIKE "%'. $_REQUEST['keyword'].'"  Or product.device_model LIKE "%'. $_REQUEST['keyword'].'%" )  ';
+      $kw = $this->db->escape_like_str($_REQUEST['keyword']);
+      $where.=" and (product.device_model LIKE '".$kw."%' OR  product.device_model LIKE '%".$kw."'  Or product.device_model LIKE '%".$kw."%' )  ";
 
           $whereorder ='ORDER by product.device_model DESC';
 
     }
 
-//input///
-//if(isset($_REQUEST['by_input']) && $_REQUEST['by_input']==1)
- // {
       $where1='';
       $where2='';
       $where3='';
       
-///////////////////////////////////////////////////////////////////   
 if($_REQUEST['input_name']){
     $input_name_where='';
         $str_input_name =$_REQUEST['input_name'];
         
-        
-        //$input_name = explode(',',$str_input_name);
         $i=1;
         foreach($str_input_name as $row){
 
-            $input_name_where.=" FIND_IN_SET('$row',input_output.input_conn) ";
+            $input_name_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.input_conn) ";
             if(count($str_input_name)>1 && $i<count($str_input_name)){
             $input_name_where.=" or ";
             }
@@ -1472,11 +1346,10 @@ $input_stand_where='';
 
         $str_input_stand =$_REQUEST['input_stand'];
         
-        //$input_stand = explode(',',$str_input_stand);
         $i=1;
         foreach($str_input_stand as $row){
 
-            $input_stand_where.=" FIND_IN_SET('$row',input_output.input_process_stand) ";
+            $input_stand_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.input_process_stand) ";
             if(count($str_input_stand)>1 && $i<count($str_input_stand)){
             $input_stand_where.=' or';
             }
@@ -1493,18 +1366,16 @@ $input_stand_where='';
         
 
 }
-/////////////////////////////////////////////////////////////////////
 
 if($_REQUEST['input_conn']){
     $input_conn_where='';
 
         $str_input_conn =$_REQUEST['input_conn'];
         
-        //$input_conn =explode(',',$str_input_conn);
         $i=1;
         foreach($str_input_conn as $row){
 
-            $input_conn_where.=" FIND_IN_SET('$row',input_output.process_connection) ";
+            $input_conn_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.process_connection) ";
             if(count($str_input_conn)>1 && $i<count($str_input_conn)){
             $input_conn_where.=' or';
             }
@@ -1522,37 +1393,21 @@ if($_REQUEST['input_conn']){
         
 }
 
-        //$where.=" or ".$input_conn_where." '' ";
-        //$whereorder ='ORDER by product.device_model DESC';
-        
 if($_REQUEST['input_conn'] || $_REQUEST['input_stand'] ||$_REQUEST['input_name']){
-
-
-//$input_name_where.=" ($input_name_where) or ($input_stand_where) or ($input_conn_where) ";
 
 $where.=" and ($where1) ";
 $whereorder ='ORDER by product.device_model DESC';
-/////////////////////////////////////////////////////////////////////
 
 }
-
-
-//output//
-// if(isset($_REQUEST['by_output']) && $_REQUEST['by_output']==1)
-//  {
-
-///////////////////////////////////////////////////////////////////   
 
 if($_REQUEST['out_conn']){
     $out_conn_where='';
         $str_out_conn =$_REQUEST['out_conn'];
         
-        
-        //$input_name = explode(',',$str_input_name);
         $j=1;
         foreach($str_out_conn as $row){
 
-            $out_conn_where.=" FIND_IN_SET('$row',input_output.out_conn) ";
+            $out_conn_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.out_conn) ";
             if(count($str_out_conn)>1 && $j<count($str_out_conn)){
             $out_conn_where.=' or';
             }
@@ -1562,19 +1417,16 @@ if($_REQUEST['out_conn']){
             $where2 .=$out_conn_where;
         
 }
-///////////////////////////////////////////////////////////////////   
 
 if($_REQUEST['out_process_stand']){
 $out_process_stand_where='';
 
         $str_out_process_stand =$_REQUEST['out_process_stand'];
         
-        //$out_process_stand = explode(',',$str_out_process_stand);
-
         $i=1;
         foreach($str_out_process_stand as $row){
 
-            $out_process_stand_where.=" FIND_IN_SET('$row',input_output.out_process_stand) ";
+            $out_process_stand_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.out_process_stand) ";
             if(count($str_out_process_stand)>1 && $i<count($str_out_process_stand)){
             $out_process_stand_where.=' or';
             }
@@ -1590,18 +1442,15 @@ $out_process_stand_where='';
 
 }
 
-///////////////////////////////////////////////////////////////////   
-
 if($_REQUEST['out_process_connection']){
     $out_process_connection_where='';
 
         $str_out_process_connection =$_REQUEST['out_process_connection'];
         
-        //$out_process_connection =explode(',',$str_out_process_connection);
         $i=1;
         foreach($str_out_process_connection as $row){
 
-            $out_process_connection_where.=" FIND_IN_SET('$row',input_output.out_process_connection) ";
+            $out_process_connection_where.=" FIND_IN_SET(".$this->db->escape($row).",input_output.out_process_connection) ";
             if(count($str_out_process_connection)>1 && $i<count($str_out_process_connection)){
             $out_process_connection_where.=' or';
             }
@@ -1621,19 +1470,11 @@ if($_REQUEST['out_conn'] || $_REQUEST['out_process_stand'] || $_REQUEST['out_pro
 $where.=" and ($where2) ";
 $whereorder ='ORDER by product.device_model DESC';
 }
-///process//
-// if(isset($_REQUEST['by_process']) && $_REQUEST['by_process']==1)
-//   {
-
-///////////////////////////////////////////////////////////////////   
-
 
 if($_REQUEST['process']){
     $process_where='';
         $str_process =$_REQUEST['process'];
         
-        
-        //$input_name = explode(',',$str_input_name);
         $i=1;
         foreach($str_process as $row){
 
@@ -1648,14 +1489,11 @@ if($_REQUEST['process']){
         
 }
 
-///////////////////////////////////////////////////////////////////   
-
 if($_REQUEST['process_stand']){
 $process_stand_where='';
 
         $str_process_stand =$_REQUEST['process_stand'];
         
-        //$process_stand = explode(',',$str_process_stand);
         $i=1;
         foreach($str_process_stand as $row){
 
@@ -1701,7 +1539,6 @@ if(isset($_REQUEST['product_type']) && !empty($_REQUEST['product_type'])){
 if(!empty($_REQUEST['main_cat']) || !empty($_REQUEST['sub1_cat']) || !empty($_REQUEST['sub2_cat'])){
     $cat_where = '';
     if(!empty($_REQUEST['main_cat'])){
-        $cats = array_map(array($this->db, 'escape'), $_REQUEST['main_cat']);
         $cat_where .= " AND (";
         $cat_parts = [];
         foreach($_REQUEST['main_cat'] as $cat){
@@ -1736,21 +1573,6 @@ if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
        $where.=$whereorder;
   }
   
-///process//
-/*if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1)
-  {
-    $where.= 'ORDER by product.id DESC';
-  }
-  elseif(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==2)
-  {
-     $where.='ORDER by product.id ASC';
-
-  }elseif(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==3){
-    $where.='ORDER by product.created_at desc';
-  }else{
-     $where.='ORDER by product.id DESC';
-  }*/
-  
   $perpage   = 10;
   if(isset($_REQUEST['perpage']) && !empty($_REQUEST['perpage'])){
 
@@ -1766,19 +1588,10 @@ if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
         $config["uri_segment"] = 2;
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-        //$data['productlist'] = $this->common_model->GetAllData($config["per_page"], $page);
         $data["links"] = $this->pagination->create_links();
 
         $data['productlist'] = $this->db->query('SELECT DISTINCT product.id , product.* FROM `product` left JOIN `input_output` ON `product`.`id`= `input_output`.`product_id` LEFT JOIN `product_category` ON `product`.`id`= `product_category`.`product_id`' .$where.' Limit '.$page.','.$config["per_page"])->result_array();
  
-       //echo $this->db->last_query(); 
-// die;
-/*$data['productlist'] = $this->db->query('SELECT * FROM `product` INNER JOIN `input_output` ON `product`.`id`= `input_output`.`product_id`' .$where)->result_array();
- */
-     //;secho $this->db->last_query(); 
-     
-    //  die;
- //die;
   $this->load->view('site/filterdevicesearchAjax',$data);
   } 
 
@@ -1820,7 +1633,6 @@ if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
                 $input_conn = $_REQUEST['query']; 
                 $searchInp = '%'.$input_conn.'%';
                 $Input = $this->common_model->GetAllData('input_output',array('input_process_stand LIKE '=>$searchInp),'input_process_stand','asc','','','','input_process_stand'); 
-                //echo $this->db->last_query();
                 foreach($Input as $InputSugg){
                 
                 
@@ -1846,7 +1658,6 @@ if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
                 $input_conn = $_REQUEST['query']; 
                 $searchInp = '%'.$input_conn.'%';
                 $Input = $this->common_model->GetAllData('input_output',array('process_connection LIKE '=>$searchInp),'process_connection','asc','','','','process_connection');
-                //echo $this->db->last_query();
                 foreach($Input as $InputSugg){
                 
                 
@@ -1901,7 +1712,6 @@ public function outputSugguestion()
                 $input_conn = $_REQUEST['query']; 
                 $searchInp = '%'.$input_conn.'%';
                 $Input = $this->common_model->GetAllData('input_output',array('out_process_stand LIKE '=>$searchInp),'out_process_stand','asc','','','','out_process_stand'); 
-                //echo $this->db->last_query();
                 foreach($Input as $InputSugg){
                 
                 
@@ -1927,7 +1737,6 @@ public function outputSugguestion()
                 $input_conn = $_REQUEST['query']; 
                 $searchInp = '%'.$input_conn.'%';
                 $Input = $this->common_model->GetAllData('input_output',array('out_process_connection LIKE '=>$searchInp),'out_process_connection','asc','','','','out_process_connection'); 
-                //echo $this->db->last_query();
                 foreach($Input as $InputSugg){
                 
                 
@@ -1958,7 +1767,6 @@ public function processsuggestion()
                 $input_conn = $_REQUEST['query']; 
                 $searchInp = '%'.$input_conn.'%';
                 $Input = $this->common_model->GetAllData('product',array('process LIKE '=>$searchInp),'process','asc','','','','process'); 
-                //echo $this->db->last_query();
                 foreach($Input as $InputSugg){
                 
                 
@@ -1984,7 +1792,6 @@ public function processsuggestion()
                 $input_conn = $_REQUEST['query']; 
                 $searchInp = '%'.$input_conn.'%';
                 $Input = $this->common_model->GetAllData('product',array('process_stand LIKE '=>$searchInp),'process_stand','asc','','','','process_stand');  
-                //echo $this->db->last_query();
                 foreach($Input as $InputSugg){
                 
                 
@@ -2020,7 +1827,6 @@ public function processsuggestion()
                $query2 = $this->db->query("SELECT * FROM users WHERE user_id = ".$this->db->escape($user_id)." and status = 1 ")->row_array();
                 if($query2){
                 $email = $query2["email"];
-				//$email = "deepshikha.webwiders@gmail.com";
                 $subject="Your Product Expire in Two Month";
 
 				$body = '<p>Hello '.$query2["fname"].'</p>
@@ -2096,9 +1902,8 @@ public function processsuggestion()
 			         
 			    $product_id = $row['id'];    
 				$user_id = $row['user_id'];
-                $query2 = $this->db->query("SELECT * FROM users WHERE user_id = '".$user_id."' and status = 1 ")->row_array();
+                $query2 = $this->db->query("SELECT * FROM users WHERE user_id = ".$this->db->escape($user_id)." and status = 1 ")->row_array();
                 $email = $query2["email"];
-//$email = "deepshikha.webwiders@gmail.com";
                 $subject="Your Product Expire in One Day";
 
 				$body = '<p>Hello '.$query2["fname"].'</p>
@@ -2151,7 +1956,6 @@ public function processsuggestion()
             $update['expiry_date'] = '';
             $update= $this->common_model->UpdateData('product',array('id'=>$product_id),$update);
 
-           //echo $this->db->last_query();
         if($update){
  		$response['url'] = base_url().'my-product-listing';
       	$response['message'] = 'Your Product amount will be paid successfully. And your product will be relisted successfully.';
@@ -2172,7 +1976,6 @@ public function processsuggestion()
     public function add_review(){
 	    
 		$this->form_validation->set_rules('email','email','required|valid_email');
-// 		$this->form_validation->set_rules('name','Name','trim|required');
         $this->form_validation->set_rules('rating','Rating','trim|required');
        
        	if($this->form_validation->run()==true)
@@ -2211,7 +2014,229 @@ public function processsuggestion()
 		}
       }
   
-    
+
+  // ── AI AUTO-FILL: extracts product info from a URL and/or PDF ──
+  // Nothing gets saved here - this only returns suggested field values
+  // for the vendor to review/edit before they hit the real Submit button.
+  public function ai_extract(){
+
+    if(!$this->session->userdata('user_id')){
+        echo json_encode(array('status' => 0, 'message' => 'Please log in first.'));
+        return;
+    }
+
+    $source_url = trim($this->input->post('source_url'));
+    $content_blocks = array();
+    $has_source = false;
+
+    // If a URL was given, fetch it server-side and strip to plain text
+    if(!empty($source_url)){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $source_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language: en-US,en;q=0.9',
+        ));
+        $html = curl_exec($ch);
+        $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curl_error = curl_error($ch);
+        curl_close($ch);
+
+        if($html === false || $html === ''){
+            echo json_encode(array('status' => 0, 'message' => 'Could not fetch that URL. '.$curl_error));
+            return;
+        }
+
+        if($http_status >= 400){
+            echo json_encode(array('status' => 0, 'message' => 'That site blocked automatic access (HTTP '.$http_status.'). This happens with some manufacturer sites that have bot protection. Please try uploading a PDF brochure/datasheet instead.'));
+            return;
+        }
+
+        // Remove script/style, then use DOMDocument to strip out nav/header/footer
+        // boilerplate (common source of noise that was drowning out real content)
+        // and prefer <main>/<article> if the page has one.
+        $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $html);
+        $html = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', $html);
+
+        $text = '';
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        if($dom->loadHTML('<?xml encoding="utf-8" ?>' . $html)){
+            $xpath = new DOMXPath($dom);
+            // strip out nav/header/footer/aside noise entirely
+            foreach(array('nav','header','footer','aside') as $tag){
+                $nodes = $dom->getElementsByTagName($tag);
+                for($i = $nodes->length - 1; $i >= 0; $i--){
+                    $node = $nodes->item($i);
+                    if($node->parentNode) $node->parentNode->removeChild($node);
+                }
+            }
+            // prefer <main> or <article> content if present
+            $main = $dom->getElementsByTagName('main');
+            if($main->length > 0){
+                $text = $main->item(0)->textContent;
+            } else {
+                $article = $dom->getElementsByTagName('article');
+                if($article->length > 0){
+                    $text = $article->item(0)->textContent;
+                } else {
+                    $body = $dom->getElementsByTagName('body');
+                    if($body->length > 0){
+                        $text = $body->item(0)->textContent;
+                    }
+                }
+            }
+        }
+        libxml_clear_errors();
+
+        if(empty($text)){
+            // fallback: plain strip_tags on the whole page
+            $text = html_entity_decode(strip_tags($html), ENT_QUOTES, 'UTF-8');
+        }
+
+        $text = preg_replace('/\s+/', ' ', $text);
+        $text = trim($text);
+        // cap length to keep token cost sane (raised from 15k - nav removal
+        // means more of this is now real content)
+        $text = substr($text, 0, 40000);
+
+        if(strlen($text) < 50){
+            echo json_encode(array('status' => 0, 'message' => 'That page did not have enough readable text to extract from.'));
+            return;
+        }
+
+        $content_blocks[] = array('type' => 'text', 'text' => "Content from product page (".$source_url."):\n\n".$text);
+        $has_source = true;
+    }
+
+    // If a PDF was uploaded, send it directly to Claude - it reads PDFs natively
+    if(!empty($_FILES['source_pdf']['tmp_name']) && $_FILES['source_pdf']['error'] == 0){
+        $pdf_data = file_get_contents($_FILES['source_pdf']['tmp_name']);
+        $pdf_base64 = base64_encode($pdf_data);
+        $content_blocks[] = array(
+            'type' => 'document',
+            'source' => array(
+                'type' => 'base64',
+                'media_type' => 'application/pdf',
+                'data' => $pdf_base64,
+            )
+        );
+        $has_source = true;
+    }
+
+    if(!$has_source){
+        echo json_encode(array('status' => 0, 'message' => 'Please provide a URL or upload a PDF.'));
+        return;
+    }
+
+    $content_blocks[] = array(
+        'type' => 'text',
+        'text' => 'Extract broadcast/media industry product information from the above. This may be physical hardware, software, a cloud/SaaS service, or a hybrid product - it does NOT need to be physical equipment. Return ONLY a valid JSON object (no markdown fencing, no explanation) with exactly these keys - use an empty string "" for anything not found:
+{
+  "product_type": "",
+  "device_model": "",
+  "device_brand": "",
+  "mechanical_demension_mounting": "",
+  "rack_unit": "",
+  "order_code": "",
+  "date_released": "",
+  "release_version": "",
+  "dealer_notes": "",
+  "warranty_detail": "",
+  "support_detail": "",
+  "input_type": "",
+  "input_standard": "",
+  "input_connection_type": "",
+  "output_type": "",
+  "output_standard": "",
+  "output_connection_type": "",
+  "process_type": "",
+  "process_standard": ""
+}
+Field meanings (apply to ANY product type - hardware, software, or cloud service):
+- product_type: must be EXACTLY one of these 5 values (no others): "Hardware", "Software", "Cloud Service", "AI Tool", "Hybrid". Choose "Hardware" for physical equipment, "Software" for installed applications, "Cloud Service" for browser-based/SaaS platforms, "AI Tool" if AI/ML is the core feature, "Hybrid" if it combines physical hardware with software/cloud components. If genuinely unclear, use "Hardware" as the default.
+- device_model: the product or service name itself (e.g. "Streamcake", "AMPP Edge Live", "EDIUS 11") - always fill this in if a clear product name is mentioned, even for software/cloud products.
+- device_brand: the company or vendor name behind the product (e.g. "Layercake", "Grass Valley") - always fill this in if the company name is findable, even for software/cloud products.
+- mechanical_demension_mounting and rack_unit: ONLY applicable to physical hardware - leave empty for pure software/cloud products.
+- date_released must be YYYY-MM-DD format if a release date is found, otherwise empty string.
+- rack_unit should be a plain number like "1" or "2" if a rack unit height is mentioned, otherwise empty string.
+- dealer_notes should be a short product description/summary in your own words, not copied verbatim.
+- input/output/process fields: for software/cloud products these might describe integrations, supported formats, or API connections rather than physical ports - fill in whatever is genuinely analogous, leave empty if nothing relevant is mentioned.'
+    );
+
+    $api_key = $this->config->item('anthropic_api_key');
+    if(empty($api_key)){
+        echo json_encode(array('status' => 0, 'message' => 'AI extraction is not configured yet (missing API key).'));
+        return;
+    }
+
+    $payload = array(
+        'model' => 'claude-haiku-4-5-20251001',
+        'max_tokens' => 1024,
+        'messages' => array(
+            array('role' => 'user', 'content' => $content_blocks)
+        )
+    );
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.anthropic.com/v1/messages');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'x-api-key: '.$api_key,
+        'anthropic-version: 2023-06-01',
+        'content-type: application/json',
+    ));
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
+
+    if($response === false){
+        echo json_encode(array('status' => 0, 'message' => 'Could not reach the AI service. '.$curl_error));
+        return;
+    }
+
+    $result = json_decode($response, true);
+
+    if($http_code != 200){
+        $err_msg = isset($result['error']['message']) ? $result['error']['message'] : 'Unknown error from AI service.';
+        echo json_encode(array('status' => 0, 'message' => $err_msg));
+        return;
+    }
+
+    $ai_text = '';
+    if(!empty($result['content']) && is_array($result['content'])){
+        foreach($result['content'] as $block){
+            if($block['type'] == 'text'){
+                $ai_text .= $block['text'];
+            }
+        }
+    }
+
+    // strip any accidental markdown fencing before decoding
+    $ai_text = trim($ai_text);
+    $ai_text = preg_replace('/^```json\s*/i', '', $ai_text);
+    $ai_text = preg_replace('/^```\s*/', '', $ai_text);
+    $ai_text = preg_replace('/```\s*$/', '', $ai_text);
+
+    $extracted = json_decode($ai_text, true);
+
+    if(!is_array($extracted)){
+        echo json_encode(array('status' => 0, 'message' => 'AI response could not be understood. Please try again or fill the form manually.'));
+        return;
+    }
+
+    echo json_encode(array('status' => 1, 'data' => $extracted));
+  }
+
 }
 
 
