@@ -541,5 +541,8 @@ $config['proxy_ips'] = '';
 
 $config['stripe_key'] ='pk_test_51F3KfEL2d8exbArBVLVRWcj5fSJZwin145kpxUgAcojGOJafN5O6JiodpiA4lrzdmJBKrJGoVwJyvJHNnAhVJgS500OBJl0cDE' ;
 $config['stripe_secret'] = 'sk_test_51F3KfEL2d8exbArBGxKZ7ntvgwajz1Tgn4ha2tNM7BpFNGPJHM2H0ws3inEh3o9qyj51Xgt7BPTsT5dQN45clfEF00lAzuoWiL';
-$config['anthropic_api_key'] = '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';
+
+if(file_exists(APPPATH.'config/secrets.php')){
+    include(APPPATH.'config/secrets.php');
+}
 
