@@ -2139,6 +2139,7 @@ public function processsuggestion()
         'text' => 'Extract broadcast/media industry product information from the above. This may be physical hardware, software, a cloud/SaaS service, or a hybrid product - it does NOT need to be physical equipment. Return ONLY a valid JSON object (no markdown fencing, no explanation) with exactly these keys - use an empty string "" for anything not found:
 {
   "product_type": "",
+  "main_category": "",
   "device_model": "",
   "device_brand": "",
   "mechanical_demension_mounting": "",
@@ -2160,6 +2161,7 @@ public function processsuggestion()
 }
 Field meanings (apply to ANY product type - hardware, software, or cloud service):
 - product_type: must be EXACTLY one of these 5 values (no others): "Hardware", "Software", "Cloud Service", "AI Tool", "Hybrid". Choose "Hardware" for physical equipment, "Software" for installed applications, "Cloud Service" for browser-based/SaaS platforms, "AI Tool" if AI/ML is the core feature, "Hybrid" if it combines physical hardware with software/cloud components. If genuinely unclear, use "Hardware" as the default.
+- main_category: must be EXACTLY one of these 8 values (no others), or empty string "" if genuinely none fit: "Connect" (routing, switching, transport, transmission), "Consume" (playback, viewing, streaming to end users), "Create" (cameras, production, editing, graphics), "Manage" (asset management, workflow, MAM/traffic systems), "Monetize" (ad insertion, monetization, analytics), "Publish" (playout, distribution, CDN delivery), "Support" (monitoring, testing, support tools), "Store" (storage, archive, backup). Pick the single best fit based on what the product is mainly used for.
 - device_model: the product or service name itself (e.g. "Streamcake", "AMPP Edge Live", "EDIUS 11") - always fill this in if a clear product name is mentioned, even for software/cloud products.
 - device_brand: the company or vendor name behind the product (e.g. "Layercake", "Grass Valley") - always fill this in if the company name is findable, even for software/cloud products.
 - mechanical_demension_mounting and rack_unit: ONLY applicable to physical hardware - leave empty for pure software/cloud products.

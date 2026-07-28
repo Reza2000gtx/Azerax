@@ -909,7 +909,7 @@ select.form-control {
      <div class="col-sm-12">
       <div id="ai-autofill-box" style="background:#FFF8E8;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;margin-bottom:20px;">
         <div id="ai-autofill-toggle" style="cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;color:#14213D;font-size:14px;">
-          🪄 Auto-fill with AI &nbsp;<span style="font-weight:400;color:#999;font-size:12px;">— paste a product page link or upload a brochure PDF</span>
+          ▸ Auto-fill with AI &nbsp;<span style="font-weight:400;color:#999;font-size:12px;">— paste a product page link or upload a brochure PDF</span>
         </div>
         <div id="ai-autofill-panel" style="display:none;margin-top:14px;">
           <div class="form-group">
@@ -976,6 +976,7 @@ select.form-control {
                     if(res.status == 1){
                         var d = res.data;
                         if(d.product_type) $('#product_type').val(d.product_type).trigger('change');
+                        if(d.main_category) $('#main_cat_select').val(d.main_category).trigger('change');
                         if(d.device_model) $('#device_name').val(d.device_model);
                         if(d.device_brand) $('#device_brand').val(d.device_brand);
                         if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);

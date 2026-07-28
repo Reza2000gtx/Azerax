@@ -78,7 +78,7 @@
     border-radius: 32px !important;
     box-shadow: 0 4px 32px rgba(0,0,0,0.25) !important;
     position: relative !important;
-    height: 64px !important;
+    height: 69px !important;
 }
 
 #inps.open {
@@ -1535,15 +1535,17 @@ function autocomplete(inp, arr) {
       this.parentNode.appendChild(a);
         /*for each item in the array...*/
       for (i = 0; i < arr.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+        /*check if the item CONTAINS the typed text anywhere (not just at the start):*/
+        var idx = arr[i].toUpperCase().indexOf(val.toUpperCase());
+        if (idx > -1) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
           const searchWrap  = document.querySelector('#inps');
           searchWrap.classList.add('open');
-          /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+          /*make the matching letters bold, wherever they actually occur:*/
+          b.innerHTML = arr[i].substr(0, idx);
+          b.innerHTML += "<strong>" + arr[i].substr(idx, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(idx + val.length);
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/
@@ -1557,6 +1559,11 @@ function autocomplete(inp, arr) {
         });
           a.appendChild(b);
           }
+      }
+      /*no matches found for what was typed - revert the rounded corners*/
+      if(a.children.length === 0){
+          const searchWrap  = document.querySelector('#inps');
+          searchWrap.classList.remove('open');
       }
   });
 
