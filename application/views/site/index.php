@@ -138,6 +138,7 @@
     font-size: 20px !important;
     color: #999 !important;
     z-index: 2 !important;
+    pointer-events: none !important;
 }
 
 .home_banner_area {
@@ -208,9 +209,29 @@
 }
 
 
-/* ── QUICK FILTER CHIPS ── */
+/* ── CAPABILITY CRAWLER ── */
 #quickChips {
-    margin-top: 14px;
+    margin-top: 28px;
+}
+.qchip-crawler {
+    max-width: 700px;
+    margin: 0 auto;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.qchip-track {
+    display: flex;
+    width: max-content;
+    gap: 8px;
+    animation: qchipScroll 22s linear infinite;
+}
+.qchip-crawler:hover .qchip-track {
+    animation-play-state: paused;
+}
+@keyframes qchipScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 .qchip {
     display: inline-block;
@@ -222,19 +243,11 @@
     font-size: 12px;
     font-weight: 500;
     font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: all 0.15s;
+    white-space: nowrap;
     user-select: none;
 }
-.qchip:hover {
-    background: rgba(252,163,17,0.15);
-    border-color: #FCA311;
-    color: #FCA311;
-}
-.qchip.active {
-    background: rgba(252,163,17,0.2);
-    border-color: #FCA311;
-    color: #FCA311;
+@media (prefers-reduced-motion: reduce) {
+    .qchip-track { animation: none; }
 }
 
 /* ── ADVANCED SEARCH GLOW ── */
@@ -620,22 +633,49 @@
 						</div>
 					</form>
 
-					<div style="margin-top:24px;position:relative;">
+					<div style="margin-top:10px;position:relative;">
 						<div class="adv-search-wrap"><a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="display:inline-block;margin-top:2px;padding:8px 22px;border:1.5px solid #FCA311;border-radius:20px;color:#FCA311;font-size:13px;font-weight:500;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.3px;">
 					
 					Advanced Search — filter by I/O type, standards, connectors and more →
 						</a></div>
 
-                        <!-- QUICK FILTER CHIPS -->
-                        <div id="quickChips" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px;max-width:700px;margin-left:auto;margin-right:auto;">
-                            <span class="qchip" data-type="product_type" data-value="Hardware">Hardware</span>
-                            <span class="qchip" data-type="product_type" data-value="Software">Software</span>
-                            <span class="qchip" data-type="product_type" data-value="Cloud Service">Cloud Service</span>
-                            <span class="qchip" data-type="product_type" data-value="AI Tool">AI Tool</span>
-                            <span class="qchip" data-type="input_stand" data-value="SMPTE ST 2110">SMPTE ST 2110</span>
-                            <span class="qchip" data-type="input_stand" data-value="AES67">AES67</span>
-                            <span class="qchip" data-type="input_stand" data-value="DVB">DVB</span>
-                            <span class="qchip" data-type="input_stand" data-value="OTT">OTT</span>
+                        <!-- CAPABILITY CRAWLER -->
+                        <div id="quickChips" class="qchip-crawler">
+                            <div class="qchip-track">
+                                <span class="qchip">Hardware</span>
+                                <span class="qchip">Software</span>
+                                <span class="qchip">Cloud Service</span>
+                                <span class="qchip">AI Tool</span>
+                                <span class="qchip">SMPTE ST 2110</span>
+                                <span class="qchip">AES67</span>
+                                <span class="qchip">DVB</span>
+                                <span class="qchip">OTT</span>
+                                <span class="qchip">Connect</span>
+                                <span class="qchip">Consume</span>
+                                <span class="qchip">Create</span>
+                                <span class="qchip">Manage</span>
+                                <span class="qchip">Monetize</span>
+                                <span class="qchip">Publish</span>
+                                <span class="qchip">Support</span>
+                                <span class="qchip">Store</span>
+                                <!-- duplicate set for seamless loop -->
+                                <span class="qchip">Hardware</span>
+                                <span class="qchip">Software</span>
+                                <span class="qchip">Cloud Service</span>
+                                <span class="qchip">AI Tool</span>
+                                <span class="qchip">SMPTE ST 2110</span>
+                                <span class="qchip">AES67</span>
+                                <span class="qchip">DVB</span>
+                                <span class="qchip">OTT</span>
+                                <span class="qchip">Connect</span>
+                                <span class="qchip">Consume</span>
+                                <span class="qchip">Create</span>
+                                <span class="qchip">Manage</span>
+                                <span class="qchip">Monetize</span>
+                                <span class="qchip">Publish</span>
+                                <span class="qchip">Support</span>
+                                <span class="qchip">Store</span>
+                            </div>
                         </div>
 
 					</div>

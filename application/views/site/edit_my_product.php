@@ -166,22 +166,7 @@ section.add_product #msform fieldset#menu3 {
    display: none;
    }
    /*inputs*/
-   /*buttons*/
-   #msform .action-button {
-   width: 100px;
-   background: #14213D;
-   font-weight: bold;
-   color: white;
-   border: 0 none;
-   border-radius: 1px;
-   cursor: pointer;
-   padding: 10px 5px;
-   margin: 10px 5px;
-   text-align: center;
-   }
-   #msform .action-button:hover, #msform .action-button:focus {
-   box-shadow: 0 0 0 2px white, 0 0 0 3px #14213D;
-   }
+   /*buttons - moved to top style block, old conflicting rule removed*/
    /*headings*/
    .fs-title {
    font-size: 15px;
@@ -389,7 +374,7 @@ section.add_product #msform fieldset#menu3 {
                     <div class="az-step-connector" style="flex:1;height:2px;background:#EBEBEB;margin:0 4px;"></div>
                     <button type="button" class="tablinks az-step" onclick="openCity(event, 'menu3')" data-step="3" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
                         <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#E5E5E5;color:#999;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">3</span>
-                        <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#999;white-space:nowrap;">Dealer Info</span>
+                        <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#999;white-space:nowrap;">Vendor Info</span>
                     </button>
                 </div>
             </div>
@@ -1485,8 +1470,8 @@ $i++;
                             <?php $user_id = $this->session->userdata('user_id'); ?>
                    -->
                <input type="button" name="previous" class="previous action-button" value="Previous" />
-               <button type="submit" name="submit" class="submit action-button submitBtn" value="Update" >Update</button>
-               <a  onclick="return (confirm('Are you sure?'))" href="<?php echo base_url();?>edit-my-product/<?php echo $product_detail['id'] ?>" class="submit action-button actionButtonSubmit "  >Cancel</a>
+               <button type="submit" name="submit" class="submit action-button submitBtn" value="Update" style="background:#FCA311 !important;color:#14213D !important;margin:0 8px !important;" >Update</button>
+               <a  onclick="return (confirm('Are you sure?'))" href="<?php echo base_url();?>edit-my-product/<?php echo $product_detail['id'] ?>" class="submit action-button actionButtonSubmit " style="margin:0 8px !important;" >Cancel</a>
             </fieldset>
          </form>
       </div>
