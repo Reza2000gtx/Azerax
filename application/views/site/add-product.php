@@ -917,8 +917,8 @@ select.form-control {
             <input type="text" id="ai_source_url" class="form-control" placeholder="https://manufacturer.com/product-page">
           </div>
           <div class="form-group">
-            <label style="font-size:12px;">Or upload a brochure/spec PDF</label>
-            <input type="file" id="ai_source_pdf" accept="application/pdf" class="form-control" style="height:auto;padding:10px 12px;line-height:normal;">
+            <label style="font-size:12px;">Or upload a brochure/spec PDF (this will also be saved as your product's downloadable brochure)</label>
+            <input type="file" id="ai_source_pdf" name="device_manual_brochure" accept="application/pdf" class="form-control" style="height:auto;padding:10px 12px;line-height:normal;">
           </div>
           <button type="button" id="ai_extract_btn" class="btn btn-warning" style="background:#FCA311;border-color:#FCA311;color:#14213D;font-weight:600;">Extract Info</button>
           <span id="ai_extract_status" style="margin-left:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;"></span>
@@ -981,12 +981,11 @@ select.form-control {
                         if(d.device_brand) $('#device_brand').val(d.device_brand);
                         if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
                         if(d.order_code) $('#order_code').val(d.order_code);
-                        if(d.release_version) $('#release_version').val(d.release_version);
-                        if(d.date_released) $('input[name="date_released"]').val(d.date_released);
                         if(d.rack_unit){
                             $('select[name="rack_unit"]').val(d.rack_unit).trigger('change');
                         }
                         // note: this field's name has a pre-existing trailing space in the HTML
+                        if(d.short_description) $('#short_description').val(d.short_description);
                         if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
                         if(d.warranty_detail) $('textarea[name="warranty_detail"]').val(d.warranty_detail);
                         if(d.support_detail) $('textarea[name="support_detail"]').val(d.support_detail);
@@ -1031,6 +1030,19 @@ select.form-control {
     <div class="row">
      <div class="col-sm-6">
       <div class="form-group">
+   <label>Device Brand</label>
+    <div class="autocomplete" >
+     <input required type="text" data-toggle="#hidden1" class="form-control sets_hidden1 rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_brand" name="device_brand" >                        
+    </div>
+  </div>
+
+</script>
+
+</script>
+</div>
+
+ <div class="col-sm-6">
+ 	<div class="form-group">
         <label>Device Model</label>
             <div class="autocomplete" >
               <input type="text" required data-toggle="#hidden1" class="form-control rui-input rui-location-box rui-auto-complete-input sets_hidden1"  autocomplete="off" placeholder="" id="device_name" name="device_model" >                        
@@ -1038,73 +1050,16 @@ select.form-control {
             </div>
         </div>
 
-    <div class="form-group">
-     <label for="title">Mechanical dimensions</label> 
-       <input type="text"class="form-control sets_hidden1" name="mechanical_demension_mounting"  id="sendNewSms">
-       <!-- <input type="text"  class="form-control" name="mechanical_demension_mounting" autocomplete="off" onkeyup="getprocess_mechanical_demension_mounting()" id="mechanical_demension_mounting"> -->
-       <!-- <input type="hidden" name="mechanical_demension_mountingid" id="mechanical_demension_mountingid" /> 
-       <ul id="mechanical_demension_mountingSugguestion" ></ul>  -->
-    </div>
-
-
-    <div class="form-group">
-     <label for="title">Rack Units</label>
-      <select required class="form-control sets_hidden1" name="rack_unit" style="height: calc(3.25rem + 2px);" >
-       <option value="">Select</option>
-    
-      <?php 
-      for ($i = 1; $i <= 10; $i++){
-      ?>
-      <option value="<?php echo "$i"; ?> RU"><?php echo "$i"; ?> RU</option> 
-      <?php } ?>
-      <option value="10+ RU">10+ RU</option>
-      </select>
-    </div>
-
-    
-
-</script>
-
-</script>
- <div class="form-group">
-  <label for="title">Manual/Brochure (PDF)</label>
-   <div style="border: 1px solid #C2C2C2;height: 35px;display: flex;align-items: center;justify-content: flex-start;padding-left: 5px;">
-    <input required type="file" accept="application/pdf" class="sets_hidden1"  name="device_manual_brochure">
-   </div>
- </div>
+</div>
 </div>
 
- <div class="col-sm-6">
- 	<div class="form-group">
-   <label>Device Brand</label>
-    <div class="autocomplete" >
-     <input required type="text" data-toggle="#hidden1" class="form-control sets_hidden1 rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_brand" name="device_brand" >                        
-    </div>
-  </div>
-
-
+<div class="row">
+ <div class="col-sm-12">
   <div class="form-group">
-   <label for="title">Release Date</label>
-   <!-- <input type="date" class="form-control" name="date_released" > -->
-    <div class='right-inner-addon' data-date-format="yyyy-mm-dd">
-     <input type="date"    min="<?php echo date('2010-01-01');?>"   name="date_released" placeholder="" class="form-control sets_hidden1">
-    </div>
+   <label>Short Description</label>
+   <textarea class="form-control sets_hidden1" name="description" id="short_description" maxlength="255" rows="3" placeholder="A one-line summary of this product"></textarea>
   </div>
-
-  <div class="form-group">
-   <label for="title">Release notes</label>
-    <input type="text"  class="form-control sets_hidden1" name="release_version" autocomplete="off" onkeyup="getprocess_release_version()" id="release_version">
-    <!--  <input type="hidden" name="release_versionid" id="release_versionid" /> 
-    <ul id="release_versionSugguestion" ></ul> -->
-  </div>
-
-  <div class="form-group">
-   <label for="title">Ordering Information</label>
-    <input type="text"  class="form-control sets_hidden1" name="order_code" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" >
-    <!-- <input type="hidden" name="order_codeid" id="order_codeid" /> 
-    <ul id="order_codeSugguestion" ></ul> -->
-  </div>
-
+ </div>
 </div>
 
 <!--   <div class="col-sm-6">
@@ -1130,6 +1085,38 @@ select.form-control {
 
 <fieldset id="menu2" class="display_block" style="display: none;">
  <!--Reza-->
+
+ <div class="row" id="physical-specs-box" style="display:none;">
+  <div class="col-md-6 set-44">
+   <div class="form-group">
+    <label for="title">Mechanical dimensions</label>
+    <input type="text" class="form-control" name="mechanical_demension_mounting" id="sendNewSms">
+   </div>
+  </div>
+  <div class="col-md-6 set-44">
+   <div class="form-group">
+    <label for="title">Rack Units</label>
+    <select class="form-control" name="rack_unit" style="height: calc(3.25rem + 2px);">
+     <option value="">Select</option>
+     <?php for ($i = 1; $i <= 10; $i++){ ?>
+     <option value="<?php echo "$i"; ?> RU"><?php echo "$i"; ?> RU</option>
+     <?php } ?>
+     <option value="10+ RU">10+ RU</option>
+    </select>
+   </div>
+  </div>
+ </div>
+ <script type="text/javascript">
+ $(document).ready(function(){
+     function togglePhysicalSpecs(){
+         var pt = $('#product_type').val();
+         var physical = (pt === 'Hardware' || pt === 'Hybrid');
+         $('#physical-specs-box').toggle(physical);
+     }
+     $('#product_type').on('change', togglePhysicalSpecs);
+     togglePhysicalSpecs();
+ });
+ </script>
  
  <div class="row input_box" id="mcat">
   <div class="col-md-3 set-44" id="main_cat">
@@ -1188,7 +1175,46 @@ select.form-control {
    
   </div>
  </div>
-</div> 
+</div>
+
+<div id="category-attributes-box" style="display:none;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;background:#FFF8E8;margin-bottom:20px;">
+    <div style="font-size:13px;font-weight:600;color:#14213D;margin-bottom:2px;">Category-specific details</div>
+    <div style="font-size:12px;color:#999;margin-bottom:14px;">These fields appear automatically based on the sub-category you selected above</div>
+    <div id="category-attributes-fields"></div>
+</div>
+<script type="text/javascript">
+$('#sub_cat_b').on('change', function(){
+    var selected = $(this).val();
+    if(!selected || selected.length === 0){
+        $('#category-attributes-box').hide();
+        $('#category-attributes-fields').html('');
+        return;
+    }
+    var cat_c = selected[0]; // Phase 3: uses the first selected sub-category
+    $.ajax({
+        url: '<?php echo base_url(); ?>get-category-attributes',
+        method: 'POST',
+        data: {cat_c: cat_c},
+        dataType: 'json',
+        success: function(data){
+            if(!data || data.length === 0){
+                $('#category-attributes-box').hide();
+                $('#category-attributes-fields').html('');
+                return;
+            }
+            var html = '';
+            $.each(data, function(i, attr){
+                html += '<div class="form-group">';
+                html += '<label style="font-size:12px;">' + attr.attribute_name + '</label>';
+                html += '<input type="text" name="category_attribute[' + attr.id + ']" class="form-control" style="margin-bottom:10px;">';
+                html += '</div>';
+            });
+            $('#category-attributes-fields').html(html);
+            $('#category-attributes-box').show();
+        }
+    });
+});
+</script> 
 
 <h3></h3>
 <!-- <fieldset> -->
@@ -1498,6 +1524,11 @@ select.form-control {
                     <ul id="dealer_web_contSugguestion" ></ul> -->
 
               </div>
+
+              <div class="form-group">
+                <label for="title">Ordering Information</label>
+                <input type="text"  class="form-control sets_hidden3" name="order_code" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" >
+              </div>
               <div class="form-group">
                 <label>Dealer Contact</label>
                 <input type="text" required  name="dealer_contact"  autocomplete="off" onkeyup="getprocess_dealer_contact()" id="dealer_contact"   class="form-control sets_hidden3">
@@ -1782,37 +1813,6 @@ $(document).on('click','#device_brandSugguestion li',function(){
   $("#device_brandid").val(ID);
   $("#device_brand").val(processName); 
   $("#device_brandSugguestion").css("display", "none");
-});
-
-
-function getprocess_release_version() {
-
- 
-  var release_version = $("#release_version").val();
-
-$.ajax({
-    url:"<?php echo base_url(); ?>/Product/release_version",
-    type:"POST",
-    data: {release_version:release_version},
-    success:function(data)
-    {
-
-        $('#release_versionSugguestion').html(data);
-        $("#release_versionSugguestion").css("display", "block");
-
-        return false;
-    }
-    
-  });
-}
-
-
-$(document).on('click','#release_versionSugguestion li',function(){
-  var processName = $(this).html();
-  var ID = $(this).attr('data-value');
-  $("#release_versionid").val(ID);
-  $("#release_version").val(processName); 
-  $("#release_versionSugguestion").css("display", "none");
 });
 
 

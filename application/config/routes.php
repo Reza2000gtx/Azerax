@@ -306,3 +306,4 @@ $route['cancel-purchase-request/(:any)'] = 'PurchaseRequest/cancel_request';
 $route['delete-purchase-request/(:any)'] = 'PurchaseRequest/delete_request';
 $route['reopen-purchase-request/(:any)'] = 'PurchaseRequest/reopen_request';
 $route['unlock-purchase-request/(:any)'] = 'PurchaseRequest/unlock_request';
+$route['get-category-attributes'] = 'Product/get_category_attributes';

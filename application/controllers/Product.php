@@ -157,14 +157,12 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   $product_type = htmlentities($_REQUEST['product_type'], ENT_QUOTES);
   $device_model = htmlentities($_REQUEST['device_model'], ENT_QUOTES);
   $device_brand = htmlentities($_REQUEST['device_brand'], ENT_QUOTES);
+  $description = htmlentities($_REQUEST['description'], ENT_QUOTES);
   $latest_firmware_version = htmlentities($_REQUEST['latest_firmware_version'], ENT_QUOTES);
   $mechanical_demension_mounting = htmlentities($_REQUEST['mechanical_demension_mounting'], ENT_QUOTES);
   $order_code = htmlentities($_REQUEST['order_code'], ENT_QUOTES);
-  $date_released = $_REQUEST['date_released'];
   $paymentIntent_id = $_POST['paymentIntent_id'];
   $rack_unit = $_REQUEST['rack_unit'];
-  $date = strtotime($date_released);
-  $date_released = date('Y-m-d',$date);
 
 
   //// Group 2: IOP ////
@@ -189,7 +187,6 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   $support_detail = htmlentities($_REQUEST['support_detail'], ENT_QUOTES);
  
   $dealer_contact = htmlentities($_REQUEST['dealer_contact'], ENT_QUOTES);
-  $release_version = htmlentities($_REQUEST['release_version'], ENT_QUOTES);
   $cdate = date('Y-m-d H:i:s');
   
 
@@ -208,25 +205,25 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
        // SECURITY FIX: every value now passed through $this->db->escape()
        // instead of raw string concatenation. rack_unit and
        // paymentIntent_id previously had ZERO escaping at all.
-       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`order_code`,`date_released`,`dealer_web_cont`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`release_version`,`paymentIntent_id`,`product_type`)
+       // Release Date / Release Notes fields removed (Stage A cleanup).
+       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`order_code`,`dealer_web_cont`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
       VALUES(
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($session_id) .",
         " .$this->db->escape($device_model) .",
         " .$this->db->escape($device_brand) .",
+        " .$this->db->escape($description) .",
         " .$this->db->escape($latest_firmware_version) .",
         " .$this->db->escape($device_manual_brochure) .",
         " .$this->db->escape($mechanical_demension_mounting) .",
         " .$this->db->escape($rack_unit) .",
         " .$this->db->escape($order_code) .",
-        " .$this->db->escape($date_released) .",
         " .$this->db->escape($dealer_web_cont) .",
         " .$this->db->escape($dealer_notes) .",
         " .$this->db->escape($warranty_detail) .",
         " .$this->db->escape($support_detail) .",
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($dealer_contact) .",
-        " .$this->db->escape($release_version) .",
         " .$this->db->escape($paymentIntent_id) .",
         " .$this->db->escape($product_type) ."
       )";
@@ -241,6 +238,15 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         $cat_b = !empty($_REQUEST['sub1_cat']) ? implode(',', $_REQUEST['sub1_cat']) : '';
         $cat_c = !empty($_REQUEST['sub2_cat']) ? implode(',', $_REQUEST['sub2_cat']) : '';
         $this->db->query("INSERT INTO product_category (product_id, cat_a, cat_b, cat_c) VALUES (".$this->db->escape($product_id).", ".$this->db->escape($cat_a).", ".$this->db->escape($cat_b).", ".$this->db->escape($cat_c).")");
+    }
+
+    // Phase 3: save any flexible category attribute values submitted
+    if(!empty($_REQUEST['category_attribute'])){
+        foreach($_REQUEST['category_attribute'] as $attr_id => $attr_value){
+            if($attr_value !== ''){
+                $this->db->query("INSERT INTO product_attribute_values (product_id, category_attribute_id, value, created_at) VALUES (".$this->db->escape($product_id).", ".$this->db->escape($attr_id).", ".$this->db->escape($attr_value).", ".$this->db->escape(date('Y-m-d H:i:s')).")");
+            }
+        }
     }
 
     if($run){      
@@ -508,13 +514,11 @@ $success = 1;
   //// Group 1: Device ////
   $device_model = htmlentities($_REQUEST['device_model'], ENT_QUOTES);
   $device_brand = htmlentities($_REQUEST['device_brand'], ENT_QUOTES);
+  $description = htmlentities($_REQUEST['description'], ENT_QUOTES);
   $latest_firmware_version = htmlentities($_REQUEST['latest_firmware_version'], ENT_QUOTES);
   $mechanical_demension_mounting = htmlentities($_REQUEST['mechanical_demension_mounting'], ENT_QUOTES);
   $order_code = htmlentities($_REQUEST['order_code'], ENT_QUOTES);
   $rack_unit = $_REQUEST['rack_unit'];
-  $date_released = $_REQUEST['date_released'];
-  $date = strtotime($date_released);
-  $date_released = date('Y-m-d',$date);
 
 
   $input_conn = count($_REQUEST['input_conn']);
@@ -539,7 +543,6 @@ $success = 1;
   $support_detail = htmlentities($_REQUEST['support_detail'], ENT_QUOTES);
   
   $dealer_contact = htmlentities($_REQUEST['dealer_contact'], ENT_QUOTES);
-  $release_version = htmlentities($_REQUEST['release_version'], ENT_QUOTES);
   $update = date('Y-m-d H:i:s');
  
   $id= $_REQUEST['id'];
@@ -551,7 +554,8 @@ $success = 1;
    
         // SECURITY FIX: every value escaped via $this->db->escape().
         // rack_unit previously had zero escaping.
-        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`order_code` = ".$this->db->escape($order_code)." ,`date_released` = ".$this->db->escape($date_released)." ,`dealer_web_cont` = ".$this->db->escape($dealer_web_cont)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact)." ,`release_version` = ".$this->db->escape($release_version).",`updated_at` = ".$this->db->escape($update)." ";
+        // Release Date / Release Notes fields removed (Stage A cleanup).
+        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`description` = ".$this->db->escape($description)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`order_code` = ".$this->db->escape($order_code)." ,`dealer_web_cont` = ".$this->db->escape($dealer_web_cont)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact).",`updated_at` = ".$this->db->escape($update)." ";
 
         if(!empty($_FILES["product_image"]['name'])){
           $uploadImage = false;
@@ -1177,23 +1181,6 @@ $device_brand_2 = $this->common_model->GetAllData('product',array('device_brand 
   }
 
 
-  public function release_version(){
-
-    $release_version = $this->input->post('release_version'); 
-    $release_version_1 = '%'.$release_version.'%';
-
-    if(!$release_version){
-     }else{
-$release_version_2 = $this->common_model->GetAllData('product',array('release_version LIKE '=>$release_version_1),'release_version','asc','','','','release_version');
-    }
-
-    foreach($release_version_2 as $release_version_3){ ?>
-    <li data-value="<?php echo $release_version_3['release_version'];?>" ><?php echo $release_version_3['release_version'];?></li>
-    <?php    }
-
-  }
-
-
   public function order_code(){
 
     $order_code = $this->input->post('order_code'); 
@@ -1290,6 +1277,14 @@ public function get_cat_c(){
     $cat_b = $this->input->post('cat_b');
     $cat_a = $this->input->post('cat_a');
     $results = $this->db->query("SELECT DISTINCT Cat_C_ID, Cat_C FROM category WHERE Cat_B = ? AND Cat_A = ? ORDER BY Cat_C_ID ASC", array($cat_b, $cat_a))->result_array();
+    echo json_encode($results);
+}
+
+// Phase 3: flexible category attributes - returns the admin-defined
+// extra spec fields for a given Cat_C sub-category, if any exist.
+public function get_category_attributes(){
+    $cat_c = $this->input->post('cat_c');
+    $results = $this->db->query("SELECT id, attribute_name, field_type FROM category_attributes WHERE cat_c = ? ORDER BY display_order ASC", array($cat_c))->result_array();
     echo json_encode($results);
 }
 
@@ -2145,8 +2140,7 @@ public function processsuggestion()
   "mechanical_demension_mounting": "",
   "rack_unit": "",
   "order_code": "",
-  "date_released": "",
-  "release_version": "",
+  "short_description": "",
   "dealer_notes": "",
   "warranty_detail": "",
   "support_detail": "",
@@ -2165,9 +2159,9 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 - device_model: the product or service name itself (e.g. "Streamcake", "AMPP Edge Live", "EDIUS 11") - always fill this in if a clear product name is mentioned, even for software/cloud products.
 - device_brand: the company or vendor name behind the product (e.g. "Layercake", "Grass Valley") - always fill this in if the company name is findable, even for software/cloud products.
 - mechanical_demension_mounting and rack_unit: ONLY applicable to physical hardware - leave empty for pure software/cloud products.
-- date_released must be YYYY-MM-DD format if a release date is found, otherwise empty string.
 - rack_unit should be a plain number like "1" or "2" if a rack unit height is mentioned, otherwise empty string.
 - dealer_notes should be a short product description/summary in your own words, not copied verbatim.
+- short_description: a single, concise one-line summary of the product (max ~120 characters) - shorter and punchier than dealer_notes, suitable for display in a list view.
 - input/output/process fields: for software/cloud products these might describe integrations, supported formats, or API connections rather than physical ports - fill in whatever is genuinely analogous, leave empty if nothing relevant is mentioned.'
     );
 

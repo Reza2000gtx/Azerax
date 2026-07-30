@@ -248,16 +248,6 @@
                         <div class="az-detail-value"><?php echo $product_detail['order_code']; ?></div>
                     </div>
                     <?php } ?>
-                    <?php if ($product_detail['release_version']) { ?>
-                    <div class="az-detail-row">
-                        <div class="az-detail-label">Release Notes</div>
-                        <div class="az-detail-value"><?php echo $product_detail['release_version']; ?></div>
-                    </div>
-                    <?php } ?>
-                    <div class="az-detail-row">
-                        <div class="az-detail-label">Released Date</div>
-                        <div class="az-detail-value"><?php echo date('d-m-Y', strtotime($product_detail['date_released'])); ?></div>
-                    </div>
                     <?php if ($product_detail['latest_firmware_version']) { ?>
                     <div class="az-detail-row">
                         <div class="az-detail-label">Latest Firmware</div>
@@ -355,9 +345,6 @@
                         <tbody>
     <?php if($product_detail['order_code']){ ?>
     <tr><td>Ordering Information</td><td><h5><?php echo $product_detail['order_code']; ?></h5></td></tr>
-    <?php } ?>
-    <?php if($product_detail['release_version']){ ?>
-    <tr><td>Release Notes</td><td><h5><?php echo $product_detail['release_version']; ?></h5></td></tr>
     <?php } ?>
     <tr><td>Device Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
     <tr><td>Device Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>

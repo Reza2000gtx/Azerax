@@ -441,19 +441,6 @@ section.add_product #msform fieldset#menu3 {
 
                      </div>
                      <div class="form-group">
-                        <label for="title">Date released</label>
-                        <!-- <input type="date" class="form-control" name="date_released" > -->
-                        <div class='' data-date-format="yyyy-mm-dd">
-                           <input   type="date"  id="" value="<?=$product_detail['date_released']?>"  name="date_released" placeholder="" class="form-control">
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label for="title">Release notes</label>
-                        <input type="text"  class="form-control" name="release_version" autocomplete="off" onkeyup="getprocess_release_version()" id="release_version" value="<?=$product_detail['release_version']?>">
-                        <!-- <input type="hidden" name="release_versionid" id="release_versionid" /> 
-                           <ul id="release_versionSugguestion" ></ul> -->
-                     </div>
-                     <div class="form-group">
                         <label for="title">Ordering Information</label>
                         <input type="text"  class="form-control" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" name="order_code" value="<?=$product_detail['order_code']?>">
                      </div>
@@ -2069,37 +2056,6 @@ if($connections){
    $("#device_brandid").val(ID);
    $("#device_brand").val(processName); 
    $("#device_brandSugguestion").css("display", "none");
-   });
-   
-   
-   function getprocess_release_version() {
-   
-   
-   var release_version = $("#release_version").val();
-   
-   $.ajax({
-     url:"<?php echo base_url(); ?>/Product/release_version",
-     type:"POST",
-     data: {release_version:release_version},
-     success:function(data)
-     {
-   
-         $('#release_versionSugguestion').html(data);
-         $("#release_versionSugguestion").css("display", "block");
-   
-         return false;
-     }
-     
-   });
-   }
-   
-   
-   $(document).on('click','#release_versionSugguestion li',function(){
-   var processName = $(this).html();
-   var ID = $(this).attr('data-value');
-   $("#release_versionid").val(ID);
-   $("#release_version").val(processName); 
-   $("#release_versionSugguestion").css("display", "none");
    });
    
    
