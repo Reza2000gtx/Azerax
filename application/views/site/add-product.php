@@ -198,11 +198,13 @@ section.add_product {
     min-width: 280px;
     height: auto !important;
     margin: 0 !important;
+    margin-top: 32px !important;
     background: #14213D;
     min-height: calc(100vh - 220px);
     padding: 32px 24px;
     position: sticky;
-    top: 0;
+    top: 32px;
+    border-radius: 16px !important;
 }
 .col-box {
     display: none;
@@ -472,6 +474,51 @@ section.add_product {
 
 .header_area {
     margin-bottom: 0 !important;
+}
+
+/* Match Main Category's select2 corners to Sub-Category A/B's rounded style
+   (a shared stylesheet flattens single-select corners to 0, which only
+   affects Main Category since it's a single-select, not multi) */
+#main_cat_select + .select2-container .select2-selection--single {
+    border-radius: 4px !important;
+}
+
+/* Sub-Category A/B: hide select2's default chips-inside-the-box rendering
+   (only for these two specific selects, since .instand/.inprocessConnection
+   classes are shared with unrelated multi-selects elsewhere on this page).
+   Selected items instead render in a custom list below, so the input box
+   itself never stretches. */
+#sub_cat_a + .select2-container .select2-selection__choice,
+#sub_cat_b + .select2-container .select2-selection__choice {
+    display: none !important;
+}
+.az-cat-chips {
+    margin-top: 8px;
+}
+.az-cat-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #14213D;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 5px 8px 5px 10px;
+    margin-bottom: 6px;
+}
+.az-cat-chip-remove {
+    cursor: pointer;
+    color: #FCA311;
+    font-weight: 700;
+    margin-left: 8px;
+    line-height: 1;
+}
+/* Keep Category row columns equal height regardless of how many chips
+   any one of them grows to hold */
+#mcat .row {
+    display: flex;
+    align-items: stretch;
 }
 
 div[style*="background:#14213D"] {
@@ -1013,10 +1060,66 @@ select.form-control {
 
     });
     </script>
+
+ <div class="input_box" id="mcat">
+  <div class="row">
+  <div class="col-md-4" id="main_cat">
+   <div class="form-group">
+    <label>Main Category</label>
+      <select id="main_cat_select" required name="main_cat[]" class="typeahead tm-input form-control sets_hidden1" style="width:300px">
+       <option value=""></option>
+
+      <?php     
+        $data=array();
+        $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_A'); 
+        foreach($Input as $InputSugg){
+        $key= explode(',',$InputSugg['Cat_A']);
+        foreach($key as $k){
+        if($k){
+        // echo '<option>'.$k.'</option>';
+        }
+        $data[] =$k ;  
+        }  
+         }
+        $data=array_unique($data);
+        foreach($data as $k){
+        if($k){
+        echo '<option>'.$k.'</option>';
+        }
+         }
+        $data=array();
+         ?>
+</select>
+   </div>
+  </div>
+
+  <div class="col-md-4">
+   <div class="form-group">
+    <label>Sub-Category A</label>
+     <select required name="sub1_cat[]" id="sub_cat_a" class="typeahead instand tm-input form-control sets_hidden1" style="width:300px" multiple="multiple">
+    <option value="">-- Select Sub-Category A --</option>
+   </select>
+   <div id="sub_cat_a_chips" class="az-cat-chips"></div>
+ </div>
+</div>
+
+  <div class="col-md-4">
+   <div class="form-group">
+    <label for="title">Sub-Category B</label>
+     <select required name="sub2_cat[]" id="sub_cat_b" class="sets_hidden1 typeahead inprocessConnection tm-input form-control" style="width:300px" multiple="multiple">
+    <option value="">-- Select Sub-Category B --</option>
+</select>
+   <div id="sub_cat_b_chips" class="az-cat-chips"></div>
+  </div>
+ </div>
+  </div>
+</div>
+
+<div class="input_box" style="margin-top:8px;">
     <div class="row">
-     <div class="col-sm-6">
+     <div class="col-md-4">
       <div class="form-group">
-        <label>Product Type</label>
+        <label>Product</label>
           <select required class="form-control" name="product_type" id="product_type">
           <option value="Hardware" selected>Hardware</option>
           <option value="Software">Software / Application</option>
@@ -1026,11 +1129,9 @@ select.form-control {
         </select>
       </div>
      </div>
-    </div>
-    <div class="row">
-     <div class="col-sm-6">
+     <div class="col-md-4">
       <div class="form-group">
-   <label>Device Brand</label>
+   <label>Brand</label>
     <div class="autocomplete" >
      <input required type="text" data-toggle="#hidden1" class="form-control sets_hidden1 rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_brand" name="device_brand" >                        
     </div>
@@ -1041,15 +1142,16 @@ select.form-control {
 </script>
 </div>
 
- <div class="col-sm-6">
+ <div class="col-md-4">
  	<div class="form-group">
-        <label>Device Model</label>
+        <label>Model</label>
             <div class="autocomplete" >
               <input type="text" required data-toggle="#hidden1" class="form-control rui-input rui-location-box rui-auto-complete-input sets_hidden1"  autocomplete="off" placeholder="" id="device_name" name="device_model" >                        
                <div id="responsemenu1"></div>
             </div>
         </div>
 
+</div>
 </div>
 </div>
 
@@ -1117,65 +1219,6 @@ select.form-control {
      togglePhysicalSpecs();
  });
  </script>
- 
- <div class="row input_box" id="mcat">
-  <div class="col-md-3 set-44" id="main_cat">
-   <div class="form-group">
-    <label>Main Category</label>
-    <!--<input type="text"   id="input_conn" name="input_conn[]"  placeholder="" class="typeahead inputF tm-input form-control "  />-->
-      <select id="main_cat_select" required name="main_cat[]" class="typeahead inputF tm-input form-control sets_hidden2" style="width:300px">
-       <div id="responsemenu2"></div>
-
-      <?php     
-        $data=array();
-        $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_A'); 
-        foreach($Input as $InputSugg){
-        $key= explode(',',$InputSugg['Cat_A']);
-        foreach($key as $k){
-        if($k){
-        // echo '<option>'.$k.'</option>';
-        }
-        $data[] =$k ;  
-        }  
-         }
-        $data=array_unique($data);
-        foreach($data as $k){
-        if($k){
-        echo '<option>'.$k.'</option>';
-        }
-         }
-        $data=array();
-         ?>
-</select>
-
-    <!--<ul id="inputSugguestion" ></ul>-->
-   </div>
-  </div>
-
-
-  <div class="col-md-3 set-44">
-   <div class="form-group">
-    <label>Sub-Category A</label>
-     <select required name="sub1_cat[]" id="sub_cat_a" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple">
-    <option value="">-- Select Sub-Category A --</option>
-         
-   </select>
- </div>
-</div>
-
-<!-- <input type="text" value="" data-role="tagsinput" placeholder="Add tags" /> -->
-
-
-  <div class="col-md-3  set-44">
-   <div class="form-group">
-    <label for="title">Sub-Category B</label>
-     <select required name="sub2_cat[]" id="sub_cat_b" class="sets_hidden2 typeahead inprocessConnection tm-input form-control" style="width:300px" multiple="multiple">
-    <option value="">-- Select Sub-Category B --</option>
-</select>
-   
-  </div>
- </div>
-</div>
 
 <div id="category-attributes-box" style="display:none;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;background:#FFF8E8;margin-bottom:20px;">
     <div style="font-size:13px;font-weight:600;color:#14213D;margin-bottom:2px;">Category-specific details</div>
@@ -2358,43 +2401,18 @@ var menu3
 //       // }
 // });
 
-$(".previous").click(function(){
-  if(animating) return false;
-  animating = true;
-  
-  current_fs = $(this).parent();
-  previous_fs = $(this).parent().prev();
-  
-  //de-activate current step on progressbar
-  $("#progressbar button").eq($("fieldset").index(current_fs)).removeClass("active");
-  $("#progressbar button").eq($("fieldset").index(previous_fs)).addClass("active");
-  //show the previous fieldset
-  previous_fs.show(); 
-  //hide the current fieldset with style
-  current_fs.animate({opacity: 1}, {
-    step: function(now, mx) {
-      //as the opacity of current_fs reduces to 0 - stored in "now"
-      //1. scale previous_fs from 80% to 100%
-      scale = 0.8 + (1 - now) * 0.2;
-      //2. take current_fs to the right(50%) - from 0%
-      left = ((1-now) * 50)+"%";
-      //3. increase opacity of previous_fs to 1 as it moves in
-      //opacity = 1 - now;
-      //current_fs.css({'left': left});
-      previous_fs.css({'transform': 'scale('+scale+')'});
-    }, 
-    duration: 0, 
-    complete: function(){
-      current_fs.hide();
-      animating = false;
-    }, 
-    //this comes from the custom easing plugin
-    easing: 'easeInOutBack'
-  });
-  if(document.getElementById('menu2').attr('hidden')){
-  $('#menu1').show();
-  $('#menu2').hide();
-  }
+$(document).on('click', '.prev2', function(){
+   $('#menu2').hide();
+   $('#menu1').show();
+   $('.t1').addClass('active');
+   $('.t2').removeClass('active');
+});
+
+$(document).on('click', '.prev3', function(){
+   $('#menu3').hide();
+   $('#menu2').show();
+   $('.t2').addClass('active');
+   $('.t3').removeClass('active');
 });
 
 $(".submit").click(function(){
@@ -2548,6 +2566,8 @@ count2++;
 $(".inputF").select2({ tags: true, tokenSeparators: [';'],
                             separator: ";",     multiple: true,
 });
+
+$('#main_cat_select').select2({ placeholder: 'Select Main Category', allowClear: true, width: '100%' });
 
 $(".instand").select2({ tags: true, tokenSeparators: [','] });
 
@@ -2709,8 +2729,7 @@ $(".processsuggestionStand").select2({ tags: true, tokenSeparators: [','] });
    // Cascading category dropdowns
 $('#main_cat_select').on('change', function(){
     var cat_a = $(this).val();
-    if(cat_a && cat_a.length > 0){
-        cat_a = cat_a[0];
+    if(cat_a){
         $.ajax({
             url: '<?php echo base_url(); ?>get-cat-b',
             method: 'POST',
@@ -2722,7 +2741,7 @@ $('#main_cat_select').on('change', function(){
                     opts += '<option value="'+item.Cat_B+'">'+item.Cat_B+'</option>';
                 });
                 $('#sub_cat_a').html(opts).trigger('change');
-                $('#sub_cat_b').html('<option value="">-- Select Sub-Category B --</option>');
+                $('#sub_cat_b').html('<option value="">-- Select Sub-Category B --</option>').trigger('change');
             }
         });
     }
@@ -2731,9 +2750,8 @@ $('#main_cat_select').on('change', function(){
 $('#sub_cat_a').on('change', function(){
     var cat_b = $(this).val();
     var cat_a = $('#main_cat_select').val();
-    if(cat_b && cat_b.length > 0 && cat_a && cat_a.length > 0){
+    if(cat_b && cat_b.length > 0 && cat_a){
         cat_b = cat_b[0];
-        cat_a = cat_a[0];
         $.ajax({
             url: '<?php echo base_url(); ?>get-cat-c',
             method: 'POST',
@@ -2749,6 +2767,36 @@ $('#sub_cat_a').on('change', function(){
         });
     }
 });
+
+  // Custom chip list for Sub-Category A/B - keeps the input box itself
+  // fixed-height, showing selections in a list below instead
+  function renderCatChips(selectId, containerId){
+      var $select = $('#' + selectId);
+      var $container = $('#' + containerId);
+      var selected = $select.val() || [];
+      var html = '';
+      $select.find('option').each(function(){
+          var val = $(this).val();
+          if(val && selected.indexOf(val) > -1){
+              html += '<div class="az-cat-chip" data-value="' + val.replace(/"/g,'&quot;') + '">';
+              html += '<span>' + val + '</span>';
+              html += '<span class="az-cat-chip-remove" data-select="' + selectId + '">&times;</span>';
+              html += '</div>';
+          }
+      });
+      $container.html(html);
+  }
+
+  $('#sub_cat_a').on('change', function(){ renderCatChips('sub_cat_a', 'sub_cat_a_chips'); });
+  $('#sub_cat_b').on('change', function(){ renderCatChips('sub_cat_b', 'sub_cat_b_chips'); });
+
+  $(document).on('click', '.az-cat-chip-remove', function(){
+      var selectId = $(this).data('select');
+      var value = $(this).closest('.az-cat-chip').data('value');
+      var $select = $('#' + selectId);
+      $select.find('option').filter(function(){ return $(this).val() == value; }).prop('selected', false);
+      $select.trigger('change');
+  });
 
   });
 </script>

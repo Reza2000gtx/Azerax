@@ -182,9 +182,55 @@
     min-height: 34px !important;
     height: auto !important;
 }
+#advSearchPanel .select2-container--default .select2-selection--single {
+    height: 34px !important;
+    display: flex !important;
+    align-items: center;
+}
 #advSearchPanel .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     padding: 0 8px !important;
     line-height: 22px !important;
+}
+
+/* Selected items render in a custom list below each field instead of
+   growing the input box itself - keeps every row's columns the same height */
+#advSearchPanel #search_sub_cat_a + .select2-container .select2-selection__choice,
+#advSearchPanel #search_sub_cat_b + .select2-container .select2-selection__choice,
+#advSearchPanel #search_input_name + .select2-container .select2-selection__choice,
+#advSearchPanel #search_input_stand + .select2-container .select2-selection__choice,
+#advSearchPanel #search_input_conn + .select2-container .select2-selection__choice,
+#advSearchPanel #search_out_conn + .select2-container .select2-selection__choice,
+#advSearchPanel #search_out_process_stand + .select2-container .select2-selection__choice,
+#advSearchPanel #search_out_process_connection + .select2-container .select2-selection__choice,
+#advSearchPanel #search_process + .select2-container .select2-selection__choice,
+#advSearchPanel #search_process_stand + .select2-container .select2-selection__choice {
+    display: none !important;
+}
+#advSearchPanel .az-cat-chips {
+    margin-top: 8px;
+}
+#advSearchPanel .az-cat-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #14213D;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 5px 8px 5px 10px;
+    margin-bottom: 6px;
+}
+#advSearchPanel .az-cat-chip-remove {
+    cursor: pointer;
+    color: #FCA311;
+    font-weight: 700;
+    margin-left: 8px;
+    line-height: 1;
+}
+#advSearchPanel .loop_inp .row {
+    display: flex;
+    align-items: stretch;
 }
 
 #advSearchPanel .btn_serch_bo1 .btn {
@@ -484,30 +530,6 @@
     padding: 6px 12px !important;
 }
 
-/* Checkbox style for select2 options */
-.catB-dropdown .select2-results__option::before,
-.catC-dropdown .select2-results__option::before {
-    content: '';
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid #EBEBEB;
-    border-radius: 3px;
-    margin-right: 8px;
-    vertical-align: middle;
-    flex-shrink: 0;
-}
-.catB-dropdown .select2-results__option[aria-selected="true"]::before,
-.catC-dropdown .select2-results__option[aria-selected="true"]::before {
-    background: #FCA311;
-    border-color: #FCA311;
-    content: '✓';
-    color: #14213D;
-    font-size: 10px;
-    line-height: 14px;
-    text-align: center;
-}
-
 #advSearchPanel .select2-dropdown {
     background: #fff !important;
     border: none !important;
@@ -764,6 +786,7 @@
               <select name="sub1_cat[]" id="search_sub_cat_a" class="catB form-control" multiple="multiple">
                 <option value="">-- Select Sub-Category A --</option>
           </select>
+          <div id="search_sub_cat_a_chips" class="az-cat-chips"></div>
 				</div>
 			</div>
       <div class="col-sm-4">
@@ -772,6 +795,7 @@
 				<select name="sub2_cat[]" id="search_sub_cat_b" class="catC form-control" multiple="multiple">
         <option value="">-- Select Sub-Category B --</option>
       </select>
+      <div id="search_sub_cat_b_chips" class="az-cat-chips"></div>
 				</div>
 			</div>
         </div><!-- /.row (category) -->
@@ -794,7 +818,7 @@
 				<div class="form-group">
 					<!-- <input type="text" data-role="tagsinput" name="input_name" placeholder="Input Type" class="form-control"> -->
 
-	          <select name="input_name[]" class="inputF  form-control" multiple="multiple" >
+	          <select name="input_name[]" id="search_input_name" class="inputF  form-control" multiple="multiple" >
                <?php     
                 $data = array();
                 $Input = $this->common_model->GetAllData('input_output','','input_conn','asc','','','','input_conn'); 
@@ -817,13 +841,14 @@
                $data=array();
                ?>
                  </select>
+<div id="search_input_name_chips" class="az-cat-chips"></div>
 				</div>
 			</div>
 			<div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" data-role="tagsinput" name="input_stand" placeholder="Input Standard" class="form-control"> -->
 
-					<select name="input_stand[]" class="typeahead instand tm-input form-control " style="width:300px" multiple="multiple" >
+					<select name="input_stand[]" id="search_input_stand" class="typeahead instand tm-input form-control " style="width:300px" multiple="multiple" >
 
              <?php     
 
@@ -850,13 +875,14 @@
               
              
              </select>
+<div id="search_input_stand_chips" class="az-cat-chips"></div>
 
 				</div>
 			</div>
 			<div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" data-role="tagsinput" name="input_conn" placeholder="Input Connection Type" class="form-control"> -->
-					<select name="input_conn[]" class="typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+					<select name="input_conn[]" id="search_input_conn" class="typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
 
              <?php     
 
@@ -882,6 +908,7 @@
                ?>
             
           </select>
+<div id="search_input_conn_chips" class="az-cat-chips"></div>
 				</div>
 			</div>
 		</div>
@@ -904,7 +931,7 @@
 			<div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" name="out_conn" data-role="tagsinput" placeholder="Output Type" class="form-control"> -->
-					<select name="out_conn[]" class="typeahead outputF tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+					<select name="out_conn[]" id="search_out_conn" class="typeahead outputF tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
 
              <?php     
 
@@ -930,12 +957,13 @@
                ?>
                
              </select>
+<div id="search_out_conn_chips" class="az-cat-chips"></div>
           </div>
 			</div>
 			<div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" name="out_process_stand" data-role="tagsinput" placeholder="Output Standard" class="form-control"> -->
-					<select name="out_process_stand[]" class="typeahead otstand tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+					<select name="out_process_stand[]" id="search_out_process_stand" class="typeahead otstand tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
 
              <?php     
 
@@ -962,12 +990,13 @@
               
              
              </select>
+<div id="search_out_process_stand_chips" class="az-cat-chips"></div>
 				</div>
 			</div>
 			<div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" name="out_process_connection" data-role="tagsinput" placeholder="Output Connection Type" class="form-control"> -->
-					<select name="out_process_connection[]" class="typeahead otprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+					<select name="out_process_connection[]" id="search_out_process_connection" class="typeahead otprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
 
              <?php     
 
@@ -992,6 +1021,7 @@
             ?>
                          
           </select>
+<div id="search_out_process_connection_chips" class="az-cat-chips"></div>
 				</div>
 			</div>
 		</div>
@@ -1015,7 +1045,7 @@
 				<div class="form-group">
 					<!-- <input type="text" data-role="tagsinput" name="process" placeholder="Process Type" class="form-control"> -->
 
-					 <select name="process[]" class="typeahead processsuggestion tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+					 <select name="process[]" id="search_process" class="typeahead processsuggestion tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
 
              <?php     
 
@@ -1040,13 +1070,14 @@
               
              
              </select>
+<div id="search_process_chips" class="az-cat-chips"></div>
 
 				</div>
 			</div>
 			<div class="col-sm-4">
 				<div class="form-group">
 					<!-- <input type="text" data-role="tagsinput" name="process_stand" placeholder="Process Standard" class="form-control"> -->
-					<select name="process_stand[]" class="typeahead processsuggestionStand tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+					<select name="process_stand[]" id="search_process_stand" class="typeahead processsuggestionStand tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
 
              <?php     
 
@@ -1071,6 +1102,7 @@
               
              
              </select>
+<div id="search_process_stand_chips" class="az-cat-chips"></div>
               
 				  </div>
 			  </div>
@@ -1109,7 +1141,7 @@ window.addEventListener('load', function(){
        lastSelect2Click = Date.now();
    });
 
-   $(document).off('click').on('click', function(e){
+   $(document).off('click.advPanelOutside').on('click.advPanelOutside', function(e){
         var panel = document.getElementById('advSearchPanel');
         var openBtn = document.getElementById('advSearchToggle');
         if(panel && panel.style.display !== 'none'){
@@ -1305,17 +1337,7 @@ function initSubCatA(){
         placeholder: "Sub-Category A",
         multiple: true,
         width: '100%',
-        dropdownParent: $('#advSearchPanel'),
-        closeOnSelect: false,
-        templateResult: function(state){
-            if(!state.id) return state.text;
-            return $('<span style="display:flex;align-items:center;gap:8px;"><input type="checkbox" style="width:14px;height:14px;accent-color:#FCA311;flex-shrink:0;">' + state.text + '</span>');
-        },
-        templateSelection: function(state){
-            var vals = $('#search_sub_cat_a').val();
-            var count = vals ? vals.length : 0;
-            return count > 1 ? count + ' selected' : state.text;
-        }
+        dropdownParent: $('#advSearchPanel')
     });
 }
 
@@ -1324,17 +1346,7 @@ function initSubCatB(){
         placeholder: "Sub-Category B",
         multiple: true,
         width: '100%',
-        dropdownParent: $('#advSearchPanel'),
-        closeOnSelect: false,
-        templateResult: function(state){
-            if(!state.id) return state.text;
-            return $('<span style="display:flex;align-items:center;gap:8px;"><input type="checkbox" style="width:14px;height:14px;accent-color:#FCA311;flex-shrink:0;">' + state.text + '</span>');
-        },
-        templateSelection: function(state){
-            var vals = $('#search_sub_cat_b').val();
-            var count = vals ? vals.length : 0;
-            return count > 1 ? count + ' selected' : state.text;
-        }
+        dropdownParent: $('#advSearchPanel')
     });
 }
 
@@ -1356,6 +1368,8 @@ $('#search_main_cat').on('change', function(){
                 $('#search_sub_cat_b').html('<option value="">-- Select Sub-Category B --</option>');
                 initSubCatA();
                 initSubCatB();
+                $('#search_sub_cat_a').trigger('change');
+                $('#search_sub_cat_b').trigger('change');
             }
         });
     }
@@ -1378,6 +1392,7 @@ $('#search_sub_cat_a').on('change', function(){
                 });
                 $('#search_sub_cat_b').html(opts);
                 initSubCatB();
+                $('#search_sub_cat_b').trigger('change');
             }
         });
     }
@@ -1390,6 +1405,56 @@ $(".otstand").select2({tags: true, placeholder: "Output Standard", tokenSeparato
 $(".otprocessConnection").select2({tags: true, placeholder: "Output Connection Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".processsuggestion").select2({tags: true, placeholder: "Process Type", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
 $(".processsuggestionStand").select2({tags: true, placeholder: "Process Standard", tokenSeparators: [',', ' '], width: '100%', dropdownParent: $('#advSearchPanel')});
+
+// ── CUSTOM CHIP LISTS (shared across all 10 multi-select fields) ──
+// Selected items render as a list below each field instead of growing
+// the input box itself, matching the same pattern used on Add Product.
+function renderSearchChips(selectId, containerId){
+    var $select = $('#' + selectId);
+    var $container = $('#' + containerId);
+    var selected = $select.val() || [];
+    var html = '';
+    $select.find('option').each(function(){
+        var val = $(this).val();
+        if(val && selected.indexOf(val) > -1){
+            html += '<div class="az-cat-chip" data-value="' + val.replace(/"/g,'&quot;') + '">';
+            html += '<span>' + val + '</span>';
+            html += '<span class="az-cat-chip-remove" data-select="' + selectId + '">&times;</span>';
+            html += '</div>';
+        }
+    });
+    $container.html(html);
+}
+
+var azChipFields = [
+    ['search_sub_cat_a', 'search_sub_cat_a_chips'],
+    ['search_sub_cat_b', 'search_sub_cat_b_chips'],
+    ['search_input_name', 'search_input_name_chips'],
+    ['search_input_stand', 'search_input_stand_chips'],
+    ['search_input_conn', 'search_input_conn_chips'],
+    ['search_out_conn', 'search_out_conn_chips'],
+    ['search_out_process_stand', 'search_out_process_stand_chips'],
+    ['search_out_process_connection', 'search_out_process_connection_chips'],
+    ['search_process', 'search_process_chips'],
+    ['search_process_stand', 'search_process_stand_chips']
+];
+
+$.each(azChipFields, function(i, pair){
+    $(document).on('change', '#' + pair[0], function(){
+        renderSearchChips(pair[0], pair[1]);
+    });
+});
+
+$(document).on('click', '.az-cat-chip-remove', function(e){
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    var selectId = $(this).data('select');
+    var value = $(this).closest('.az-cat-chip').data('value');
+    var $select = $('#' + selectId);
+    var current = $select.val() || [];
+    var updated = current.filter(function(v){ return v !== value; });
+    $select.val(updated).trigger('change');
+});
 
 // ── ROW ON/OFF TOGGLE ──
 function setRowState(rowName, enabled){
@@ -1497,7 +1562,9 @@ $(document).on('click','#processSugguestion li',function(){
         }
     }, false);
 })();
+</script>
 
+<style>
 /* ── ADVANCED SEARCH BUTTON GLOW ── */
 .adv-search-wrap {
     position: relative;
@@ -1536,7 +1603,7 @@ $(document).on('click','#processSugguestion li',function(){
     100% { box-shadow: 0 0 0px rgba(252,163,17,0);    }
 }
 
-</script>
+</style>
 
 <?php 
 
