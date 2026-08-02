@@ -187,6 +187,54 @@
     display: flex !important;
     align-items: center;
 }
+#search_main_cat + .select2-container {
+    box-sizing: border-box !important;
+    height: 43px !important;
+    display: block !important;
+}
+#search_main_cat + .select2-container .selection {
+    box-sizing: border-box !important;
+    height: 43px !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+#search_main_cat + .select2-container .select2-selection--single {
+    box-sizing: border-box !important;
+    height: 43px !important;
+    min-height: 43px !important;
+    max-height: 43px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+}
+#search_main_cat + .select2-container .select2-selection__rendered {
+    box-sizing: border-box !important;
+    line-height: 41px !important;
+    padding: 0 32px 0 12px !important;
+    margin: 0 !important;
+    height: 41px !important;
+}
+#search_main_cat + .select2-container .select2-selection__clear {
+    position: absolute !important;
+    right: 26px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    color: #999 !important;
+    font-size: 16px !important;
+}
+#search_main_cat + .select2-container .select2-selection__arrow {
+    box-sizing: border-box !important;
+    height: 41px !important;
+    top: 0 !important;
+    position: absolute !important;
+    right: 6px !important;
+}
 #advSearchPanel .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     padding: 0 8px !important;
     line-height: 22px !important;
