@@ -50,6 +50,42 @@ section.add_product .form_add_product {
     border-color: #FCA311;
     color: #14213D;
 }
+.input_box {
+    border: 1.5px solid #EBEBEB;
+    border-radius: 10px;
+    background: #FAFAFA;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+#sendNewSms1 + .select2-container + .nice-select {
+    display: none !important;
+}
+.az-cat-chips {
+    margin-top: 8px;
+}
+.az-cat-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #14213D;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 5px 8px 5px 10px;
+    margin-bottom: 6px;
+}
+.az-cat-chip-remove {
+    cursor: pointer;
+    color: #FCA311;
+    font-weight: 700;
+    margin-left: 8px;
+    line-height: 1;
+}
+#mcat .row {
+    display: flex;
+    align-items: stretch;
+}
 section.add_product #msform fieldset#menu1,
 section.add_product #msform fieldset#menu2,
 section.add_product #msform fieldset#menu3 {
@@ -380,79 +416,297 @@ section.add_product #msform fieldset#menu3 {
             </div>
             <!-- fieldsets -->
             <fieldset id="menu1" class="display_block" style="display: block;">
-               <div>
-                 <label>Product Type: </label>
-                 <?php $pt = $product_detail['product_type'] ?: 'Hardware'; ?>
-                 <span class="pt-pill-btn <?php if($pt=='Hardware')echo 'active';?>" data-value="Hardware">Hardware</span><span class="pt-pill-btn <?php if($pt=='Software')echo 'active';?>" data-value="Software">Software</span><span class="pt-pill-btn <?php if($pt=='Cloud Service')echo 'active';?>" data-value="Cloud Service">Cloud Service</span><span class="pt-pill-btn <?php if($pt=='AI Tool')echo 'active';?>" data-value="AI Tool">AI Tool</span><span class="pt-pill-btn <?php if($pt=='Hybrid')echo 'active';?>" data-value="Hybrid">Hybrid</span><input type="hidden" name="product_type" id="product_type" value="<?=$pt?>">
-               </div>
 
-               <h3></h3>
-               <div class="row">
-                  <div class="col-sm-6">
-                     <div class="form-group">
-                        <label>Device Model</label>
-                      
-
-
- <div class="autocomplete" >
-
-                          <input data-toggle="#hidden1" class="form-control rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_name" name="device_model" value="<?=$product_detail['device_model']?>" >                        
-</div>
-
-                     </div>
-                 
-                     <div class="form-group">
-                        <label for="title">Mechanical dimensions</label>
-                        <input type="text" class="form-control" name="mechanical_demension_mounting" id="sendNewSms" value="<?=$product_detail['mechanical_demension_mounting']?>" >
-                     </div>
-                     <div class="form-group" style="margin-bottom:0 !important;">
-                        <label for="title">Rack Units</label>
-                        <select class="form-control" name="rack_unit" id="sendNewSms1">
-                           <option value="">Select</option>
-                           <?php 
-                              for ($i = 1; $i <= 60; $i++){ ?>
-                           <option <?php if($product_detail['rack_unit']== $i ){echo 'selected';}?> value="<?php echo "$i"; ?> RU"><?php echo "$i"; ?> RU</option>
-                           <?php    };
-                              ?>
-                        </select>
-                     </div>
-                     <script type="text/javascript">
-                                $("#sendNewSms1").select2();
-                     </script>
-                     <div class="form-group">
-                        <label for="title">Manual/Brochure (PDF)</label>
-                         <div style="border: 1px solid #C2C2C2;height: 35px;display: flex;align-items: center;justify-content: flex-start;padding-left: 5px;">
-                        <input type="file" accept="application/pdf"  name="device_manual_brochure" value="<?=$product_detail['device_manual_brochure']?>" >
-                        </div>
-                     </div>
+              <div id="ai-autofill-box" style="background:#FFF8E8;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;margin-bottom:20px;">
+                <div id="ai-autofill-toggle" style="cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;color:#14213D;font-size:14px;">
+                  ▸ Auto-fill with AI &nbsp;<span style="font-weight:400;color:#999;font-size:12px;">— paste a product page link or upload a brochure PDF</span>
+                </div>
+                <div id="ai-autofill-panel" style="display:none;margin-top:14px;">
+                  <div class="form-group">
+                    <label style="font-size:12px;">Product page URL</label>
+                    <input type="text" id="ai_source_url" class="form-control" placeholder="https://manufacturer.com/product-page">
                   </div>
-                  <div class="col-sm-6">
-                     <div class="form-group">
-                        <label>Device Brand</label>
-                       
-
-
-                           <div class="autocomplete" >
-
-                          <input data-toggle="#hidden1" class="form-control rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_brand" name="device_brand" value="<?=$product_detail['device_brand']?>">                        
-</div>
-
-
-
-                     </div>
-                     <div class="form-group">
-                        <label for="title">Ordering Information</label>
-                        <input type="text"  class="form-control" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" name="order_code" value="<?=$product_detail['order_code']?>">
-                     </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;">Or upload a brochure/spec PDF (this will also be saved as your product's downloadable brochure)</label>
+                    <input type="file" id="ai_source_pdf" name="device_manual_brochure" accept="application/pdf" class="form-control" style="height:auto;padding:10px 12px;line-height:normal;">
                   </div>
-                  <div id="Error"></div>
-               </div>
+                  <button type="button" id="ai_extract_btn" class="btn btn-warning" style="background:#FCA311;border-color:#FCA311;color:#14213D;font-weight:600;">Extract Info</button>
+                  <span id="ai_extract_status" style="margin-left:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;"></span>
+                  <div style="font-size:12px;color:#999;margin-top:8px;">This only fills in the fields below for you to review — nothing is saved until you check everything and click Submit.</div>
+                </div>
+              </div>
+              <script type="text/javascript">
+              $(document).ready(function(){
+                  $('#ai-autofill-toggle').on('click', function(){
+                      $('#ai-autofill-panel').slideToggle(200);
+                  });
+                  function setSelect2Value(selector, value){
+                      if(!value) return;
+                      var $el = $(selector);
+                      if($el.length === 0) return;
+                      if($el.find("option[value='"+value.replace(/'/g,"\\'")+"']").length === 0){
+                          $el.append(new Option(value, value, true, true));
+                      } else {
+                          $el.val(value);
+                      }
+                      $el.trigger('change');
+                  }
+                  $('#ai_extract_btn').on('click', function(){
+                      var url = $('#ai_source_url').val();
+                      var pdfFile = $('#ai_source_pdf')[0].files[0];
+                      if(!url && !pdfFile){
+                          $('#ai_extract_status').text('Please enter a URL or choose a PDF first.').css('color','#dc3545');
+                          return;
+                      }
+                      var formData = new FormData();
+                      formData.append('source_url', url);
+                      if(pdfFile){ formData.append('source_pdf', pdfFile); }
+                      $('#ai_extract_status').text('Reading and extracting... this can take a few seconds.').css('color','#666');
+                      $('#ai_extract_btn').prop('disabled', true);
+                      $.ajax({
+                          url: '<?php echo base_url(); ?>Product/ai_extract',
+                          type: 'POST', data: formData, processData: false, contentType: false, dataType: 'json',
+                          success: function(res){
+                              $('#ai_extract_btn').prop('disabled', false);
+                              if(res.status == 1){
+                                  var d = res.data;
+                                  if(d.product_type){
+                                      $('.pt-pill-btn').removeClass('active');
+                                      $('.pt-pill-btn[data-value="'+d.product_type+'"]').addClass('active');
+                                      $('#product_type').val(d.product_type);
+                                  }
+                                  if(d.main_category) $('#main_cat_select').val(d.main_category).trigger('change');
+                                  if(d.device_model) $('#device_name').val(d.device_model);
+                                  if(d.device_brand) $('#device_brand').val(d.device_brand);
+                                  if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
+                                  if(d.order_code) $('#order_code').val(d.order_code);
+                                  if(d.rack_unit) $('#sendNewSms1').val(d.rack_unit).trigger('change');
+                                  if(d.short_description) $('#short_description').val(d.short_description);
+                                  if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
+                                  if(d.warranty_detail) $('textarea[name="warranty_detail"]').val(d.warranty_detail);
+                                  if(d.support_detail) $('textarea[name="support_detail"]').val(d.support_detail);
+                                  setSelect2Value('select[name="input_conn[0][]"]', d.input_type);
+                                  setSelect2Value('select[name="input_process_stand[0][]"]', d.input_standard);
+                                  setSelect2Value('select[name="process_connection[0][]"]', d.input_connection_type);
+                                  setSelect2Value('select[name="out_conn[0][]"]', d.output_type);
+                                  setSelect2Value('select[name="out_process_stand[0][]"]', d.output_standard);
+                                  setSelect2Value('select[name="out_process_connection[0][]"]', d.output_connection_type);
+                                  setSelect2Value('select[name="process[0][]"]', d.process_type);
+                                  setSelect2Value('select[name="process_stand[0][]"]', d.process_standard);
+                                  $('#ai_extract_status').text('Done - please review every field before submitting.').css('color','#28a745');
+                              } else {
+                                  $('#ai_extract_status').text(res.message || 'Something went wrong.').css('color','#dc3545');
+                              }
+                          },
+                          error: function(){
+                              $('#ai_extract_btn').prop('disabled', false);
+                              $('#ai_extract_status').text('Request failed. Please try again.').css('color','#dc3545');
+                          }
+                      });
+                  });
+              });
+              </script>
+
+              <div class="input_box" id="mcat">
+                <div class="row">
+                  <div class="col-md-4" id="main_cat">
+                    <div class="form-group">
+                      <label>Main Category</label>
+                      <select id="main_cat_select" name="main_cat[]" class="form-control">
+                        <option value=""></option>
+                        <?php
+                          $data=array();
+                          $Input = $this->common_model->GetAllData('category','','','asc','','','','Cat_A');
+                          foreach($Input as $InputSugg){
+                            $key= explode(',',$InputSugg['Cat_A']);
+                            foreach($key as $k){ if($k){ $data[] =$k; } }
+                          }
+                          $data=array_unique($data);
+                          $existing_cat_a = !empty($product_category['cat_a']) ? $product_category['cat_a'] : '';
+                          foreach($data as $k){
+                            if($k){
+                              $sel = ($k == $existing_cat_a) ? 'selected' : '';
+                              echo '<option '.$sel.'>'.$k.'</option>';
+                            }
+                          }
+                          $data=array();
+                        ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Sub-Category A</label>
+                      <select name="sub1_cat[]" id="sub_cat_a" class="form-control" multiple="multiple">
+                        <?php
+                          $existing_cat_b_list = !empty($product_category['cat_b']) ? explode(',', $product_category['cat_b']) : array();
+                          if(!empty($existing_cat_a)){
+                            $catBOptions = $this->db->query("SELECT DISTINCT Cat_B FROM category WHERE Cat_A = ?", array($existing_cat_a))->result_array();
+                            foreach($catBOptions as $opt){
+                              $sel = in_array($opt['Cat_B'], $existing_cat_b_list) ? 'selected' : '';
+                              echo '<option '.$sel.' value="'.$opt['Cat_B'].'">'.$opt['Cat_B'].'</option>';
+                            }
+                          }
+                        ?>
+                      </select>
+                      <div id="sub_cat_a_chips" class="az-cat-chips"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="title">Sub-Category B</label>
+                      <select name="sub2_cat[]" id="sub_cat_b" class="form-control" multiple="multiple">
+                        <?php
+                          $existing_cat_c_list = !empty($product_category['cat_c']) ? explode(',', $product_category['cat_c']) : array();
+                          if(!empty($existing_cat_a) && !empty($existing_cat_b_list)){
+                            $catCOptions = $this->db->query("SELECT DISTINCT Cat_C FROM category WHERE Cat_A = ? AND Cat_B = ?", array($existing_cat_a, $existing_cat_b_list[0]))->result_array();
+                            foreach($catCOptions as $opt){
+                              $sel = in_array($opt['Cat_C'], $existing_cat_c_list) ? 'selected' : '';
+                              echo '<option '.$sel.' value="'.$opt['Cat_C'].'">'.$opt['Cat_C'].'</option>';
+                            }
+                          }
+                        ?>
+                      </select>
+                      <div id="sub_cat_b_chips" class="az-cat-chips"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input_box" style="margin-top:8px;">
+                 <div style="margin-bottom:14px;">
+                   <label>Product Type: </label>
+                   <?php $pt = $product_detail['product_type'] ?: 'Hardware'; ?>
+                   <span class="pt-pill-btn <?php if($pt=='Hardware')echo 'active';?>" data-value="Hardware">Hardware</span><span class="pt-pill-btn <?php if($pt=='Software')echo 'active';?>" data-value="Software">Software</span><span class="pt-pill-btn <?php if($pt=='Cloud Service')echo 'active';?>" data-value="Cloud Service">Cloud Service</span><span class="pt-pill-btn <?php if($pt=='AI Tool')echo 'active';?>" data-value="AI Tool">AI Tool</span><span class="pt-pill-btn <?php if($pt=='Hybrid')echo 'active';?>" data-value="Hybrid">Hybrid</span><input type="hidden" name="product_type" id="product_type" value="<?=$pt?>">
+                 </div>
+                 <div class="row">
+                    <div class="col-md-6">
+                       <div class="form-group">
+                          <label>Brand</label>
+                          <div class="autocomplete" >
+                             <input data-toggle="#hidden1" class="form-control rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_brand" name="device_brand" value="<?=$product_detail['device_brand']?>">
+                          </div>
+                       </div>
+                    </div>
+                    <div class="col-md-6">
+                       <div class="form-group">
+                          <label>Model</label>
+                          <div class="autocomplete" >
+                             <input data-toggle="#hidden1" class="form-control rui-input rui-location-box rui-auto-complete-input"   autocomplete="off" placeholder="" id="device_name" name="device_model" value="<?=$product_detail['device_model']?>" >
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Short Description</label>
+                    <textarea class="form-control" name="description" id="short_description" maxlength="255" rows="3" placeholder="A one-line summary of this product"><?=$product_detail['description']?></textarea>
+                  </div>
+                </div>
+              </div>
+
+               <div id="Error"></div>
                <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id');?>" >
                <?php $user_id = $this->session->userdata('user_id'); ?>
                <input type="button" name="next" class="next action-button" value="Next" />
             </fieldset>
             <fieldset id="menu2" class="display_block" style="display: none;">
-    
+
+              <div class="row" id="physical-specs-box" style="display:none;">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="title">Mechanical dimensions</label>
+                    <input type="text" class="form-control" name="mechanical_demension_mounting" id="sendNewSms" value="<?=$product_detail['mechanical_demension_mounting']?>">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="title">Rack Units</label>
+                    <select class="form-control" name="rack_unit" id="sendNewSms1">
+                      <option value="">Select</option>
+                      <?php for ($i = 1; $i <= 10; $i++){ ?>
+                      <option <?php if($product_detail['rack_unit']== "$i RU" ){echo 'selected';}?> value="<?php echo "$i"; ?> RU"><?php echo "$i"; ?> RU</option>
+                      <?php } ?>
+                      <option <?php if($product_detail['rack_unit']== "10+ RU" ){echo 'selected';}?> value="10+ RU">10+ RU</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <script type="text/javascript">
+              $(document).ready(function(){
+                  function initRackUnits(){
+                      if($("#sendNewSms1").hasClass('select2-hidden-accessible')){
+                          return; // already initialized
+                      }
+                      $("#sendNewSms1").select2({ width: '100%' });
+                  }
+                  function togglePhysicalSpecs(){
+                      var pt = $('#product_type').val();
+                      var physical = (pt === 'Hardware' || pt === 'Hybrid');
+                      $('#physical-specs-box').toggle(physical);
+                      if(physical){
+                          initRackUnits();
+                      }
+                  }
+                  $(document).on('change', '#product_type', togglePhysicalSpecs);
+                  // product_type is a hidden input updated by pill-button clicks, so also
+                  // re-check whenever a pill is clicked
+                  $(document).on('click', '.pt-pill-btn', function(){
+                      setTimeout(togglePhysicalSpecs, 0);
+                  });
+                  togglePhysicalSpecs();
+              });
+              </script>
+
+              <div id="category-attributes-box" style="display:<?= !empty($category_attribute_values) ? 'block' : 'none' ?>;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;background:#FFF8E8;margin-bottom:20px;">
+                  <div style="font-size:13px;font-weight:600;color:#14213D;margin-bottom:2px;">Category-specific details</div>
+                  <div style="font-size:12px;color:#999;margin-bottom:14px;">These fields appear automatically based on the sub-category you selected</div>
+                  <div id="category-attributes-fields">
+                    <?php foreach($category_attribute_values as $cav){ ?>
+                    <div class="form-group">
+                      <label style="font-size:12px;"><?=$cav['attribute_name']?></label>
+                      <input type="text" name="category_attribute[<?=$cav['category_attribute_id']?>]" class="form-control" style="margin-bottom:10px;" value="<?=$cav['value']?>">
+                    </div>
+                    <?php } ?>
+                  </div>
+              </div>
+              <script type="text/javascript">
+              $('#sub_cat_b').on('change', function(){
+                  var selected = $(this).val();
+                  if(!selected || selected.length === 0){
+                      $('#category-attributes-box').hide();
+                      $('#category-attributes-fields').html('');
+                      return;
+                  }
+                  var cat_c = selected[0];
+                  $.ajax({
+                      url: '<?php echo base_url(); ?>get-category-attributes',
+                      method: 'POST',
+                      data: {cat_c: cat_c},
+                      dataType: 'json',
+                      success: function(data){
+                          if(!data || data.length === 0){
+                              $('#category-attributes-box').hide();
+                              $('#category-attributes-fields').html('');
+                              return;
+                          }
+                          var html = '';
+                          $.each(data, function(i, attr){
+                              html += '<div class="form-group">';
+                              html += '<label style="font-size:12px;">' + attr.attribute_name + '</label>';
+                              html += '<input type="text" name="category_attribute[' + attr.id + ']" class="form-control" style="margin-bottom:10px;">';
+                              html += '</div>';
+                          });
+                          $('#category-attributes-fields').html(html);
+                          $('#category-attributes-box').show();
+                      }
+                  });
+              });
+              </script>
+
 <h3></h3>
 
 <?php 
@@ -1409,6 +1663,10 @@ $i++;
                            <ul id="dealer_contactSugguestion" ></ul> -->
                      </div>
                      <div class="form-group">
+                        <label for="title">Ordering Information</label>
+                        <input type="text" class="form-control" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" name="order_code" value="<?=$product_detail['order_code']?>">
+                     </div>
+                     <div class="form-group">
                         <label for="title">Dealer notes</label>
                         <textarea class="form-control"  name="dealer_notes" ><?=$product_detail['dealer_notes']?></textarea>
                         <!-- <input type="text" class="form-control" name="dealer_notes" > -->
@@ -1426,21 +1684,26 @@ $i++;
                      <div class="form-group">
                         <label>Gallery</label><br>
                         <div class="upload-btn-wrapper">
-                           <button type="button" class="btn" id="upBtn"><i class="fa fa-upload"></i> Upload a file</button>
+                           <button type="button" class="btn" id="upBtn"><i class="fa fa-upload"></i> Upload an image</button>
                            <input type="file" onchange="ValidateSingleInput(this);" name="gallery-image[]" id="gallery-image" accept="image/*" class="form-control imageUpload" value="Upload Photo" >
                         </div>
+                        <div style="font-size:12px;color:#999;margin:6px 0;">Select which image should be shown as the main product image:</div>
                         <div  id="preview" class="ddd__uus row gallaryimg">
                            <?php
                               $product_gallery = $this->common_model->GetAllData('product_gallery_image',array('product_id'=>$product_detail['id']));
                               //print_r($product_gallery);
                               
                                                    foreach ($product_gallery as $key => $gallery) {
+                                                     $is_main = ($gallery['gallery_image'] == $product_detail['product_image']);
                                                      ?>
                            <div class="col-md-2" id="cancel<?=$key?>">
-                              <div class="img_div">
-                                 <img style="height: 100px;" src="<?php echo base_url(); ?>assets/product_image/<?php echo $gallery['gallery_image'];?>"><br>
+                              <div class="img_div" style="position:relative;<?php if($is_main){ echo 'border:3px solid #FCA311;border-radius:6px;padding:2px;'; } ?>">
+                                 <span style="cursor:pointer;position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;z-index:2;" class="cancel_cls" onclick="removeImg(<?=$key?>)">X</span>
+                                 <img style="width:100%;height:100px;object-fit:cover;border-radius:4px;" src="<?php echo base_url(); ?>assets/product_image/<?php echo $gallery['gallery_image'];?>">
+                                 <label style="font-size:11px;font-weight:normal;display:block;margin-top:4px;">
+                                   <input type="radio" name="main_gallery_image" value="<?=$gallery['gallery_image']?>" <?php if($is_main){ echo 'checked'; } ?>> Main image
+                                 </label>
                                  <input type="hidden"  value="<?=$gallery['id']?>" name="gallery-image-id[]">
-                                 <span style="cursor:pointer"  class="cancel_cls" onclick="removeImg(<?=$key?>)">X</span>
                               </div>
                            </div>
                            <?php  
@@ -1517,7 +1780,7 @@ $i++;
          
          for(var i=0;i<total_file;i++){
              k=divimage++;
-              $('#preview').append('<div class="col-md-2" id="cancel'+k+'"><div class="img_div"><img style="height: 100px;" src='+URL.createObjectURL(event.target.files[i])+'><br><input type="file" name="gallery-image-orignal[]" class="form-control imageUpload" id="gallery-image-orignal'+k+'" accept="image/*" style="display:none;"><span style="cursor:pointer" class="cancel_cls" onclick="removeImg('+k+')">X</span></div></div>');
+              $('#preview').append('<div class="col-md-2" id="cancel'+k+'"><div class="img_div" style="position:relative"><span style="cursor:pointer;position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;z-index:2;" class="cancel_cls" onclick="removeImg('+k+')">X</span><img style="width:100%;height:100px;object-fit:cover;border-radius:4px;" src='+URL.createObjectURL(event.target.files[i])+'><input type="file" name="gallery-image-orignal[]" class="form-control imageUpload" id="gallery-image-orignal'+k+'" accept="image/*" style="display:none;"></div></div>');
                document.querySelector("#gallery-image-orignal"+k).files = document.querySelector("#gallery-image").files;
         }
          
@@ -1529,7 +1792,7 @@ $i++;
     var divimage=jQuery("#preview img").length;
     
     if(divimage <= 1){
-      jQuery('#upBtn').html('<i class="fa fa-upload"></i> Upload a file');
+      jQuery('#upBtn').html('<i class="fa fa-upload"></i> Upload an image');
     }
    jQuery('#cancel'+i).remove();
     
@@ -2252,6 +2515,86 @@ if($connections){
    $(".processsuggestionStand").select2({ tags: true, tokenSeparators: [',', ''] });
    
    
+   // ── Category fields ──
+   $('#main_cat_select').select2({ placeholder: 'Select Main Category', allowClear: true, width: '100%' });
+   $('#sub_cat_a').select2({ placeholder: 'Sub-Category A', multiple: true, width: '100%' });
+   $('#sub_cat_b').select2({ placeholder: 'Sub-Category B', multiple: true, width: '100%' });
+
+   function renderEditCatChips(selectId, containerId){
+       var $select = $('#' + selectId);
+       var $container = $('#' + containerId);
+       var selected = $select.val() || [];
+       var html = '';
+       $select.find('option').each(function(){
+           var val = $(this).val();
+           if(val && selected.indexOf(val) > -1){
+               html += '<div class="az-cat-chip" data-value="' + val.replace(/"/g,'&quot;') + '">';
+               html += '<span>' + val + '</span>';
+               html += '<span class="az-cat-chip-remove" data-select="' + selectId + '">&times;</span>';
+               html += '</div>';
+           }
+       });
+       $container.html(html);
+   }
+   $('#sub_cat_a').on('change', function(){ renderEditCatChips('sub_cat_a', 'sub_cat_a_chips'); });
+   $('#sub_cat_b').on('change', function(){ renderEditCatChips('sub_cat_b', 'sub_cat_b_chips'); });
+   // render on page load too, since these may be pre-filled from the existing product
+   renderEditCatChips('sub_cat_a', 'sub_cat_a_chips');
+   renderEditCatChips('sub_cat_b', 'sub_cat_b_chips');
+
+   $(document).on('click', '.az-cat-chip-remove', function(e){
+       e.stopPropagation();
+       e.stopImmediatePropagation();
+       var selectId = $(this).data('select');
+       var value = $(this).closest('.az-cat-chip').data('value');
+       var $select = $('#' + selectId);
+       var current = $select.val() || [];
+       var updated = current.filter(function(v){ return v !== value; });
+       $select.val(updated).trigger('change');
+   });
+
+   $('#main_cat_select').on('change', function(){
+       var cat_a = $(this).val();
+       $('#sub_cat_b').val(null).trigger('change');
+       if(cat_a){
+           $.ajax({
+               url: '<?php echo base_url(); ?>get-cat-b',
+               method: 'POST',
+               data: {cat_a: cat_a},
+               dataType: 'json',
+               success: function(data){
+                   var opts = '';
+                   $.each(data, function(i, item){
+                       opts += '<option value="'+item.Cat_B+'">'+item.Cat_B+'</option>';
+                   });
+                   $('#sub_cat_a').html(opts).trigger('change');
+               }
+           });
+       } else {
+           $('#sub_cat_a').html('').trigger('change');
+       }
+   });
+
+   $('#sub_cat_a').on('change', function(){
+       var cat_b = $(this).val();
+       var cat_a = $('#main_cat_select').val();
+       if(cat_b && cat_b.length > 0 && cat_a){
+           cat_b = cat_b[0];
+           $.ajax({
+               url: '<?php echo base_url(); ?>get-cat-c',
+               method: 'POST',
+               data: {cat_a: cat_a, cat_b: cat_b},
+               dataType: 'json',
+               success: function(data){
+                   var opts = '';
+                   $.each(data, function(i, item){
+                       opts += '<option value="'+item.Cat_C+'">'+item.Cat_C+'</option>';
+                   });
+                   $('#sub_cat_b').html(opts).trigger('change');
+               }
+           });
+       }
+   });
    
 </script>
 <script  async  src="https://js.stripe.com/v3/"  ></script>
@@ -2332,7 +2675,7 @@ $paymentinfo = $this->db->query("SELECT * FROM `setting` ")->row_array();
    $('#addform').on('submit', function(ev) {
        //alert();
        ev.preventDefault();
-      show_lates_stripe_popup(<?php echo $paymentinfo['amount']; ?>,<?php $paymentinfo['amount']; ?>,<?php echo $user_id;?>,<?php echo $user_id;?>,<?php echo $user_id;?>,'purchasesession<?php echo $user_id;?>',''); 
+      show_lates_stripe_popup(<?php echo $paymentinfo['amount']; ?>,<?php echo $paymentinfo['amount']; ?>,<?php echo $user_id;?>,<?php echo $user_id;?>,<?php echo $user_id;?>,'purchasesession<?php echo $user_id;?>',''); 
    
        
    });

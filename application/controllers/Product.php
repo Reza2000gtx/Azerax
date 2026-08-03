@@ -252,17 +252,17 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
     if($run){      
 
 for($i=0; $i<$input_conn; $i++){
- $input_data = implode(',',$input_conn1[$i]);
-$input_process_stand_data = implode(',',$input_process_stand[$i]);
-$process_connection_data = implode(',',$process_connection[$i]);
+ $input_data = implode(',',$input_conn1[$i] ?? array());
+$input_process_stand_data = implode(',',$input_process_stand[$i] ?? array());
+$process_connection_data = implode(',',$process_connection[$i] ?? array());
 
-$out_conn_data = implode(',',$out_conn[$i]);
-$out_process_stand_data = implode(',',$out_process_stand[$i]);
-$out_process_connection_data = implode(',',$out_process_connection[$i]);
+$out_conn_data = implode(',',$out_conn[$i] ?? array());
+$out_process_stand_data = implode(',',$out_process_stand[$i] ?? array());
+$out_process_connection_data = implode(',',$out_process_connection[$i] ?? array());
 
 
-$process_stand_data = implode(',',$process_stand[$i]);
-$process_data = implode(',',$process[$i]);
+$process_stand_data = implode(',',$process_stand[$i] ?? array());
+$process_data = implode(',',$process[$i] ?? array());
 
 $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($product_id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." ";
 
@@ -416,6 +416,12 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
     $data['manufacturerlist'] = $this->common_model->GetAllData('manufacturer');
     $data['product_detail'] = $this->common_model->GetSingleData('product',array('id'=>$product_id));
 
+    // Existing category assignment (if any) - so the edit form can pre-select it
+    $data['product_category'] = $this->common_model->GetSingleData('product_category',array('product_id'=>$product_id));
+
+    // Existing category-specific attribute values (if any), joined with their definitions
+    $data['category_attribute_values'] = $this->db->query("SELECT pav.category_attribute_id, pav.value, ca.attribute_name, ca.cat_c FROM product_attribute_values pav JOIN category_attributes ca ON ca.id = pav.category_attribute_id WHERE pav.product_id = ?", array($product_id))->result_array();
+
     $this->load->view('site/edit_my_product',$data);
   }
 
@@ -568,6 +574,9 @@ $success = 1;
           }
           $product_image = $filename;
            $sql .= ", `product_image` = ".$this->db->escape($product_image)."";
+        } elseif(!empty($_REQUEST['main_gallery_image'])){
+          // vendor selected an existing gallery image as the main product image
+          $sql .= ", `product_image` = ".$this->db->escape($_REQUEST['main_gallery_image'])."";
         }
   
     
@@ -580,6 +589,25 @@ $success = 1;
      
 
     if($run){
+
+	// Save category assignment (replace any existing one for this product)
+	$this->db->query("DELETE FROM product_category WHERE product_id = ".$this->db->escape($id));
+	if(!empty($_REQUEST['main_cat'])){
+		$cat_a = implode(',', (array)$_REQUEST['main_cat']);
+		$cat_b = !empty($_REQUEST['sub1_cat']) ? implode(',', $_REQUEST['sub1_cat']) : '';
+		$cat_c = !empty($_REQUEST['sub2_cat']) ? implode(',', $_REQUEST['sub2_cat']) : '';
+		$this->db->query("INSERT INTO product_category (product_id, cat_a, cat_b, cat_c) VALUES (".$this->db->escape($id).", ".$this->db->escape($cat_a).", ".$this->db->escape($cat_b).", ".$this->db->escape($cat_c).")");
+	}
+
+	// Save category-specific attribute values (replace any existing ones for this product)
+	$this->db->query("DELETE FROM product_attribute_values WHERE product_id = ".$this->db->escape($id));
+	if(!empty($_REQUEST['category_attribute'])){
+		foreach($_REQUEST['category_attribute'] as $attr_id => $attr_value){
+			if($attr_value !== ''){
+				$this->db->query("INSERT INTO product_attribute_values (product_id, category_attribute_id, value, created_at) VALUES (".$this->db->escape($id).", ".$this->db->escape($attr_id).", ".$this->db->escape($attr_value).", ".$this->db->escape(date('Y-m-d H:i:s')).")");
+			}
+		}
+	}
 
 
 	$qry = $this->db->query("SELECT * FROM fav_device_list WHERE device_id = ".$this->db->escape($id)."")->row_array();
@@ -608,17 +636,17 @@ $input_output = " DELETE FROM `input_output` WHERE product_id=".$this->db->escap
 $run3 = $this->db->query($input_output);
 
 for($i=0; $i<$input_conn; $i++){
- $input_data = implode(',',$input_conn1[$i]);
-$input_process_stand_data = implode(',',$input_process_stand[$i]);
-$process_connection_data = implode(',',$process_connection[$i]);
+ $input_data = implode(',',$input_conn1[$i] ?? array());
+$input_process_stand_data = implode(',',$input_process_stand[$i] ?? array());
+$process_connection_data = implode(',',$process_connection[$i] ?? array());
 
-$out_conn_data = implode(',',$out_conn[$i]);
-$out_process_stand_data = implode(',',$out_process_stand[$i]);
-$out_process_connection_data = implode(',',$out_process_connection[$i]);
+$out_conn_data = implode(',',$out_conn[$i] ?? array());
+$out_process_stand_data = implode(',',$out_process_stand[$i] ?? array());
+$out_process_connection_data = implode(',',$out_process_connection[$i] ?? array());
 
 
-$process_stand_data = implode(',',$process_stand[$i]);
-$process_data = implode(',',$process[$i]);
+$process_stand_data = implode(',',$process_stand[$i] ?? array());
+$process_data = implode(',',$process[$i] ?? array());
 
 $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." ";
 
@@ -2039,6 +2067,7 @@ public function processsuggestion()
         ));
         $html = curl_exec($ch);
         $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
         $curl_error = curl_error($ch);
         curl_close($ch);
 
@@ -2051,6 +2080,24 @@ public function processsuggestion()
             echo json_encode(array('status' => 0, 'message' => 'That site blocked automatic access (HTTP '.$http_status.'). This happens with some manufacturer sites that have bot protection. Please try uploading a PDF brochure/datasheet instead.'));
             return;
         }
+
+        // The "URL" sometimes points directly at a PDF file (not a webpage) -
+        // detect that via Content-Type (or a .pdf extension as a fallback) and
+        // send it to Claude as a proper document, not HTML text to strip.
+        $is_pdf = (stripos($content_type, 'application/pdf') !== false) || (stripos($source_url, '.pdf') !== false);
+
+        if($is_pdf){
+            $pdf_base64 = base64_encode($html);
+            $content_blocks[] = array(
+                'type' => 'document',
+                'source' => array(
+                    'type' => 'base64',
+                    'media_type' => 'application/pdf',
+                    'data' => $pdf_base64,
+                )
+            );
+            $has_source = true;
+        } else {
 
         // Remove script/style, then use DOMDocument to strip out nav/header/footer
         // boilerplate (common source of noise that was drowning out real content)
@@ -2107,6 +2154,7 @@ public function processsuggestion()
 
         $content_blocks[] = array('type' => 'text', 'text' => "Content from product page (".$source_url."):\n\n".$text);
         $has_source = true;
+        } // end else (not a direct PDF URL)
     }
 
     // If a PDF was uploaded, send it directly to Claude - it reads PDFs natively

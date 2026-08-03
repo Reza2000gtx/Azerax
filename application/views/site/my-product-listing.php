@@ -184,7 +184,14 @@
 
         <?php if(!empty($productlist)): ?>
         <?php foreach ($productlist as $row):
-            $imageFirst = $this->common_model->GetSingleData('product_gallery_image', array('product_id' => $row['id']));
+            // Show the vendor's chosen main image if one is set; otherwise
+            // fall back to whatever gallery image happens to exist first.
+            if(!empty($row['product_image'])){
+                $thumbnailImage = $row['product_image'];
+            } else {
+                $imageFirst = $this->common_model->GetSingleData('product_gallery_image', array('product_id' => $row['id']));
+                $thumbnailImage = !empty($imageFirst['gallery_image']) ? $imageFirst['gallery_image'] : '';
+            }
             $date = $row['approve_date'];
             $date1 = date('Y-m-d', strtotime('+14 days', strtotime($date)));
             $date2 = date('Y-m-d');
@@ -192,8 +199,8 @@
         <div class="col-sm-12 list_page<?php echo $row['id']; ?>" style="padding:0;">
             <div class="boder_image">
                 <div class="f_p_img">
-                    <?php if($imageFirst['gallery_image']): ?>
-                    <img src="<?php echo base_url(); ?>assets/product_image/<?=$imageFirst['gallery_image']?>" alt="">
+                    <?php if($thumbnailImage): ?>
+                    <img src="<?php echo base_url(); ?>assets/product_image/<?=$thumbnailImage?>" alt="">
                     <?php else: ?>
                     <img src="<?php echo base_url(); ?>assets/product_image/no.jpg" alt="">
                     <?php endif; ?>
