@@ -489,7 +489,15 @@ section.add_product {
    Selected items instead render in a custom list below, so the input box
    itself never stretches. */
 #sub_cat_a + .select2-container .select2-selection__choice,
-#sub_cat_b + .select2-container .select2-selection__choice {
+#sub_cat_b + .select2-container .select2-selection__choice,
+#io_input_type + .select2-container .select2-selection__choice,
+#io_input_standard + .select2-container .select2-selection__choice,
+#io_input_connection_type + .select2-container .select2-selection__choice,
+#io_output_type + .select2-container .select2-selection__choice,
+#io_output_standard + .select2-container .select2-selection__choice,
+#io_output_connection_type + .select2-container .select2-selection__choice,
+#io_process_type + .select2-container .select2-selection__choice,
+#io_process_standard + .select2-container .select2-selection__choice {
     display: none !important;
 }
 .az-cat-chips {
@@ -1174,8 +1182,6 @@ select.form-control {
 <div class="Error1"></div>
  <div id="Error"></div>
 
-</div>
-
   <input required type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id');?>" >
   <!--<button type="submit"  data-toggle="modal"  value="submit" class="btn submit_btn submitBtn">Submit</button> 
    <?php $user_id = $this->session->userdata('user_id'); ?> -->
@@ -1266,7 +1272,7 @@ $('#sub_cat_b').on('change', function(){
     <div class="form-group">
      <label>Input 1</label>
      <!--<input type="text"   id="input_conn" name="input_conn[]"  placeholder="" class="typeahead inputF tm-input form-control "  />-->
-       <select id="e2_2" required name="input_conn[0][]" id="input_conn" required="" class="typeahead inputF tm-input form-control sets_hidden2" multiple="multiple" style="width:300px" class="populate placeholder">
+       <select id="io_input_type" required name="input_conn[0][]" class="typeahead inputF tm-input form-control sets_hidden2" multiple="multiple" style="width:300px" class="populate placeholder">
         <div id="responsemenu2"></div>
          <?php     
           $data=array();
@@ -1290,6 +1296,7 @@ $('#sub_cat_b').on('change', function(){
 
            ?>
        </select>
+<div id="io_input_type_chips" class="az-cat-chips"></div>
        <!--<ul id="inputSugguestion" ></ul>-->
     </div>
 	</div>
@@ -1297,7 +1304,7 @@ $('#sub_cat_b').on('change', function(){
   <div class="col-md-3 set-44">
    <div class="form-group">
     <label>Input Standard</label>
-     <select required name="input_process_stand[0][]" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
+     <select id="io_input_standard" required name="input_process_stand[0][]" class="typeahead instand tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
       <?php     
        $Input = $this->common_model->GetAllData('input_output','','input_process_stand','asc','','','','input_process_stand'); 
        foreach($Input as $InputSugg){
@@ -1319,6 +1326,7 @@ $('#sub_cat_b').on('change', function(){
              
       ?>
    </select>
+<div id="io_input_standard_chips" class="az-cat-chips"></div>
   </div>
  </div>
 
@@ -1327,7 +1335,7 @@ $('#sub_cat_b').on('change', function(){
   <div class="col-md-3  set-44">
    <div class="form-group">
     <label for="title">Input Connection Type</label>
-     <select required name="process_connection[0][]" class="sets_hidden2 typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+     <select id="io_input_connection_type" required name="process_connection[0][]" class="sets_hidden2 typeahead inprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
       <?php     
        $Input = $this->common_model->GetAllData('input_output','','process_connection','asc','','','','process_connection');
        foreach($Input as $InputSugg){
@@ -1349,25 +1357,17 @@ $('#sub_cat_b').on('change', function(){
         
       ?>
     </select>
+<div id="io_input_connection_type_chips" class="az-cat-chips"></div>
    </div>
   </div>
 
-  <div class="col-md-3  set-22">
-   <div class="form-group">
-     <label for="title"></label><br>
-      <button type="button" class="btn btn-success addmore" onclick="addanotherinput()">+ </button>
-      <!--  <input type="checkbox" class="form-control" onclick="addanotherinput() ;"  > -->
-   </div>
-  </div>
-
-  <div class="addanotherinputResponse col-sm-12"></div>
 </div>
 <!-- </fieldset> -->
   <div class="row input_box" id="outs">
    <div class="col-md-3 set-44">
      <div class="form-group">
        <label>Output 1</label>
-        <select required name="out_conn[0][]" class="typeahead outputF tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
+        <select id="io_output_type" required name="out_conn[0][]" class="typeahead outputF tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
          <?php     
           $Input = $this->common_model->GetAllData('input_output','','out_conn','asc','','','','out_conn');
           foreach($Input as $InputSugg){
@@ -1389,13 +1389,14 @@ $('#sub_cat_b').on('change', function(){
             
           ?>
         </select>
+<div id="io_output_type_chips" class="az-cat-chips"></div>
        </div>
       </div>
 
   <div class="col-md-3 set-44">
    <div class="form-group">
     <label>Output Standard</label>
-     <select required name="out_process_stand[0][]" class="typeahead otstand tm-input form-control sets_hidden2 " style="width:300px" multiple="multiple" class="populate placeholder">
+     <select id="io_output_standard" required name="out_process_stand[0][]" class="typeahead otstand tm-input form-control sets_hidden2 " style="width:300px" multiple="multiple" class="populate placeholder">
       <?php    
        $Input = $this->common_model->GetAllData('input_output','','out_process_stand','asc','','','','out_process_stand'); 
        foreach($Input as $InputSugg){
@@ -1417,13 +1418,14 @@ $('#sub_cat_b').on('change', function(){
               
       ?>
     </select>
+<div id="io_output_standard_chips" class="az-cat-chips"></div>
    </div>
   </div>
 
   <div class="col-md-3 set-44">
    <div class="form-group">
     <label for="title">Output Connection Type</label>
-     <select required name="out_process_connection[0][]" class="sets_hidden2 typeahead otprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+     <select id="io_output_connection_type" required name="out_process_connection[0][]" class="sets_hidden2 typeahead otprocessConnection tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
       <?php     
        $Input = $this->common_model->GetAllData('input_output','','out_process_connection','asc','','','','out_process_connection'); 
        foreach($Input as $InputSugg)
@@ -1446,26 +1448,18 @@ $('#sub_cat_b').on('change', function(){
             
       ?>
      </select>
+<div id="io_output_connection_type_chips" class="az-cat-chips"></div>
     </div>
    </div>  
 
            
-  <div class="col-md-3 set-22">
-   <div class="form-group">
-     <label for="title"></label><br>
-      <button type="button" class="btn btn-success addmore" onclick="addanotheroutput()">+ </button>
-      <!-- <input type="checkbox" class="form-control" onclick="addanotheroutput() ;"  > -->
-    </div>
-   </div>
-
-  <div class="addanotheroutputResponse col-sm-12"></div>
 </div>
 
   <div class="row input_box" id="proc">
    <div class="col-md-3 set-44">
     <div class="form-group">
      <label>Process 1</label>
-      <select required  name="process[0][]" class="sets_hidden2 typeahead processsuggestion tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+      <select id="io_process_type" required  name="process[0][]" class="sets_hidden2 typeahead processsuggestion tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
        <?php     
         $Input = $this->common_model->GetAllData('input_output','','process','asc','','','','process'); 
         foreach($Input as $InputSugg){
@@ -1486,6 +1480,7 @@ $('#sub_cat_b').on('change', function(){
         $data=array();
         ?>
       </select>
+<div id="io_process_type_chips" class="az-cat-chips"></div>
       <!--  <input type="hidden" name="processid" id="processid" />  -->
       <!-- <ul id="processSugguestion" ></ul> -->
      </div>
@@ -1494,7 +1489,7 @@ $('#sub_cat_b').on('change', function(){
   <div class="col-md-3 set-44">
    <div class="form-group">
     <label>Process Standard</label>
-     <select required name="process_stand[0][]" class="sets_hidden2 typeahead processsuggestionStand tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
+     <select id="io_process_standard" required name="process_stand[0][]" class="sets_hidden2 typeahead processsuggestionStand tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
       <?php     
        $Input = $this->common_model->GetAllData('input_output','','process_stand','asc','','','','process_stand');  
        foreach($Input as $InputSugg){
@@ -1516,21 +1511,12 @@ $('#sub_cat_b').on('change', function(){
               
       ?>
     </select>
+<div id="io_process_standard_chips" class="az-cat-chips"></div>
     <!-- <input type="hidden" name="process_standid" id="process_standid" />  -->
     <!--  <ul id="process_standSugguestion" ></ul> -->
    </div>
   </div>
-  <div class="col-md-3 set-44"></div>
-  <div class="col-md-3 set-22">
-   <div class="form-group">
-    <label for="title"></label><br>
-     <button type="button" class="btn btn-success addmore" onclick="addanotherprocess()">+  </button>
-     <!-- <input type="checkbox" class="form-control" onclick="addanotherprocess() ;" > -->
-    </div>
-   </div>
             
-  <div class="addanotherprocessResponse col-sm-12"></div>
-
   <div id="Error"></div>
 
  </div>
@@ -2424,136 +2410,12 @@ $(".submit").click(function(){
 
 
 <script type="text/javascript">
-  var count = 2;
-  function addanotherinput() {  
-
-//alert();
-
-    var i=1;
- $.ajax({
-    url:"<?php echo base_url(); ?>addanotherinput",
-    type:"POST",
-    data:{classid:i,count:count},
-    beforeSend:function()
-    {
-    
-      $('.btn-load-addMoreSpecilities').show();
-
-    },
-    success:function(data)
-    {
-      
-        $('.addanotherinputResponse').append(data);
-        $('.btn-load-addMoreSpecilities').hide();
-          /*$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();*/
-          i++;
-        return false;
-    
-    }
-    
-  });
-count++;
-
-}
-// $(document).on('keyup', ".bootstrap-tagsinput", function(e) {
-//   var input_conn = $(".bootstrap-tagsinput").val();
-// $.ajax({
-//     url:"<?php echo base_url(); ?>Product/inputSugguestion",
-//     type:"POST",
-//     data: {input_conn:input_conn},
-//     success:function(data)
-//     {
-//         $('#inputSugguestion').html(data);
-//         $("#inputSugguestion").css("display", "block");
-//         return false;
-//     }
-    
-//   });
-//   e.preventDefault();
-// });
-
 $(document).on('click','#inputSugguestion li',function(){
   var inpName = $(this).html();
   alert(inpName);
   $(".bootstrap-tagsinput").val(inpName); 
   $("#inputSugguestion").css("display", "none");
 });
-
-
-$(document).on("click", ".RemoveInput", function(){
-$(this).closest(".row").remove();
-});
-
-$(document).on("click", ".RemoveOutput", function(){
-$(this).closest(".row").remove();
-});
-
-$(document).on("click", ".RemoveProcess", function(){
-$(this).closest(".row").remove();
-});
-
-var count1 = 2;
-function addanotheroutput() { 
-
-//alert();
-
-    var j=1;
- $.ajax({
-    url:"<?php echo base_url(); ?>addanotheroutput",
-    type:"POST",
-    data:{classid:j,count1:count1},
-    beforeSend:function()
-    {
-    
-      $('.btn-load-addMoreSpecilities').show();
-
-    },
-    success:function(data)
-    {
-      
-        $('.addanotheroutputResponse').append(data);
-        $('.btn-load-addMoreSpecilities').hide();
-          /*$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();*/
-          j++;
-        return false;
-    
-    }
-    
-  });
-count1++;
-
-}
-
-var count2 = 2;
-function addanotherprocess() {  
-
-//alert();
-var k=1;
-    
- $.ajax({
-    url:"<?php echo base_url(); ?>addanotherprocess",
-    type:"POST",
-    data:{classid:k,count2:count2},
-    beforeSend:function()
-    {
-    
-      $('.btn-load-addMoreSpecilities').show();
-
-    },
-    success:function(data)
-    {
-      
-        $('.addanotherprocessResponse').append(data);
-        $('.btn-load-addMoreSpecilities').hide();
-          k++;
-        return false;
-    
-    }
-    
-  });
-
-count2++;
-}
 
 </script>
 
@@ -2790,13 +2652,44 @@ $('#sub_cat_a').on('change', function(){
   $('#sub_cat_a').on('change', function(){ renderCatChips('sub_cat_a', 'sub_cat_a_chips'); });
   $('#sub_cat_b').on('change', function(){ renderCatChips('sub_cat_b', 'sub_cat_b_chips'); });
 
-  $(document).on('click', '.az-cat-chip-remove', function(){
+  var ioChipFields = [
+      ['io_input_type', 'io_input_type_chips'],
+      ['io_input_standard', 'io_input_standard_chips'],
+      ['io_input_connection_type', 'io_input_connection_type_chips'],
+      ['io_output_type', 'io_output_type_chips'],
+      ['io_output_standard', 'io_output_standard_chips'],
+      ['io_output_connection_type', 'io_output_connection_type_chips'],
+      ['io_process_type', 'io_process_type_chips'],
+      ['io_process_standard', 'io_process_standard_chips']
+  ];
+  $.each(ioChipFields, function(i, pair){
+      $('#' + pair[0]).on('change', function(){ renderCatChips(pair[0], pair[1]); });
+  });
+
+  $(document).on('click', '.az-cat-chip-remove', function(e){
+      e.stopPropagation();
+      e.stopImmediatePropagation();
       var selectId = $(this).data('select');
       var value = $(this).closest('.az-cat-chip').data('value');
       var $select = $('#' + selectId);
-      $select.find('option').filter(function(){ return $(this).val() == value; }).prop('selected', false);
-      $select.trigger('change');
+      var current = $select.val() || [];
+      var updated = current.filter(function(v){ return v !== value; });
+      $select.val(updated).trigger('change');
   });
+
+  // A separate widget (nice-select) sometimes also attaches to select2-managed
+  // fields and duplicates the selected items inside the box itself. Remove it
+  // directly rather than relying on CSS, since its DOM position isn't consistent.
+  function removeCompetingNiceSelect(selectId){
+      $('#' + selectId).siblings('.nice-select').remove();
+  }
+  var allChipFieldIds = ['sub_cat_a', 'sub_cat_b'];
+  $.each(ioChipFields, function(i, pair){ allChipFieldIds.push(pair[0]); });
+  function cleanupNiceSelects(){
+      $.each(allChipFieldIds, function(i, id){ removeCompetingNiceSelect(id); });
+  }
+  cleanupNiceSelects();
+  setTimeout(cleanupNiceSelects, 500);
 
   });
 </script>

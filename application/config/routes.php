@@ -101,9 +101,6 @@ $route['edit-my-product/(:any)'] = 'Product/edit_my_product';
 $route['cancel-my-product/(:any)'] = 'Product/cancel_my_product';
 $route['delete-product/(:any)'] = 'Product/deleteproduct';
 
-$route['addanotherinput'] = 'Product/addanotherinput';
-$route['addanotheroutput'] = 'Product/addanotheroutput';
-$route['addanotherprocess'] = 'Product/addanotherprocess';
 
 $route['search-listing'] = 'Product/devicefilter';
 $route['get-cat-b'] = 'Product/get_cat_b';

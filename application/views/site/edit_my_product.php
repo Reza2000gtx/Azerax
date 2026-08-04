@@ -57,11 +57,16 @@ section.add_product .form_add_product {
     padding: 16px;
     margin-bottom: 16px;
 }
-#sendNewSms1 + .select2-container + .nice-select {
+.select2-hidden-accessible + .select2-container + .nice-select,
+.select2-hidden-accessible + .nice-select {
     display: none !important;
 }
 .az-cat-chips {
     margin-top: 8px;
+}
+#sub_cat_a + .select2-container .select2-selection__choice,
+#sub_cat_b + .select2-container .select2-selection__choice {
+    display: none !important;
 }
 .az-cat-chip {
     display: flex;
@@ -2541,6 +2546,22 @@ if($connections){
    // render on page load too, since these may be pre-filled from the existing product
    renderEditCatChips('sub_cat_a', 'sub_cat_a_chips');
    renderEditCatChips('sub_cat_b', 'sub_cat_b_chips');
+
+   // A separate widget (nice-select) sometimes also attaches to these same
+   // fields and duplicates the selected items. CSS hiding proved unreliable
+   // since its position in the DOM isn't consistent, so remove it directly.
+   function removeCompetingNiceSelect(selectId){
+       $('#' + selectId).siblings('.nice-select').remove();
+   }
+   removeCompetingNiceSelect('main_cat_select');
+   removeCompetingNiceSelect('sub_cat_a');
+   removeCompetingNiceSelect('sub_cat_b');
+   // re-check shortly after too, in case it attaches slightly later than our script runs
+   setTimeout(function(){
+       removeCompetingNiceSelect('main_cat_select');
+       removeCompetingNiceSelect('sub_cat_a');
+       removeCompetingNiceSelect('sub_cat_b');
+   }, 500);
 
    $(document).on('click', '.az-cat-chip-remove', function(e){
        e.stopPropagation();
