@@ -160,7 +160,6 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   $description = htmlentities($_REQUEST['description'], ENT_QUOTES);
   $latest_firmware_version = htmlentities($_REQUEST['latest_firmware_version'], ENT_QUOTES);
   $mechanical_demension_mounting = htmlentities($_REQUEST['mechanical_demension_mounting'], ENT_QUOTES);
-  $order_code = htmlentities($_REQUEST['order_code'], ENT_QUOTES);
   $paymentIntent_id = $_POST['paymentIntent_id'];
   $rack_unit = $_REQUEST['rack_unit'];
 
@@ -181,7 +180,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   $process_stand = $_REQUEST['process_stand'];
 
   //// Group 3: Dealer //// 
-  $dealer_web_cont = htmlentities($_REQUEST['dealer_web_cont'], ENT_QUOTES);
+  // Retailer website / Ordering Information merged into Dealer Contact (Stage cleanup)
   $dealer_notes = htmlentities($_REQUEST['dealer_notes'], ENT_QUOTES);
   $warranty_detail = htmlentities($_REQUEST['warranty_detail'], ENT_QUOTES);
   $support_detail = htmlentities($_REQUEST['support_detail'], ENT_QUOTES);
@@ -206,7 +205,8 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
        // instead of raw string concatenation. rack_unit and
        // paymentIntent_id previously had ZERO escaping at all.
        // Release Date / Release Notes fields removed (Stage A cleanup).
-       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`order_code`,`dealer_web_cont`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
+       // order_code / dealer_web_cont merged into dealer_contact (Stage cleanup).
+       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
       VALUES(
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($session_id) .",
@@ -217,8 +217,6 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         " .$this->db->escape($device_manual_brochure) .",
         " .$this->db->escape($mechanical_demension_mounting) .",
         " .$this->db->escape($rack_unit) .",
-        " .$this->db->escape($order_code) .",
-        " .$this->db->escape($dealer_web_cont) .",
         " .$this->db->escape($dealer_notes) .",
         " .$this->db->escape($warranty_detail) .",
         " .$this->db->escape($support_detail) .",
@@ -523,7 +521,6 @@ $success = 1;
   $description = htmlentities($_REQUEST['description'], ENT_QUOTES);
   $latest_firmware_version = htmlentities($_REQUEST['latest_firmware_version'], ENT_QUOTES);
   $mechanical_demension_mounting = htmlentities($_REQUEST['mechanical_demension_mounting'], ENT_QUOTES);
-  $order_code = htmlentities($_REQUEST['order_code'], ENT_QUOTES);
   $rack_unit = $_REQUEST['rack_unit'];
 
 
@@ -543,7 +540,7 @@ $success = 1;
   $Connection_id = $_REQUEST['Connection_id'];
 
   //// Group 3: Dealer //// 
-  $dealer_web_cont = htmlentities($_REQUEST['dealer_web_cont'], ENT_QUOTES);
+  // Retailer website / Ordering Information merged into Dealer Contact (Stage cleanup)
   $dealer_notes = htmlentities($_REQUEST['dealer_notes'], ENT_QUOTES);
   $warranty_detail = htmlentities($_REQUEST['warranty_detail'], ENT_QUOTES);
   $support_detail = htmlentities($_REQUEST['support_detail'], ENT_QUOTES);
@@ -561,7 +558,8 @@ $success = 1;
         // SECURITY FIX: every value escaped via $this->db->escape().
         // rack_unit previously had zero escaping.
         // Release Date / Release Notes fields removed (Stage A cleanup).
-        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`description` = ".$this->db->escape($description)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`order_code` = ".$this->db->escape($order_code)." ,`dealer_web_cont` = ".$this->db->escape($dealer_web_cont)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact).",`updated_at` = ".$this->db->escape($update)." ";
+        // order_code / dealer_web_cont merged into dealer_contact (Stage cleanup).
+        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`description` = ".$this->db->escape($description)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact).",`updated_at` = ".$this->db->escape($update)." ";
 
         if(!empty($_FILES["product_image"]['name'])){
           $uploadImage = false;
@@ -819,56 +817,6 @@ $device_brand_2 = $this->common_model->GetAllData('product',array('device_brand 
 
   }
 
-
-  public function order_code(){
-
-    $order_code = $this->input->post('order_code'); 
-    $order_code_1 = '%'.$order_code.'%';
-
-    if(!$order_code){
-     }else{
-$order_code_2 = $this->common_model->GetAllData('product',array('order_code LIKE '=>$order_code_1),'order_code','asc','','','','order_code');
-    }
-
-    foreach($order_code_2 as $order_code_3){ ?>
-    <li data-value="<?php echo $order_code_3['order_code'];?>" ><?php echo $order_code_3['order_code'];?></li>
-    <?php    }
-
-  }
-
-
-  public function dealer_contact(){
-
-    $dealer_contact = $this->input->post('dealer_contact'); 
-    $dealer_contact_1 = '%'.$dealer_contact.'%';
-
-    if(!$dealer_contact){
-     }else{
-$dealer_contact_2 = $this->common_model->GetAllData('product',array('dealer_contact LIKE '=>$dealer_contact_1),'dealer_contact','asc','','','','dealer_contact');
-    }
-
-    foreach($dealer_contact_2 as $dealer_contact_3){ ?>
-    <li data-value="<?php echo $dealer_contact_3['dealer_contact'];?>" ><?php echo $dealer_contact_3['dealer_contact'];?></li>
-    <?php    }
-
-  }
-
-
-  public function dealer_web_cont(){
-
-    $dealer_web_cont = $this->input->post('dealer_web_cont'); 
-    $dealer_web_cont_1 = '%'.$dealer_web_cont.'%';
-
-    if(!$dealer_web_cont){
-     }else{
-$dealer_web_cont_2 = $this->common_model->GetAllData('product',array('dealer_web_cont LIKE '=>$dealer_web_cont_1),'dealer_web_cont','asc','','','','dealer_web_cont');
-    }
-
-    foreach($dealer_web_cont_2 as $dealer_web_cont_3){ ?>
-    <li data-value="<?php echo $dealer_web_cont_3['dealer_web_cont'];?>" ><?php echo $dealer_web_cont_3['dealer_web_cont'];?></li>
-    <?php    }
-
-  }
 
 
   public function process(){

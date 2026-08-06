@@ -333,6 +333,24 @@ section.add_product {
 .next:hover { background: #e8940a !important; color: #14213D !important; }
 .next:hover { background: #e8940a !important; }
 
+.previous {
+    background: #FCA311 !important;
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 11px 28px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: normal !important;
+}
+.previous:hover { background: #e8940a !important; color: #14213D !important; }
+
 /* Input type label in I.P.O */
 .input_box {
     border: 1.5px solid #EBEBEB !important;
@@ -993,11 +1011,20 @@ select.form-control {
             if(!value) return;
             var $el = $(selector);
             if($el.length === 0) return;
-            if($el.find("option[value='"+value.replace(/'/g,"\\'")+"']").length === 0){
-                $el.append(new Option(value, value, true, true));
-            } else {
-                $el.val(value);
-            }
+            // AI often returns multiple items as one comma-separated string
+            // (e.g. "AES67, RAVENNA, ST2110-30") - split into individual,
+            // separately-selectable/removable items instead of one big blob
+            var items = value.split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v.length > 0; });
+            var existing = $el.val() || [];
+            $.each(items, function(i, item){
+                if($el.find("option[value='"+item.replace(/'/g,"\\'")+"']").length === 0){
+                    $el.append(new Option(item, item, false, false));
+                }
+                if(existing.indexOf(item) === -1){
+                    existing.push(item);
+                }
+            });
+            $el.val(existing);
             $el.trigger('change');
         }
 
@@ -1035,7 +1062,7 @@ select.form-control {
                         if(d.device_model) $('#device_name').val(d.device_model);
                         if(d.device_brand) $('#device_brand').val(d.device_brand);
                         if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
-                        if(d.order_code) $('#order_code').val(d.order_code);
+                        if(d.order_code) $('#dealer_contact').val(d.order_code);
                         if(d.rack_unit){
                             $('select[name="rack_unit"]').val(d.rack_unit).trigger('change');
                         }
@@ -1544,30 +1571,12 @@ $('#sub_cat_b').on('change', function(){
             <div class="col-sm-12">
 
               <div class="form-group">
-                <label>Retailer website</label>
-                <input type="text" required="required"  name="dealer_web_cont"  autocomplete="off" onkeyup="getprocess_dealer_web_cont()" id="dealer_web_cont"  class="form-control sets_hidden3">
-
-               
-
-                     <!--  <input type="hidden" name="dealer_web_contid" id="dealer_web_contid" /> 
-                    <ul id="dealer_web_contSugguestion" ></ul> -->
-
+                <label>Vendor Contact &amp; Ordering Info</label>
+                <textarea class="form-control sets_hidden3" name="dealer_contact" id="dealer_contact" rows="3" placeholder="How can a buyer reach and order from you? e.g. website, phone, email, ordering process, lead times..."></textarea>
               </div>
 
               <div class="form-group">
-                <label for="title">Ordering Information</label>
-                <input type="text"  class="form-control sets_hidden3" name="order_code" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" >
-              </div>
-              <div class="form-group">
-                <label>Dealer Contact</label>
-                <input type="text" required  name="dealer_contact"  autocomplete="off" onkeyup="getprocess_dealer_contact()" id="dealer_contact"   class="form-control sets_hidden3">
-
-                 <!-- <input type="hidden" name="dealer_contactid" id="dealer_contactid" /> 
-                    <ul id="dealer_contactSugguestion" ></ul> -->
-              </div>
-
-              <div class="form-group">
-                <label for="title">Dealer notes</label>
+                <label for="title">Vendor notes</label>
                 <textarea  class="form-control sets_hidden3"  name="dealer_notes " ></textarea>
                 <!-- <input type="text" class="form-control" name="dealer_notes" > -->
               </div>
@@ -1593,6 +1602,9 @@ $('#sub_cat_b').on('change', function(){
                       <div class="upload-btn-wrapper">
                          <button type="button" class="btn" id="upBtn"><i class="fa fa-upload"></i> Upload a file</button>
                          <input  required type="file"  name="gallery-image[]" id="gallery-image" accept="image/*" onchange="ValidateSingleInput(this)" class="form-control sets_hidden3 imageUpload" >
+                      </div>
+                      <div id="galleryPasteZone" tabindex="0" style="margin-top:8px;border:1.5px dashed #ccc;border-radius:6px;padding:10px 14px;font-size:12px;color:#999;cursor:text;">
+                        Or click here and paste an image (Ctrl+V / Cmd+V)
                       </div>
 
                       <div  id="preview" class="row gallaryimg">
@@ -1845,97 +1857,7 @@ $(document).on('click','#device_brandSugguestion li',function(){
 });
 
 
-function getprocess_order_code() {
 
- 
-  var order_code = $("#order_code").val();
-
-$.ajax({
-    url:"<?php echo base_url(); ?>/Product/order_code",
-    type:"POST",
-    data: {order_code:order_code},
-    success:function(data)
-    {
-
-        $('#order_codeSugguestion').html(data);
-        $("#order_codeSugguestion").css("display", "block");
-
-        return false;
-    }
-    
-  });
-}
-
-
-$(document).on('click','#order_codeSugguestion li',function(){
-  var processName = $(this).html();
-  var ID = $(this).attr('data-value');
-  $("#order_codeid").val(ID);
-  $("#order_code").val(processName); 
-  $("#order_codeSugguestion").css("display", "none");
-});
-
-
-function getprocess_dealer_contact() {
-
- 
-  var dealer_contact = $("#dealer_contact").val();
-
-$.ajax({
-    url:"<?php echo base_url(); ?>/Product/dealer_contact",
-    type:"POST",
-    data: {dealer_contact:dealer_contact},
-    success:function(data)
-    {
-
-        $('#dealer_contactSugguestion').html(data);
-        $("#dealer_contactSugguestion").css("display", "block");
-
-        return false;
-    }
-    
-  });
-}
-
-
-$(document).on('click','#dealer_contactSugguestion li',function(){
-  var processName = $(this).html();
-  var ID = $(this).attr('data-value');
-  $("#dealer_contactid").val(ID);
-  $("#dealer_contact").val(processName); 
-  $("#dealer_contactSugguestion").css("display", "none");
-});
-
-
-function getprocess_dealer_web_cont() {
-
- 
-  var dealer_web_cont = $("#dealer_web_cont").val();
-
-$.ajax({
-    url:"<?php echo base_url(); ?>/Product/dealer_web_cont",
-    type:"POST",
-    data: {dealer_web_cont:dealer_web_cont},
-    success:function(data)
-    {
-
-        $('#dealer_web_contSugguestion').html(data);
-        $("#dealer_web_contSugguestion").css("display", "block");
-
-        return false;
-    }
-    
-  });
-}
-
-
-$(document).on('click','#dealer_web_contSugguestion li',function(){
-  var processName = $(this).html();
-  var ID = $(this).attr('data-value');
-  $("#dealer_web_contid").val(ID);
-  $("#dealer_web_cont").val(processName); 
-  $("#dealer_web_contSugguestion").css("display", "none");
-});
 
 
 
@@ -2066,6 +1988,34 @@ $(document).on('click','#process_standSugguestion li',function(){
        
    
       });
+
+      // Paste an image directly from the clipboard (e.g. a screenshot) instead
+      // of having to save it to disk first and use the file picker.
+      jQuery(document).on("paste", "#galleryPasteZone", function(e){
+          var clipboardItems = (e.originalEvent.clipboardData || e.clipboardData).items;
+          if(!clipboardItems) return;
+          var foundImage = false;
+          for(var idx = 0; idx < clipboardItems.length; idx++){
+              var item = clipboardItems[idx];
+              if(item.type && item.type.indexOf('image/') === 0){
+                  foundImage = true;
+                  var file = item.getAsFile();
+                  var divimage = jQuery("#preview img").length;
+                  k = divimage + 1;
+                  $('#preview').append('<div class="col-md-2 " id="cancel'+k+'"><div class="img_div" ><span style="cursor:pointer" class="cancel_cls" onclick="removeImg('+k+')"><i class="fa fa-times"></i></span><img  style="height: 100px;" src='+URL.createObjectURL(file)+'><br><input type="file" name="gallery-image-orignal[]" class="form-control imageUpload" id="gallery-image-orignal'+k+'" accept="image/*" style="display:none;"></div></div>');
+                  var dt = new DataTransfer();
+                  dt.items.add(file);
+                  document.querySelector("#gallery-image-orignal"+k).files = dt.files;
+                  jQuery('#upBtn').html('<i class="fa fa-upload"></i> Add New');
+              }
+          }
+          if(foundImage){
+              $('#galleryPasteZone').css('color', '#28a745').text('Image pasted! Paste another, or click Upload a file to add more.');
+              setTimeout(function(){
+                  $('#galleryPasteZone').css('color', '#999').text('Or click here and paste an image (Ctrl+V / Cmd+V)');
+              }, 2500);
+          }
+      });
       
    });
 
@@ -2080,74 +2030,6 @@ $(document).on('click','#process_standSugguestion li',function(){
     
    }
 </script>
-
-<script type="text/javascript">
-
-  var el_1 = document.getElementById('mcat');
-  var hiddenDiv1 = document.getElementById('box1');
-  
-  el_1.addEventListener('mouseover', function handleMouseOver() {
-  hiddenDiv1.style.display = 'block';
-  //alert('fuck!!');
-
-});
-
-  el_1.addEventListener('mouseout', function handleMouseOut() {
-  hiddenDiv1.style.display = 'none';
-
-});
- </script>
- 
- <script type="text/javascript">
-
-var el_2 = document.getElementById('inps');
-var hiddenDiv2 = document.getElementById('box2');
-
-el_2.addEventListener('mouseover', function handleMouseOver() {
-hiddenDiv2.style.display = 'block';
-//alert('fuck!!');
-
-});
-
-el_2.addEventListener('mouseout', function handleMouseOut() {
-hiddenDiv2.style.display = 'none';
-
-});
-</script>
-
-<script type="text/javascript">
-
-  var el_3 = document.getElementById('outs');
-  var hiddenDiv3 = document.getElementById('box3');
-  
-  el_3.addEventListener('mouseover', function handleMouseOver() {
-  hiddenDiv3.style.display = 'block';
-  //alert('fuck!!');
-
-});
-
-  el_3.addEventListener('mouseout', function handleMouseOut() {
-  hiddenDiv3.style.display = 'none';
-
-});
- </script>
-
-<script type="text/javascript">
-
-  var el_4 = document.getElementById('proc');
-  var hiddenDiv4 = document.getElementById('box4');
-  
-  el_4.addEventListener('mouseover', function handleMouseOver() {
-  hiddenDiv4.style.display = 'block';
-  //alert('fuck!!');
-
-});
-
-  el_4.addEventListener('mouseout', function handleMouseOut() {
-  hiddenDiv4.style.display = 'none';
-
-});
- </script>
 
 <script type="text/javascript">
   var _validFileExtensions = [".jpg", ".png",".jpeg"];    
@@ -2392,6 +2274,8 @@ $(document).on('click', '.prev2', function(){
    $('#menu1').show();
    $('.t1').addClass('active');
    $('.t2').removeClass('active');
+   $('.col-box').removeClass('active-box');
+   $('#box1').addClass('active-box');
 });
 
 $(document).on('click', '.prev3', function(){
@@ -2399,6 +2283,8 @@ $(document).on('click', '.prev3', function(){
    $('#menu2').show();
    $('.t2').addClass('active');
    $('.t3').removeClass('active');
+   $('.col-box').removeClass('active-box');
+   $('#box2').addClass('active-box');
 });
 
 $(".submit").click(function(){
@@ -3489,6 +3375,8 @@ function payment_process_paypal(paymentType,actual_amt,paymentIntent_id){
    $('#menu2').show();
    $('.t2').addClass('active');
    $('.t1').removeClass('active');
+   $('.col-box').removeClass('active-box');
+   $('#box2').addClass('active-box');
    $(".Error1").html('');
    }
    else
@@ -3516,6 +3404,8 @@ function payment_process_paypal(paymentType,actual_amt,paymentIntent_id){
    $('#menu3').show();
    $('.t3').addClass('active');
    $('.t2').removeClass('active');
+   $('.col-box').removeClass('active-box');
+   $('#box3').addClass('active-box');
    $(".Error2").html('');
    } 
     else

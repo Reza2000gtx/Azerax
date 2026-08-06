@@ -65,7 +65,15 @@ section.add_product .form_add_product {
     margin-top: 8px;
 }
 #sub_cat_a + .select2-container .select2-selection__choice,
-#sub_cat_b + .select2-container .select2-selection__choice {
+#sub_cat_b + .select2-container .select2-selection__choice,
+#io_input_type + .select2-container .select2-selection__choice,
+#io_input_standard + .select2-container .select2-selection__choice,
+#io_input_connection_type + .select2-container .select2-selection__choice,
+#io_output_type + .select2-container .select2-selection__choice,
+#io_output_standard + .select2-container .select2-selection__choice,
+#io_output_connection_type + .select2-container .select2-selection__choice,
+#io_process_type + .select2-container .select2-selection__choice,
+#io_process_standard + .select2-container .select2-selection__choice {
     display: none !important;
 }
 .az-cat-chip {
@@ -125,6 +133,23 @@ section.add_product #msform fieldset#menu3 {
     background: #FCA311 !important;
     color: #14213D !important;
 }
+.previous {
+    background: #FCA311 !important;
+    color: #14213D !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 11px 28px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: normal !important;
+}
+.previous:hover { background: #e8940a !important; color: #14213D !important; }
 #msform .action-button.next:hover { background: #e8940a !important; }
 #msform .action-button.actionButtonSubmit { background: #dc3545; }
 /* Fix nav hover on this page */
@@ -449,11 +474,20 @@ section.add_product #msform fieldset#menu3 {
                       if(!value) return;
                       var $el = $(selector);
                       if($el.length === 0) return;
-                      if($el.find("option[value='"+value.replace(/'/g,"\\'")+"']").length === 0){
-                          $el.append(new Option(value, value, true, true));
-                      } else {
-                          $el.val(value);
-                      }
+                      // AI often returns multiple items as one comma-separated string
+                      // (e.g. "AES67, RAVENNA, ST2110-30") - split into individual,
+                      // separately-selectable/removable items instead of one big blob
+                      var items = value.split(',').map(function(v){ return v.trim(); }).filter(function(v){ return v.length > 0; });
+                      var existing = $el.val() || [];
+                      $.each(items, function(i, item){
+                          if($el.find("option[value='"+item.replace(/'/g,"\\'")+"']").length === 0){
+                              $el.append(new Option(item, item, false, false));
+                          }
+                          if(existing.indexOf(item) === -1){
+                              existing.push(item);
+                          }
+                      });
+                      $el.val(existing);
                       $el.trigger('change');
                   }
                   $('#ai_extract_btn').on('click', function(){
@@ -717,185 +751,7 @@ section.add_product #msform fieldset#menu3 {
 <?php 
 $i=0;
 $connections = $this->common_model->GetAllData('input_output',array('product_id' =>$product_detail['id']));
-   if($connections){ ?>   
-<div class="row input_box">
-<?php 
-$count=count($input_process_stand)+1;
-foreach($connections as $connection) {  ?>
-<input type="hidden" value="<?php echo $connection['id'];?>" name="Connection_id">  
-            
-              <div class="col-md-3 set-44">
-<!--               <div class="form-group">
-                <label>Input </label>
-                <input type="text" data-role="tagsinput" name="input_conn[]"  value="<?php echo $connection['input_conn'];?>" placeholder="" class="typeahead inputF tm-input form-control tm-input-info">
-                <ul id="inputSugguestion" ></ul>
-              </div> -->
-             <div class="form-group">
-                <label>Input <?php echo $i+1; ?></label>
-                 <select id="e2_2" name="input_conn[<?php echo $i;?>][]" class="typeahead inputF tm-input form-control " multiple="multiple" style="width:275px" class="populate placeholder">
-               <?php     
-               
-               $inputRes=explode(',',$connection['input_conn']);
-               $data=array();
-                $Input = $this->common_model->GetAllData('input_output','','input_conn','asc','','','','input_conn'); 
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['input_conn']);
-               
-               foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-              
-               foreach($data as $k){
-                   if($k){
-                         $selected='';
-                       if(in_array($k,$inputRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-                  
-               }
-               $data=array();
-               ?>
-                 </select>
-              </div>
-
-
-                
-
-              </div>
-
-              <div class="col-md-3 set-44">
-
-              
-  <?php //echo $input_process_stand[$key];?>
-                    <!-- <div class="form-group">
-                        <label>Input Standard</label>
-                        <input type="text" data-role="tagsinput" name="input_process_stand[]"  value="<?php echo $connection['input_process_stand'];?>" placeholder="" class="typeahead instand tm-input form-control tm-input-info">
-                    </div> -->
-              
-              <div class="form-group">
-                <label>Input Standard</label>
-
-        <select name="input_process_stand[<?php echo $i;?>][]" class="typeahead instand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-
-             <?php     
-        $input_process_standRes=explode(',',$connection['input_process_stand']);
-                $Input = $this->common_model->GetAllData('input_output','','input_process_stand','asc','','','','input_process_stand'); 
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['input_process_stand']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                   if($k){
-                       $selected='';
-                       if(in_array($k,$input_process_standRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-                  
-               }
-               $data=array();
-               
-               ?>
-              
-             
-             </select>
-              </div>
-              
-              </div>
-
-              <div class="col-md-3 set-44">
-
-                  <!-- <div class="form-group">
-                      <label for="title">Input Connection Type</label>
-                      <input type="text" data-role="tagsinput" class="typeahead inprocessConnection tm-input form-control tm-input-info" value="<?php echo $connection['process_connection'];?>" name="process_connection[]" >
-                  </div> -->
-                  
-              <div class="form-group">
-                <label for="title">Input Connection Type</label>
-               <select name="process_connection[<?php echo $i;?>][]" class="typeahead inprocessConnection tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-
-            <?php     
-        $process_connectionRes=explode(',',$connection['process_connection']);
-
-                $Input = $this->common_model->GetAllData('input_output','','process_connection','asc','','','','process_connection');
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['process_connection']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                   if($k){
-                       
-                       $selected='';
-                       if(in_array($k,$process_connectionRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-                  
-               }
-               $data=array();
-               
-               ?>
-              
-             
-             </select>   
-              </div>
-          
-
-              </div>
-            
-
-              <div class="col-md-3 set-22" >
-
-
-               <div class="form-group">
-                  <label title="for"></label><br>
-                  <?php if($i==0){?>
-                    <button type="button" class="btn btn-success btn-add" onclick="addanotherinput()">+
-                    </button>
-
-                  <?php  }else{?>
-
-          <!-- <button type="button" class="btn btn-danger btn-remove" onclick="removeMoreSpecilities(<?php echo $i;?>)">- -->
-
-            <input type="button" class="btn btn-danger RemoveInput" value="-">
-
-                  <?php }?>
-
-
-                  </div>
-
-                </div>
-                
-   <?php $i++; } ?><div class="addanotherinputResponse col-sm-12"></div></div> <?php } else { ?>
+?>
    <div class="row input_box">
 
             <div class="col-md-3 set-44">
@@ -907,9 +763,10 @@ foreach($connections as $connection) {  ?>
               </div> -->
               <div class="form-group">
                 <label>Input 1</label>
-                 <select id="e2_2" name="input_conn[0][]" class="typeahead inputF tm-input form-control " multiple="multiple" style="width:275px" class="populate placeholder">
+                 <select id="io_input_type" name="input_conn[0][]" class="typeahead inputF tm-input form-control " multiple="multiple" style="width:275px" class="populate placeholder">
                <?php     
                 $data=array();
+                $existing_input_conn = !empty($connections[0]['input_conn']) ? explode(',', $connections[0]['input_conn']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','input_conn','asc','','','','input_conn'); 
                 foreach($Input as $InputSugg){
                $key= explode(',',$InputSugg['input_conn']);
@@ -918,14 +775,16 @@ foreach($connections as $connection) {  ?>
                    $data[] =$k ;  
                   }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_input_conn));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_input_conn)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   }
                $data=array(); ?>
                  </select>
+<div id="io_input_type_chips" class="az-cat-chips"></div>
               </div>
         </div>
       
@@ -939,10 +798,10 @@ foreach($connections as $connection) {  ?>
             <div class="form-group">
                 <label>Input Standard</label>
 
-        <select name="input_process_stand[0][]" class="typeahead instand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+        <select id="io_input_standard" name="input_process_stand[0][]" class="typeahead instand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
 
              <?php     
-
+                $existing_input_stand = !empty($connections[0]['input_process_stand']) ? explode(',', $connections[0]['input_process_stand']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','input_process_stand','asc','','','','input_process_stand'); 
                 foreach($Input as $InputSugg){
                $key= explode(',',$InputSugg['input_process_stand']);
@@ -952,10 +811,11 @@ foreach($connections as $connection) {  ?>
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_input_stand));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_input_stand)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -965,6 +825,7 @@ foreach($connections as $connection) {  ?>
               
              
              </select>
+<div id="io_input_standard_chips" class="az-cat-chips"></div>
               </div>
         </div>
 
@@ -979,10 +840,10 @@ foreach($connections as $connection) {  ?>
                   </div> -->
               <div class="form-group">
                 <label for="title">Input Connection Type</label>
-               <select name="process_connection[0][]" class="typeahead inprocessConnection tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+               <select id="io_input_connection_type" name="process_connection[0][]" class="typeahead inprocessConnection tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
 
              <?php     
-
+                $existing_input_conn_type = !empty($connections[0]['process_connection']) ? explode(',', $connections[0]['process_connection']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','process_connection','asc','','','','process_connection');
                 foreach($Input as $InputSugg){
                $key= explode(',',$InputSugg['process_connection']);
@@ -993,10 +854,10 @@ foreach($connections as $connection) {  ?>
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_input_conn_type));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_input_conn_type)) ? 'selected' : ''; echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -1004,230 +865,17 @@ foreach($connections as $connection) {  ?>
                
                ?>
              </select>
+<div id="io_input_connection_type_chips" class="az-cat-chips"></div>
               </div>
             </div>
 
-            <div class="col-md-3  set-22">
-
-              <div class="form-group">
-                     
-                      <label for="title"></label><br>
-
-                      <button type="button" class="btn btn-success" onclick="addanotherinput()">+
-                    </button>
-
-                     <!--  <input type="checkbox" class="form-control" onclick="addanotherinput() ;"  > -->
-                  </div>
-
-            </div>
-
-             <div class="addanotherinputResponse col-sm-12"></div>
 </div>
-   <?php } ?>
 
    <?php 
 $i=0;
 
 $out_connections = $this->common_model->GetAllData('input_output',array('product_id' =>$product_detail['id']));
-if($out_connections){ ?>
-<div class="row input_box">
-<?php $count=count($out_process_stand)+1;
-
-foreach($out_connections as $out_connection) {
-
- ?>  
-
-        
-<div class="col-md-3 set-44">
-
-              <!-- <div class="form-group">
-                <label>Output </label>
-                <input type="text" data-role="tagsinput" name="out_conn[]"  value="<?php echo $out_connection['out_conn'];?>" placeholder="" class="typeahead outputF tm-input form-control tm-input-info">
-              </div> -->
-
-                <div class="form-group">
-                <label>Output <?php echo $i+1; ?></label>
-               <select name="out_conn[<?php echo $i;?>][]" class="typeahead outputF tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-                <?php     
-        $out_connRes=explode(',',$out_connection['out_conn']);
-
-                $Input = $this->common_model->GetAllData('input_output','','out_conn','asc','','','','out_conn');
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['out_conn']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                    $selected='';
-                      if($k){
-                       if(in_array($k,$out_connRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-               }
-               
-               $data=array();
-               
-               ?>
-              
-             
-             </select>  
-              </div>
-
-              </div>
-
-
-              <div class="col-md-3 set-44">
-                    <!-- <div class="form-group">
-                        <label>Output Standard</label>
-                        <input type="text" data-role="tagsinput" name="out_process_stand[]"  value="<?php echo $out_connection['out_process_stand'];?>" placeholder="" class="typeahead  otstand tm-input form-control tm-input-info">
-                    </div> -->
-
-                    <div class="form-group">
-                <label>Output Standard</label>
-
-              <select name="out_process_stand[<?php echo $i;?>][]" class="typeahead otstand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-
-                 <?php     
-        $out_process_standRes=explode(',',$out_connection['out_process_stand']);
-
-                $Input = $this->common_model->GetAllData('input_output','','out_process_stand','asc','','','','out_process_stand');
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['out_process_stand']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                    $selected='';
-                      if($k){
-                       if(in_array($k,$out_process_standRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-               }
-               
-               $data=array();
-               
-               ?>
-              
-             
-             </select>    
-              
-              </div>
-              
-              
-              
-              </div>
-
-              <div class="col-md-3 set-44">
-
-              
-
-
-<?php //echo $process_connection[$key];?>
-              <!-- <div class="form-group">
-                      <label for="title">Output Connection Type</label>
-                      <input type="text" data-role="tagsinput" class="typeahead  otprocessConnection  tm-input form-control tm-input-info" value="<?php echo $out_connection['out_process_connection'];?>" name="out_process_connection[]" >
-                  </div> -->
-
-             <div class="form-group">
-                      <label for="title">Output Connection Type</label>
-
-                <select name="out_process_connection[<?php echo $i;?>][]" class="typeahead otprocessConnection tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-
-            <?php     
-        $out_process_connectionRes=explode(',',$out_connection['out_process_connection']);
-
-                $Input = $this->common_model->GetAllData('input_output','','out_process_connection','asc','','','','out_process_connection');
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['out_process_connection']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                    $selected='';
-                      if($k){
-                       if(in_array($k,$out_process_connectionRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-               }
-               
-               $data=array();
-               
-               ?>
-              
-             
-             </select>  
-                
-                  </div>
-
-             
-
-                 
-                
-              
-
-              </div>
-            
-
-              <div class="col-md-3 set-22" >
-
-
-                <span class="form-group">
-                <label title="for"></label><br>
-
-<?php if($i==0){?>
-                    <button type="button" class="btn btn-success btn-add" onclick="addanotheroutput()">+
-                    </button>
-
-                  <?php  }else{?>
-
-          <!-- <button type="button" class="btn btn-danger btn-remove" onclick="removeMoreSpecilities(<?php echo $i;?>)">- -->
-
-            <input type="button" class="btn btn-danger RemoveOutput" value="-">
-                  <?php }?>
-
-
-                  </span>
-
-                </div>
-            
- 
-
-<?php
-$i++;
-
- }?>
-
-<div class="addanotheroutputResponse col-sm-12"></div></div><?php } else { ?>
+?>
 <div class="row input_box">
            <div class="col-md-3 set-44">
 
@@ -1238,9 +886,9 @@ $i++;
 
                <div class="form-group">
                 <label>Output 1</label>
-               <select name="out_conn[0][]" class="typeahead outputF tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+               <select id="io_output_type" name="out_conn[0][]" class="typeahead outputF tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
              <?php     
-
+                $existing_out_conn = !empty($out_connections[0]['out_conn']) ? explode(',', $out_connections[0]['out_conn']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','out_conn','asc','','','','out_conn');
                 foreach($Input as $InputSugg){
                 
@@ -1254,10 +902,11 @@ $i++;
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_out_conn));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_out_conn)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -1265,6 +914,7 @@ $i++;
                
                ?>
              </select>
+<div id="io_output_type_chips" class="az-cat-chips"></div>
               </div>
 
              </div>
@@ -1279,10 +929,10 @@ $i++;
               <div class="form-group">
                 <label>Output Standard</label>
 
-              <select name="out_process_stand[0][]" class="typeahead otstand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+              <select id="io_output_standard" name="out_process_stand[0][]" class="typeahead otstand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
 
              <?php     
-
+                $existing_out_stand = !empty($out_connections[0]['out_process_stand']) ? explode(',', $out_connections[0]['out_process_stand']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','out_process_stand','asc','','','','out_process_stand'); 
                 foreach($Input as $InputSugg){
                 
@@ -1296,10 +946,11 @@ $i++;
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_out_stand));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_out_stand)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -1309,6 +960,7 @@ $i++;
               
              
              </select>
+<div id="io_output_standard_chips" class="az-cat-chips"></div>
               
               </div>
 
@@ -1323,10 +975,10 @@ $i++;
                   <div class="form-group">
                       <label for="title">Output Connection Type</label>
 
-                <select name="out_process_connection[0][]" class="typeahead otprocessConnection tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+                <select id="io_output_connection_type" name="out_process_connection[0][]" class="typeahead otprocessConnection tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
 
              <?php     
-
+                $existing_out_conn_type = !empty($out_connections[0]['out_process_connection']) ? explode(',', $out_connections[0]['out_process_connection']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','out_process_connection','asc','','','','out_process_connection'); 
                 foreach($Input as $InputSugg){
                 
@@ -1340,10 +992,11 @@ $i++;
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_out_conn_type));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_out_conn_type)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -1353,6 +1006,7 @@ $i++;
               
              
              </select>
+<div id="io_output_connection_type_chips" class="az-cat-chips"></div>
                 
                   </div>
   
@@ -1363,22 +1017,7 @@ $i++;
 
 
 
-              <div class="col-md-3 set-22">
-
-              <div class="form-group">
-                      <label for="title"></label><br>
-
-                       <button type="button" class="btn btn-success" onclick="addanotheroutput()">+
-                    </button>
-
-                      <!-- <input type="checkbox" class="form-control" onclick="addanotheroutput() ;"  > -->
-                  </div>
-
-            </div>
-
-            <div class="addanotheroutputResponse col-sm-12"></div>
 </div>
-<?php } ?>
 
 <?php 
 $i=0;
@@ -1386,156 +1025,8 @@ $i=0;
 
 $process_conn = $this->common_model->GetAllData('input_output',array('product_id' =>$product_detail['id']));
 
+?>
 
-if($process_conn){ ?>
-<div class="row input_box">
-<?php $count=count($process_stand)+1;
-
-foreach($process_conn as $process_con) {
-
-   
-
-      ?>  
-
-              
-              <div class="col-md-3 set-44">
-
-
-
-              <!-- <div class="form-group">
-                <label>Process </label>
-                <input type="text" data-role="tagsinput" name="process[]"  value="<?php echo $process_con['process'];?>" placeholder="" class="typeahead  processsuggestion  tm-input form-control tm-input-info ">
-              </div> -->
-
-              <div class="form-group">
-                <label>Process <?php echo $i+1; ?></label>
-
-                <select name="process[<?php echo $i;?>][]" class="typeahead processsuggestion tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-
-              <?php     
-        $processRes=explode(',',$process_con['process']);
-
-                $Input = $this->common_model->GetAllData('input_output','','process','asc','','','','process');
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['process']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                    $selected='';
-                      if($k){
-                       if(in_array($k,$processRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-               }
-               
-               $data=array();
-               
-               ?>
-              
-             
-             </select>  
-              </div>
-
-                
-
-              </div>
-
-              <div class="col-md-3 set-44">
-
-                    <!-- <div class="form-group">
-                        <label>Process Standard</label>
-                        <input type="text" data-role="tagsinput" name="process_stand[]"  value="<?php echo $process_con['process_stand'];?>" placeholder="" class="typeahead  processsuggestionStand  tm-input form-control tm-input-info">
-                    </div> -->
-
-                    <div class="form-group">
-                <label>Process Standard</label>
-<select name="process_stand[<?php echo $i;?>][]" class="typeahead processsuggestionStand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
-
-            <?php     
-        $process_standRes=explode(',',$process_con['process_stand']);
-
-                $Input = $this->common_model->GetAllData('input_output','','process_stand','asc','','','','process_stand');
-                foreach($Input as $InputSugg){
-                
-                
-               $key= explode(',',$InputSugg['process_stand']);
-               
-                foreach($key as $k){
-                   if($k){
-                  // echo '<option>'.$k.'</option>';
-                   }
-                 $data[] =$k ;  
-               }  
-                }
-                $data=array_unique($data);
-               foreach($data as $k){
-                    $selected='';
-                      if($k){
-                       if(in_array($k,$process_standRes)){
-                           $selected='selected';
-                       }
-                   echo '<option '.$selected.'>'.$k.'</option>';
-                   }
-               }
-               
-               $data=array();
-               
-               ?>
-              
-             
-             </select>    
-              
-              </div>
-              
-              
-              
-              </div>
-
-
-                <div class="col-md-3 set-44">
-             
-
-                <span class="form-group">
-                <label title="for"></label><br>
-
-                  <?php if($i==0){?>
-                    <button type="button" class="btn btn-success btn-add" onclick="addanotherprocess()">+
-                    </button>
-
-                  <?php  }else{?>
-
-         
-
-            <input type="button" class="btn btn-danger RemoveProcess" value="-">
-                  <?php }?>
-
-
-                  </span>
-
-                </div>
-
-            
-
-
-
-
-<?php
-$i++;
-
- } ?>
-
-<div class="addanotherprocessResponse col-sm-12"></div></div><?php } else { ?>
 <div class="row input_box">
   
 
@@ -1549,10 +1040,10 @@ $i++;
                <div class="form-group">
                 <label>Process 1</label>
 
-                <select name="process[0][]" class="typeahead processsuggestion tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+                <select id="io_process_type" name="process[0][]" class="typeahead processsuggestion tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
 
              <?php     
-
+                $existing_process_type = !empty($process_conn[0]['process']) ? explode(',', $process_conn[0]['process']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','process','asc','','','','process'); 
                 foreach($Input as $InputSugg){
                 
@@ -1566,10 +1057,11 @@ $i++;
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_process_type));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_process_type)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -1577,6 +1069,7 @@ $i++;
                ?>
               
              </select>
+<div id="io_process_type_chips" class="az-cat-chips"></div>
               </div>
 
           </div>
@@ -1592,10 +1085,10 @@ $i++;
               </div> -->
                <div class="form-group">
                 <label>Process Standard</label>
-<select name="process_stand[0][]" class="typeahead processsuggestionStand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
+<select id="io_process_standard" name="process_stand[0][]" class="typeahead processsuggestionStand tm-input form-control " style="width:275px" multiple="multiple" class="populate placeholder">
 
              <?php     
-
+                $existing_process_standard = !empty($process_conn[0]['process_stand']) ? explode(',', $process_conn[0]['process_stand']) : array();
                 $Input = $this->common_model->GetAllData('input_output','','process_stand','asc','','','','process_stand');  
                 foreach($Input as $InputSugg){
                 
@@ -1609,10 +1102,11 @@ $i++;
                  $data[] =$k ;  
                }  
                 }
-                $data=array_unique($data);
+                $data=array_unique(array_merge($data, $existing_process_standard));
                foreach($data as $k){
                    if($k){
-                   echo '<option>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_process_standard)) ? 'selected' : '';
+                   echo '<option '.$sel.'>'.$k.'</option>';
                    }
                   
                }
@@ -1622,31 +1116,20 @@ $i++;
               
              
              </select>
+<div id="io_process_standard_chips" class="az-cat-chips"></div>
               
               </div>
 
           </div>
 
-           <div class="col-md-3 set-22">
+           
 
-              <div class="form-group">
-                      <label for="title"></label><br>
-
-                        <button type="button" class="btn btn-success" onclick="addanotherprocess()">+
-                    </button>
-
-                      <!-- <input type="checkbox" class="form-control" onclick="addanotherprocess() ;" > -->
-                  </div>
-
-            </div>
             
-             <div class="addanotherprocessResponse col-sm-12"></div>
-
+             
 
              <div id="Error"></div>
 
           </div>
-<?php } ?>
 
     <input type="button" name="previous" class="previous action-button" value="Previous" />
     <input type="button" name="next" class="next action-button" value="Next" />
@@ -2086,116 +1569,6 @@ if($connections){
 }
 ?>
 <script type="text/javascript">
-   var count = '<?php echo $countpro;?>';
-   function addanotherinput() {  
-   
-   //alert();
-   
-     var i=1;
-   $.ajax({
-     url:"<?php echo base_url(); ?>addanotherinput",
-     type:"POST",
-     data:{classid:i,count:count},
-     beforeSend:function()
-     {
-     
-       $('.btn-load-addMoreSpecilities').show();
-   
-     },
-     success:function(data)
-     {
-       
-         $('.addanotherinputResponse').append(data);
-         $('.btn-load-addMoreSpecilities').hide();
-              /*$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();*/
-         return false;
-     
-     }
-     
-   });
-   
-   count++;
-
-   }
-   
-   var count1 = '<?php echo $countpro;?>';
-   function addanotheroutput() { 
-   
-   //alert();
-   
-     var j=1;
-   $.ajax({
-     url:"<?php echo base_url(); ?>addanotheroutput",
-     type:"POST",
-     data:{classid:j,count1:count1},
-     beforeSend:function()
-     {
-     
-       $('.btn-load-addMoreSpecilities').show();
-   
-     },
-     success:function(data)
-     {
-       
-         $('.addanotheroutputResponse').append(data);
-         $('.btn-load-addMoreSpecilities').hide();
-              /*$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();*/
-         return false;
-     
-     }
-     
-   });
-   count1++;
-   
-   }
-   
-   
-   $(document).on("click", ".RemoveInput", function(){
-   $(this).closest(".row").remove();
-   });
-   
-   $(document).on("click", ".RemoveOutput", function(){
-   $(this).closest(".row").remove();
-   });
-   
-   $(document).on("click", ".RemoveProcess", function(){
-   $(this).closest(".row").remove();
-   });
-   
-   
-   var count2 = '<?php echo $countpro;?>';
-   function addanotherprocess() {  
-   
-   //alert();
-   
-     var k=1;
-   
-   $.ajax({
-     url:"<?php echo base_url(); ?>addanotherprocess?classid="+k,
-     type:"POST",
-     data:{classid:k,count2:count2},
-     beforeSend:function()
-     {
-     
-       $('.btn-load-addMoreSpecilities').show();
-   
-     },
-     success:function(data)
-     {
-       
-         $('.addanotherprocessResponse').append(data);
-         $('.btn-load-addMoreSpecilities').hide();
-           
-         return false;
-     
-     }
-     
-   });
-   
-   count2++;
-
-   }
-   
 </script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script> -->
 <!-- <script type="text/javascript">
@@ -2547,21 +1920,34 @@ if($connections){
    renderEditCatChips('sub_cat_a', 'sub_cat_a_chips');
    renderEditCatChips('sub_cat_b', 'sub_cat_b_chips');
 
+   var ioChipFields = [
+       ['io_input_type', 'io_input_type_chips'],
+       ['io_input_standard', 'io_input_standard_chips'],
+       ['io_input_connection_type', 'io_input_connection_type_chips'],
+       ['io_output_type', 'io_output_type_chips'],
+       ['io_output_standard', 'io_output_standard_chips'],
+       ['io_output_connection_type', 'io_output_connection_type_chips'],
+       ['io_process_type', 'io_process_type_chips'],
+       ['io_process_standard', 'io_process_standard_chips']
+   ];
+   $.each(ioChipFields, function(i, pair){
+       $('#' + pair[0]).on('change', function(){ renderEditCatChips(pair[0], pair[1]); });
+       renderEditCatChips(pair[0], pair[1]);
+   });
+
    // A separate widget (nice-select) sometimes also attaches to these same
    // fields and duplicates the selected items. CSS hiding proved unreliable
    // since its position in the DOM isn't consistent, so remove it directly.
    function removeCompetingNiceSelect(selectId){
        $('#' + selectId).siblings('.nice-select').remove();
    }
-   removeCompetingNiceSelect('main_cat_select');
-   removeCompetingNiceSelect('sub_cat_a');
-   removeCompetingNiceSelect('sub_cat_b');
-   // re-check shortly after too, in case it attaches slightly later than our script runs
-   setTimeout(function(){
-       removeCompetingNiceSelect('main_cat_select');
-       removeCompetingNiceSelect('sub_cat_a');
-       removeCompetingNiceSelect('sub_cat_b');
-   }, 500);
+   var allChipFieldIds = ['main_cat_select', 'sub_cat_a', 'sub_cat_b'];
+   $.each(ioChipFields, function(i, pair){ allChipFieldIds.push(pair[0]); });
+   function cleanupNiceSelects(){
+       $.each(allChipFieldIds, function(i, id){ removeCompetingNiceSelect(id); });
+   }
+   cleanupNiceSelects();
+   setTimeout(cleanupNiceSelects, 500);
 
    $(document).on('click', '.az-cat-chip-remove', function(e){
        e.stopPropagation();

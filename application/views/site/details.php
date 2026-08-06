@@ -1,4 +1,20 @@
 <?php include_once 'include/header2.php' ; ?>
+<?php
+// Vendor Contact & Ordering Info: the Add/Edit Product form now saves this as
+// one combined field (dealer_contact). Older listings may still only have the
+// separate legacy fields populated - combine whatever exists so nothing is lost.
+$vendor_contact_parts = array();
+if(!empty($product_detail['dealer_contact'])){
+    $vendor_contact_parts[] = $product_detail['dealer_contact'];
+}
+if(!empty($product_detail['dealer_web_cont'])){
+    $vendor_contact_parts[] = $product_detail['dealer_web_cont'];
+}
+if(!empty($product_detail['order_code'])){
+    $vendor_contact_parts[] = $product_detail['order_code'];
+}
+$vendor_contact_combined = implode("\n", $vendor_contact_parts);
+?>
 <?php if($this->session->userdata('user_id')){ ?>
 <div style="background:#F5F5F5;padding:10px 40px;border-bottom:1px solid #EBEBEB;">
     <a href="<?php echo base_url(); ?>my-product-listing" style="font-family:'Inter',sans-serif;font-size:13px;color:#14213D;text-decoration:none;">← Back to My Products</a>
@@ -242,12 +258,6 @@
 
                 <!-- Specs Grid below image -->
                 <div class="az-detail-grid" style="margin-top:24px;">
-                    <?php if ($product_detail['order_code']) { ?>
-                    <div class="az-detail-row">
-                        <div class="az-detail-label">Order Code</div>
-                        <div class="az-detail-value"><?php echo $product_detail['order_code']; ?></div>
-                    </div>
-                    <?php } ?>
                     <?php if ($product_detail['latest_firmware_version']) { ?>
                     <div class="az-detail-row">
                         <div class="az-detail-label">Latest Firmware</div>
@@ -262,10 +272,10 @@
                             <?php } else { echo '<span style="color:#999;">Not available</span>'; } ?>
                         </div>
                     </div>
-                    <?php if ($product_detail['dealer_contact']) { ?>
+                    <?php if ($vendor_contact_combined) { ?>
                     <div class="az-detail-row">
-                        <div class="az-detail-label">Vendor Contact</div>
-                        <div class="az-detail-value"><a href="<?php echo $product_detail['dealer_contact']; ?>" target="_blank" style="color:#FCA311;word-break:break-all;"><?php echo $product_detail['dealer_contact']; ?></a></div>
+                        <div class="az-detail-label">Vendor Contact &amp; Ordering Info</div>
+                        <div class="az-detail-value" style="white-space:pre-line;"><?php echo htmlspecialchars($vendor_contact_combined); ?></div>
                     </div>
                     <?php } ?>
                     <?php if ($product_detail['mechanical_demension_mounting']) { ?>
@@ -343,9 +353,6 @@
                 <div class="table-responsive">
                     <table class="table">
                         <tbody>
-    <?php if($product_detail['order_code']){ ?>
-    <tr><td>Ordering Information</td><td><h5><?php echo $product_detail['order_code']; ?></h5></td></tr>
-    <?php } ?>
     <tr><td>Device Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
     <tr><td>Device Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>
     <?php if($product_detail['latest_firmware_version']){ ?>
@@ -357,11 +364,8 @@
     <?php if($product_detail['rack_unit']){ ?>
     <tr><td>Rack Units</td><td><h5><?php echo $product_detail['rack_unit']; ?></h5></td></tr>
     <?php } ?>
-    <?php if($product_detail['dealer_web_cont']){ ?>
-    <tr><td>Vendor Website</td><td><h5><a href="<?php echo $product_detail['dealer_web_cont']; ?>" target="_blank" style="color:#FCA311;">Visit</a></h5></td></tr>
-    <?php } ?>
-    <?php if($product_detail['dealer_contact']){ ?>
-    <tr><td>Dealer Contact</td><td><h5><?php echo $product_detail['dealer_contact']; ?></h5></td></tr>
+    <?php if($vendor_contact_combined){ ?>
+    <tr><td>Vendor Contact &amp; Ordering Info</td><td><h5 style="white-space:pre-line;"><?php echo htmlspecialchars($vendor_contact_combined); ?></h5></td></tr>
     <?php } ?>
     <?php if($product_detail['warranty_detail']){ ?>
     <tr><td>Warranty</td><td><h5><?php echo $product_detail['warranty_detail']; ?></h5></td></tr>
