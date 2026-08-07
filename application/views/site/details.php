@@ -227,11 +227,18 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
 
             <!-- LEFT COL: Image + Specs Grid -->
             <div class="col-lg-6">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <?php $product_gallery = $this->common_model->GetAllData('product_gallery_image', array('product_id' => $product_detail['id'])); ?>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="<?php echo (count($product_gallery) > 1) ? 'carousel' : 'false'; ?>">
                     <div class="carousel-inner">
                         <?php
                         $j = 1;
-                        $product_gallery = $this->common_model->GetAllData('product_gallery_image', array('product_id' => $product_detail['id']));
+                        if(empty($product_gallery)){
+                        ?>
+                        <div class="carousel-item active">
+                            <img class="d-block w-100" src="<?php echo base_url(); ?>assets/product_image/no.jpg" alt="<?php echo $product_detail['device_model']; ?>">
+                        </div>
+                        <?php
+                        } else {
                         foreach ($product_gallery as $key => $gallery) {
                             $active1 = '';
                             if ($j == 1 || count($product_gallery) == 1) { $active1 = 'active'; }
@@ -239,7 +246,7 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                         <div class="carousel-item <?php echo $active1; ?>">
                             <img class="d-block w-100" src="<?php echo base_url(); ?>assets/product_image/<?php echo $gallery['gallery_image']; ?>" alt="<?php echo $product_detail['device_model']; ?>">
                         </div>
-                        <?php $j++; } ?>
+                        <?php $j++; } } ?>
                     </div>
                     <?php if (count($product_gallery) > 1) { ?>
                     <ol class="carousel-indicators">

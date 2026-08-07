@@ -89,50 +89,48 @@
 }
 .contt h4 { margin-bottom: 12px; }
 
-/* Action buttons */
-.btn-edit {
-    background: #14213D;
-    color: #fff;
-    border: none;
-    padding: 7px 16px;
-    border-radius: 6px;
+/* Status badges - informational only, never clickable */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    width: 130px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.status-badge.is-active { background: #EAF3DE; color: #27500A; }
+.status-badge.is-pending { background: #FAEEDA; color: #633806; }
+.status-badge.is-cancelled { background: #FCEBEB; color: #791F1F; }
+.status-badge.is-expired { background: #F1EFE8; color: #444441; }
+.status-badge i { font-size: 13px; }
+
+/* Action buttons - consistent shape, color tied to meaning */
+.btn-edit, .btn-delete, .btn-relist, .btn-cancel-listing {
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 6px;
+    border: none;
     text-decoration: none;
     display: inline-block;
     margin-right: 6px;
     cursor: pointer;
 }
+.btn-edit { background: #14213D; color: #fff; }
 .btn-edit:hover { background: #0D1929; color: #fff; }
-.btn-delete {
-    background: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 7px 16px;
-    border-radius: 6px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-right: 6px;
-}
-.btn-delete:hover { background: #b02a37; }
-.btn-cancel-listing {
-    background: #FCA311;
-    color: #14213D;
-    border: none;
-    padding: 7px 16px;
-    border-radius: 6px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-right: 6px;
-}
-.btn-active { background: #198754; color: #fff; border: none; padding: 7px 16px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; }
-.btn-cancelled { background: #6c757d; color: #fff; border: none; padding: 7px 16px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; }
-.btn-relist { background: #0d6efd; color: #fff; border: none; padding: 7px 16px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; }
+.btn-delete { background: #A32D2D; color: #fff; }
+.btn-delete:hover { background: #791F1F; }
+.btn-cancel-listing { background: transparent; color: #854F0B; border: 1px solid #EF9F27; }
+.btn-cancel-listing:hover { background: #FAEEDA; }
+.btn-relist { background: #FCA311; color: #14213D; }
+.btn-relist:hover { background: #e8940a; }
 
 /* Flash messages */
 .print-success-msg { display: none; }
@@ -207,6 +205,15 @@
                 </div>
                 <div class="contt">
                     <h4>
+                        <?php if($row['status'] == 1): ?>
+                        <span class="status-badge is-active"><i class="fa fa-check-circle" aria-hidden="true"></i>Active</span>
+                        <?php elseif($row['status'] == 2): ?>
+                        <span class="status-badge is-expired"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Expired</span>
+                        <?php elseif($row['status'] == 3): ?>
+                        <span class="status-badge is-cancelled"><i class="fa fa-minus-circle" aria-hidden="true"></i>Cancelled</span>
+                        <?php elseif($row['status'] == 0): ?>
+                        <span class="status-badge is-pending"><i class="fa fa-clock-o" aria-hidden="true"></i>Pending approval</span>
+                        <?php endif; ?>
                         <a href="<?php echo base_url(); ?>details/<?=$row['id']?>"><?=$row['device_model']?></a>
                         <span><?=$row['device_brand']?></span>
                         <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;">ID: <?=$row['id']?></span>
@@ -220,9 +227,11 @@
                     <button class="btn-delete" onclick="confirm('Are you sure want to delete this product?') ? deleteproduct(<?php echo $row['id'] ?>) : ''">Delete</button>
                     <?php endif; ?>
 
-                    <!-- Relist (cancelled) -->
+                    <!-- Relist (cancelled) / Renew (expired) -->
                     <?php if($row['status'] == 3): ?>
                     <button class="btn-relist" onclick="paymentOption(<?php echo $row['id']; ?>)">Relist</button>
+                    <?php elseif($row['status'] == 2): ?>
+                    <button class="btn-relist" onclick="paymentOption(<?php echo $row['id']; ?>)">Renew</button>
                     <?php endif; ?>
 
                     <!-- Cancel (within 14 days and not cancelled) -->
@@ -261,19 +270,6 @@
                         </div>
                         </form>
                     </div>
-                    <?php endif; ?>
-
-                    <!-- Status badges -->
-                    <?php if($row['status'] == 1): ?>
-                    <button class="btn-active" disabled>Active</button>
-                    <?php elseif($row['status'] == 2): ?>
-                    <span style="color:red;font-family:'Inter',sans-serif;font-size:13px;">Expired</span>
-                    <button class="btn-relist" onclick="paymentOption(<?php echo $row['id']; ?>)">Renew</button>
-                    <?php elseif($row['status'] == 3): ?>
-                    <button class="btn-cancelled" disabled>Cancelled</button>
-                    <?php elseif($row['status'] == 0): ?>
-                    <i class="fa fa-exclamation-triangle" style="color:#FCA311;font-size:20px;vertical-align:middle;" title="Pending Approval"></i>
-                    <span style="font-family:'Inter',sans-serif;font-size:13px;color:#999;margin-left:6px;">Pending Approval</span>
                     <?php endif; ?>
                 </div>
             </div>

@@ -518,7 +518,7 @@ section.add_product #msform fieldset#menu3 {
                                   if(d.device_model) $('#device_name').val(d.device_model);
                                   if(d.device_brand) $('#device_brand').val(d.device_brand);
                                   if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
-                                  if(d.order_code) $('#order_code').val(d.order_code);
+                                  if(d.order_code) $('#dealer_contact').val(d.order_code);
                                   if(d.rack_unit) $('#sendNewSms1').val(d.rack_unit).trigger('change');
                                   if(d.short_description) $('#short_description').val(d.short_description);
                                   if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
@@ -1139,23 +1139,18 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
                <div class="row">
                   <div class="col-sm-12">
                      <div class="form-group">
-                        <label>Dealer website</label>
-                        <input type="text" name="dealer_web_cont"  autocomplete="off" onkeyup="getprocess_dealer_web_cont()" id="dealer_web_cont" placeholder="" class="form-control" value="<?=$product_detail['dealer_web_cont']?>">
-                        <!-- <input type="hidden" name="dealer_web_contid" id="dealer_web_contid" /> 
-                           <ul id="dealer_web_contSugguestion" ></ul> -->
+                        <label>Vendor Contact &amp; Ordering Info</label>
+                        <?php
+                           $vendor_contact_parts = array();
+                           if(!empty($product_detail['dealer_contact'])) $vendor_contact_parts[] = $product_detail['dealer_contact'];
+                           if(!empty($product_detail['dealer_web_cont'])) $vendor_contact_parts[] = $product_detail['dealer_web_cont'];
+                           if(!empty($product_detail['order_code'])) $vendor_contact_parts[] = $product_detail['order_code'];
+                           $vendor_contact_combined = implode("\n", $vendor_contact_parts);
+                        ?>
+                        <textarea class="form-control" name="dealer_contact" id="dealer_contact" rows="3" placeholder="How can a buyer reach and order from you? e.g. website, phone, email, ordering process, lead times..."><?=$vendor_contact_combined?></textarea>
                      </div>
                      <div class="form-group">
-                        <label>Dealer Contact</label>
-                        <input type="text" name="dealer_contact"  autocomplete="off" onkeyup="getprocess_dealer_contact()" id="dealer_contact"  placeholder="" class="form-control" value="<?=$product_detail['dealer_contact']?>">
-                        <!-- <input type="hidden" name="dealer_contactid" id="dealer_contactid" /> 
-                           <ul id="dealer_contactSugguestion" ></ul> -->
-                     </div>
-                     <div class="form-group">
-                        <label for="title">Ordering Information</label>
-                        <input type="text" class="form-control" autocomplete="off" onkeyup="getprocess_order_code()" id="order_code" name="order_code" value="<?=$product_detail['order_code']?>">
-                     </div>
-                     <div class="form-group">
-                        <label for="title">Dealer notes</label>
+                        <label for="title">Vendor notes</label>
                         <textarea class="form-control"  name="dealer_notes" ><?=$product_detail['dealer_notes']?></textarea>
                         <!-- <input type="text" class="form-control" name="dealer_notes" > -->
                      </div>
@@ -1174,6 +1169,9 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
                         <div class="upload-btn-wrapper">
                            <button type="button" class="btn" id="upBtn"><i class="fa fa-upload"></i> Upload an image</button>
                            <input type="file" onchange="ValidateSingleInput(this);" name="gallery-image[]" id="gallery-image" accept="image/*" class="form-control imageUpload" value="Upload Photo" >
+                        </div>
+                        <div id="galleryPasteZone" tabindex="0" style="margin-top:8px;border:1.5px dashed #ccc;border-radius:6px;padding:10px 14px;font-size:12px;color:#999;cursor:text;">
+                          Or click here and paste an image (Ctrl+V / Cmd+V)
                         </div>
                         <div style="font-size:12px;color:#999;margin:6px 0;">Select which image should be shown as the main product image:</div>
                         <div  id="preview" class="ddd__uus row gallaryimg">
@@ -1273,6 +1271,34 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
         }
          
       jQuery('#upBtn').html('<i class="fa fa-upload"></i> Add New');
+      });
+
+      // Paste an image directly from the clipboard (e.g. a screenshot) instead
+      // of having to save it to disk first and use the file picker.
+      jQuery(document).on("paste", "#galleryPasteZone", function(e){
+          var clipboardItems = (e.originalEvent.clipboardData || e.clipboardData).items;
+          if(!clipboardItems) return;
+          var foundImage = false;
+          for(var idx = 0; idx < clipboardItems.length; idx++){
+              var item = clipboardItems[idx];
+              if(item.type && item.type.indexOf('image/') === 0){
+                  foundImage = true;
+                  var file = item.getAsFile();
+                  var divimage = jQuery("#preview img").length;
+                  k = divimage + 1;
+                  $('#preview').append('<div class="col-md-2" id="cancel'+k+'"><div class="img_div" style="position:relative"><span style="cursor:pointer;position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;z-index:2;" class="cancel_cls" onclick="removeImg('+k+')">X</span><img style="width:100%;height:100px;object-fit:cover;border-radius:4px;" src='+URL.createObjectURL(file)+'><input type="file" name="gallery-image-orignal[]" class="form-control imageUpload" id="gallery-image-orignal'+k+'" accept="image/*" style="display:none;"></div></div>');
+                  var dt = new DataTransfer();
+                  dt.items.add(file);
+                  document.querySelector("#gallery-image-orignal"+k).files = dt.files;
+                  jQuery('#upBtn').html('<i class="fa fa-upload"></i> Add New');
+              }
+          }
+          if(foundImage){
+              $('#galleryPasteZone').css('color', '#28a745').text('Image pasted! Paste another, or click Upload a file to add more.');
+              setTimeout(function(){
+                  $('#galleryPasteZone').css('color', '#999').text('Or click here and paste an image (Ctrl+V / Cmd+V)');
+              }, 2500);
+          }
       });
    });
    
@@ -1699,98 +1725,6 @@ if($connections){
    $("#device_brandSugguestion").css("display", "none");
    });
    
-   
-   function getprocess_order_code() {
-   
-   
-   var order_code = $("#order_code").val();
-   
-   $.ajax({
-     url:"<?php echo base_url(); ?>/Product/order_code",
-     type:"POST",
-     data: {order_code:order_code},
-     success:function(data)
-     {
-   
-         $('#order_codeSugguestion').html(data);
-         $("#order_codeSugguestion").css("display", "block");
-   
-         return false;
-     }
-     
-   });
-   }
-   
-   
-   $(document).on('click','#order_codeSugguestion li',function(){
-   var processName = $(this).html();
-   var ID = $(this).attr('data-value');
-   $("#order_codeid").val(ID);
-   $("#order_code").val(processName); 
-   $("#order_codeSugguestion").css("display", "none");
-   });
-   
-   
-   function getprocess_dealer_contact() {
-   
-   
-   var dealer_contact = $("#dealer_contact").val();
-   
-   $.ajax({
-     url:"<?php echo base_url(); ?>/Product/dealer_contact",
-     type:"POST",
-     data: {dealer_contact:dealer_contact},
-     success:function(data)
-     {
-   
-         $('#dealer_contactSugguestion').html(data);
-         $("#dealer_contactSugguestion").css("display", "block");
-   
-         return false;
-     }
-     
-   });
-   }
-   
-   
-   $(document).on('click','#dealer_contactSugguestion li',function(){
-   var processName = $(this).html();
-   var ID = $(this).attr('data-value');
-   $("#dealer_contactid").val(ID);
-   $("#dealer_contact").val(processName); 
-   $("#dealer_contactSugguestion").css("display", "none");
-   });
-   
-   
-   function getprocess_dealer_web_cont() {
-   
-   
-   var dealer_web_cont = $("#dealer_web_cont").val();
-   
-   $.ajax({
-     url:"<?php echo base_url(); ?>/Product/dealer_web_cont",
-     type:"POST",
-     data: {dealer_web_cont:dealer_web_cont},
-     success:function(data)
-     {
-   
-         $('#dealer_web_contSugguestion').html(data);
-         $("#dealer_web_contSugguestion").css("display", "block");
-   
-         return false;
-     }
-     
-   });
-   }
-   
-   
-   $(document).on('click','#dealer_web_contSugguestion li',function(){
-   var processName = $(this).html();
-   var ID = $(this).attr('data-value');
-   $("#dealer_web_contid").val(ID);
-   $("#dealer_web_cont").val(processName); 
-   $("#dealer_web_contSugguestion").css("display", "none");
-   });
    
    
    
