@@ -122,6 +122,9 @@
     display: inline-block;
     margin-right: 6px;
     cursor: pointer;
+    width: 90px;
+    text-align: center;
+    box-sizing: border-box;
 }
 .btn-edit { background: #14213D; color: #fff; }
 .btn-edit:hover { background: #0D1929; color: #fff; }
@@ -207,6 +210,13 @@
                     <h4>
                         <?php if($row['status'] == 1): ?>
                         <span class="status-badge is-active"><i class="fa fa-check-circle" aria-hidden="true"></i>Active</span>
+                        <?php
+                        if($date2 <= $date1){
+                            $days_left = ceil((strtotime($date1) - strtotime($date2)) / 86400);
+                            if($days_left > 0){
+                        ?>
+                        <span style="font-family:'Inter',sans-serif;font-size:12px;color:#854F0B;margin-left:6px;"><?= $days_left ?> day<?= $days_left == 1 ? '' : 's' ?> remaining in cooling-off period</span>
+                        <?php } } ?>
                         <?php elseif($row['status'] == 2): ?>
                         <span class="status-badge is-expired"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Expired</span>
                         <?php elseif($row['status'] == 3): ?>
