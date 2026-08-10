@@ -104,6 +104,54 @@ p.has-error {
     background: #fff;
     border-bottom: 1px solid #EBEBEB;
     padding: 0 40px;
+    z-index: 500;
+}
+.az-steps-bar.az-is-pinned {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+}
+.az-page-section {
+    background: #fff;
+    border: 1px solid #EBEBEB;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+}
+.az-section-device { border-left: 4px solid #14213D; }
+.az-section-io { border-left: 4px solid #FCA311; }
+.az-section-vendor { border-left: 4px solid #14213D; }
+.az-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+.az-section-header .az-section-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.az-section-device .az-section-num, .az-section-vendor .az-section-num {
+    background: #14213D;
+    color: #fff;
+}
+.az-section-io .az-section-num {
+    background: #FCA311;
+    color: #14213D;
+}
+.az-section-header .az-section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #14213D;
 }
 .az-steps-inner {
     display: flex;
@@ -316,8 +364,51 @@ section.add_product {
 #msform .action-button.next:hover {
     background: #e8940a !important;
 }
+.az-btn {
+    width: 110px;
+    height: 42px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+.az-btn:active { transform: scale(0.97); }
+.az-btn-submit {
+    background: #FCA311;
+    color: #14213D;
+    box-shadow: 0 2px 6px rgba(252,163,17,0.35);
+}
+.az-btn-submit:hover { background: #e8940a; color: #14213D; }
+.az-btn-cancel {
+    background: #fff;
+    color: #6b6f76;
+    border: 1.5px solid #DADDE1;
+}
+.az-btn-cancel:hover { background: #F5F5F5; color: #43464b; border-color: #C7CBD1; }
 .actionButtonSubmit {
     background: #dc3545 !important;
+    color: #fff !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 11px 28px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+.actionButtonSubmit:hover {
+    background: #b02a37 !important;
+    color: #fff !important;
 }
 .next {
     background: #FCA311 !important;
@@ -908,20 +999,72 @@ select.form-control {
     <p style="font-family:'Inter',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);margin:0;">List your broadcast product on azera<span style="color:#FCA311;">X</span></p>
 </div>
 
+<script type="text/javascript">
+// Scrolls to a section, automatically accounting for any sticky/fixed header
+// currently on screen (measured live, not hardcoded) so the section's own
+// top - not some point behind the header - ends up at the top of the view.
+function azScrollToSection(sectionId){
+    var el = document.getElementById(sectionId);
+    if(!el) return;
+    var stepBar = document.querySelector('.az-steps-bar');
+    var stepBarHeight = stepBar ? stepBar.getBoundingClientRect().height : 0;
+    var realHeaderHeight = 90; // the site's own fixed navbar
+    var offset = realHeaderHeight + stepBarHeight;
+    var targetY = el.getBoundingClientRect().top + window.pageYOffset - offset - 16;
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
+}
+// At the very top of the page: normal position, no fixing.
+// As soon as the user scrolls down at all: pin below the header.
+// Back at the top: return to original position.
+document.addEventListener('DOMContentLoaded', function(){
+    var stepBar = document.querySelector('.az-steps-bar');
+    var progressSection = document.querySelector('section.Progress');
+    if(!stepBar || !progressSection) return;
+
+    function getScrollY(){
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+
+    function reserveSpace(){
+        progressSection.style.setProperty('padding', '0', 'important');
+        progressSection.style.setProperty('margin', '0', 'important');
+        progressSection.style.setProperty('border', 'none', 'important');
+        progressSection.style.height = stepBar.classList.contains('az-is-pinned')
+            ? stepBar.getBoundingClientRect().height + 'px'
+            : '';
+    }
+
+    function update(){
+        if(getScrollY() > 5){
+            stepBar.classList.add('az-is-pinned');
+        } else {
+            stepBar.classList.remove('az-is-pinned');
+        }
+        reserveSpace();
+    }
+
+    update();
+    window.addEventListener('load', update);
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, { passive: true });
+    document.addEventListener('scroll', update, { passive: true, capture: true });
+    setInterval(update, 300);
+});
+</script>
 <section class="Progress">
   <div class="az-steps-bar">
     <div class="az-steps-inner">
-      <button class="tablinks t1 az-step active" onclick="openCity(event, 'menu1')" data-step="1">
+      <button class="tablinks t1 az-step active" onclick="azScrollToSection('section-device')" data-step="1">
         <span class="az-step-num">1</span>
         <span class="az-step-label">Device</span>
       </button>
       <div class="az-step-connector"></div>
-      <button class="tablinks t2 az-step" onclick="openCity(event, 'menu2')" data-step="2">
+      <button class="tablinks t2 az-step" onclick="azScrollToSection('section-io')" data-step="2">
         <span class="az-step-num">2</span>
         <span class="az-step-label">I/O &amp; Process</span>
       </button>
       <div class="az-step-connector"></div>
-      <button class="tablinks t3 az-step" onclick="openCity(event, 'menu3')" data-step="3">
+      <button class="tablinks t3 az-step" onclick="azScrollToSection('section-vendor')" data-step="3">
         <span class="az-step-num">3</span>
         <span class="az-step-label">Vendor Info</span>
       </button>
@@ -975,8 +1118,9 @@ select.form-control {
 	<!-- multistep form -->
    <form id="msform" action="#" name="myForm">
     <input type="hidden" id="paymentIntent_id" name="paymentIntent_id" value="0">
-  <!-- fieldsets -->
-  <fieldset id="menu1" class="display_block" style="display: block;">
+  <!-- Section 1: Device -->
+  <div id="section-device" class="az-page-section az-section-device">
+   <div class="az-section-header"><span class="az-section-num">1</span><span class="az-section-title">Device</span></div>
    <h3></h3>
     <div class="row">
      <div class="col-sm-12">
@@ -1212,13 +1356,10 @@ select.form-control {
   <input required type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id');?>" >
   <!--<button type="submit"  data-toggle="modal"  value="submit" class="btn submit_btn submitBtn">Submit</button> 
    <?php $user_id = $this->session->userdata('user_id'); ?> -->
-    <div class="btnNxtEmail"></div>
-      <input type="button" id="btnNxtEmail" name="next" class="next action-button next1 reg-next-button" value="Next" />
-
-</fieldset>
-
-
-<fieldset id="menu2" class="display_block" style="display: none;">
+  </div>
+  <!-- Section 2: I/O & Process -->
+  <div id="section-io" class="az-page-section az-section-io">
+   <div class="az-section-header"><span class="az-section-num">2</span><span class="az-section-title">I/O &amp; Process</span></div>
  <!--Reza-->
 
  <div class="row" id="physical-specs-box" style="display:none;">
@@ -1553,16 +1694,12 @@ $('#sub_cat_b').on('change', function(){
           <?php $user_id = $this->session->userdata('user_id'); ?>
  -->
 
-    <div class="btnNxtEmail1"></div>
-
-    <input type="button" name="previous" class="previous prev2 action-button" value="Previous"/>
-    <input type="button" name="next" id="btnNxtEmail1" class="next next2 action-button" value="Next" />
     <div class="Error2"></div>
 
-  </fieldset>
-
-
-  <fieldset id="menu3" class="display_block" style="display: none;">
+  </div>
+  <!-- Section 3: Vendor Info -->
+  <div id="section-vendor" class="az-page-section az-section-vendor">
+   <div class="az-section-header"><span class="az-section-num">3</span><span class="az-section-title">Vendor Info</span></div>
 
  <h3></h3>
 
@@ -1628,19 +1765,19 @@ $('#sub_cat_b').on('change', function(){
 
  </form>
 
-
+      </div>
+      <!-- Submit/Cancel sit outside the colored sections, in their own neutral area -->
+      <div style="display:flex;justify-content:center;align-items:center;gap:14px;padding:28px 0;">
 <div class="btnNxtEmail2"></div>
- <input type="button" name="previous" class="previous prev3 action-button " value="Previous" />
-  <input type="button" name="next" id="btnNxtEmail2" class="next next3 action-button" value="Submit" />
-  <!--<a onclick="show_payment_option()" class="submit action-button " value="Submit" >Submit</a>-->
-   <a onclick="return (confirm('Are you sure?'))" href="<?php echo base_url();?>add-product" class="submit action-button actionButtonSubmit " value="Submit" >Cancel</a>
+  <button type="button" name="next" id="btnNxtEmail2" class="next3 az-btn az-btn-submit">Submit</button>
+   <a onclick="return (confirm('Are you sure?'))" href="<?php echo base_url();?>add-product" class="az-btn az-btn-cancel">Cancel</a>
    <?php
     $setting = $this->common_model->GetSingleData('setting','id=1');
     $amt=$setting['actual_amount'];
    ?>
    <input type="hidden" id="actual_amt" name="actual_amt" value="<?php echo $setting['actual_amount']; ?>">
+      </div>
 
-      </fieldset>
       </div>
      </div>
     </div>
@@ -2268,24 +2405,6 @@ var menu3
   
 //       // }
 // });
-
-$(document).on('click', '.prev2', function(){
-   $('#menu2').hide();
-   $('#menu1').show();
-   $('.t1').addClass('active');
-   $('.t2').removeClass('active');
-   $('.col-box').removeClass('active-box');
-   $('#box1').addClass('active-box');
-});
-
-$(document).on('click', '.prev3', function(){
-   $('#menu3').hide();
-   $('#menu2').show();
-   $('.t2').addClass('active');
-   $('.t3').removeClass('active');
-   $('.col-box').removeClass('active-box');
-   $('#box2').addClass('active-box');
-});
 
 $(".submit").click(function(){
   //return false;
@@ -3359,82 +3478,36 @@ function payment_process_paypal(paymentType,actual_amt,paymentIntent_id){
 
 
 <script type="text/javascript">
-   $(document).on('click','.next1',function(){
-   var counter1=0; 
-     $('.sets_hidden1').each(function(){
-      if($(this).val())
-      {
-        counter1=1;
-        return false ;
-       }
-   });
-   if(counter1)
-   { 
-  //alert('Success'); 
-   $('#menu1').hide();
-   $('#menu2').show();
-   $('.t2').addClass('active');
-   $('.t1').removeClass('active');
-   $('.col-box').removeClass('active-box');
-   $('#box2').addClass('active-box');
-   $(".Error1").html('');
-   }
-   else
-   {
-      $(".Error1").html("<p class='has-error'> Requires at least one field in a group to be filled!</p>");  
-   }
-
-  });
-
-   $(document).on('click','.next2',function(){
-   var counter2=0; 
-     $('.sets_hidden2').each(function(){
-      if($(this).val())
-      {
-        console.log($(this).val());  
-        counter2=1;
-        return false ;
-      }
-   });
-   if(counter2)
-   { 
-  // alert('Success 2'); 
-   $('#menu1').hide();
-   $('#menu2').hide();
-   $('#menu3').show();
-   $('.t3').addClass('active');
-   $('.t2').removeClass('active');
-   $('.col-box').removeClass('active-box');
-   $('#box3').addClass('active-box');
-   $(".Error2").html('');
-   } 
-    else
-   {
-      $(".Error2").html("<p class='has-error'> Requires at least one field in a group to be filled!</p>");  
-   }
-
-  });
-  
    $(document).on('click','.next3',function(){
-   var counter3=0; 
-     $('.sets_hidden3').each(function(){
-      if($(this).val())
-      {
-        counter3=1;
-        return false ;
-       }
-   });
-   if(counter3)
-   { 
-   $('#menu1').hide();
-   $('#menu2').hide();
    $(".Error3").html('');
    add_function();
-   }
-    else
-   {
-    $(".Error3").html("<p class='has-error'> Requires at least one field in a group to be filled!</p>");  
-   }
-
   }); 
+
+  // Scrollspy: since this is now a single scrolling page (not separate tabs),
+  // highlight the current step number and update the sidebar help text based
+  // on which section is actually in view, rather than on a tab click.
+  (function(){
+      var sections = [
+          { id: 'section-device', step: '.t1', box: 'box1' },
+          { id: 'section-io', step: '.t2', box: 'box2' },
+          { id: 'section-vendor', step: '.t3', box: 'box3' }
+      ];
+      if(!('IntersectionObserver' in window)) return;
+      var observer = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+              if(entry.isIntersecting){
+                  var match = sections.find(function(s){ return s.id === entry.target.id; });
+                  if(!match) return;
+                  $('.az-step').removeClass('active');
+                  $(match.step).addClass('active');
+                  $('.col-box').removeClass('active-box');
+                  $('#' + match.box).addClass('active-box');
+              }
+          });
+      }, { rootMargin: '-40% 0px -40% 0px' });
+      sections.forEach(function(s){
+          var el = document.getElementById(s.id);
+          if(el) observer.observe(el);
+      });
+  })();
 </script>

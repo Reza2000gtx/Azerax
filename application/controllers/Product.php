@@ -895,7 +895,10 @@ public function get_category_attributes(){
     //keyword///
     if(isset($_REQUEST['keyword']) && $_REQUEST['keyword']!='' ){
       $kw = $this->db->escape_like_str($_REQUEST['keyword']);
-      $where.=" and (product.device_model LIKE '".$kw."%' OR  product.device_model LIKE '%".$kw."'  Or product.device_model LIKE '%".$kw."%' )  ";
+      $where.=" and (
+        product.device_model LIKE '".$kw."%' OR product.device_model LIKE '%".$kw."' OR product.device_model LIKE '%".$kw."%'
+        OR product.device_brand LIKE '".$kw."%' OR product.device_brand LIKE '%".$kw."' OR product.device_brand LIKE '%".$kw."%'
+      )  ";
 
           $whereorder ='ORDER by product.device_model DESC';
 

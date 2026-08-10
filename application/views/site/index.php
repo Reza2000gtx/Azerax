@@ -1635,6 +1635,12 @@ $array[]=$process_sugg['device_model'];
 
     }
 
+$process_2 = $this->db->query('SELECT device_brand FROM `product` GROUP BY device_brand')->result_array();
+   foreach($process_2 as $brand_sugg){
+$array[]=$brand_sugg['device_brand'];
+    }
+
+$array = array_values(array_unique(array_filter($array)));
 $deviceModelJson=json_encode($array);
 ?>
 
