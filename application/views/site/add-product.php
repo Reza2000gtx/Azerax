@@ -606,7 +606,8 @@ section.add_product {
 #io_output_standard + .select2-container .select2-selection__choice,
 #io_output_connection_type + .select2-container .select2-selection__choice,
 #io_process_type + .select2-container .select2-selection__choice,
-#io_process_standard + .select2-container .select2-selection__choice {
+#io_process_standard + .select2-container .select2-selection__choice,
+#io_features + .select2-container .select2-selection__choice {
     display: none !important;
 }
 .az-cat-chips {
@@ -1224,6 +1225,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         setSelect2Value('select[name="out_process_connection[0][]"]', d.output_connection_type);
                         setSelect2Value('select[name="process[0][]"]', d.process_type);
                         setSelect2Value('select[name="process_stand[0][]"]', d.process_standard);
+                        setSelect2Value('select[name="features[0][]"]', d.features);
 
                         $('#ai_extract_status').text('Done - please review every field below before submitting.').css('color','#28a745');
                     } else {
@@ -1388,8 +1390,25 @@ document.addEventListener('DOMContentLoaded', function(){
          var pt = $('#product_type').val();
          var physical = (pt === 'Hardware' || pt === 'Hybrid');
          $('#physical-specs-box').toggle(physical);
+
+         // Hardware/Hybrid: I/O always shown, no checkbox needed.
+         // Software/Cloud Service/AI Tool: I/O hidden by default, shown via checkbox.
+         var softwareLike = (pt === 'Software' || pt === 'Cloud Service' || pt === 'AI Tool');
+         $('#io-toggle-wrapper').toggle(softwareLike);
+         if(physical){
+             $('#io-input-output-box').show();
+         } else if(softwareLike){
+             $('#io-input-output-box').toggle($('#io_toggle_checkbox').is(':checked'));
+         } else {
+             $('#io-input-output-box').hide();
+         }
+
+         // Features: shown for everything except pure Hardware
+         // (Hybrid, Software, Cloud Service, AI Tool all get it).
+         $('#feats').toggle(pt !== '');
      }
      $('#product_type').on('change', togglePhysicalSpecs);
+     $('#io_toggle_checkbox').on('change', togglePhysicalSpecs);
      togglePhysicalSpecs();
  });
  </script>
@@ -1435,6 +1454,15 @@ $('#sub_cat_b').on('change', function(){
 
 <h3></h3>
 <!-- <fieldset> -->
+
+<div class="form-group" id="io-toggle-wrapper" style="display:none;">
+  <label style="display:flex;align-items:center;gap:8px;font-weight:500;cursor:pointer;">
+    <input type="checkbox" id="io_toggle_checkbox" style="width:16px;height:16px;">
+    This software also processes live input/output streams (e.g. an encoder)
+  </label>
+</div>
+
+<div id="io-input-output-box" style="display:block;">
   <div class="row input_box" id="inps">
    <div class="col-md-3 set-44">
     <div class="form-group">
@@ -1622,6 +1650,7 @@ $('#sub_cat_b').on('change', function(){
 
            
 </div>
+</div>
 
   <div class="row input_box" id="proc">
    <div class="col-md-3 set-44">
@@ -1687,6 +1716,36 @@ $('#sub_cat_b').on('change', function(){
             
   <div id="Error"></div>
 
+ </div>
+
+<div class="row input_box" id="feats" style="display:none;">
+   <div class="col-md-6 set-44">
+    <div class="form-group">
+     <label>Features</label>
+      <select id="io_features" name="features[0][]" class="typeahead tm-input form-control" multiple="multiple" style="width:300px">
+       <?php     
+        $Input = $this->common_model->GetAllData('input_output','','features','asc','','','','features'); 
+        foreach($Input as $InputSugg){
+        if(empty($InputSugg['features'])) continue;
+        $key= explode(',',$InputSugg['features']);
+        foreach($key as $k){
+        if($k){
+        }
+        $data[] =$k ;  
+        }  
+         }
+        $data=array_unique($data);
+        foreach($data as $k){
+        if($k){
+        echo '<option>'.$k.'</option>';
+        }
+         }
+        $data=array();
+        ?>
+      </select>
+<div id="io_features_chips" class="az-cat-chips"></div>
+     </div>
+    </div>
  </div>
 
 <!--<button type="submit"  data-toggle="modal"  value="submit" class="btn submit_btn submitBtn">Submit</button> 
@@ -2464,6 +2523,7 @@ $(".otprocessConnection").select2({ tags: true, tokenSeparators: [','] });
 $(".processsuggestion").select2({ tags: true, tokenSeparators: [','] });
 
 $(".processsuggestionStand").select2({ tags: true, tokenSeparators: [','] });
+$("#io_features").select2({ tags: true, tokenSeparators: [','], placeholder: 'e.g. Multi-tenant support, SSO integration, Auto-scaling', width: '100%' });
 
 
 
@@ -2665,7 +2725,8 @@ $('#sub_cat_a').on('change', function(){
       ['io_output_standard', 'io_output_standard_chips'],
       ['io_output_connection_type', 'io_output_connection_type_chips'],
       ['io_process_type', 'io_process_type_chips'],
-      ['io_process_standard', 'io_process_standard_chips']
+      ['io_process_standard', 'io_process_standard_chips'],
+      ['io_features', 'io_features_chips']
   ];
   $.each(ioChipFields, function(i, pair){
       $('#' + pair[0]).on('change', function(){ renderCatChips(pair[0], pair[1]); });

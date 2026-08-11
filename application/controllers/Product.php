@@ -166,18 +166,27 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
 
   //// Group 2: IOP ////
 
-  $input_conn = count($_REQUEST['input_conn']);
+  $input_conn1 = isset($_REQUEST['input_conn']) ? $_REQUEST['input_conn'] : array();
+   $input_process_stand = isset($_REQUEST['input_process_stand']) ? $_REQUEST['input_process_stand'] : array();
+   $process_connection = isset($_REQUEST['process_connection']) ? $_REQUEST['process_connection'] : array();
 
-  $input_conn1 = $_REQUEST['input_conn'];
-   $input_process_stand = $_REQUEST['input_process_stand'];
-   $process_connection = $_REQUEST['process_connection'];
+  $out_conn = isset($_REQUEST['out_conn']) ? $_REQUEST['out_conn'] : array();
+  $out_process_stand = isset($_REQUEST['out_process_stand']) ? $_REQUEST['out_process_stand'] : array();
+  $out_process_connection = isset($_REQUEST['out_process_connection']) ? $_REQUEST['out_process_connection'] : array();
 
-  $out_conn = $_REQUEST['out_conn'];
-  $out_process_stand = $_REQUEST['out_process_stand'];
-  $out_process_connection = $_REQUEST['out_process_connection'];
+  $process = isset($_REQUEST['process']) ? $_REQUEST['process'] : array();
+  $process_stand = isset($_REQUEST['process_stand']) ? $_REQUEST['process_stand'] : array();
+  $features = isset($_REQUEST['features']) ? $_REQUEST['features'] : array();
 
-  $process = $_REQUEST['process'];
-  $process_stand = $_REQUEST['process_stand'];
+  // The number of I/O rows to save is based on whichever field actually has
+  // data - not just input_conn specifically, since a product might have
+  // Output/Process/Features filled in while Input is genuinely empty (e.g.
+  // a pure output device), and that data should still save correctly.
+  $input_conn = max(
+      count($input_conn1), count($input_process_stand), count($process_connection),
+      count($out_conn), count($out_process_stand), count($out_process_connection),
+      count($process), count($process_stand), count($features)
+  );
 
   //// Group 3: Dealer //// 
   // Retailer website / Ordering Information merged into Dealer Contact (Stage cleanup)
@@ -261,8 +270,9 @@ $out_process_connection_data = implode(',',$out_process_connection[$i] ?? array(
 
 $process_stand_data = implode(',',$process_stand[$i] ?? array());
 $process_data = implode(',',$process[$i] ?? array());
+$features_data = implode(',',$features[$i] ?? array());
 
-$sqlInsert1="insert into input_output set product_id = ".$this->db->escape($product_id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." ";
+$sqlInsert1="insert into input_output set product_id = ".$this->db->escape($product_id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." , features = ".$this->db->escape($features_data)." ";
 
                    $run21 = $this->db->query($sqlInsert1);
 }
@@ -524,18 +534,23 @@ $success = 1;
   $rack_unit = $_REQUEST['rack_unit'];
 
 
-  $input_conn = count($_REQUEST['input_conn']);
+  $input_conn1 = isset($_REQUEST['input_conn']) ? $_REQUEST['input_conn'] : array();
+   $input_process_stand = isset($_REQUEST['input_process_stand']) ? $_REQUEST['input_process_stand'] : array();
+   $process_connection = isset($_REQUEST['process_connection']) ? $_REQUEST['process_connection'] : array();
 
-  $input_conn1 = $_REQUEST['input_conn'];
-   $input_process_stand = $_REQUEST['input_process_stand'];
-   $process_connection = $_REQUEST['process_connection'];
+  $out_conn = isset($_REQUEST['out_conn']) ? $_REQUEST['out_conn'] : array();
+  $out_process_stand = isset($_REQUEST['out_process_stand']) ? $_REQUEST['out_process_stand'] : array();
+  $out_process_connection = isset($_REQUEST['out_process_connection']) ? $_REQUEST['out_process_connection'] : array();
 
-  $out_conn = $_REQUEST['out_conn'];
-  $out_process_stand = $_REQUEST['out_process_stand'];
-  $out_process_connection = $_REQUEST['out_process_connection'];
+  $process = isset($_REQUEST['process']) ? $_REQUEST['process'] : array();
+  $process_stand = isset($_REQUEST['process_stand']) ? $_REQUEST['process_stand'] : array();
+  $features = isset($_REQUEST['features']) ? $_REQUEST['features'] : array();
 
-  $process = $_REQUEST['process'];
-  $process_stand = $_REQUEST['process_stand'];
+  $input_conn = max(
+      count($input_conn1), count($input_process_stand), count($process_connection),
+      count($out_conn), count($out_process_stand), count($out_process_connection),
+      count($process), count($process_stand), count($features)
+  );
 
   $Connection_id = $_REQUEST['Connection_id'];
 
@@ -645,8 +660,9 @@ $out_process_connection_data = implode(',',$out_process_connection[$i] ?? array(
 
 $process_stand_data = implode(',',$process_stand[$i] ?? array());
 $process_data = implode(',',$process[$i] ?? array());
+$features_data = implode(',',$features[$i] ?? array());
 
-$sqlInsert1="insert into input_output set product_id = ".$this->db->escape($id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." ";
+$sqlInsert1="insert into input_output set product_id = ".$this->db->escape($id)." , input_conn = ".$this->db->escape($input_data)." , input_process_stand = ".$this->db->escape($input_process_stand_data)." , process_connection = ".$this->db->escape($process_connection_data)." , out_conn = ".$this->db->escape($out_conn_data)." , out_process_stand = ".$this->db->escape($out_process_stand_data)." , out_process_connection = ".$this->db->escape($out_process_connection_data)." , process_stand = ".$this->db->escape($process_stand_data)." , process = ".$this->db->escape($process_data)." , features = ".$this->db->escape($features_data)." ";
 
                    $run21 = $this->db->query($sqlInsert1);
 }
@@ -1621,7 +1637,15 @@ public function processsuggestion()
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        // NOTE: SSL verification disabled because this local XAMPP install
+        // doesn't have a configured CA certificate bundle, causing every
+        // HTTPS fetch to fail with "unable to get local issuer certificate".
+        // This is fine for local development (fetching public product pages,
+        // no sensitive data involved) but should be re-enabled - with a
+        // proper cacert.pem configured in php.ini - before this ever runs
+        // on a production server.
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -1741,7 +1765,9 @@ public function processsuggestion()
 
     $content_blocks[] = array(
         'type' => 'text',
-        'text' => 'Extract broadcast/media industry product information from the above. This may be physical hardware, software, a cloud/SaaS service, or a hybrid product - it does NOT need to be physical equipment. Return ONLY a valid JSON object (no markdown fencing, no explanation) with exactly these keys - use an empty string "" for anything not found:
+        'text' => 'IMPORTANT FIRST CHECK: does the content above describe ONE specific product in detail, or does it list/mention MULTIPLE different products (a catalog page, category listing, "shop all" page, or search results)? If it lists multiple distinct products rather than describing one in depth, respond with EXACTLY this and nothing else: {"error": "multiple_products"}
+
+Otherwise, extract broadcast/media industry product information from the above. This may be physical hardware, software, a cloud/SaaS service, or a hybrid product - it does NOT need to be physical equipment. Return ONLY a valid JSON object (no markdown fencing, no explanation) with exactly these keys - use an empty string "" for anything not found:
 {
   "product_type": "",
   "main_category": "",
@@ -1761,7 +1787,8 @@ public function processsuggestion()
   "output_standard": "",
   "output_connection_type": "",
   "process_type": "",
-  "process_standard": ""
+  "process_standard": "",
+  "features": ""
 }
 Field meanings (apply to ANY product type - hardware, software, or cloud service):
 - product_type: must be EXACTLY one of these 5 values (no others): "Hardware", "Software", "Cloud Service", "AI Tool", "Hybrid". Choose "Hardware" for physical equipment, "Software" for installed applications, "Cloud Service" for browser-based/SaaS platforms, "AI Tool" if AI/ML is the core feature, "Hybrid" if it combines physical hardware with software/cloud components. If genuinely unclear, use "Hardware" as the default.
@@ -1772,7 +1799,8 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 - rack_unit should be a plain number like "1" or "2" if a rack unit height is mentioned, otherwise empty string.
 - dealer_notes should be a short product description/summary in your own words, not copied verbatim.
 - short_description: a single, concise one-line summary of the product (max ~120 characters) - shorter and punchier than dealer_notes, suitable for display in a list view.
-- input/output/process fields: for software/cloud products these might describe integrations, supported formats, or API connections rather than physical ports - fill in whatever is genuinely analogous, leave empty if nothing relevant is mentioned.'
+- input/output/process fields: for software/cloud products these might describe integrations, supported formats, or API connections rather than physical ports - fill in whatever is genuinely analogous, leave empty if nothing relevant is mentioned.
+- features: high-level capabilities/benefits, as opposed to raw technical specs - e.g. "High availability", "Auto-scaling", "REST API integration", "Multi-tenant support", "Automatic failover". This applies to ANY product type, including hardware, whenever the source genuinely lists capability-style features distinct from its technical specifications (e.g. a hardware product with an explicit "Features" or "Benefits" section on its page). Leave empty if the source only has raw specs with nothing capability-level to extract, or if this field would just duplicate what belongs in process_type/process_standard.'
     );
 
     $api_key = $this->config->item('anthropic_api_key');
@@ -1795,6 +1823,9 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+    // Same local-XAMPP CA bundle issue as the page-fetch call above.
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'x-api-key: '.$api_key,
         'anthropic-version: 2023-06-01',
@@ -1837,6 +1868,11 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 
     if(!is_array($extracted)){
         echo json_encode(array('status' => 0, 'message' => 'AI response could not be understood. Please try again or fill the form manually.'));
+        return;
+    }
+
+    if(isset($extracted['error']) && $extracted['error'] === 'multiple_products'){
+        echo json_encode(array('status' => 0, 'message' => 'This page lists multiple different products (a catalog or category page), not one specific product. Please find and paste the link for the individual product page instead.'));
         return;
     }
 

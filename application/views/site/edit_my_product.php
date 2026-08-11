@@ -2,6 +2,76 @@
    $id = $_REQUEST['id'];
     ?>
 <style type="text/css">
+   .az-page-section {
+       background: #fff;
+       border: 1px solid #EBEBEB;
+       border-radius: 8px;
+       padding: 24px 28px;
+       margin-bottom: 20px;
+   }
+   .az-section-device { border-left: 4px solid #14213D; }
+   .az-section-io { border-left: 4px solid #FCA311; }
+   .az-section-vendor { border-left: 4px solid #14213D; }
+   .az-section-header {
+       display: flex;
+       align-items: center;
+       gap: 10px;
+       margin-bottom: 18px;
+   }
+   .az-section-header .az-section-num {
+       width: 24px;
+       height: 24px;
+       border-radius: 50%;
+       font-size: 13px;
+       font-weight: 600;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       flex-shrink: 0;
+   }
+   .az-section-device .az-section-num, .az-section-vendor .az-section-num {
+       background: #14213D;
+       color: #fff;
+   }
+   .az-section-io .az-section-num {
+       background: #FCA311;
+       color: #14213D;
+   }
+   .az-section-header .az-section-title {
+       font-family: 'Inter', sans-serif;
+       font-size: 15px;
+       font-weight: 600;
+       color: #14213D;
+   }
+   .az-btn {
+       width: 110px;
+       height: 42px;
+       box-sizing: border-box;
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       font-family: 'Inter', sans-serif;
+       font-size: 14px;
+       font-weight: 600;
+       border-radius: 8px;
+       border: none;
+       cursor: pointer;
+       text-decoration: none;
+       transition: background 0.15s ease, transform 0.1s ease;
+   }
+   .az-btn:active { transform: scale(0.97); }
+   .az-btn-submit {
+       background: #FCA311;
+       color: #14213D;
+       box-shadow: 0 2px 6px rgba(252,163,17,0.35);
+   }
+   .az-btn-submit:hover { background: #e8940a; color: #14213D; }
+   .az-btn-cancel {
+       background: #fff;
+       color: #6b6f76;
+       border: 1.5px solid #DADDE1;
+   }
+   .az-btn-cancel:hover { background: #F5F5F5; color: #43464b; border-color: #C7CBD1; }
    .right-inner-addon i {
    position: absolute;
    right: 5px;
@@ -428,24 +498,25 @@ section.add_product #msform fieldset#menu3 {
             <!-- premium step indicator -->
             <div class="az-steps-bar" style="background:#fff;border-bottom:1px solid #EBEBEB;padding:0 20px;margin-bottom:24px;">
                 <div style="display:flex;align-items:center;max-width:600px;margin:0 auto;padding:20px 0;">
-                    <button type="button" class="tablinks az-step active" onclick="openCity(event, 'menu1')" data-step="1" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
+                    <button type="button" class="tablinks az-step active" onclick="azStepClick(event, 'section-device', 1)" data-step="1" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
                         <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#FCA311;color:#14213D;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">1</span>
                         <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#14213D;white-space:nowrap;">Device Info</span>
                     </button>
                     <div class="az-step-connector" style="flex:1;height:2px;background:#EBEBEB;margin:0 4px;"></div>
-                    <button type="button" class="tablinks az-step" onclick="openCity(event, 'menu2')" data-step="2" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
+                    <button type="button" class="tablinks az-step" onclick="azStepClick(event, 'section-io', 2)" data-step="2" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
                         <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#E5E5E5;color:#999;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">2</span>
                         <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#999;white-space:nowrap;">I/O & Process</span>
                     </button>
                     <div class="az-step-connector" style="flex:1;height:2px;background:#EBEBEB;margin:0 4px;"></div>
-                    <button type="button" class="tablinks az-step" onclick="openCity(event, 'menu3')" data-step="3" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
+                    <button type="button" class="tablinks az-step" onclick="azStepClick(event, 'section-vendor', 3)" data-step="3" style="display:flex;align-items:center;gap:10px;background:transparent;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;">
                         <span class="az-step-num" style="width:32px;height:32px;border-radius:50%;background:#E5E5E5;color:#999;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;">3</span>
                         <span class="az-step-label" style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#999;white-space:nowrap;">Vendor Info</span>
                     </button>
                 </div>
             </div>
-            <!-- fieldsets -->
-            <fieldset id="menu1" class="display_block" style="display: block;">
+            <!-- sections -->
+            <div id="section-device" class="az-page-section az-section-device">
+              <div class="az-section-header"><span class="az-section-num">1</span><span class="az-section-title">Device</span></div>
 
               <div id="ai-autofill-box" style="background:#FFF8E8;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;margin-bottom:20px;">
                 <div id="ai-autofill-toggle" style="cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;color:#14213D;font-size:14px;">
@@ -650,9 +721,9 @@ section.add_product #msform fieldset#menu3 {
                <div id="Error"></div>
                <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id');?>" >
                <?php $user_id = $this->session->userdata('user_id'); ?>
-               <input type="button" name="next" class="next action-button" value="Next" />
-            </fieldset>
-            <fieldset id="menu2" class="display_block" style="display: none;">
+            </div>
+            <div id="section-io" class="az-page-section az-section-io">
+              <div class="az-section-header"><span class="az-section-num">2</span><span class="az-section-title">I/O &amp; Process</span></div>
 
               <div class="row" id="physical-specs-box" style="display:none;">
                 <div class="col-md-6">
@@ -1131,10 +1202,9 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
 
           </div>
 
-    <input type="button" name="previous" class="previous action-button" value="Previous" />
-    <input type="button" name="next" class="next action-button" value="Next" />
-  </fieldset>
-            <fieldset id="menu3" class="display_block" style="display: none;">
+  </div>
+            <div id="section-vendor" class="az-page-section az-section-vendor">
+              <div class="az-section-header"><span class="az-section-num">3</span><span class="az-section-title">Vendor Info</span></div>
                <h3></h3>
                <div class="row">
                   <div class="col-sm-12">
@@ -1205,10 +1275,11 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
                   
                             <?php $user_id = $this->session->userdata('user_id'); ?>
                    -->
-               <input type="button" name="previous" class="previous action-button" value="Previous" />
-               <button type="submit" name="submit" class="submit action-button submitBtn" value="Update" style="background:#FCA311 !important;color:#14213D !important;margin:0 8px !important;" >Update</button>
-               <a  onclick="return (confirm('Are you sure?'))" href="<?php echo base_url();?>edit-my-product/<?php echo $product_detail['id'] ?>" class="submit action-button actionButtonSubmit " style="margin:0 8px !important;" >Cancel</a>
-            </fieldset>
+            </div>
+            <div style="display:flex;justify-content:center;align-items:center;gap:14px;padding:28px 0;">
+               <button type="submit" name="submit" class="submitBtn az-btn az-btn-submit">Update</button>
+               <a  onclick="return (confirm('Are you sure?'))" href="<?php echo base_url();?>edit-my-product/<?php echo $product_detail['id'] ?>" class="az-btn az-btn-cancel">Cancel</a>
+            </div>
          </form>
       </div>
    </div>
@@ -1315,8 +1386,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
     
 </script>
 <script>
-   function openCity(evt, cityName) {
-    var stepNum = cityName.replace('menu','');
+   function azUpdateStepStyling(stepNum){
     document.querySelectorAll('.az-step').forEach(function(btn){
         var s = btn.getAttribute('data-step');
         var numEl = btn.querySelector('.az-step-num');
@@ -1326,7 +1396,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
             numEl.style.color = '#fff';
             labelEl.style.color = '#14213D';
             labelEl.style.fontWeight = '600';
-        } else if(s === stepNum){
+        } else if(s === String(stepNum)){
             numEl.style.background = '#FCA311';
             numEl.style.color = '#14213D';
             labelEl.style.color = '#14213D';
@@ -1341,19 +1411,46 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
     document.querySelectorAll('.az-step-connector').forEach(function(c,i){
         c.style.background = i < parseInt(stepNum)-1 ? '#14213D' : '#EBEBEB';
     });
-
-     var i, display_block, tablinks;
-     display_block = document.getElementsByClassName("display_block");
-     for (i = 0; i < display_block.length; i++) {
-       display_block[i].style.display = "none";
-     }
-     tablinks = document.getElementsByClassName("tablinks");
-     for (i = 0; i < tablinks.length; i++) {
-       tablinks[i].className = tablinks[i].className.replace(" active", "");
-     }
-     document.getElementById(cityName).style.display = "block";
-     evt.currentTarget.className += " active";
+    document.querySelectorAll('.az-step').forEach(function(btn){
+        btn.classList.toggle('active', btn.getAttribute('data-step') === String(stepNum));
+    });
    }
+
+   function azScrollToSection(sectionId){
+       var el = document.getElementById(sectionId);
+       if(!el) return;
+       var stepBar = document.querySelector('.az-steps-bar');
+       var offset = stepBar ? stepBar.getBoundingClientRect().height : 0;
+       var targetY = el.getBoundingClientRect().top + window.pageYOffset - offset - 16;
+       window.scrollTo({ top: targetY, behavior: 'smooth' });
+   }
+
+   function azStepClick(evt, sectionId, stepNum){
+       azUpdateStepStyling(stepNum);
+       azScrollToSection(sectionId);
+   }
+
+   // Scrollspy: highlight the correct step as the user scrolls, not just on click
+   (function(){
+       var sections = [
+           { id: 'section-device', step: 1 },
+           { id: 'section-io', step: 2 },
+           { id: 'section-vendor', step: 3 }
+       ];
+       if(!('IntersectionObserver' in window)) return;
+       var observer = new IntersectionObserver(function(entries){
+           entries.forEach(function(entry){
+               if(entry.isIntersecting){
+                   var match = sections.find(function(s){ return s.id === entry.target.id; });
+                   if(match) azUpdateStepStyling(match.step);
+               }
+           });
+       }, { rootMargin: '-40% 0px -40% 0px' });
+       sections.forEach(function(s){
+           var el = document.getElementById(s.id);
+           if(el) observer.observe(el);
+       });
+   })();
 </script>
 <script type="text/javascript">
    var _validFileExtensions = [".jpg", ".png",".jpeg"];    
