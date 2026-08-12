@@ -95,6 +95,7 @@ input.primary:checked + .slider {
 
 <?php foreach ($about as $row) { ?>					
 		<form method="post" >
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       		<div class="form-group">
             <textarea id="aboutContent" class="form-control ckeditor" placeholder="About content" required>
             <?php echo $row["about"] ?>	
@@ -121,6 +122,7 @@ input.primary:checked + .slider {
 
 <?php foreach ($about as $row) { ?>					
 		<form method="post" >
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       		<div class="form-group">
             <textarea id="AboutFooterContent" class="form-control ckeditor" placeholder="About footer content" required>
             <?php echo $row["aboutFooter"] ?>	
@@ -145,6 +147,7 @@ input.primary:checked + .slider {
 
 <?php foreach ($about as $row) { ?>					
 		<form method="post" >
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       		<div class="form-group">
             <textarea id="newLetter" class="form-control ckeditor" placeholder="News letter content" required>
             <?php echo $row["newLetter"] ?>	
@@ -169,6 +172,7 @@ input.primary:checked + .slider {
 
 <?php foreach ($about as $row) { ?>					
 		<form method="post" >
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       		<div class="form-group">
             <textarea id="helpAndSupport" class="form-control ckeditor" placeholder="Help & Support content" required>
             <?php echo $row["helpAndSupport"] ?>	
@@ -193,6 +197,7 @@ input.primary:checked + .slider {
 
 <?php foreach ($about as $row) { ?>					
 		<form method="post" >
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       		<div class="form-group">
             <textarea id="who_we_are" class="form-control ckeditor" placeholder="Who we are" required>
             <?php echo $row["who_we_are"] ?>	
@@ -216,6 +221,7 @@ input.primary:checked + .slider {
 
 <?php foreach ($about as $row) { ?>					
 		<form method="post" >
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       		<div class="form-group">
             <textarea id="" class="form-control ckeditor" placeholder="Who we are" required>
             <?php echo $row["legal"] ?>	

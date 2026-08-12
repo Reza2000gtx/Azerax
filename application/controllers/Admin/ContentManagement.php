@@ -13,9 +13,9 @@ class ContentManagement extends CI_Controller
 	}
 
 	public function check_login(){
-		/*if(!$this->session->userdata('admin_id')){
+		if(!$this->session->userdata('admin_id')){
 			redirect('Admin/login');
-		}*/
+		}
 	}
 
 	public function aboutUs(){

@@ -46,6 +46,7 @@ include_once('include/header.php');
                     </div>
 					
 					<form action="<?php echo base_url();?>Admin/reply-action" method="post">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 					    <ul class="ul_set" id="response">
                     <?php 
                         $ticket_id=$_GET['ticket_id'];

@@ -60,7 +60,8 @@ include_once('include/header.php');
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>Admin/edit-user" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-user" enctype="multipart/form-data">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Admin Name</label>
@@ -112,7 +113,8 @@ include_once('include/header.php');
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post" action="<?php echo base_url();?>Admin/add-user" id="addmanufacturer" enctype="multipart/form-data">
+     <form method="post" action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/add-user" id="addmanufacturer" enctype="multipart/form-data">
       <div class="modal-body">
        <div class="form-group">
          <label>Admin Name</label>

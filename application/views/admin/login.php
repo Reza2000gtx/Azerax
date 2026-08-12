@@ -45,6 +45,7 @@ $admindata= $this->common_model->GetSingleData('admin',array('id'=>1));
 			<div class="login-box-body">
 				<p class="login-box-msg">Sign in to start your session</p>
 				<form role="form" id="login_form1" action="<?php echo base_url().'Admin/login/do_login'; ?>" method="post">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 					<div class="form-group">
 						<label>Email address</label>
 						<input type="text" class="form-control" name="admin_email" id="email">

@@ -59,7 +59,7 @@ class Profile extends CI_Controller
  		// echo "</pre>";
 
  		$this->form_validation->set_rules('admin_password','Current password','required');
- 		$this->form_validation->set_rules('New_Password','New password','required|min_length[6]');
+ 		$this->form_validation->set_rules('New_Password','New password','required|min_length[8]');
  		$this->form_validation->set_rules('Confirm_Password','Confirm password','required|matches[New_Password]');
 
  		if($this->form_validation->run()==true){
@@ -68,9 +68,15 @@ class Profile extends CI_Controller
 			$New_Password = $this->input->post('New_Password');
 			$Confirm_Password = $this->input->post('Confirm_Password');
 
- 			if($admindata['admin_password'] == $admin_pass){
+ 			// FIXED: the stored password is a bcrypt hash (Login.php uses
+ 			// password_verify() to check it) - comparing it with == against
+ 			// the raw input would always fail. password_verify() is the
+ 			// correct check here.
+ 			if(password_verify($admin_pass, $admindata['admin_password'])){
 
- 				$run = $this->common_model->UpdateData('admin',array('id' =>$admin_id),array('admin_password' =>$New_Password));
+ 				// FIXED: the new password is now hashed before storage,
+ 				// instead of being saved in plaintext.
+ 				$run = $this->common_model->UpdateData('admin',array('id' =>$admin_id),array('admin_password' =>password_hash($New_Password, PASSWORD_DEFAULT)));
 
  				if($run){
 

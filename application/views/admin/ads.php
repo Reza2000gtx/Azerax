@@ -123,7 +123,8 @@ include_once('include/header.php');
 								      </div>
 
 								      <!-- Modal body -->
-											<form method="post" action="<?php echo base_url();?>Admin/update_advertisement" enctype='multipart/form-data'>
+											<form method="post" action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_advertisement" enctype='multipart/form-data'>
 								      <div class="modal-body">
 
 								       <div class="form-group">
@@ -208,7 +209,8 @@ include_once('include/header.php');
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post" action="<?php echo base_url();?>Admin/add_advertisement" enctype='multipart/form-data'>
+     <form method="post" action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/add_advertisement" enctype='multipart/form-data'>
       <div class="modal-body">
        
        <div class="form-group">

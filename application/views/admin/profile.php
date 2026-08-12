@@ -25,6 +25,7 @@ include_once('include/header.php');
 					<!-- /.box-header -->
 					<!-- form start -->
 					<form role="form" method="post" id="profile_form" action="<?php echo base_url().'Admin/Profile/change_name_email'; ?>">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 						<div class="box-body">
 							<input type="hidden" name="id" value="<?php echo $admindata['id'] ?>">
 							<div class="form-group">
@@ -51,6 +52,7 @@ include_once('include/header.php');
 					</div>
 			
 					<form role="form" method="post" action="<?php echo base_url().'Admin/Profile/change_password'; ?>">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 						<div class="box-body">
 							<div id="error_pass"></div>
 							<input type="hidden" name="id" value="<?php echo $admindata['id'] ?>">

@@ -70,7 +70,8 @@ include_once('include/header.php');
 
 								      <!-- Modal body -->
 								      <div id="error<?php echo $row['brand_id']; ?>"></div>
-								     <form method="post" enctype='multipart/form-data' action="<?php echo base_url();?>Admin/Brand/edit_brand">
+								     <form method="post" enctype='multipart/form-data' action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/Brand/edit_brand">
 								      <div class="modal-body">
 								      	 
 								       <div class="form-group">
@@ -116,7 +117,8 @@ include_once('include/header.php');
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post"  enctype='multipart/form-data' action="<?php echo base_url();?>Admin/Brand/add_brand" >
+     <form method="post"  enctype='multipart/form-data' action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/Brand/add_brand" >
       <div class="modal-body">
       	
        <div class="form-group">

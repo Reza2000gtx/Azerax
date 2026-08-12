@@ -14,9 +14,9 @@ class ServiceManagement extends CI_Controller
 	}
 
 	public function check_login(){
-		/*if(!$this->session->userdata('admin_id')){
+		if(!$this->session->userdata('admin_id')){
 			redirect('Admin/login');
-		}*/
+		}
 	}
 
 	public function index(){
@@ -45,14 +45,14 @@ class ServiceManagement extends CI_Controller
 
     	$output .="<tr>
 			<td>".$x++."</td>
-			<td>".$value["product"]."</td>
-			<td>".$value["description"]."</td>
-			<td><img height='50px' width='50px'src='".base_url().'application/views/admin/ServiceImages/'.$value["image"]."'/></td>
-			<td>".$value["created_on"]."</td>
-			<td>".$value["Update_on"]."</td>
+			<td>".html_escape($value["product"])."</td>
+			<td>".html_escape($value["description"])."</td>
+			<td><img height='50px' width='50px'src='".base_url().'application/views/admin/ServiceImages/'.html_escape($value["image"])."'/></td>
+			<td>".html_escape($value["created_on"])."</td>
+			<td>".html_escape($value["Update_on"])."</td>
 			<td>
-<button type='button' class='btn btn-danger btn-xs' data-id='".$value["id"]."' id='DeleteServices' ><i class='fa fa-trash' aria-hidden='true'></i></button>
-<button type='button' class='btn btn-info btn-xs' data-id='".$value["id"]."' id='EditServices' ><i class='fa fa-edit' aria-hidden='true'></i></button>
+<button type='button' class='btn btn-danger btn-xs' data-id='".(int)$value["id"]."' id='DeleteServices' ><i class='fa fa-trash' aria-hidden='true'></i></button>
+<button type='button' class='btn btn-info btn-xs' data-id='".(int)$value["id"]."' id='EditServices' ><i class='fa fa-edit' aria-hidden='true'></i></button>
 			</td>
 		</tr>"; 	
 
@@ -121,41 +121,41 @@ class ServiceManagement extends CI_Controller
     	$output .="
 	<div class='form-group'>
             <label >Product:</label>
-            <input type='text' class='form-control' id='product' placeholder='Enter Name' name='product' required value='".$value["product"]."'/>
+            <input type='text' class='form-control' id='product' placeholder='Enter Name' name='product' required value='".html_escape($value["product"])."'/>
             <div id='ProdErrEdit'></div>
           </div>
         <div class='form-group'>
             <label >Description</label>
-            <textarea rows='3' class='form-control' id='description' placeholder='Enter description' name='description' required>".$value["description"]."</textarea>
+            <textarea rows='3' class='form-control' id='description' placeholder='Enter description' name='description' required>".html_escape($value["description"])."</textarea>
             <div id='DescripErrEdit'></div>
           </div>
         <div class='form-group'>
             <label >Image:</label>
 <span style='color:red; font-size:10px'>Only .jpeg, .jpg, .png, .gif formats are allowed.</span>           
-<input type='file' name='image' accept='image/*' class='form-control' id='imgInp".$value["id"]."' />
+<input type='file' name='image' accept='image/*' class='form-control' id='imgInp".(int)$value["id"]."' />
 
           <div class='form-group'>
-		<img height='100px' width='100px'src='".base_url().'application/views/admin/ServiceImages/'.$value["image"]."'/>   
+		<img height='100px' width='100px'src='".base_url().'application/views/admin/ServiceImages/'.html_escape($value["image"])."'/>   
 		<div class='img_view'>
-		<span id='UpdateImgMsg".$value["id"]."'></span>
-        <img id='blah".$value["id"]."' src='#' height='100px' width='100px' style='display: none' />
+		<span id='UpdateImgMsg".(int)$value["id"]."'></span>
+        <img id='blah".(int)$value["id"]."' src='#' height='100px' width='100px' style='display: none' />
 
           </div>       
 			</div> 
-			<input type='hidden' value='".$value["id"]."' name='UpdateId'/>
+			<input type='hidden' value='".(int)$value["id"]."' name='UpdateId'/>
           <button type='submit' class='btn btn-primary' id='updateProductbtn'>Submit<i style='display:none' class='spinner fa fa-spinner fa-spin fa-fw btn-loadUpdate'></i></button>
  <script>
-    $('#imgInp".$value["id"]."').change(function() {
+    $('#imgInp".(int)$value["id"]."').change(function() {
 
               var fileExtension = ['jpeg', 'jpg', 'png', 'gif'];
                 if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
                     alert('Only .jpeg, .jpg, .png, .gif formats are allowed.');
-                    $('#imgInp".$value["id"]."').val('');
-                    $('#UpdateImgMsg".$value["id"]."').html('');
-                    $('#blah".$value["id"]."').css('display', 'none');
+                    $('#imgInp".(int)$value["id"]."').val('');
+                    $('#UpdateImgMsg".(int)$value["id"]."').html('');
+                    $('#blah".(int)$value["id"]."').css('display', 'none');
                 }
                 else {
-                  readURL(this,'blah".$value["id"]."', 'UpdateImgMsg".$value["id"]."');
+                  readURL(this,'blah".(int)$value["id"]."', 'UpdateImgMsg".(int)$value["id"]."');
                 }
   
 });

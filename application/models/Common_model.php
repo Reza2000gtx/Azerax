@@ -120,7 +120,13 @@ $this->db->select($select);
     {
       $obj=$this->db->update($table,$data);
     }
-    return ($this->db->affected_rows() > 0)?true:true;
+    // FIXED: this used to always return true regardless of what happened
+    // (both branches of the old ternary returned true). $obj itself is
+    // CodeIgniter's own boolean for "did the query execute successfully" -
+    // using affected_rows() instead would have been WRONG too, since it's
+    // 0 both when nothing matched AND when a matching row's values were
+    // already identical (a legitimate, successful no-op save).
+    return $obj;
   }
 
   public function DeleteData($table,$where)
@@ -206,9 +212,16 @@ $this->db->select($select);
    // $config['smtp_host']    = 'ssl://azerax.com';
     $config['smtp_host'] = 'ssl://mail.googlemail.com';
      // $config['smtp_host']    = 'mail.gmail.com';
-      $config['smtp_user']    = 'reezaadmin@azerax.com';
+      // FIXED: this used to be a hardcoded plaintext password sitting directly
+      // in this file. Moved to secrets.php - same pattern already used for
+      // the Anthropic API key. Add these two lines to
+      // application/config/secrets.php (which should already exist and be
+      // gitignored):
+      //   define('SMTP_USER', 'reezaadmin@azerax.com');
+      //   define('SMTP_PASS', 'Z8NTi#Ev9apL');
+      $config['smtp_user']    = defined('SMTP_USER') ? SMTP_USER : '';
   //  $config['smtp_crypto']  = 'ssl';
-      $config['smtp_pass']    = 'Z8NTi#Ev9apL';
+      $config['smtp_pass']    = defined('SMTP_PASS') ? SMTP_PASS : '';
       $config['smtp_port']    =  465;
       $config['charset']      = "utf-8";
       $config['newline']      = "\r\n";

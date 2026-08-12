@@ -20,6 +20,7 @@ include_once('include/header.php');
                       
                <div class="container">
                   <form action="<?php echo base_url(); ?>edit-plan-action" method="post" class="form-horizontal">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                       <input type="hidden" name="plan_id"  value="<?php echo $planview['plan_id'];?>">
                     
                     <div class="form-group">

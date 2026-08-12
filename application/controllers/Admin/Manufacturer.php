@@ -82,7 +82,13 @@
 
     public function deletemanufacturer(){
 
-			$id = $_REQUEST['id']; 
+			// FIXED: was $_REQUEST (accepts a destructive action via URL query
+			// string / GET). Now requires an actual POST body.
+			$id = $this->input->post('id');
+			if(!$id){
+				$this->session->set_flashdata('msgf','<div class="alert alert-danger">Invalid request.</div>');
+				return;
+			}
 			$run = $this->common_model->DeleteData('manufacturer',array('id'=>$id));
             //echo $this->db->last_query();
 			if($run){

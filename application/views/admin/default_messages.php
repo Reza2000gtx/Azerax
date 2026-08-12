@@ -60,7 +60,8 @@ include_once('include/header.php');
 								      </div>
 
 								      <!-- Modal body -->
-								     <form method="post" action="<?php echo base_url();?>Admin/update_default_message">
+								     <form method="post" action="<?php echo base_url();?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_default_message">
 								      <div class="modal-body">
 								       <div class="form-group">
 								       	<label>Message </label>

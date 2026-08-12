@@ -139,6 +139,7 @@ echo 'Active'; }else{
 
     <div class="modal-body us_form_ggg">
     <form  name="add_post" method="post" action="<?php echo base_url() ?>Admin/update_post_package" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 
        <div class="form-group">
        <select required="required"   class="form-control" name="package_id">

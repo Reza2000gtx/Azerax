@@ -91,7 +91,8 @@ display:none;
 						<h3 class="box-title">Mail Option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3">
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3">
                  <div class="box-body">
                 
                  <div class="form-group">
@@ -123,7 +124,8 @@ display:none;
 						<h3 class="box-title">Website Logo Option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
                 
                  <div class="form-group">
@@ -148,7 +150,8 @@ display:none;
 						<h3 class="box-title">Home Page Banner Option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
                 
                  <div class="form-group">
@@ -182,7 +185,8 @@ display:none;
 						<h3 class="box-title">Home Page Post section option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
 				 <div class="form-group">
 								<label class=" form-control-label">Post Section Heading</label>
@@ -208,7 +212,8 @@ display:none;
 						<h3 class="box-title">Home Page Featured Post section option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
 				 <div class="form-group">
 								<label class=" form-control-label">Featured Post Section Heading</label>
@@ -234,7 +239,8 @@ display:none;
 						<h3 class="box-title">Home Page Best Selling section option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
 				 <div class="form-group">
 								<label class=" form-control-label">Best Selling Section Heading</label>
@@ -260,7 +266,8 @@ display:none;
 						<h3 class="box-title">Home Page Our Categories section option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
 				 <div class="form-group">
 								<label class=" form-control-label">Our Categories Section Heading</label>
@@ -286,7 +293,8 @@ display:none;
 						<h3 class="box-title">Home Page Subcriber section option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
 
 				  <div class="form-group">
@@ -320,7 +328,8 @@ display:none;
 						<h3 class="box-title">Home Page Our Brands section option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
 				 <div class="form-group">
 								<label class=" form-control-label">Our Brands Section Heading</label>
@@ -346,7 +355,8 @@ display:none;
 						<h3 class="box-title">Best Seller Banner Option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
 				 <?php 
   $showads=1;
   if($admin[0]['best_selling_section_display']==1){
@@ -408,7 +418,8 @@ display:none;
 						<h3 class="box-title">Footer Content Option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
                 
                  <div class="form-group">
@@ -438,7 +449,8 @@ display:none;
 						<h3 class="box-title">Social Links Option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
                  <div class="form-group">
 								<label class=" form-control-label">Facebook</label>
@@ -470,7 +482,8 @@ display:none;
 						<h3 class="box-title">Additional Script option</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
+                 <form method="post" action="<?php echo base_url() ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_settings_option" name="f3" id="f3" enctype='multipart/form-data'>
                  <div class="box-body">
                 
                  <div class="form-group">

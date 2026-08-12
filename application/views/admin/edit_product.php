@@ -360,6 +360,7 @@ span.select2.select2-container.select2-container--default {
       <div class="form_add_product contact_form">
         <!-- multistep form -->
  <form method="post" name="editForm" id="msform" onsubmit="return edit_function(event);">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 
   <input type="hidden" name="user_id" value="<?php echo $this->session->userdata('user_id');?>" >
 <input type="hidden" name="id" value="<?=$product_detail['id']?>" >

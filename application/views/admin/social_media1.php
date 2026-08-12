@@ -25,6 +25,7 @@ include_once('include/header.php');
 						 ?>
 					<!-- form start -->
 					<form role="form" method="post" id="profile_form" action="<?php echo site_url().'Admin/Social_media/social_link'; ?>">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 						<div class="box-body">
 							<div class="form-group">
 								<label class=" form-control-label">Facebook</label>

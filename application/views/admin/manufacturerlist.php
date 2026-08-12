@@ -118,7 +118,8 @@ input.primary:checked + .slider {
 
 								      <!-- Modal body -->
 								      <div id="error<?php echo $row['id']; ?>"></div>
-								     <form method="post" onsubmit="return editmanufacturer(<?php echo $row['id']; ?>);" id="editmanufacturer<?php echo $row['id']; ?>">
+								     <form method="post" onsubmit="return editmanufacturer(<?php echo $row['id']; ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">);" id="editmanufacturer<?php echo $row['id']; ?>">
 								      <div class="modal-body">
 								       <div class="form-group">
 								       	<label>Manufacturer Name</label>
@@ -160,6 +161,7 @@ input.primary:checked + .slider {
       <!-- Modal body -->
       <div id="error"></div>
      <form method="post" onsubmit="return addmanufacturer();" id="addmanufacturer">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       <div class="modal-body">
        <div class="form-group">
        	<label>Manufacturer Name</label>

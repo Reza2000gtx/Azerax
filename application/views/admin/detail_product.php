@@ -41,6 +41,7 @@
                <!-- /.box-header -->
                <!-- form start -->
                <form method="post" name="editForm" readonly id="editForm" onsubmit="edit_function(event);">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                    <div class="modal-body">
 
                   <div class="form-group">
