@@ -188,8 +188,8 @@ body {font-family: Arial;}
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-input" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>Admin/edit-input" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Input Name</label>
@@ -232,8 +232,8 @@ body {font-family: Arial;}
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-input" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>Admin/edit-input" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Input Name</label>
@@ -321,8 +321,8 @@ body {font-family: Arial;}
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-output" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>Admin/edit-output" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Output Name</label>
@@ -363,8 +363,8 @@ body {font-family: Arial;}
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-output" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>Admin/edit-output" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Output Name</label>
@@ -453,8 +453,8 @@ body {font-family: Arial;}
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-process" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>Admin/edit-process" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Process Name</label>
@@ -491,8 +491,8 @@ body {font-family: Arial;}
 
                               <!-- Modal body -->
                               <div id="error<?php echo $row['id']; ?>"></div>
-                             <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/edit-process" enctype="multipart/form-data">
+                             <form method="post" action="<?php echo base_url();?>Admin/edit-process" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Process Name</label>
@@ -540,8 +540,8 @@ body {font-family: Arial;}
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/add-input" id="addmanufacturer" enctype="multipart/form-data">
+     <form method="post" action="<?php echo base_url();?>Admin/add-input" id="addmanufacturer" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       <div class="modal-body">
        <div class="form-group">
          <label>Input name</label>
@@ -583,8 +583,8 @@ body {font-family: Arial;}
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/add-output" id="addmanufacturer" enctype="multipart/form-data">
+     <form method="post" action="<?php echo base_url();?>Admin/add-output" id="addmanufacturer" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       <div class="modal-body">
        <div class="form-group">
          <label>Output name</label>
@@ -626,8 +626,8 @@ body {font-family: Arial;}
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/add-process" id="addmanufacturer" enctype="multipart/form-data">
+     <form method="post" action="<?php echo base_url();?>Admin/add-process" id="addmanufacturer" enctype="multipart/form-data">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       <div class="modal-body">
        <div class="form-group">
          <label>Process name</label>

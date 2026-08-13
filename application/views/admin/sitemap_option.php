@@ -24,8 +24,8 @@ include_once('include/header.php');
 					</div>
 					<div class="box-body">
 
-					<form method="post" action="<?php echo base_url() ?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_site_map" name="f3" id="f3" enctype='multipart/form-data'>
+					<form method="post" action="<?php echo base_url() ?>Admin/update_site_map" name="f3" id="f3" enctype='multipart/form-data'>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 
 					<div class="form-group">
 								<label class=" form-control-label">Upload new xml file</label>

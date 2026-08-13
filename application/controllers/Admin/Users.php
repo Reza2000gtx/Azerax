@@ -554,8 +554,8 @@ foreach ($users as $key => $user) {
 
 			$insert['fname'] = $this->input->post('name');
  	     	$insert['email'] =  $this->input->post('email');
-			$insert['password'] = md5($this->input->post('password'));
-			$insert['view_password'] =  $this->input->post('password');
+			$insert['password'] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+			$insert['view_password'] =  '';
 			$insert['address'] =  $this->input->post('address');
 			$insert['status'] = 1;
 			$insert['email_verified'] = 0;

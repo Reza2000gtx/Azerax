@@ -19,11 +19,49 @@
 	
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/admin/custom/style.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700">
 	
 	<style type="text/css">
-		.skin-blue .main-header .logo {
-			background-color: #ae9435   !important; 
+		/* ── AzeraX Admin — unified navy/amber design, replacing the
+		   previous mismatched inline colors (bright CSS "blue", amber,
+		   and a third muddy gold all fighting each other) ── */
+		body, .main-header, .sidebar-menu, .box, .form-control, .btn { font-family: 'Inter', 'Source Sans Pro', sans-serif; }
+
+		.main-header, .main-header .navbar {
+			background: #14213D !important;
 		}
+		.main-header .logo {
+			background: #14213D !important;
+			color: #FCA311 !important;
+			border-bottom: none !important;
+		}
+		.main-header .logo:hover { background: #1a2b4d !important; }
+		.main-header .navbar .sidebar-toggle { color: #fff !important; }
+		.main-header .navbar .sidebar-toggle:hover { background: #1a2b4d !important; }
+		.main-header .navbar-custom-menu .nav > li > a { color: #fff !important; }
+		.main-header .navbar-custom-menu .nav > li > a:hover { background: #1a2b4d !important; }
+
+		.main-sidebar, .sidebar { background: #14213D !important; }
+		.sidebar-menu > li > a { color: rgba(255,255,255,0.82) !important; border-left: 3px solid transparent !important; }
+		.sidebar-menu > li:hover > a,
+		.sidebar-menu > li.active > a {
+			background: #FCA311 !important;
+			color: #14213D !important;
+			border-left: 3px solid #FCA311 !important;
+			font-weight: 600 !important;
+		}
+		.sidebar-menu li.treeview-menu > li > a { color: rgba(255,255,255,0.72) !important; }
+		.sidebar-menu li.treeview-menu > li.active > a,
+		.sidebar-menu li.treeview-menu > li > a:hover {
+			color: #FCA311 !important;
+			background: rgba(252,163,17,0.08) !important;
+		}
+		.sidebar-menu > li > a > .pull-right-container { color: inherit !important; }
+
+		.box { border-top: 3px solid #14213D !important; }
+		.box.box-primary { border-top-color: #FCA311 !important; }
+		.btn-primary, .btn-info { background-color: #14213D !important; border-color: #14213D !important; }
+		.btn-primary:hover, .btn-info:hover { background-color: #1a2b4d !important; border-color: #1a2b4d !important; }
 	</style>
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>assets/site/img/logo.png">
 
@@ -41,14 +79,14 @@ $admindata= $this->common_model->GetSingleData('admin',array('id'=>$admin_id));
 
  ?>
 	<div class="wrapper">
-		<header class="main-header" style="background-color: blue!important;">
+		<header class="main-header">
 			<!-- Logo -->
-			<a href="<?php echo base_url();?>Admin/home" class="logo" style="background-color: #fca311!important;">
+			<a href="<?php echo base_url();?>Admin/home" class="logo">
 				<!-- logo for regular state and mobile devices -->
 				<span class="logo-lg"><img src="<?php echo base_url();?>assets/site/img/logo.png" height="30px" width="auto"  alt="User Image"></span>
 			</a>
 			<!-- Header Navbar: style can be found in header.less -->
-			<nav class="navbar navbar-static-top" style="background-color: #fca311!important;">
+			<nav class="navbar navbar-static-top">
 				<!-- Sidebar toggle button-->
 				<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
 					<span class="sr-only">Toggle navigation</span>

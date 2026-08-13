@@ -72,8 +72,8 @@ include_once('include/header.php');
 
 								      <!-- Modal body -->
 								      <div id="error<?php echo $row['meta_id']; ?>"></div>
-								     <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/update_site_meta">
+								     <form method="post" action="<?php echo base_url();?>Admin/update_site_meta">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
 								       <div class="form-group">
 								       	<label>Page Title</label>

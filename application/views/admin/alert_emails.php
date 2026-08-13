@@ -68,8 +68,8 @@ include_once('include/header.php');
 
       <!-- Modal body -->
       <div id="error"></div>
-     <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/add_alert_emails" id="addbrand">
+     <form method="post" action="<?php echo base_url();?>Admin/add_alert_emails" id="addbrand">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       <div class="modal-body">
       	
        <div class="form-group">

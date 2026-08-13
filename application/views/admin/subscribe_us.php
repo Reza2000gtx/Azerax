@@ -72,8 +72,8 @@ include_once('include/header.php');
       </div>
 
       <!-- Modal body -->
-      <form method="post" id="f3" action="<?php echo base_url(); ?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/Footer_content/replyrequest">
+      <form method="post" id="f3" action="<?php echo base_url(); ?>Admin/Footer_content/replyrequest">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
       <div class="modal-body">
          <input type="hidden" id="arrayid" value="" name="id[]">
         <div class="form-group">

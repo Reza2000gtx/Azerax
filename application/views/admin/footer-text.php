@@ -84,8 +84,8 @@ input:checked + .slider:before {
 						<h3 class="box-title">Footer Text</h3>
 						
 					</div>
-                 <form method="post" action="<?php echo base_url() ?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/Footer_content/addfooter_text" name="f3" id="f3">
+                 <form method="post" action="<?php echo base_url() ?>Admin/Footer_content/addfooter_text" name="f3" id="f3">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                  	<div class="box-body">
                  		<?php foreach ($footer_text as $value) {
                           ?>

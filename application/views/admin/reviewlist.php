@@ -271,8 +271,8 @@ input.primary:checked + .slider {
 
 								      <div id="error<?php echo $row['id']; ?>"></div>
 
-								     <form method="post" action="<?php echo base_url();?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">Admin/Review/editstatus" id="editreview<?php echo $row['id']; ?>">
+								     <form method="post" action="<?php echo base_url();?>Admin/Review/editstatus" id="editreview<?php echo $row['id']; ?>
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">">
 
 								      <div class="modal-body">
 

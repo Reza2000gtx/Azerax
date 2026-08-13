@@ -166,8 +166,8 @@ public function signup_action_payment($userdata){
  	     	$insert['fname'] = $userdata['fname'];
  	     	$insert['lname'] =  $userdata['lname'];
  	     	$insert['email'] =  $userdata['email'];
-			$insert['password'] = md5($userdata['password']);
-			$insert['view_password'] =  $userdata['password'];
+			$insert['password'] = password_hash($userdata['password'], PASSWORD_BCRYPT);
+			$insert['view_password'] =  '';
 			$insert['phonecode'] =  $userdata['phonecode'];
 
 			$insert['phone'] =  $userdata['phone'];
