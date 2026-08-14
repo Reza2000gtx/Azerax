@@ -281,7 +281,7 @@ input.primary:checked + .slider {
 
 
 
-										<a href="<?php echo base_url(); ?>Admin/detail-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
 										<a class="btn btn-success btn-xs" href="<?php echo base_url().'Admin/Product/changestatus/'.$row['id'].'/1'?>" onclick="return confirm('Are you sure you want to Approve this Product?')">Approve</a>
 
 

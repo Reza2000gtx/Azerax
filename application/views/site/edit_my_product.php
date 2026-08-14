@@ -143,7 +143,8 @@ section.add_product .form_add_product {
 #io_output_standard + .select2-container .select2-selection__choice,
 #io_output_connection_type + .select2-container .select2-selection__choice,
 #io_process_type + .select2-container .select2-selection__choice,
-#io_process_standard + .select2-container .select2-selection__choice {
+#io_process_standard + .select2-container .select2-selection__choice,
+#io_features + .select2-container .select2-selection__choice {
     display: none !important;
 }
 .az-cat-chip {
@@ -603,6 +604,7 @@ section.add_product #msform fieldset#menu3 {
                                   setSelect2Value('select[name="out_process_connection[0][]"]', d.output_connection_type);
                                   setSelect2Value('select[name="process[0][]"]', d.process_type);
                                   setSelect2Value('select[name="process_stand[0][]"]', d.process_standard);
+                                  setSelect2Value('select[name="features[0][]"]', d.features);
                                   $('#ai_extract_status').text('Done - please review every field before submitting.').css('color','#28a745');
                               } else {
                                   $('#ai_extract_status').text(res.message || 'Something went wrong.').css('color','#dc3545');
@@ -760,6 +762,7 @@ section.add_product #msform fieldset#menu3 {
                       if(physical){
                           initRackUnits();
                       }
+                      $('#feats').toggle(pt !== '');
                   }
                   $(document).on('change', '#product_type', togglePhysicalSpecs);
                   // product_type is a hidden input updated by pill-button clicks, so also
@@ -1199,6 +1202,36 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
              
 
              <div id="Error"></div>
+
+<div class="row input_box" id="feats" style="display:none;">
+   <div class="col-md-6 set-44">
+    <div class="form-group">
+     <label>Features</label>
+      <select id="io_features" name="features[0][]" class="typeahead tm-input form-control" multiple="multiple" style="width:300px">
+       <?php     
+        $Input = $this->common_model->GetAllData('input_output','','features','asc','','','','features'); 
+        foreach($Input as $InputSugg){
+        if(empty($InputSugg['features'])) continue;
+        $key= explode(',',$InputSugg['features']);
+        foreach($key as $k){
+        if($k){
+        }
+        $data[] =$k ;  
+        }  
+         }
+        $data=array_unique($data);
+        foreach($data as $k){
+        if($k){
+        echo '<option>'.$k.'</option>';
+        }
+         }
+        $data=array();
+        ?>
+      </select>
+<div id="io_features_chips" class="az-cat-chips"></div>
+     </div>
+    </div>
+ </div>
 
           </div>
 
@@ -1922,6 +1955,7 @@ if($connections){
    $(".processsuggestion").select2({ tags: true, tokenSeparators: [',', ''] });
    
    $(".processsuggestionStand").select2({ tags: true, tokenSeparators: [',', ''] });
+   $("#io_features").select2({ tags: true, tokenSeparators: [','], placeholder: 'e.g. Multi-tenant support, SSO integration, Auto-scaling', width: '100%' });
    
    
    // ── Category fields ──
@@ -1959,7 +1993,8 @@ if($connections){
        ['io_output_standard', 'io_output_standard_chips'],
        ['io_output_connection_type', 'io_output_connection_type_chips'],
        ['io_process_type', 'io_process_type_chips'],
-       ['io_process_standard', 'io_process_standard_chips']
+       ['io_process_standard', 'io_process_standard_chips'],
+       ['io_features', 'io_features_chips']
    ];
    $.each(ioChipFields, function(i, pair){
        $('#' + pair[0]).on('change', function(){ renderEditCatChips(pair[0], pair[1]); });

@@ -109,8 +109,8 @@ input.primary:checked + .slider {
 									<th>Owner</th>
 									<th>Product Image</th>
 									<th>Date listed</th>
-									<th>Expiry Date</th>
-									<th>Product Status</th>
+									<th style="min-width:170px;">Expiry Date</th>
+									<th style="width:110px;">Product Status</th>
 
 									<th>Action</th>
 								</tr>
@@ -150,6 +150,10 @@ if($row['approve_date'] && $row['approve_date'] !='0000-00-00'){
 									}?></td>
 										<td>
 <?php
+if($row['status'] != 0){
+?>
+<div style="display:flex;align-items:center;gap:8px;white-space:nowrap;">
+<?php
 if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 
 										echo $row['expiry_date']; 
@@ -157,11 +161,16 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 									}?>
 <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['id']; ?>"> Change Expiry
 								</a>
+</div>
+<?php } ?>
 
 							</td>
 							<td>
 								 <?php 
-                              if($row['status']==1){
+                              if($row['status']==0){
+                              	echo 'Pending Approval';
+                              }
+                              elseif($row['status']==1){
                               	echo 'Active';
                               }
                               elseif($row['status']==2){
@@ -209,10 +218,6 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 							</td>
 									<td>
 
-										<a href="<?php echo base_url(); ?>Admin/detail-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
-
-										<a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
-								
 										<a class="btn btn-primary btn-xs" href="<?php echo base_url();?>Admin/edit-product/<?php echo $row['id']; ?>"><i class="fa fa-edit" aria-hidden="true"></i></a>
 
 
@@ -226,6 +231,7 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
                         
                               ?> 
 
+										<a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-xs" style="background:#DC2626;color:#fff;margin-left:4px;"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>
@@ -275,6 +281,20 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 </div>
 
 <?php include_once('include/footer.php'); ?>
+<script type="text/javascript">
+// The site-wide DataTables default sorts ascending by whichever column
+// comes first (Device ID here), showing oldest devices first. Re-init
+// this specific table sorted by Device ID descending instead, so newest
+// listings show at the top.
+$(document).ready(function(){
+    if($.fn.DataTable.isDataTable('#bootstrap-data-table')){
+        $('#bootstrap-data-table').DataTable().destroy();
+    }
+    $('#bootstrap-data-table').DataTable({
+        "order": [[0, "desc"]]
+    });
+});
+</script>
 <script type="text/javascript">
 	function deleteproduct(id){  
 

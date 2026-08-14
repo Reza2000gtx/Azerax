@@ -144,7 +144,7 @@ $image = $this->common_model->GetSingleData('product_gallery_image',array('produ
 										<td><?php echo $row['expiry_date']; ?></td>
 									<td>
 
-										<a href="<?php echo base_url(); ?>Admin/detail-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>

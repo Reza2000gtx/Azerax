@@ -140,7 +140,7 @@ $image = $this->common_model->GetSingleData('product_gallery_image',array('produ
 										</td>							
 									<td>
 
-										<a href="<?php echo base_url(); ?>Admin/detail-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
 										<!-- <a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
 											
 

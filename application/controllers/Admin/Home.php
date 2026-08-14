@@ -538,7 +538,7 @@ public function update_settings_option(){
 		 public function admin_create(){
 		 $insert['admin_name'] = $this->input->post('admin_name');
 		 $insert['admin_email'] = $this->input->post('admin_email');
-		 $insert['admin_password'] = $this->input->post('admin_password');
+		 $insert['admin_password'] = password_hash($this->input->post('admin_password'), PASSWORD_DEFAULT);
 		 $insert['type'] = 2;
 
 			if($_FILES['admin_image']['name']){
@@ -630,7 +630,7 @@ public function update_settings_option(){
 					$id=$this->input->post('admin_id');
 					$insert['admin_name'] = $this->input->post('admin_name');
 					$insert['admin_email'] = $this->input->post('admin_email');
-					$insert['admin_password'] = $this->input->post('admin_password');
+					if($this->input->post('admin_password')){ $insert['admin_password'] = password_hash($this->input->post('admin_password'), PASSWORD_DEFAULT); }
 		   
 					   if($_FILES['admin_image']['name']){
 			   

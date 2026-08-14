@@ -44,7 +44,6 @@ include_once('include/header.php');
 									<th>Profile </th>
 									<th>Name</th>
 									<th>Email</th>
-									<th>password</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -71,7 +70,6 @@ include_once('include/header.php');
 
 									<td><?php echo $row['admin_name']; ?></td>
 									<td><?php echo $row['admin_email']; ?></td>
-									<td><?php echo $row['admin_password']; ?></td>
 
 									<td>
 									<!--<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalpermission<?php echo $row['id']; ?>"><i class="fa fa-lock"></i></button>-->
@@ -109,7 +107,7 @@ include_once('include/header.php');
 
 								      <div class="form-group">
 								       	<label>Admin Password</label>
-								       	<input type="password"  required name="admin_password" value="<?php echo $row['admin_password']; ?>" class="form-control">
+								       	<input type="password" name="admin_password" placeholder="Leave blank to keep current password" class="form-control">
 								       </div>
 
 								       <div class="form-group">
