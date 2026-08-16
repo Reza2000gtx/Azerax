@@ -210,13 +210,15 @@ input.primary:checked + .slider {
 
 									<th>Device ID</th>
 
-									<th>Device model</th>
+									<th style="max-width:180px;">Device model</th>
 
 									<th>Device brand</th>
 
 									<th>Owner</th>
 
 									<th>Product Image</th>
+
+									<th style="width:120px;">Date Listed</th>
 									
 									<th>Product Status</th>
 
@@ -240,7 +242,7 @@ input.primary:checked + .slider {
 
 								<tr class="delete_mem<?php echo $row['id']; ?>">
 
-									<td><?php echo $i; ?></td>
+									<td><?php echo $row['id']; ?></td>
 
 									<td><?php echo substr($row['device_model'],0,50); ?></td>
 
@@ -273,6 +275,7 @@ input.primary:checked + .slider {
 										
 
 										</td>
+										<td><?php echo date('d M Y', strtotime($row['created_at'])); ?></td>
 										<td>	
 											<a class="btn btn-warning btn-xs" href="#">Pending</a>
 										</td>									

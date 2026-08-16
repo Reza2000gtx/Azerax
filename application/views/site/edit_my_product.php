@@ -1196,6 +1196,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
 
           </div>
 
+</div>
            
 
             
@@ -1233,7 +1234,6 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
     </div>
  </div>
 
-          </div>
 
   </div>
             <div id="section-vendor" class="az-page-section az-section-vendor">

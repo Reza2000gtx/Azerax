@@ -25,16 +25,16 @@
         }
         return '';
     }
-    $(document).ajaxSend(function(event, jqxhr, settings){
-        if(!settings.type || settings.type.toUpperCase() !== 'POST') return;
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+        if(!options.type || options.type.toUpperCase() !== 'POST') return;
         var token = getCsrfCookieValue();
         if(!token) return;
-        if(settings.data instanceof FormData){
-            settings.data.append(CSRF_TOKEN_NAME, token);
-        } else if(typeof settings.data === 'string' || settings.data === undefined || settings.data === null){
-            settings.data = (settings.data ? settings.data + '&' : '') + CSRF_TOKEN_NAME + '=' + encodeURIComponent(token);
-        } else if(typeof settings.data === 'object'){
-            settings.data[CSRF_TOKEN_NAME] = token;
+        if(options.data instanceof FormData){
+            options.data.append(CSRF_TOKEN_NAME, token);
+        } else if(typeof options.data === 'string' || options.data === undefined || options.data === null){
+            options.data = (options.data ? options.data + '&' : '') + CSRF_TOKEN_NAME + '=' + encodeURIComponent(token);
+        } else if(typeof options.data === 'object'){
+            options.data[CSRF_TOKEN_NAME] = token;
         }
     });
 })();
@@ -63,7 +63,7 @@
   })
 </script>
 
-<script src="https://cdn.ckeditor.com/4.15.1/standard/ckeditor.js"></script>  
+<script src="https://cdn.ckeditor.com/4.25.2-lts/standard/ckeditor.js"></script>  
 <script type="text/javascript">
             $(function() {
                CKEDITOR.replace('ckeditor');

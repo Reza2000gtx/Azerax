@@ -216,10 +216,18 @@ input.primary:checked + .slider {
 									$device = $this->common_model->GetDataById('product',$row['device_id']);
 									
 									echo $device['device_model']; 
+									?> <span style="color:#999;font-size:12px;">(ID: <?php echo $row['device_id']; ?>)</span></td>
 
-									?></td>
-
-									<td><?php echo $row['message']; ?></td>
+									<td>
+									<?php
+									$full_message = htmlspecialchars($row['message']);
+									$preview = strlen($row['message']) > 60 ? htmlspecialchars(substr($row['message'], 0, 60)) . '...' : $full_message;
+									?>
+									<?php echo $preview; ?>
+									<?php if(strlen($row['message']) > 60){ ?>
+									<br><a href="#" data-toggle="modal" data-target="#messageModal<?php echo $row['id']; ?>" style="font-size:12px;">View full message</a>
+									<?php } ?>
+									</td>
 
 									<td>
 
@@ -243,7 +251,25 @@ input.primary:checked + .slider {
 
 									</td>
 
-								</tr>
+									</tr>
+
+								<!-- Full message modal -->
+								<div class="modal" id="messageModal<?php echo $row['id']; ?>">
+								  <div class="modal-dialog">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <h4 class="modal-title">Review Message</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+								      <div class="modal-body">
+								        <p style="white-space:pre-wrap;"><?php echo $full_message; ?></p>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+								    </div>
+								  </div>
+								</div>
 
 								<!-- The Modal -->
 

@@ -57,7 +57,16 @@ include_once('include/header.php');
 									<td><?php echo $row['email']; ?></td>
                   <!--<td><?php //echo $row['address']; ?></td>-->
 
-									<td><?php echo $row['msg']; ?></td>
+									<td style="max-width:220px;word-break:break-word;">
+								<?php
+								$full_msg = htmlspecialchars($row['msg']);
+								$msg_preview = strlen($row['msg']) > 60 ? htmlspecialchars(substr($row['msg'], 0, 60)) . '...' : $full_msg;
+								?>
+								<?php echo $msg_preview; ?>
+								<?php if(strlen($row['msg']) > 60){ ?>
+								<br><a href="#" data-toggle="modal" data-target="#msgModal<?php echo $row['id']; ?>" style="font-size:12px;">View full message</a>
+								<?php } ?>
+								</td>
 										<td><?php echo $row['reply']; ?></td>
                                     <td><?php echo date('d-m-Y H:i a', strtotime($row['created_at'])); ?></td>
                                     <td>
@@ -78,6 +87,24 @@ include_once('include/header.php');
                                     </td>
 								</tr>
 								
+								<!-- Full message modal -->
+								<div class="modal" id="msgModal<?php echo $row['id']; ?>">
+								  <div class="modal-dialog">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <h4 class="modal-title">Contact Message</h4>
+								        <button type="button" class="close" data-dismiss="modal">&times;</button>
+								      </div>
+								      <div class="modal-body">
+								        <p style="white-space:pre-wrap;word-break:break-word;"><?php echo $full_msg; ?></p>
+								      </div>
+								      <div class="modal-footer">
+								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+								      </div>
+								    </div>
+								  </div>
+								</div>
+
                                 <div class="modal fade" id="replyModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form action ="<?php echo base_url();?>Admin/Home/update_contact" method="POST">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">

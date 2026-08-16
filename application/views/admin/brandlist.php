@@ -118,7 +118,7 @@ input.primary:checked + .slider {
                  $user = $this->db->query("SELECT * from users where user_id = '".$row['user_id']."'")->row_array();
 									?>
 								<tr class="delete_mem<?php echo $row['id']; ?>">
-									<td><?php echo $i; ?></td>
+									<td><?php echo $row['id']; ?></td>
 									<td><?php echo substr($row['device_model'],0,50); ?></td>
 									<td><?php echo substr($row['device_brand'],0,50); ?></td>
 									<td><?php echo $user['fname']; ?></td>

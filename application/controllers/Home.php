@@ -78,7 +78,7 @@ public function services(){
 
 		$data['help_support'] = '';
 
-		$this->load->view('site/conactus',$data);
+		$this->load->view('site/contactus',$data);
 	}
 	public function support(){
 
@@ -214,12 +214,12 @@ public function fee_charges(){
 	
    public function contact_us()
    {
-	$this->load->view('site/conactus');
+	$this->load->view('site/contactus');
    }
 	public function contact_us_action()
 	{
       $this->form_validation->set_rules('username','Username','required');
-      $this->form_validation->set_rules('email','Email','required|valid_email');
+      $this->form_validation->set_rules('email','Email','required|valid_email|regex_match[/^[^\s@]+@[^\s@]+\.[^\s@]+$/]');
     //$this->form_validation->set_rules('phone','Phone','required|numeric');
       $this->form_validation->set_rules('subject','Subject','required');
       $this->form_validation->set_rules('message','Message','required');
@@ -261,7 +261,7 @@ public function fee_charges(){
 	public function about_us_action()
 	{
       $this->form_validation->set_rules('username','Username','required');
-      $this->form_validation->set_rules('email','Email','required|valid_email');
+      $this->form_validation->set_rules('email','Email','required|valid_email|regex_match[/^[^\s@]+@[^\s@]+\.[^\s@]+$/]');
     //$this->form_validation->set_rules('phone','Phone','required|numeric');
       $this->form_validation->set_rules('subject','Subject','required');
       $this->form_validation->set_rules('message','Message','required');
@@ -280,7 +280,7 @@ public function fee_charges(){
 		if($run)
 		{
 			$subject="Contact request";
-			$emails = 'info@azerax.com,ekta.webwiders@gmail.com';	
+			$emails = 'info@azerax.com';	
 			$body = '<p>Hello Administrator</p><p>You have received a new contact request.</p><p>Contact Detail:</p><p><b>Name:</b> '.$name.' <br><b>Email:</b>'.$email.'<br><b>Phone:</b>'.$phone.'<br><b>Address:</b>'.$address.'<br><b>Subject:</b> '.$subject.' <br> Message: '.$msg.'</p>';
 			 
 			$send = $this->common_model->SendMail($emails,$subject,$body,'',$email); 
