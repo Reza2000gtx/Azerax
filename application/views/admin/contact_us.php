@@ -36,6 +36,7 @@ include_once('include/header.php');
 									<!--<th>Phone</th>-->
 									<th>Email</th>
                  <!-- <th>Address</th>-->
+									<th>Subject</th>
 
 									<th>Message</th>
                                     <th>Reply</th>
@@ -56,6 +57,7 @@ include_once('include/header.php');
 									<!--<td><?php //echo $row['phone']; ?></td>-->
 									<td><?php echo $row['email']; ?></td>
                   <!--<td><?php //echo $row['address']; ?></td>-->
+									<td><?php echo htmlspecialchars($row['subject']); ?></td>
 
 									<td style="max-width:220px;word-break:break-word;">
 								<?php

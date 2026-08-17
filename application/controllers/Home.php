@@ -238,7 +238,17 @@ public function fee_charges(){
 		if($run)
 		{
 			$subject="Contact request";
-			$emails = 'admin@azerax.com';	
+			// Pull the notification recipient from the actual admin profile
+			// (super admin, type=1) instead of a hardcoded address, so
+			// it stays correct if the profile email ever changes. Validated
+			// before use, with a safe fallback if the lookup fails or the
+			// stored value isn't a genuine email.
+			$super_admin = $this->common_model->GetSingleData('admin', array('type' => 1));
+			$emails = 'admin@azerax.com'; // fallback
+			if($super_admin && !empty($super_admin['admin_email']) && filter_var($super_admin['admin_email'], FILTER_VALIDATE_EMAIL)){
+				$emails = $super_admin['admin_email'];
+			}
+
 			$body = '<p>Hello Administrator</p><p>You have recived a new contact request.</p><p>Contact Detail:</p><p><b>Name:</b> '.$name.' <br><b>Email:</b>'.$email.'<br><b>Phone:</b>'.$phone.'<br><b>Address:</b>'.$address.'<br><b>Subject:</b> '.$subject.' <br> Message: '.$msg.'</p>';
 			 
 			$send = $this->common_model->SendMail($emails,$subject,$body,'',$email); 
