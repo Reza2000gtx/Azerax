@@ -34,7 +34,7 @@ include_once('include/header.php');
 							</div>
 							<div class="form-group">
 								<label class=" form-control-label">Email</label>
-								<input type="text" name="admin_email" id="email" value="<?php echo $admindata['admin_email'] ?>" class="form-control" readonly >
+								<input type="text" name="admin_email" id="email" value="<?php echo $admindata['admin_email'] ?>" class="form-control" >
 							</div>
 						</div>
 						<div class="box-footer">

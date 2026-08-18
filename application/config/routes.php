@@ -77,7 +77,7 @@ $route['Admin/detail-product/(:any)'] = 'Admin/Product/detail_product';
 $route['Admin/manufacturerlist'] = 'Admin/Manufacturer';
 $route['Admin/brandlist/(:any)'] = 'Admin/Manufacturer/brandlist';
 $route['Admin/about'] = 'Admin/contentManagement/aboutUs';
-$route['Admin/services'] = 'Admin/ServiceManagement';
+
 
 $route['Admin/reviewlist'] = 'Admin/Review';
 

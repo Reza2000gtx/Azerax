@@ -44,12 +44,6 @@ $page=$this->uri->segment(2);
 				</a>
 			</li>
 
-			<li class="<?php if($page=='services'){echo 'active';}?>">
-				<a href="<?php echo base_url(); ?>Admin/services">
-					<i class="fa fa-cogs"></i> <span>Services</span>
-				</a>
-			</li>
-
 			<li class="<?php if($page=='ipolist'){echo 'active';}?>">
 				<a href="<?php echo base_url(); ?>Admin/ipolist">
 					<i class="fa fa-list-alt"></i> <span>IPO List</span>

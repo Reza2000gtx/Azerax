@@ -291,7 +291,16 @@ $(document).ready(function(){
         $('#bootstrap-data-table').DataTable().destroy();
     }
     $('#bootstrap-data-table').DataTable({
-        "order": [[0, "desc"]]
+        "order": [[0, "desc"]],
+        "stateSave": true,
+        "initComplete": function(){
+            var scrollKey = 'az-scroll-' + window.location.pathname;
+            var saved = sessionStorage.getItem(scrollKey);
+            if(saved !== null){
+                window.scrollTo(0, parseInt(saved, 10));
+                sessionStorage.removeItem(scrollKey);
+            }
+        }
     });
 });
 </script>

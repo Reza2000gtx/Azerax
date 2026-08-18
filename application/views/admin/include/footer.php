@@ -59,7 +59,35 @@
 
 <script>
   $(function () {
-    $('.DataTable').DataTable();
+    // Prevent the browser's own native scroll-restoration from fighting
+    // with the custom logic below.
+    if('scrollRestoration' in history){
+        history.scrollRestoration = 'manual';
+    }
+
+    $('.DataTable').DataTable({
+        "stateSave": true,
+        "initComplete": function(){
+            // Restore scroll position only after DataTables has fully
+            // finished its own setup (including its own stateSave page
+            // restoration) - doing this earlier caused a visible double-jump
+            // as the table's layout shifted after the scroll already ran.
+            var scrollKey = 'az-scroll-' + window.location.pathname;
+            var saved = sessionStorage.getItem(scrollKey);
+            if(saved !== null){
+                window.scrollTo(0, parseInt(saved, 10));
+                sessionStorage.removeItem(scrollKey);
+            }
+        }
+    });
+
+    // Save position right before any form on the page submits
+    (function(){
+        var scrollKey = 'az-scroll-' + window.location.pathname;
+        $(document).on('submit', 'form', function(){
+            sessionStorage.setItem(scrollKey, window.scrollY);
+        });
+    })();
   })
 </script>
 

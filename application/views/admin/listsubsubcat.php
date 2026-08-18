@@ -73,8 +73,8 @@ include_once('include/header.php');
 
 								      <!-- Modal body -->
 								      <div id="error<?php echo $row['subsub_cat_id']; ?>"></div>
-								     <form method="post" onsubmit="return editsubsubcategory(<?php echo $row['subsub_cat_id']; ?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">);" id="editsubsubcategory<?php echo $row['subsub_cat_id']; ?>">
+								     <form method="post" onsubmit="return editsubsubcategory(<?php echo $row['subsub_cat_id']; ?>);" id="editsubsubcategory<?php echo $row['subsub_cat_id']; ?>">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
 									  <div class="form-group">
 								       	<label>Category</label>

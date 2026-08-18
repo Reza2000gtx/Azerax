@@ -41,7 +41,7 @@ include_once('include/header.php');
 									<th>Message</th>
                                     <th>Reply</th>
 									<th>Created date</th>
-                                    <th>Action</th>
+                                    <th style="white-space:nowrap;">Action</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -71,7 +71,7 @@ include_once('include/header.php');
 								</td>
 										<td><?php echo $row['reply']; ?></td>
                                     <td><?php echo date('d-m-Y H:i a', strtotime($row['created_at'])); ?></td>
-                                    <td>
+                                    <td style="white-space:nowrap;">
                                         <?php
                                             if($row['reply']=='')
                                             {
@@ -86,6 +86,11 @@ include_once('include/header.php');
                                         <?php
                                             }
                                         ?>
+                                        <form method="post" action="<?php echo base_url(); ?>Admin/Footer_content/delete_contact" style="display:inline-block;margin-left:6px;vertical-align:middle;" onsubmit="return confirm('Are you sure you want to delete this message?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" style="background:none;border:none;padding:4px 8px;color:#DC2626;font-size:16px;"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        </form>
                                     </td>
 								</tr>
 								

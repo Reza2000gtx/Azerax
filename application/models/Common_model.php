@@ -203,58 +203,23 @@ $this->db->select($select);
     }
     function SendMail($to,$subject,$body,$attach='',$replyTo=''){
       $this->load->library('email');
-      
-       $this->email->set_newline("\r\n");
-
 
       $config = array();
       $config['protocol']     = 'smtp';
-   // $config['smtp_host']    = 'ssl://azerax.com';
-    $config['smtp_host'] = 'ssl://mail.googlemail.com';
-     // $config['smtp_host']    = 'mail.gmail.com';
-      // FIXED: this used to be a hardcoded plaintext password sitting directly
-      // in this file. Moved to secrets.php - same pattern already used for
-      // the Anthropic API key. Add these two lines to
-      // application/config/secrets.php (which should already exist and be
-      // gitignored):
-      //   define('SMTP_USER', 'reezaadmin@azerax.com');
-      //   define('SMTP_PASS', 'Z8NTi#Ev9apL');
+      $config['smtp_host']    = 'ssl://smtp.gmail.com';
       $config['smtp_user']    = defined('SMTP_USER') ? SMTP_USER : '';
-  //  $config['smtp_crypto']  = 'ssl';
       $config['smtp_pass']    = defined('SMTP_PASS') ? SMTP_PASS : '';
-      $config['smtp_port']    =  465;
+      $config['smtp_port']    = 465;
       $config['charset']      = "utf-8";
       $config['newline']      = "\r\n";
-      $config['mailtype']     = 'html'; // or html
+      $config['mailtype']     = 'html';
       $config['wordwrap']     = TRUE;
       $config['validate']     = FALSE;
-      
-      
-      
-    //   $config = array();
-    //   $config['protocol']     = 'smtp';
-    //   $config['smtp_host']    = 'mail.azerax.com';
-    //   $config['smtp_user']    = 'ekta.webwiders@gmail.com';
-    //   $config['smtp_pass']    = 'Ekta@1234';
-    //   $config['smtp_port']    =  465;
-    //   $config['charset']      = "utf-8";
-    //   $config['newline']    = "\r\n";
-    //   $config['mailtype'] = 'html'; // or html
-    //   $config['wordwrap']     = TRUE;
-    //   $config['validate']     = FALSE;
 
- //  $this->load->library('email', $config);
+      $this->email->initialize($config);
 
-//       $this->email->set_newline("\r\n");
-//       $this->email->set_mailtype("html");
-      
-          
-
-//   $this->email->initialize($config);
-     
-
-     $mail_from_title='Azerax';
-     $from='admin@azerax.com';
+      $mail_from_title = 'Azerax';
+      $from = defined('SMTP_USER') ? SMTP_USER : 'admin@azerax.com';
       
      $headers ="From: ".$mail_from_title." <".$from."> \n";
      if($replyTo){
@@ -322,38 +287,23 @@ $this->db->select($select);
             </tbody>
           </table>
         </body>';
-        //echo mail($to,$subject,$msg,$headers);
-            if(mail($to,$subject,$msg,$headers)) {
-      return 1;
-    } else {
-      return 0;
-    }
-        
-    // //     $this->email->set_mailtype("html"); 
-    // //     $this->email->set_newline("\r\n"); 
 
-    // //   $this->email->from($from, $mail_from_title);
-    // //   $this->email->to($to);
-    // //   $this->email->subject($subject);
-    // //   $this->email->message($msg);
-    // //   if($this->email->send())
-    // //   {
-    // //   //  $this->email->print_debugger();
-        
-    // //     echo $this->email->print_debugger();
-    // //   $this->email->print_debugger();
-    // //     // die ;
+      $this->email->from($from, $mail_from_title);
+      $this->email->to($to);
+      if($replyTo){
+          $this->email->reply_to($replyTo);
+      }
+      $this->email->subject($subject);
+      $this->email->message($msg);
 
-    //   return 1;
-    //   }
-    //   else
-    // //   {
-    // //         echo $this->email->print_debugger();
-    // //     //     echo '<pre>' ; 
-    // // //    print_r($this->email->print_debugger());
-    // //     // die ;
-    // //   echo  show_error($this->email->print_debugger());
-    //   }
+      if($this->email->send()){
+          return 1;
+      } else {
+          // Log the real failure reason so future issues are actually
+          // diagnosable, instead of failing silently like before.
+          log_message('error', 'SendMail failed to '.$to.': '.$this->email->print_debugger(array('headers')));
+          return 0;
+      }
   }
   
   function SendMail_old($toz,$sub,$body)

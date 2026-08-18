@@ -233,11 +233,21 @@ input.primary:checked + .slider {
 
                                       <?php if($row['status']==1) { ?>
 
-                                      <span class="badge badge-success badge-round badge-sm"><?php echo 'Active'; ?></span>
+                                      <form method="post" action="<?php echo base_url();?>Admin/Review/editstatus" style="display:inline;" onsubmit="return confirm('Change this review to Inactive?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                                      <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
+                                      <input type="hidden" name="status" value="0">
+                                      <button type="submit" class="btn btn-sm" style="background:#14213D;color:#fff;">Active</button>
+                                      </form>
 
                                       <?php } else { ?>
 
-                                         <span class="badge badge-danger badge-round badge-sm"><?php echo 'Inactive'; ?></span>
+                                      <form method="post" action="<?php echo base_url();?>Admin/Review/editstatus" style="display:inline;" onsubmit="return confirm('Change this review to Active?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                                      <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
+                                      <input type="hidden" name="status" value="1">
+                                      <button type="submit" class="btn btn-sm" style="background:#EAB308;color:#fff;">Inactive</button>
+                                      </form>
 
                                       <?php }?>
 
@@ -245,9 +255,7 @@ input.primary:checked + .slider {
 
 									
 
-									<td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
-
-								     	<a href="javascript:void(0)" data-deleteid="<?php echo $row['id']; ?>" data-nid="<?php echo $i; ?>" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+									<td><a href="javascript:void(0)" data-deleteid="<?php echo $row['id']; ?>" data-nid="<?php echo $i; ?>" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 
@@ -269,89 +277,6 @@ input.primary:checked + .slider {
 								      </div>
 								    </div>
 								  </div>
-								</div>
-
-								<!-- The Modal -->
-
-								<div class="modal" id="myModal<?php echo $row['id']; ?>">
-
-								  <div class="modal-dialog">
-
-								    <div class="modal-content">
-
-
-
-								      <!-- Modal Header -->
-
-								      <div class="modal-header">
-
-								        <h4 class="modal-title">Edit status</h4>
-
-								        <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-								      </div>
-
-
-
-								      <!-- Modal body -->
-
-								      <div id="error<?php echo $row['id']; ?>"></div>
-
-								     <form method="post" action="<?php echo base_url();?>Admin/Review/editstatus" id="editreview<?php echo $row['id']; ?>
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">">
-
-								      <div class="modal-body">
-
-								          
-
-								       <div class="form-group">
-
-								       	<label>Review status</label>
-
-								       	  <select class="custom-select form-control" name="status" id="status" >  
-
-                                          <?php if($row['status'] == 1){  ?>
-
-                                         <option value="1" selected>Active</option>
-
-                                         <option value="0">Inactive</option>
-
-                                         <?php }else{ ?>
-
-                                          <option value="1">Active</option>
-
-                                          <option value="0" selected>Inactive</option>
-
-                                          <?php } ?>
-
-                                        </select>
-
-								       	
-
-								       	</div>
-
-
-
-							      
-
-								      <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
-
-								      <!-- Modal footer -->
-
-								      <div class="modal-footer">
-
-								      	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Save</button>
-
-								        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
-								      </div>
-
-								    </form>
-
-								    </div>
-
-								  </div>
-
 								</div>
 
 								<?php } ?>

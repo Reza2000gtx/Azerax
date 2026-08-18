@@ -229,6 +229,22 @@ class Footer_content extends CI_Controller
 	   $this->load->view('admin/contact_us',$data);
 
  	}
+
+ 	public function delete_contact(){
+ 		$id = $this->input->post('id');
+ 		if(!$id){
+ 			$this->session->set_flashdata('msgs','<div class="alert alert-danger">Invalid request.</div>');
+ 			redirect('Admin/contact_us');
+ 			return;
+ 		}
+ 		$run = $this->common_model->DeleteData('contact_us',array('id'=>$id));
+ 		if($run){
+ 			$this->session->set_flashdata('msgs','<div class="alert alert-success">Success! Message has been deleted successfully.</div>');
+ 		} else {
+ 			$this->session->set_flashdata('msgs','<div class="alert alert-danger">Something went wrong.</div>');
+ 		}
+ 		redirect('Admin/contact_us');
+ 	}
 	 public function subscribe_us(){
 		$data['contact'] = $this->common_model->GetAllData('contact_us',array('type'=>'subscriber'),'id','desc');
 		$this->load->view('admin/subscribe_us',$data);
