@@ -105,10 +105,7 @@ p.has-error {
     border-bottom: 1px solid #EBEBEB;
     padding: 0 40px;
     z-index: 500;
-}
-.az-steps-bar.az-is-pinned {
     position: fixed;
-    top: 90px;
     left: 0;
     width: 100%;
 }
@@ -463,6 +460,86 @@ section.add_product #msform fieldset#menu3 {
 
 .header_area .navbar .nav .nav-item .nav-link:hover {
     background: transparent !important;
+}
+
+/* Extract Info button - the payoff moment of the AI tool */
+.az-extract-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: #FCA311;
+    color: #14213D;
+    border: none;
+    border-radius: 6px;
+    padding: 11px 26px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 0 0 rgba(20,33,61,0.35);
+    animation: az-extract-idle-glow 2.6s ease-in-out infinite;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.az-extract-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(252,163,17,0.35), 0 0 0 3px rgba(20,33,61,0.15);
+    animation: none;
+}
+.az-extract-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+}
+.az-extract-btn:disabled {
+    opacity: 0.85;
+    cursor: default;
+    animation: none;
+}
+/* Signal sweep - a diagonal light band that crosses the button on hover,
+   evoking a broadcast signal scan (this is the signature element) */
+.az-extract-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,0.65), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
+}
+.az-extract-btn:hover:not(:disabled)::before {
+    left: 130%;
+}
+@keyframes az-extract-idle-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(20,33,61,0.35); }
+    50% { box-shadow: 0 0 0 6px rgba(20,33,61,0); }
+}
+.az-extract-icon {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.az-extract-icon .az-spark {
+    transition: opacity 0.15s ease;
+}
+.az-extract-btn.az-is-loading .az-spark {
+    animation: az-extract-spin 0.9s linear infinite;
+    transform-origin: center;
+}
+@keyframes az-extract-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .az-extract-btn, .az-extract-btn::before, .az-extract-icon .az-spark {
+        animation: none !important;
+        transition: none !important;
+    }
 }
 </style>
 
@@ -1022,31 +1099,49 @@ document.addEventListener('DOMContentLoaded', function(){
     var progressSection = document.querySelector('section.Progress');
     if(!stepBar || !progressSection) return;
 
+    var PINNED_TOP = 90;
+
     function getScrollY(){
         return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     }
+
+    // Measure where the step bar would naturally sit (relative to the
+    // document) if it had never been taken out of normal flow. Measured
+    // from progressSection - not stepBar itself - since stepBar is always
+    // position:fixed now and can't be measured this way directly.
+    function getNaturalOffset(){
+        var rect = progressSection.getBoundingClientRect();
+        return rect.top + getScrollY();
+    }
+
+    var naturalOffset = getNaturalOffset();
 
     function reserveSpace(){
         progressSection.style.setProperty('padding', '0', 'important');
         progressSection.style.setProperty('margin', '0', 'important');
         progressSection.style.setProperty('border', 'none', 'important');
-        progressSection.style.height = stepBar.classList.contains('az-is-pinned')
-            ? stepBar.getBoundingClientRect().height + 'px'
-            : '';
+        progressSection.style.height = stepBar.getBoundingClientRect().height + 'px';
     }
 
     function update(){
-        if(getScrollY() > 5){
-            stepBar.classList.add('az-is-pinned');
-        } else {
-            stepBar.classList.remove('az-is-pinned');
-        }
+        // Continuously tracks scroll position with no lag, right up until
+        // it reaches the pinned spot - unlike toggling position modes
+        // outright, this has no abrupt jump since only a number (top) is
+        // changing, not the positioning mode itself.
+        var top = Math.max(PINNED_TOP, naturalOffset - getScrollY());
+        stepBar.style.top = top + 'px';
         reserveSpace();
     }
 
     update();
-    window.addEventListener('load', update);
-    window.addEventListener('resize', update);
+    window.addEventListener('load', function(){
+        naturalOffset = getNaturalOffset();
+        update();
+    });
+    window.addEventListener('resize', function(){
+        naturalOffset = getNaturalOffset();
+        update();
+    });
     window.addEventListener('scroll', update, { passive: true });
     document.addEventListener('scroll', update, { passive: true, capture: true });
     setInterval(update, 300);
@@ -1138,7 +1233,12 @@ document.addEventListener('DOMContentLoaded', function(){
             <label style="font-size:12px;">Or upload a brochure/spec PDF (this will also be saved as your product's downloadable brochure)</label>
             <input type="file" id="ai_source_pdf" name="device_manual_brochure" accept="application/pdf" class="form-control" style="height:auto;padding:10px 12px;line-height:normal;">
           </div>
-          <button type="button" id="ai_extract_btn" class="btn btn-warning" style="background:#FCA311;border-color:#FCA311;color:#14213D;font-weight:600;">Extract Info</button>
+          <button type="button" id="ai_extract_btn" class="az-extract-btn">
+            <svg class="az-extract-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="az-spark" d="M12 2L14.2 9.2L21.5 11.5L14.2 13.8L12 21L9.8 13.8L2.5 11.5L9.8 9.2L12 2Z" fill="#14213D"/>
+            </svg>
+            <span class="az-extract-label">Extract Info</span>
+          </button>
           <span id="ai_extract_status" style="margin-left:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;"></span>
           <div style="font-size:12px;color:#999;margin-top:8px;">This only fills in the fields below for you to review — nothing is submitted until you check everything and click Submit.</div>
         </div>
@@ -1156,6 +1256,34 @@ document.addEventListener('DOMContentLoaded', function(){
             if(!value) return;
             var $el = $(selector);
             if($el.length === 0) return;
+
+            // select2's own "tags: true" runtime behavior can independently
+            // create a duplicate <option> for a value that was already
+            // added below - and it can happen at an unpredictable delay,
+            // not immediately. Rather than guess at timing, watch this
+            // field continuously and remove any true duplicate (same
+            // value) the instant one appears, from any source.
+            if(!$el.data('azDedupeObserverAttached')){
+                var dedupeObserver = new MutationObserver(function(){
+                    var seen = {};
+                    var removedAny = false;
+                    $el.find('option').each(function(){
+                        var v = $(this).val();
+                        if(!v) return;
+                        if(seen[v]){
+                            $(this).remove();
+                            removedAny = true;
+                        } else {
+                            seen[v] = true;
+                        }
+                    });
+                    if(removedAny){
+                        $el.trigger('change');
+                    }
+                });
+                dedupeObserver.observe($el[0], { childList: true });
+                $el.data('azDedupeObserverAttached', true);
+            }
             // AI often returns multiple items as one comma-separated string
             // (e.g. "AES67, RAVENNA, ST2110-30") - split into individual,
             // separately-selectable/removable items instead of one big blob
@@ -1171,6 +1299,26 @@ document.addEventListener('DOMContentLoaded', function(){
             });
             $el.val(existing);
             $el.trigger('change');
+
+            // Defensive cleanup: select2's own "tags: true" behavior can
+            // sometimes create its own duplicate <option> for a value that
+            // was already set programmatically above, rather than
+            // recognizing the existing one. Remove any true duplicates
+            // (same value), keeping only the first, regardless of how they
+            // got created.
+            setTimeout(function(){
+                var seen = {};
+                $el.find('option').each(function(){
+                    var v = $(this).val();
+                    if(!v) return;
+                    if(seen[v]){
+                        $(this).remove();
+                    } else {
+                        seen[v] = true;
+                    }
+                });
+                $el.trigger('change.select2');
+            }, 0);
         }
 
         $('#ai_extract_btn').on('click', function(){
@@ -1189,7 +1337,8 @@ document.addEventListener('DOMContentLoaded', function(){
             }
 
             $('#ai_extract_status').text('Reading and extracting... this can take a few seconds.').css('color','#666');
-            $('#ai_extract_btn').prop('disabled', true);
+            $('#ai_extract_btn').prop('disabled', true).addClass('az-is-loading');
+            $('#ai_extract_btn .az-extract-label').text('Extracting...');
 
             $.ajax({
                 url: '<?php echo base_url(); ?>Product/ai_extract',
@@ -1199,7 +1348,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 contentType: false,
                 dataType: 'json',
                 success: function(res){
-                    $('#ai_extract_btn').prop('disabled', false);
+                    $('#ai_extract_btn').prop('disabled', false).removeClass('az-is-loading');
+                    $('#ai_extract_btn .az-extract-label').text('Extract Info');
                     if(res.status == 1){
                         var d = res.data;
                         if(d.product_type) $('#product_type').val(d.product_type).trigger('change');
@@ -1233,7 +1383,8 @@ document.addEventListener('DOMContentLoaded', function(){
                     }
                 },
                 error: function(){
-                    $('#ai_extract_btn').prop('disabled', false);
+                    $('#ai_extract_btn').prop('disabled', false).removeClass('az-is-loading');
+                    $('#ai_extract_btn .az-extract-label').text('Extract Info');
                     $('#ai_extract_status').text('Request failed. Please try again.').css('color','#dc3545');
                 }
             });
@@ -1466,7 +1617,7 @@ $('#sub_cat_b').on('change', function(){
   <div class="row input_box" id="inps">
    <div class="col-md-3 set-44">
     <div class="form-group">
-     <label>Input 1</label>
+     <label>Input Type</label>
      <!--<input type="text"   id="input_conn" name="input_conn[]"  placeholder="" class="typeahead inputF tm-input form-control "  />-->
        <select id="io_input_type" required name="input_conn[0][]" class="typeahead inputF tm-input form-control sets_hidden2" multiple="multiple" style="width:300px" class="populate placeholder">
         <div id="responsemenu2"></div>
@@ -1479,6 +1630,7 @@ $('#sub_cat_b').on('change', function(){
           if($k){
           // echo '<option>'.$k.'</option>';
           }
+          $k = trim($k);
           $data[] =$k ;  
           }  
            }
@@ -1509,6 +1661,7 @@ $('#sub_cat_b').on('change', function(){
        if($k){
        // echo '<option>'.$k.'</option>';
        }
+       $k = trim($k);
        $data[] =$k ;  
        }  
         }
@@ -1540,6 +1693,7 @@ $('#sub_cat_b').on('change', function(){
        if($k){
        // echo '<option>'.$k.'</option>';
        }
+       $k = trim($k);
        $data[] =$k ;  
        }  
         }
@@ -1562,7 +1716,7 @@ $('#sub_cat_b').on('change', function(){
   <div class="row input_box" id="outs">
    <div class="col-md-3 set-44">
      <div class="form-group">
-       <label>Output 1</label>
+       <label>Output Type</label>
         <select id="io_output_type" required name="out_conn[0][]" class="typeahead outputF tm-input form-control sets_hidden2" style="width:300px" multiple="multiple" class="populate placeholder">
          <?php     
           $Input = $this->common_model->GetAllData('input_output','','out_conn','asc','','','','out_conn');
@@ -1572,6 +1726,7 @@ $('#sub_cat_b').on('change', function(){
           if($k){
           // echo '<option>'.$k.'</option>';
           }
+          $k = trim($k);
           $data[] =$k ;  
           }  
            }
@@ -1601,6 +1756,7 @@ $('#sub_cat_b').on('change', function(){
        if($k){
        // echo '<option>'.$k.'</option>';
        }
+       $k = trim($k);
        $data[] =$k ;  
        }  
         }
@@ -1631,6 +1787,7 @@ $('#sub_cat_b').on('change', function(){
        if($k){
        // echo '<option>'.$k.'</option>';
        }
+       $k = trim($k);
        $data[] =$k ;  
        }  
         }
@@ -1655,7 +1812,7 @@ $('#sub_cat_b').on('change', function(){
   <div class="row input_box" id="proc">
    <div class="col-md-3 set-44">
     <div class="form-group">
-     <label>Process 1</label>
+     <label>Process Type</label>
       <select id="io_process_type" required  name="process[0][]" class="sets_hidden2 typeahead processsuggestion tm-input form-control " style="width:300px" multiple="multiple" class="populate placeholder">
        <?php     
         $Input = $this->common_model->GetAllData('input_output','','process','asc','','','','process'); 
@@ -1665,6 +1822,7 @@ $('#sub_cat_b').on('change', function(){
         if($k){
         // echo '<option>'.$k.'</option>';
         }
+        $k = trim($k);
         $data[] =$k ;  
         }  
          }
@@ -1695,6 +1853,7 @@ $('#sub_cat_b').on('change', function(){
        if($k){
        // echo '<option>'.$k.'</option>';
        }
+       $k = trim($k);
        $data[] =$k ;  
        }  
         }
@@ -1731,6 +1890,7 @@ $('#sub_cat_b').on('change', function(){
         foreach($key as $k){
         if($k){
         }
+        $k = trim($k);
         $data[] =$k ;  
         }  
          }
