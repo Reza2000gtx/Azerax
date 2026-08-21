@@ -227,9 +227,41 @@ $this->db->select($select);
     }
     $headers .= "MIME-Version: 1.0\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1 \n";
-      $logo =base_url().'assets/site/img/logo2.png';
+      // Logo recreated as an HTML table rather than an image - the real
+      // logo is an inline SVG in the site's own nav bar, but most email
+      // clients (especially Outlook) don't reliably render inline SVG at
+      // all. This table-based version is universally supported and
+      // matches the same grid pattern and colors.
+      $logo_html = '
+        <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+          <tr>
+            <td style="padding:0;">
+              <table cellpadding="0" cellspacing="3" border="0" bgcolor="#FCA311" style="border-collapse:separate;background:#FCA311;border-radius:8px;">
+                <tr>
+                  <td style="width:9px;height:9px;background:#B98A50;border-radius:2px;"></td>
+                  <td style="width:9px;height:9px;background:#8C6A48;border-radius:2px;"></td>
+                  <td style="width:9px;height:9px;background:#14213D;border-radius:2px;"></td>
+                </tr>
+                <tr>
+                  <td style="width:9px;height:9px;background:#8C6A48;border-radius:2px;"></td>
+                  <td style="width:9px;height:9px;background:#5C4632;border-radius:2px;"></td>
+                  <td style="width:9px;height:9px;background:#8C6A48;border-radius:2px;"></td>
+                </tr>
+                <tr>
+                  <td style="width:9px;height:9px;background:#14213D;border-radius:2px;"></td>
+                  <td style="width:9px;height:9px;background:#8C6A48;border-radius:2px;"></td>
+                  <td style="width:9px;height:9px;background:#B98A50;border-radius:2px;"></td>
+                </tr>
+              </table>
+            </td>
+            <td style="padding:0 0 0 10px;">
+              <span style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif;font-size:22px;font-weight:700;color:#ffffff;">azera<span style="color:#FCA311;">X</span></span>
+            </td>
+          </tr>
+        </table>
+      ';
        $msg = '<body style="margin:0px;">
-          <table style="background-color:#555058; border-collapse:collapse!important; width:100%; border-spacing:0" width="100%" bgcolor="#fff">
+          <table style="background-color:#F5F5F5; border-collapse:collapse!important; width:100%; border-spacing:0" width="100%" bgcolor="#fff">
             <tbody>
               <tr>
                 <td style="border-collapse:collapse; font-family:Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif; font-size:14px; vertical-align:top; padding:0" valign="top"></td>
@@ -239,11 +271,11 @@ $this->db->select($select);
                       <table style="border-collapse:collapse!important; width:100%; border-spacing:0" width="100%">
                         <tbody>
                           <tr>
-                            <td style="border-collapse:collapse; font-family:Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif; font-size:14px; vertical-align:top; padding:10px 0 10px 0;color:#ffffff; margin-top:20px; width:100%; border-bottom:none; background-color:#fca311; margin-bottom:30px" width="100%" valign="top" bgcolor="#f8f8f8">
+                            <td style="border-collapse:collapse; font-family:Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif; font-size:14px; vertical-align:top; padding:16px 0 16px 0;color:#ffffff; margin-top:20px; width:100%; border-bottom:none; background-color:#14213D; margin-bottom:30px" width="100%" valign="top" bgcolor="#14213D">
                               <table style="border-collapse:collapse!important; width:100%; border-spacing:0" width="100%">
                                 <tbody>
                                   <tr>
-                                    <td style="border-collapse:collapse; font-family:Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif; font-size:14px; vertical-align:top; padding:0; color:#000000" valign="top" align="center"><img src="'.$logo.'" style="max-width:100%; margin:6px 0 0 21px;" width="140"></td>
+                                    <td style="border-collapse:collapse; font-family:Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif; font-size:14px; vertical-align:top; padding:0 0 0 21px; color:#000000" valign="top" align="left">'.$logo_html.'</td>
                                     <td style="border-collapse:collapse; font-family:Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif; font-size:14px; vertical-align:top; padding:0; color:#000000" valign="top" align="right"></td>
                                   </tr>
                                 </tbody>
@@ -273,7 +305,7 @@ $this->db->select($select);
                       <tbody>
                         <tr style=" margin:0 auto; background:#14213D; color:#ffffff; margin-top:20px; font-size:16px">
                           <td style="width:100%">
-                            <p style="text-align: center; color:#ffffff;" > © Copyright 2021 '.$mail_from_title.'. All Rights Reserved.</p>
+                            <p style="text-align: center; color:#ffffff;" > &copy; Copyright '.date('Y').' '.$mail_from_title.'. All Rights Reserved.</p>
                           </td>
                           
                         </tr>

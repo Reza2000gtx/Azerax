@@ -27,7 +27,7 @@ public function signup_action(){
 
 				 $this->form_validation->set_rules('username','Name','required');
 		         $this->form_validation->set_rules('email','Email','required|valid_email|is_unique[users.email]');
-				 $this->form_validation->set_rules('password','Password','required|min_length[6]');
+				 $this->form_validation->set_rules('password','Password','callback_valid_password');
 		         $this->form_validation->set_rules('cpassword','Confirm Password','required|matches[password]');
 		         $this->form_validation->set_message('is_unique', ' Already exist');
                
@@ -45,6 +45,8 @@ public function signup_action(){
 
 		
  	     	$insert['fname'] = $this->input->post('username');
+	     	$posted_user_type = $this->input->post('user_type');
+	     	$insert['user_type'] = ($posted_user_type == '1') ? 1 : 0;
  	     	$insert['email'] =  $this->input->post('email');
 			$insert['password'] = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
 			$insert['view_password'] = '';
@@ -138,9 +140,9 @@ public function signup_action(){
 			return FALSE;
 		}
 
-		if (strlen($password) < 5)
+		if (strlen($password) < 6)
 		{
-			$this->form_validation->set_message('valid_password', 'The {field} field must be at least 5 characters in length.');
+			$this->form_validation->set_message('valid_password', 'The {field} field must be at least 6 characters in length.');
 
 			return FALSE;
 		}
@@ -266,7 +268,13 @@ public function signup_success(){
 
 	   if($run){
 
-		  
+		   // If the user is currently logged in as this same account,
+		   // update their session right away too - otherwise the "please
+		   // verify" banner keeps showing (reading stale session data)
+		   // until their next login refreshes it.
+		   if($this->session->userdata('user_id') == $user['user_id']){
+		       $this->session->set_userdata('email_verified', 1);
+		   }
 
 		   $this->session->set_flashdata('msg','<div class="alert alert-success">Success! Your email has been verified successfully,Now you can login your account.</div>');
 
@@ -282,7 +290,7 @@ public function signup_success(){
 
 		   $this->session->set_flashdata('msg','<div class="alert alert-danger col-md-6">This link has been expired.</div>');
 
-			 redirect('already-verified');
+			 redirect('login');
 
 	   }
 
@@ -290,7 +298,7 @@ public function signup_success(){
 
 		   $this->session->set_flashdata('msg','<div class="alert alert-danger col-md-6">This link has been expired.</div>');
 
-			 redirect('already-verified');
+			 redirect('login');
 
    }
 

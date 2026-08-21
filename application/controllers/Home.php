@@ -233,7 +233,8 @@ public function fee_charges(){
 		//$address = $this->input->post('address');
 		$msg = $this->input->post('message');
 
-		$run = $this->common_model->InsertData('contact_us',array('name'=>$name,'email'=>$email,'subject'=>$subject,'msg'=>$msg,'read_contact'=>0,'created_at'=>date('Y-m-d H:i:s')));
+		$received_at = date('Y-m-d H:i:s');
+		$run = $this->common_model->InsertData('contact_us',array('name'=>$name,'email'=>$email,'subject'=>$subject,'msg'=>$msg,'read_contact'=>0,'created_at'=>$received_at));
 
 		if($run)
 		{
@@ -249,7 +250,7 @@ public function fee_charges(){
 				$emails = $super_admin['admin_email'];
 			}
 
-			$body = '<p>Hello Administrator</p><p>You have recived a new contact request.</p><p>Contact Detail:</p><p><b>Name:</b> '.$name.' <br><b>Email:</b>'.$email.'<br><b>Phone:</b>'.$phone.'<br><b>Address:</b>'.$address.'<br><b>Subject:</b> '.$subject.' <br> Message: '.$msg.'</p>';
+			$body = '<p>Hello Administrator</p><p>You have received a new contact request.</p><p>Contact Detail:</p><p><b>Name:</b> '.$name.' <br><b>Email:</b>'.$email.'<br><b>Received:</b> '.date('d M Y, g:i A', strtotime($received_at)).'<br><b>Subject:</b> '.$subject.' <br> Message: '.$msg.'</p>';
 			 
 			$send = $this->common_model->SendMail($emails,$subject,$body,'',$email); 
 			$this->session->set_flashdata('msg','<div class="alert alert-success">Success! Contact request has been send successfully.</div>');
@@ -285,13 +286,14 @@ public function fee_charges(){
 		//$address = $this->input->post('address');
 		$msg = $this->input->post('message');
 
-		$run = $this->common_model->InsertData('contact_us',array('name'=>$name,'email'=>$email,'subject'=>$subject,'msg'=>$msg,'read_contact'=>0,'created_at'=>date('Y-m-d H:i:s')));
+		$received_at = date('Y-m-d H:i:s');
+		$run = $this->common_model->InsertData('contact_us',array('name'=>$name,'email'=>$email,'subject'=>$subject,'msg'=>$msg,'read_contact'=>0,'created_at'=>$received_at));
 
 		if($run)
 		{
 			$subject="Contact request";
 			$emails = 'info@azerax.com';	
-			$body = '<p>Hello Administrator</p><p>You have received a new contact request.</p><p>Contact Detail:</p><p><b>Name:</b> '.$name.' <br><b>Email:</b>'.$email.'<br><b>Phone:</b>'.$phone.'<br><b>Address:</b>'.$address.'<br><b>Subject:</b> '.$subject.' <br> Message: '.$msg.'</p>';
+			$body = '<p>Hello Administrator</p><p>You have received a new contact request.</p><p>Contact Detail:</p><p><b>Name:</b> '.$name.' <br><b>Email:</b>'.$email.'<br><b>Received:</b> '.date('d M Y, g:i A', strtotime($received_at)).'<br><b>Subject:</b> '.$subject.' <br> Message: '.$msg.'</p>';
 			 
 			$send = $this->common_model->SendMail($emails,$subject,$body,'',$email); 
 			$this->session->set_flashdata('msg','<div class="alert alert-success">Success! Your request has been send successfully.</div>');

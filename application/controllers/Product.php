@@ -53,7 +53,10 @@ class Product extends CI_Controller
   
   $data['user'] = $this->common_model->GetSingleData('users',array('user_id' =>$session_id));
 
-
+  if($data['user']['user_type'] != 1){
+      $this->session->set_flashdata('msg','<div class="alert alert-danger">This page is only available to vendor accounts.</div>');
+      redirect('home');
+  }
 
 		$data['manufacturerlist'] = $this->common_model->GetAllData('manufacturer');
      	$this->load->view('site/add-product.php',$data);
@@ -124,9 +127,17 @@ class Product extends CI_Controller
 
 	public function my_product_listing()
 	{	
+	if(!$this->session->userdata('user_id')){
+	    redirect('login');
+	}
 	$session_id = $this->session->userdata('user_id');
   
   $data['user'] = $this->common_model->GetSingleData('users',array('user_id' =>$session_id));
+
+  if($data['user']['user_type'] != 1){
+      $this->session->set_flashdata('msg','<div class="alert alert-danger">This page is only available to vendor accounts.</div>');
+      redirect('home');
+  }
 
 		$data['productlist'] = $this->common_model->GetAllData('product',array('user_id'=>$session_id),'id','desc');
 		$data['manufacturerlist'] = $this->common_model->GetAllData('manufacturer');
@@ -414,15 +425,31 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 
    public function edit_my_product(){
 
+    if(!$this->session->userdata('user_id')){
+        redirect('login');
+    }
+
     $product_id = $this->uri->segment(2);
 
      $session_id = $this->session->userdata('user_id');
   
   $data['user'] = $this->common_model->GetSingleData('users',array('user_id' =>$session_id));
 
+  if($data['user']['user_type'] != 1){
+      $this->session->set_flashdata('msg','<div class="alert alert-danger">This page is only available to vendor accounts.</div>');
+      redirect('home');
+  }
+
 
     $data['manufacturerlist'] = $this->common_model->GetAllData('manufacturer');
     $data['product_detail'] = $this->common_model->GetSingleData('product',array('id'=>$product_id));
+
+    // Ownership check - a vendor should only be able to edit their own
+    // product, never someone else's just by changing the ID in the URL.
+    if(!$data['product_detail'] || $data['product_detail']['user_id'] != $session_id){
+        $this->session->set_flashdata('msg','<div class="alert alert-danger">You do not have permission to edit this product.</div>');
+        redirect('my-product-listing');
+    }
 
     // Existing category assignment (if any) - so the edit form can pre-select it
     $data['product_category'] = $this->common_model->GetSingleData('product_category',array('product_id'=>$product_id));
@@ -566,6 +593,17 @@ $success = 1;
   $id= $_REQUEST['id'];
   $condition = "`id` = ".$this->db->escape($id)."";
   $product_detail = $this->common_model->GetSingleData('product', $condition);
+
+  // Ownership check - never allow updating a product that doesn't belong
+  // to the currently logged-in user, even if they craft the request
+  // directly rather than going through the edit form/page.
+  $session_id = $this->session->userdata('user_id');
+  if(!empty($product_detail) && $product_detail[0]['user_id'] != $session_id){
+      $response['status'] = 0;
+      $response['msg'] = 'You do not have permission to edit this product.';
+      echo json_encode($response);
+      return;
+  }
 
   if(!empty($product_detail)){
     $product_detail = $product_detail[0];

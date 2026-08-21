@@ -362,11 +362,11 @@ public function editinput(){
 			$update['user_type']=$this->uri->segment(5);
 			$id = $this->uri->segment(4);
 		    if($this->uri->segment(5)==1){
-		    	$status = 'deligate';
+		    	$status = 'made a Vendor';
 			
 		    }else{
 		 
-		    	$status = 'free';
+		    	$status = 'made a Normal user';
 		    }
 			$run = $this->common_model->UpdateData('users',array('user_id'=>$id),$update);
 

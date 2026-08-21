@@ -61,11 +61,11 @@ include_once('include/header.php');
                         <?php 
                               if($row['user_type']==0){
                               ?>
-                           <a class="btn btn-danger btn-xs"  href="<?php echo site_url().'Admin/Users/changetype/'.$row['user_id'].'/1'?>" onclick="return confirm('Are you sure you want to Deligate this user?')">Free</a>
+                           <a class="btn btn-danger btn-xs"  href="<?php echo site_url().'Admin/Users/changetype/'.$row['user_id'].'/1'?>" onclick="return confirm('Are you sure you want to make this a Vendor account?')">Normal user</a>
                            <?php
                               }else{
                               ?>
-                           <a class="btn btn-success btn-xs" href="<?php echo site_url().'Admin/Users/changetype/'.$row['user_id'].'/0'?>" onclick="return confirm('Are you sure you want to Free this user?')">Deligate</a>
+                           <a class="btn btn-success btn-xs" href="<?php echo site_url().'Admin/Users/changetype/'.$row['user_id'].'/0'?>" onclick="return confirm('Are you sure you want to make this a Normal user account?')">Vendor</a>
 
                            <?php
                               }
@@ -74,11 +74,11 @@ include_once('include/header.php');
                            <!-- <?php 
                               if($row['user_type']==0){
                               ?>
-                              <p>Free</p>
+                              <p>Normal user</p>
                               <?php
                               }else{
                               ?>
-                              <p>Deligate</p>
+                              <p>Vendor</p>
                                <?php
                               }
 

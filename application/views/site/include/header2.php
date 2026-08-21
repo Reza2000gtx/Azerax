@@ -174,10 +174,10 @@ html {
                                 <li class="az-dd-section">Buying</li>
                                 <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>my-purchase-requests"><i class="ti ti-shopping-cart"></i> Purchase Request Sent</a></li>
                                 <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>my-fav-listing"><i class="ti ti-heart"></i> My Favourites</a></li>
+                                <?php if ($user['user_type'] == 1) { ?>
                                 <li class="az-dd-section">Selling</li>
                                 <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>add-product"><i class="ti ti-plus"></i> Add Product</a></li>
                                 <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>my-product-listing"><i class="ti ti-list"></i> My Products</a></li>
-                                <?php if ($user['user_type'] == 1) { ?>
                                 <li class="nav-item"><a class="az-dd-link" href="<?php echo base_url();?>vendor-requests"><i class="ti ti-inbox"></i> Purchase Request Received</a></li>
                                 <?php } ?>
                                 <li class="az-dd-section">Financials</li>

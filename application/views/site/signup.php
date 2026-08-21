@@ -163,6 +163,83 @@ body {
     margin-top: 16px;
 }
 .az-terms a { color: #FCA311; text-decoration: none; }
+
+/* Account type selection - two clickable cards, radio-based */
+.az-account-type {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+.az-account-type input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.az-account-type-card {
+    flex: 1;
+    display: block;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 8px;
+    padding: 14px 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+}
+.az-account-type-card i {
+    font-size: 20px;
+    color: #999;
+    display: block;
+    margin-bottom: 6px;
+    transition: color 0.15s;
+}
+.az-account-type-card .az-account-type-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #14213D;
+    display: block;
+}
+.az-account-type-card .az-account-type-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #999;
+    display: block;
+    margin-top: 2px;
+}
+.az-account-type input[type="radio"]:checked + .az-account-type-card {
+    border-color: #FCA311;
+    background: #FFF8E8;
+}
+.az-account-type input[type="radio"]:checked + .az-account-type-card i {
+    color: #FCA311;
+}
+.az-account-type input[type="radio"]:focus-visible + .az-account-type-card {
+    outline: 2px solid #FCA311;
+    outline-offset: 2px;
+}
+
+/* Show/hide password toggle */
+.az-password-wrap {
+    position: relative;
+}
+.az-password-wrap input {
+    padding-right: 42px;
+}
+.az-password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #999;
+    font-size: 17px;
+    line-height: 1;
+}
+.az-password-toggle:hover { color: #14213D; }
 </style>
 
 <div class="az-login-body">
@@ -197,34 +274,62 @@ body {
     <div class="az-login-right">
         <div class="az-login-form">
             <h3>Create account</h3>
-            <p class="az-subtitle">Free to join. No credit card required.</p>
+            <p class="az-subtitle">Free to join for everyone.</p>
 
             <?php echo $this->session->flashdata('msg'); ?>
 
             <form action="<?php echo base_url(); ?>signup-action" method="post">
 
                 <div class="form-group">
+                    <label>I am joining as a...</label>
+                    <div class="az-account-type">
+                        <label style="position:relative;flex:1;margin:0;">
+                            <input type="radio" name="user_type" value="0" checked>
+                            <span class="az-account-type-card">
+                                <i class="ti ti-user"></i>
+                                <span class="az-account-type-label">Buyer</span>
+                                <span class="az-account-type-sub">Browse &amp; request quotes</span>
+                            </span>
+                        </label>
+                        <label style="position:relative;flex:1;margin:0;">
+                            <input type="radio" name="user_type" value="1">
+                            <span class="az-account-type-card">
+                                <i class="ti ti-building-store"></i>
+                                <span class="az-account-type-label">Vendor</span>
+                                <span class="az-account-type-sub">List &amp; manage products</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" required class="form-control" name="username" value="<?php echo set_value('username'); ?>" placeholder="Your full name">
-                    <div class="errorMessage"><?php echo form_error('username'); ?></div>
+                    <div class="errorMessage" id="err-username"><?php echo form_error('username'); ?></div>
                 </div>
 
                 <div class="form-group">
                     <label>Email Address</label>
                     <input type="email" required class="form-control" name="email" value="<?php echo set_value('email'); ?>" placeholder="your@email.com">
-                    <div class="errorMessage"><?php echo form_error('email'); ?></div>
+                    <div class="errorMessage" id="err-email"><?php echo form_error('email'); ?></div>
                 </div>
 
                 <div class="form-group">
-                    <label>Password <span style="color:#999;font-weight:400;">(min. 6 characters)</span></label>
-                    <input type="password" required class="form-control" name="password" placeholder="Choose a password">
-                    <div class="errorMessage"><?php echo form_error('password'); ?></div>
+                    <label>Password <span style="color:#999;font-weight:400;">(min. 6 characters, with upper &amp; lowercase, a number and a special character)</span></label>
+                    <div class="az-password-wrap">
+                        <input type="password" required class="form-control" name="password" id="signup-password" placeholder="Choose a password">
+                        <button type="button" class="az-password-toggle ti ti-eye" data-target="signup-password" aria-label="Show password"></button>
+                    </div>
+                    <div class="errorMessage" id="err-password"><?php echo form_error('password'); ?></div>
                 </div>
 
                 <div class="form-group">
                     <label>Confirm Password</label>
-                    <input type="password" required class="form-control" name="cpassword" placeholder="Confirm your password">
-                    <div class="errorMessage"><?php echo form_error('cpassword'); ?></div>
+                    <div class="az-password-wrap">
+                        <input type="password" required class="form-control" name="cpassword" id="signup-cpassword" placeholder="Confirm your password">
+                        <button type="button" class="az-password-toggle ti ti-eye" data-target="signup-cpassword" aria-label="Show password"></button>
+                    </div>
+                    <div class="errorMessage" id="err-cpassword"><?php echo form_error('cpassword'); ?></div>
                 </div>
 
                 <div class="az-keep-logged">
@@ -247,4 +352,35 @@ body {
 
 </div>
 
+<script>
+document.querySelectorAll('.az-password-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        var input = document.getElementById(btn.getAttribute('data-target'));
+        if(!input) return;
+        var isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        btn.classList.toggle('ti-eye', !isHidden);
+        btn.classList.toggle('ti-eye-off', isHidden);
+        btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+    });
+});
+
+// Clear a field's error message as soon as the user edits it, rather than
+// leaving a stale error (e.g. "email already exists") sitting there after
+// they've already typed a different, valid value - it only actually
+// re-validates on the next full submit either way.
+[
+    ['username', 'err-username'],
+    ['email', 'err-email'],
+    ['password', 'err-password'],
+    ['cpassword', 'err-cpassword']
+].forEach(function(pair){
+    var input = document.querySelector('[name="' + pair[0] + '"]');
+    var errorEl = document.getElementById(pair[1]);
+    if(!input || !errorEl) return;
+    input.addEventListener('input', function(){
+        errorEl.textContent = '';
+    });
+});
+</script>
 <?php include_once 'include/footer2.php'; ?>

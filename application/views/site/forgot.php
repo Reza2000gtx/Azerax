@@ -1,44 +1,144 @@
-<?php include_once 'include/header.php'; ?>
-<section class="login_box_area p_120">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6">
-				<div class="login_box_img">
-					<img class="img-fluid" src="<?php echo base_url();?>assets/site/img/login.jpg" alt="">
-					<div class="hover">
-						<h4>New to our website?</h4>
-						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-						<a class="main_btn" href="<?php echo base_url();?>signup">Create an Account</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-6">
-				<div class="login_form_inner">
-					<h3>Forgot Password</h3>
-					<?php echo $this->session->flashdata('msg'); ?>
+<?php include_once 'include/header2.php'; ?>
 
-					<form class="row login_form"  method="post" id="contactForm"  action="<?php echo base_url();?>send-password-mail">
-						<div class="col-md-12 form-group">
-							<input required type="email" class="form-control" id="name" name="email" placeholder="info@gmail.com">
-							<div class="errorMessage" id="email_error" ><?php echo form_error('email'); ?></div>
-						</div>
-						<!-- <div class="col-md-12 form-group">
-							<input type="text" class="form-control" id="name" name="name" placeholder="Password">
-						</div> -->
-						<!-- <div class="col-md-12 form-group">
-							<div class="creat_account">
-								<input type="checkbox" id="f-option2" name="selector">
-								<label for="f-option2">Keep me logged in</label>
-							</div>
-						</div> -->
-						<div class="col-md-12 form-group">
-							<button type="submit" value="submit" class="btn submit_btn">Forgot Password</button>
-							<!-- <a href="#">Forgot Password?</a> -->
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<?php include_once 'include/footer.php'; ?>
+<style>
+.az-page-hero {
+    background: #14213D;
+    padding: 40px;
+    text-align: center;
+    margin-top: -20px;
+}
+.az-page-hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+.az-page-hero p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin: 0;
+}
+.az-form-body {
+    background: #F5F5F5;
+    padding: 40px;
+    min-height: calc(100vh - 280px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.az-form-card {
+    background: #fff;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 14px;
+    padding: 36px;
+    width: 100%;
+    max-width: 480px;
+}
+.az-form-card h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #14213D;
+    margin-bottom: 6px;
+}
+.az-form-card .az-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 24px;
+}
+.az-form-card .form-group label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 6px;
+    display: block;
+}
+.az-form-card .form-control {
+    border: 1.5px solid #EBEBEB;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #14213D;
+    padding: 10px 14px;
+    transition: border-color 0.15s;
+    width: 100%;
+}
+.az-form-card .form-control:focus {
+    border-color: #FCA311;
+    box-shadow: none;
+    outline: none;
+}
+.errorMessage {
+    color: #dc3545;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+}
+.az-submit-btn {
+    background: #FCA311;
+    color: #14213D;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    width: 100%;
+}
+.az-submit-btn:hover { background: #e8940a; }
+.az-back-link {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #999;
+    text-decoration: none;
+}
+.az-back-link:hover { color: #14213D; }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.az-form-body {
+    flex: 1;
+}
+</style>
+
+<!-- Hero -->
+<div class="az-page-hero">
+    <h1>Forgot Password</h1>
+    <p>We'll send you a link to reset it</p>
+</div>
+
+<!-- Body -->
+<div class="az-form-body">
+    <div class="az-form-card">
+        <h3>Reset your password</h3>
+        <p class="az-subtitle">Enter the email address on your account and we'll send you a reset link.</p>
+        <?php echo $this->session->flashdata('msg'); ?>
+
+        <form method="post" action="<?php echo base_url();?>send-password-mail">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input required type="email" class="form-control" name="email" placeholder="your@email.com">
+                <div class="errorMessage" id="email_error"><?php echo form_error('email'); ?></div>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+                <button type="submit" class="az-submit-btn">Send Reset Link</button>
+            </div>
+        </form>
+
+        <a href="<?php echo base_url();?>login" class="az-back-link">&larr; Back to Sign In</a>
+    </div>
+</div>
+
+<?php include_once 'include/footer2.php'; ?>
