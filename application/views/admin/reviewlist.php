@@ -202,21 +202,21 @@ input.primary:checked + .slider {
 
 								<?php $i=1;	foreach($reviewlist as $row){ ?>
 
-								<tr class="delete_mem<?php echo $row['id']; ?>">
+								<tr class="delete_mem<?php echo html_escape($row['id']); ?>">
 
 								
 
 									<td class="row-index"><?php echo $i++; ?></td>
 
-									<td><?php echo $row['name']; ?></td>
+									<td><?php echo html_escape($row['name']); ?></td>
 
-									<td><?php echo $row['email']; ?></td>
+									<td><?php echo html_escape($row['email']); ?></td>
 
 									<td><?php 
 									$device = $this->common_model->GetDataById('product',$row['device_id']);
 									
 									echo $device['device_model']; 
-									?> <span style="color:#999;font-size:12px;">(ID: <?php echo $row['device_id']; ?>)</span></td>
+									?> <span style="color:#999;font-size:12px;">(ID: <?php echo html_escape($row['device_id']); ?>)</span></td>
 
 									<td>
 									<?php
@@ -225,7 +225,7 @@ input.primary:checked + .slider {
 									?>
 									<?php echo $preview; ?>
 									<?php if(strlen($row['message']) > 60){ ?>
-									<br><a href="#" data-toggle="modal" data-target="#messageModal<?php echo $row['id']; ?>" style="font-size:12px;">View full message</a>
+									<br><a href="#" data-toggle="modal" data-target="#messageModal<?php echo html_escape($row['id']); ?>" style="font-size:12px;">View full message</a>
 									<?php } ?>
 									</td>
 
@@ -235,7 +235,7 @@ input.primary:checked + .slider {
 
                                       <form method="post" action="<?php echo base_url();?>Admin/Review/editstatus" style="display:inline;" onsubmit="return confirm('Change this review to Inactive?');">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                      <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
+                                      <input type="hidden" name="review_id" value="<?php echo html_escape($row['id']); ?>">
                                       <input type="hidden" name="status" value="0">
                                       <button type="submit" class="btn btn-sm" style="background:#14213D;color:#fff;">Active</button>
                                       </form>
@@ -244,7 +244,7 @@ input.primary:checked + .slider {
 
                                       <form method="post" action="<?php echo base_url();?>Admin/Review/editstatus" style="display:inline;" onsubmit="return confirm('Change this review to Active?');">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                      <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
+                                      <input type="hidden" name="review_id" value="<?php echo html_escape($row['id']); ?>">
                                       <input type="hidden" name="status" value="1">
                                       <button type="submit" class="btn btn-sm" style="background:#EAB308;color:#fff;">Inactive</button>
                                       </form>
@@ -255,14 +255,14 @@ input.primary:checked + .slider {
 
 									
 
-									<td><a href="javascript:void(0)" data-deleteid="<?php echo $row['id']; ?>" data-nid="<?php echo $i; ?>" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+									<td><a href="javascript:void(0)" data-deleteid="<?php echo html_escape($row['id']); ?>" data-nid="<?php echo $i; ?>" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 
 									</tr>
 
 								<!-- Full message modal -->
-								<div class="modal" id="messageModal<?php echo $row['id']; ?>">
+								<div class="modal" id="messageModal<?php echo html_escape($row['id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 								      <div class="modal-header">

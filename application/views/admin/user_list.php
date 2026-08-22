@@ -37,18 +37,18 @@ include_once('include/header.php');
                         $i=1;
 						      foreach($userlist as $row){
                     ?>
-                     <tr class="delete_mem<?php echo $row['user_id']; ?>">
-                        <td><?php echo $row['user_id'];?></td>
+                     <tr class="delete_mem<?php echo html_escape($row['user_id']); ?>">
+                        <td><?php echo html_escape($row['user_id']);?></td>
                         
-                        <td><a href="<?php echo base_url(); ?>Admin/user-profile/<?php echo $row['user_id']; ?>"><?php echo $row['fname'];?></a></td>
-                        <td><?php echo $row['email'];?></td>
-                        <td><?php echo $row['address'];?></td>
+                        <td><a href="<?php echo base_url(); ?>Admin/user-profile/<?php echo html_escape($row['user_id']); ?>"><?php echo html_escape($row['fname']);?></a></td>
+                        <td><?php echo html_escape($row['email']);?></td>
+                        <td><?php echo html_escape($row['address']);?></td>
                         <td>
                            <?php
                               if($row['profile']!='')
                               {
                                 ?>
-                           <img height="50" width="50" src="<?php echo base_url();?>assets/profile/<?php echo $row['profile'];?>">
+                           <img height="50" width="50" src="<?php echo base_url();?>assets/profile/<?php echo html_escape($row['profile']);?>">
                            <?php
                               }else{
                                 ?>
@@ -89,7 +89,7 @@ include_once('include/header.php');
 
                         <td>
 
-                        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEdit<?php echo $row['user_id']; ?>"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEdit<?php echo html_escape($row['user_id']); ?>"><i class="fa fa-edit"></i></button>
 
                            
 
@@ -107,7 +107,7 @@ include_once('include/header.php');
 
                             ?>
 
-                         <a onclick="confirm('Are you sure want to delete this user?'); deleteuser(<?php echo $row['user_id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                         <a onclick="confirm('Are you sure want to delete this user?'); deleteuser(<?php echo html_escape($row['user_id']); ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
                       
                            
                         </td>
@@ -116,7 +116,7 @@ include_once('include/header.php');
                      </tr>
 
                      <!-- The Modal -->
-                        <div class="modal" id="myModalEdit<?php echo $row['user_id']; ?>">
+                        <div class="modal" id="myModalEdit<?php echo html_escape($row['user_id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -127,33 +127,33 @@ include_once('include/header.php');
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['user_id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['user_id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-user" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Name</label>
-                                 <input type="text" required name="name" class="form-control" value="<?php echo $row['fname']; ?>">
+                                 <input type="text" required name="name" class="form-control" value="<?php echo html_escape($row['fname']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Email</label>
-                                 <input type="email" required name="email" class="form-control" value="<?php echo $row['email']; ?>">
+                                 <input type="email" required name="email" class="form-control" value="<?php echo html_escape($row['email']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Address</label>
-                                 <textarea class="form-control" name="address" id="address"><?php echo $row['address']; ?></textarea>
+                                 <textarea class="form-control" name="address" id="address"><?php echo html_escape($row['address']); ?></textarea>
                                </div>
 
                                <div class="form-group">
                                  <label>Profile</label>
                                  <input type="file" name="image" accept="image/*" class="form-control" id="fileUpload"/>
-                                 <img height="100" width="100" src="<?php echo base_url();?>assets/profile/<?php echo $row['profile'];?>">
+                                 <img height="100" width="100" src="<?php echo base_url();?>assets/profile/<?php echo html_escape($row['profile']);?>">
                                </div>
 
                            
-                              <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
+                              <input type="hidden" name="user_id" value="<?php echo html_escape($row['user_id']); ?>">
                               </div>
 
                               <!-- Modal footer -->

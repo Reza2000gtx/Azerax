@@ -102,14 +102,14 @@ input.primary:checked + .slider {
 							
 									<td>
 
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
+										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
 									
-										<!-- <a onclick="return confirm('Are you sure want to delete this manufacturer ?');" href="<?php echo base_url(); ?>Admin/Home/deletesetting/<?php echo $row['id']; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+										<!-- <a onclick="return confirm('Are you sure want to delete this manufacturer ?');" href="<?php echo base_url(); ?>Admin/Home/deletesetting/<?php echo html_escape($row['id']); ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
 											
 									</td>
 								</tr>
 								<!-- The Modal -->
-								<div class="modal" id="myModal<?php echo $row['id']; ?>">
+								<div class="modal" id="myModal<?php echo html_escape($row['id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -120,8 +120,8 @@ input.primary:checked + .slider {
 								      </div>
 
 								      <!-- Modal body -->
-								      <div id="error<?php echo $row['id']; ?>"></div>
-								     <form method="post" onsubmit="return editpayment(<?php echo $row['id']; ?>);" id="editpayment<?php echo $row['id']; ?>">
+								      <div id="error<?php echo html_escape($row['id']); ?>"></div>
+								     <form method="post" onsubmit="return editpayment(<?php echo html_escape($row['id']); ?>);" id="editpayment<?php echo html_escape($row['id']); ?>">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
 								       <div class="form-group">
@@ -130,7 +130,7 @@ input.primary:checked + .slider {
 								       </div>
 
 							      
-								      <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+								      <input type="hidden" name="id" value="<?php echo html_escape($row['id']); ?>">
 								      <!-- Modal footer -->
 								      <div class="modal-footer">
 								      	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Save</button>

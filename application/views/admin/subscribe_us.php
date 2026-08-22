@@ -44,9 +44,9 @@ include_once('include/header.php');
 								<tr>
 									<td><?php echo $i; ?></td>
 									 <!-- <td>   
-                                      <input type="checkbox" id="checkItem" name="check[]" value="<?php echo $row['email']; ?>" >
+                                      <input type="checkbox" id="checkItem" name="check[]" value="<?php echo html_escape($row['email']); ?>" >
                                      </td> -->
-									<td><?php echo $row['email']; ?></td>
+									<td><?php echo html_escape($row['email']); ?></td>
                                     <td><?php echo date('d-m-Y H:i a', strtotime($row['created_at'])); ?></td>
 								</tr>
 								

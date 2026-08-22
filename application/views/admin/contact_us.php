@@ -53,10 +53,10 @@ include_once('include/header.php');
 								<tr>
 									<td><?php echo $i; ?></td>
 									
-									<td><?php echo $row['name']; ?></td>
-									<!--<td><?php //echo $row['phone']; ?></td>-->
-									<td><?php echo $row['email']; ?></td>
-                  <!--<td><?php //echo $row['address']; ?></td>-->
+									<td><?php echo html_escape($row['name']); ?></td>
+									<!--<td><?php //echo html_escape($row['phone']); ?></td>-->
+									<td><?php echo html_escape($row['email']); ?></td>
+                  <!--<td><?php //echo html_escape($row['address']); ?></td>-->
 									<td><?php echo htmlspecialchars($row['subject']); ?></td>
 
 									<td style="max-width:220px;word-break:break-word;">
@@ -66,17 +66,17 @@ include_once('include/header.php');
 								?>
 								<?php echo $msg_preview; ?>
 								<?php if(strlen($row['msg']) > 60){ ?>
-								<br><a href="#" data-toggle="modal" data-target="#msgModal<?php echo $row['id']; ?>" style="font-size:12px;">View full message</a>
+								<br><a href="#" data-toggle="modal" data-target="#msgModal<?php echo html_escape($row['id']); ?>" style="font-size:12px;">View full message</a>
 								<?php } ?>
 								</td>
-										<td><?php echo $row['reply']; ?></td>
+										<td><?php echo html_escape($row['reply']); ?></td>
                                     <td><?php echo date('d-m-Y H:i a', strtotime($row['created_at'])); ?></td>
                                     <td style="white-space:nowrap;">
                                         <?php
                                             if($row['reply']=='')
                                             {
                                         ?>
-                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#replyModal<?php echo $row['id']; ?>">Send Reply</button>
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#replyModal<?php echo html_escape($row['id']); ?>">Send Reply</button>
                                         <?php
                                             }
                                             else
@@ -88,14 +88,14 @@ include_once('include/header.php');
                                         ?>
                                         <form method="post" action="<?php echo base_url(); ?>Admin/Footer_content/delete_contact" style="display:inline-block;margin-left:6px;vertical-align:middle;" onsubmit="return confirm('Are you sure you want to delete this message?');">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <input type="hidden" name="id" value="<?php echo html_escape($row['id']); ?>">
                                         <button type="submit" style="background:none;border:none;padding:4px 8px;color:#DC2626;font-size:16px;"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                         </form>
                                     </td>
 								</tr>
 								
 								<!-- Full message modal -->
-								<div class="modal" id="msgModal<?php echo $row['id']; ?>">
+								<div class="modal" id="msgModal<?php echo html_escape($row['id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 								      <div class="modal-header">
@@ -112,20 +112,20 @@ include_once('include/header.php');
 								  </div>
 								</div>
 
-                                <div class="modal fade" id="replyModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="replyModal<?php echo html_escape($row['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form action ="<?php echo base_url();?>Admin/Home/update_contact" method="POST">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                                 <div class="modal-dialog cancel-btn" role="document" class="cancel-model">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="replyModal><?php echo $row['id']; ?>"></h5>
+                                            <h5 class="modal-title" id="replyModal><?php echo html_escape($row['id']); ?>"></h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                         </div>
-                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="email" value="<?php echo $row['email']; ?>">
-                                        <input type="hidden" name="name" value="<?php echo $row['name']; ?>">
+                                        <input type="hidden" name="id" value="<?php echo html_escape($row['id']); ?>">
+                                        <input type="hidden" name="email" value="<?php echo html_escape($row['email']); ?>">
+                                        <input type="hidden" name="name" value="<?php echo html_escape($row['name']); ?>">
                                         <div class="modal-body">
                                             <h4 style="color:#14213D;">Write Your Reply</h4><br>
                                                 <textarea name="reply"  rows="3" maxlength="3000" class="form-control"></textarea>

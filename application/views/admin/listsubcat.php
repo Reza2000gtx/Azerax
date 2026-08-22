@@ -46,22 +46,25 @@ include_once('include/header.php');
 									?>
 								<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $row['sub_name']; ?></td>
-									<td><?php echo $row['sub_desc']; ?></td>
+									<td><?php echo html_escape($row['sub_name']); ?></td>
+									<td><?php echo html_escape($row['sub_desc']); ?></td>
 									<td><?php echo $cat['cat_title']; ?></td>
 									
 									<td>
 									<?php if($admin_permission_single && $admin_permission_single['edit']=='YES') { ?>
 
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['sub_cat_id']; ?>"><i class="fa fa-edit"></i></button>
+										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['sub_cat_id']); ?>"><i class="fa fa-edit"></i></button>
 										<?php	} ?>
 										<?php if($admin_permission_single && $admin_permission_single['delete']=='YES') { ?>
-										<a onclick="return confirm('Are you sure want to delete this subcategory?');" href="<?php echo base_url(); ?>Admin/Subcategory/deletesubcat/<?php echo $row['sub_cat_id']; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<form method="post" action="<?php echo base_url(); ?>Admin/Subcategory/deletesubcat/<?php echo html_escape($row['sub_cat_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this subcategory?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+										<button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash" aria-hidden="true"></i></button>
+										</form>
 										<?php	} ?>
 									</td>
 								</tr>
 								<!-- The Modal -->
-								<div class="modal" id="myModal<?php echo $row['sub_cat_id']; ?>">
+								<div class="modal" id="myModal<?php echo html_escape($row['sub_cat_id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -72,8 +75,8 @@ include_once('include/header.php');
 								      </div>
 
 								      <!-- Modal body -->
-								      <div id="error<?php echo $row['cat_id']; ?>"></div>
-								     <form method="post" onsubmit="return editsubcategory(<?php echo $row['sub_cat_id']; ?>);" id="editsubcategory<?php echo $row['sub_cat_id']; ?>">
+								      <div id="error<?php echo html_escape($row['cat_id']); ?>"></div>
+								     <form method="post" onsubmit="return editsubcategory(<?php echo html_escape($row['sub_cat_id']); ?>);" id="editsubcategory<?php echo html_escape($row['sub_cat_id']); ?>">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
 									  <div class="form-group">
@@ -88,16 +91,16 @@ include_once('include/header.php');
 
 								       <div class="form-group">
 								       	<label>SubCategory Name</label>
-								       	<input type="text" name="sub_name" value="<?php echo $row['sub_name']; ?>" class="form-control">
+								       	<input type="text" name="sub_name" value="<?php echo html_escape($row['sub_name']); ?>" class="form-control">
 								       </div>
 
 								       <div class="form-group">
 								       	<label>SubCategory Description</label>
-								       	<textarea class="form-control" name="sub_desc"><?php echo $row['sub_desc']; ?></textarea> 
+								       	<textarea class="form-control" name="sub_desc"><?php echo html_escape($row['sub_desc']); ?></textarea> 
 								       </div>
 								       				
 								      </div>
-								      <input type="hidden" name="sub_cat_id" value="<?php echo $row['sub_cat_id']; ?>">
+								      <input type="hidden" name="sub_cat_id" value="<?php echo html_escape($row['sub_cat_id']); ?>">
 								      <!-- Modal footer -->
 								      <div class="modal-footer">
 								      	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Save</button>

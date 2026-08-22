@@ -30,9 +30,6 @@ class Home extends CI_Controller
 		$this->load->view('admin/index',$data);
 	}
 	public function advertisement(){
-		$data['currently_online_users'] = $this->common_model->GetAllData('users',array('logged_in_status'=>1));
-
-		$data['userdata'] = $this->common_model->GetAllData('users');
 		$data['ads'] = $this->common_model->GetAllData('advertisement','','position_order','ASC');
 
 		$this->load->view('admin/ads',$data);
@@ -55,7 +52,11 @@ class Home extends CI_Controller
 			$config['allowed_types'] = 'jpeg|gif|jpg|png';
 			$config['encrypt_name']=true;
 			$this->load->library("upload",$config);
-			 $this->upload->do_upload('ads_image');
+			 if(!$this->upload->do_upload('ads_image')){
+			    $this->session->set_flashdata('msg','<div class="alert alert-danger">Error uploading image: '.$this->upload->display_errors('','').'</div>');
+			    redirect('Admin/advertisement');
+			    return;
+			 }
 			$u_profile=$this->upload->data("file_name");
 		    $insert['ads_image'] = $u_profile;
 		    
@@ -83,6 +84,9 @@ class Home extends CI_Controller
 			
 		
 				redirect('Admin/advertisement');
+			} else {
+			    $this->session->set_flashdata('msg','<div class="alert alert-danger">Please choose an image to upload.</div>');
+			    redirect('Admin/advertisement');
 			}
 
 	 }
@@ -115,7 +119,7 @@ $run = $this->common_model->UpdateData('advertisement',array('ads_id'=>$v),$inse
        	     	
        	     	foreach ($selectAllSubCatquery as  $subcategory) {
        	     		?>
-       	     		<option value="<?=$subcategory['id']?>"><?=$subcategory['sub_name']?></option>
+       	     		<option value="<?=$subcategory['id']?>"><?=html_escape($subcategory['sub_name'])?></option>
        	     		<?php
        	     	}
        	     	
@@ -139,7 +143,7 @@ $run = $this->common_model->UpdateData('advertisement',array('ads_id'=>$v),$inse
        	     	
        	     	foreach ($selectAllSubCatquery as  $subcategory) {
        	     		?>
-       	     		<option value="<?=$subcategory['id']?>"><?=$subcategory['sub_name']?></option>
+       	     		<option value="<?=$subcategory['id']?>"><?=html_escape($subcategory['sub_name'])?></option>
        	     		<?php
        	     	}
        	     	
@@ -163,7 +167,11 @@ $run = $this->common_model->UpdateData('advertisement',array('ads_id'=>$v),$inse
 			$config['allowed_types'] = 'jpeg|gif|jpg|png';
 			$config['encrypt_name']=true;
 			$this->load->library("upload",$config);
-			 $this->upload->do_upload('ads_image');
+			 if(!$this->upload->do_upload('ads_image')){
+			    $this->session->set_flashdata('msg','<div class="alert alert-danger">Error uploading image: '.$this->upload->display_errors('','').'</div>');
+			    redirect('Admin/advertisement');
+			    return;
+			 }
 			$u_profile=$this->upload->data("file_name");
 		    $insert['ads_image'] = $u_profile;
 
@@ -531,7 +539,7 @@ public function update_settings_option(){
 			$type=2;
 		   
 
-		   $data['admins'] = $this->common_model->GetAllData('admin',array('type'=>$type),'id','desc');
+		   $data['admins'] = $this->common_model->GetAllData('admin',array('type'=>$type),'id','asc');
 		   $this->load->view('admin/admin_list',$data);
 	
 		 }

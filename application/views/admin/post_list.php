@@ -102,16 +102,25 @@ echo 'Active'; }else{
                             <?php if($admin_permission_single && $admin_permission_single['delete']=='YES') { ?>
              
                            
-                             <a class="btn btn-danger btn-xs" onclick="alert('Are you sure want to delete this post?')" href="<?php echo base_url();?>Admin/posts/delete/<?php echo $post['id'];?>/<?php echo $this->uri->segment(4);?>" ><i class="fa fa-trash"></i></a>
+                             <form method="post" action="<?php echo base_url();?>Admin/posts/delete/<?php echo $post['id'];?>/<?php echo $this->uri->segment(4);?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this post?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                            <button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash"></i></button>
+                            </form>
                              <?php	} ?>
                              <?php if($admin_permission_single && $admin_permission_single['active_deactive']=='YES') { ?>
 
 <?php if($post['post_status']==0) { ?>
-                             <a class="btn btn-danger btn-xs"  href="<?php echo base_url();?>Admin/posts/de-activate/<?php echo $post['id'];?>/<?php echo $this->uri->segment(4);?>" >Deactivate</a>
+                             <form method="post" action="<?php echo base_url();?>Admin/posts/de-activate/<?php echo $post['id'];?>/<?php echo $this->uri->segment(4);?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Deactivate this post?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                            <button type="submit" class="btn btn-danger btn-xs" style="border:none;">Deactivate</button>
+                            </form>
 
                            <?php }else { ?>
  
-   <a class="btn btn-success btn-success"  href="<?php echo base_url();?>Admin/posts/activate/<?php echo $post['id'];?>/<?php echo $this->uri->segment(4);?>" >Activate</a>   
+   <form method="post" action="<?php echo base_url();?>Admin/posts/activate/<?php echo $post['id'];?>/<?php echo $this->uri->segment(4);?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Activate this post?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+   <button type="submit" class="btn btn-success btn-success" style="border:none;">Activate</button>
+   </form>
 
                          <?php } ?>
 

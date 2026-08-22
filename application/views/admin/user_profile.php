@@ -125,7 +125,7 @@ input.primary:checked + .slider {
                             $i = 1;
                             foreach ($transaction_detail as $key => $value) {
                         
-                             $user = $this->db->query("SELECT * from users where user_id = '".$value->tr_userid."'")->row();
+                             $user = $this->db->query("SELECT * from users where user_id = ".$this->db->escape($value->tr_userid))->row();
                                 ?>
                                 <tr>                                                      
                                     <td><?php echo $i++;?></td>

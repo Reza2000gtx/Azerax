@@ -236,13 +236,13 @@ input.primary:checked + .slider {
 
 								foreach($pending_devices as $row){ 
 
-                 $user = $this->db->query("SELECT * from users where user_id = '".$row['user_id']."'")->row_array();
+                 $user = $this->db->query("SELECT * from users where user_id = ".$this->db->escape($row['user_id']))->row_array();
 
 									?>
 
-								<tr class="delete_mem<?php echo $row['id']; ?>">
+								<tr class="delete_mem<?php echo html_escape($row['id']); ?>">
 
-									<td><?php echo $row['id']; ?></td>
+									<td><?php echo html_escape($row['id']); ?></td>
 
 									<td><?php echo substr($row['device_model'],0,50); ?></td>
 
@@ -284,19 +284,19 @@ input.primary:checked + .slider {
 
 
 
-										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo html_escape($row['id']); ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
 										<a class="btn btn-success btn-xs" href="<?php echo base_url().'Admin/Product/changestatus/'.$row['id'].'/1'?>" onclick="return confirm('Are you sure you want to Approve this Product?')">Approve</a>
 
 
                     
 
-										<!-- <a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+										<!-- <a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
 
 											
 
 
 
-										<!-- <a class="btn btn-primary btn-xs" href="<?php echo base_url();?>Admin/edit-product/<?php echo $row['id']; ?>"><i class="fa fa-edit" aria-hidden="true"></i></a> -->
+										<!-- <a class="btn btn-primary btn-xs" href="<?php echo base_url();?>Admin/edit-product/<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit" aria-hidden="true"></i></a> -->
 
 
 

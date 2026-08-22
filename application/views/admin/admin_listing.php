@@ -35,20 +35,20 @@ include_once('include/header.php');
                         $i=1;
 						      foreach($adminlist as $row){
                     ?>
-                     <tr class="delete_mem<?php echo $row['id']; ?>">
+                     <tr class="delete_mem<?php echo html_escape($row['id']); ?>">
                         <td><?php echo $i;?></td>
-                        <td><?php echo $row['admin_name'];?></td>
-                        <td><?php echo $row['admin_email'];?></td>
+                        <td><?php echo html_escape($row['admin_name']);?></td>
+                        <td><?php echo html_escape($row['admin_email']);?></td>
                         <td>
 
-                        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEdit<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEdit<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
 
-                        <a onclick="confirm('Are you sure want to delete this user?'); deleteuser(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        <a onclick="confirm('Are you sure want to delete this user?'); deleteuser(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
                       </td>
                     </tr>
 
                      <!-- The Modal -->
-                        <div class="modal" id="myModalEdit<?php echo $row['id']; ?>">
+                        <div class="modal" id="myModalEdit<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -59,21 +59,21 @@ include_once('include/header.php');
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-user" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Admin Name</label>
-                                 <input type="text" required name="admin_name" class="form-control" value="<?php echo $row['fname']; ?>">
+                                 <input type="text" required name="admin_name" class="form-control" value="<?php echo html_escape($row['fname']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Email</label>
-                                 <input type="email" required name="admin_email" class="form-control" value="<?php echo $row['email']; ?>">
+                                 <input type="email" required name="admin_email" class="form-control" value="<?php echo html_escape($row['email']); ?>">
                                </div>
 
-                            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                            <input type="hidden" name="id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->

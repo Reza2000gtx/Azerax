@@ -62,6 +62,12 @@ $page=$this->uri->segment(2);
 				</a>
 			</li>
 
+			<li class="<?php if($page=='advertisement'){echo 'active';}?>">
+				<a href="<?php echo base_url(); ?>Admin/advertisement">
+					<i class="fa fa-bullhorn"></i> <span>Advertisement</span>
+				</a>
+			</li>
+
 			<li class="<?php if($page=='setting'){echo 'active';}?>">
 				<a href="<?php echo base_url().'Admin/setting';?>">
 					<i class="fa fa-cog"></i> <span>Setting</span>

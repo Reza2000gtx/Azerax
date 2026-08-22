@@ -121,8 +121,8 @@ input.primary:checked + .slider {
 								foreach($plans as $row){ ?>
 								<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $row['title']; ?></td>
-									<td><?php echo $row['description']; ?></td>
+									<td><?php echo html_escape($row['title']); ?></td>
+									<td><?php echo html_escape($row['description']); ?></td>
 									<td><?php
 
 								$myArray = explode(',', $row['categories']);
@@ -148,7 +148,7 @@ input.primary:checked + .slider {
 									// 	echo 'forever/unlimited';
 										
 									// }else{
-									// 	echo $row['days'];	
+									// 	echo html_escape($row['days']);	
 									// }?></td> -->
 									<td><?php
 									
@@ -157,10 +157,10 @@ input.primary:checked + .slider {
 										echo 'forever/unlimited';
 										
 									}else{
-										echo $row['post_active_days'];	
+										echo html_escape($row['post_active_days']);	
 									}?></td>
-									<td>$<?php echo $row['price']; ?></td>
-									<td><?php echo $row['post_photos']; ?></td>
+									<td>$<?php echo html_escape($row['price']); ?></td>
+									<td><?php echo html_escape($row['post_photos']); ?></td>
 									<td><?php 
 									if($row['show_ads']==1){
 										echo 'YES';
@@ -203,7 +203,7 @@ input.primary:checked + .slider {
 									<td>
 									<?php if($admin_permission_single && $admin_permission_single['edit']=='YES') { ?>
 
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['membership_id']; ?>"><i class="fa fa-edit"></i></button>
+										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['membership_id']); ?>"><i class="fa fa-edit"></i></button>
 										<?php	} ?>
 										<?php 
 									
@@ -212,14 +212,14 @@ input.primary:checked + .slider {
 											?>
 										<?php if($admin_permission_single && $admin_permission_single['delete']=='YES') { ?>
 
-										<a onclick="return confirm('Are you sure want to delete this Package?');" href="<?php echo base_url(); ?>Admin/delete-membership/<?php echo $row['membership_id']; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<a onclick="return confirm('Are you sure want to delete this Package?');" href="<?php echo base_url(); ?>Admin/delete-membership/<?php echo html_escape($row['membership_id']); ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
 										<?php	} ?>
 										<?php if($admin_permission_single && $admin_permission_single['active_deactive']=='YES') { ?>
 
 								<?php		if($row['status']==1){ ?>
-									<a onclick="return confirm('Are you sure want to Deactivate this Package?');" href="<?php echo base_url(); ?>Admin/deactivate_membership/<?php echo $row['membership_id']; ?>" class="btn btn-danger btn-xs">Deactivate</a>
+									<a onclick="return confirm('Are you sure want to Deactivate this Package?');" href="<?php echo base_url(); ?>Admin/deactivate_membership/<?php echo html_escape($row['membership_id']); ?>" class="btn btn-danger btn-xs">Deactivate</a>
 							<?php		}else{ ?>
-								<a onclick="return confirm('Are you sure want to Activate this Package?');" href="<?php echo base_url(); ?>Admin/activate_membership/<?php echo $row['membership_id']; ?>" class="btn btn-success btn-xs">Activate</a>
+								<a onclick="return confirm('Are you sure want to Activate this Package?');" href="<?php echo base_url(); ?>Admin/activate_membership/<?php echo html_escape($row['membership_id']); ?>" class="btn btn-success btn-xs">Activate</a>
 							<?php		}							
 								?>
 	<?php	} ?>
@@ -228,7 +228,7 @@ input.primary:checked + .slider {
 									</td>
 								</tr>
 								<!-- The Modal -->
-								<div class="modal" id="myModal<?php echo $row['membership_id']; ?>">
+								<div class="modal" id="myModal<?php echo html_escape($row['membership_id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -239,18 +239,18 @@ input.primary:checked + .slider {
 								      </div>
 
 								      <!-- Modal body -->
-								      <div id="error<?php echo $row['membership_id']; ?>"></div>
+								      <div id="error<?php echo html_escape($row['membership_id']); ?>"></div>
 								     <form method="post" action="<?php echo base_url();?>Admin/edit-membership" >
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								     <div class="modal-body">
        <div class="form-group">
        	<label>Title</label>
-       	<input type="text" required value="<?php echo $row['title']; ?>"  name="title" class="form-control">
+       	<input type="text" required value="<?php echo html_escape($row['title']); ?>"  name="title" class="form-control">
        </div>
 
        <div class="form-group">
        	<label> Description</label>
-       	<textarea required class="form-control ckeditor" id="" name="desc"><?php echo $row['description']; ?>  </textarea> 
+       	<textarea required class="form-control ckeditor" id="" name="desc"><?php echo html_escape($row['description']); ?>  </textarea> 
        </div>
 			 <div class="form-group">
         	<label>Select Category's</label><br />
@@ -268,28 +268,28 @@ input.primary:checked + .slider {
         </div>
 				<div class="form-group">
        	<label>Price</label>
-       $	<input required type="number"  value="<?php echo $row['price']; ?>" name="price" min="0" class="form-control">
+       $	<input required type="number"  value="<?php echo html_escape($row['price']); ?>" name="price" min="0" class="form-control">
        </div>
 			 <div class="form-group">
        	<label>Post Days Active<span style="color:red"> </span></label>
-       	<input required type="number" min="0"  value="<?php echo $row['post_active_days']; ?>" name="post_active_days" class="form-control">
+       	<input required type="number" min="0"  value="<?php echo html_escape($row['post_active_days']); ?>" name="post_active_days" class="form-control">
        </div>
 			 <!-- <div class="form-group">
 			 <label>Package Active Days</label>
-       	<input required type="number" min="0" <?php echo $readonly;?> value="<?php echo $row['days']; ?>" name="days" class="form-control">
+       	<input required type="number" min="0" <?php echo $readonly;?> value="<?php echo html_escape($row['days']); ?>" name="days" class="form-control">
        </div> -->
 
       <div class="form-group">
        	<label>Picture Upload</label>
-       	<input required type="number" value="<?php echo $row['post_photos']; ?>" name="photos" min="1" max="10" class="form-control">
+       	<input required type="number" value="<?php echo html_escape($row['post_photos']); ?>" name="photos" min="1" max="10" class="form-control">
        </div>
 			 <div class="form-group">
        	<label>Package Color</label>
-       	<input type="text" required value="<?php echo $row['package_color']; ?>"  name="package_color" class="form-control">
+       	<input type="text" required value="<?php echo html_escape($row['package_color']); ?>"  name="package_color" class="form-control">
        </div>
 			 <div class="form-group">
        	<label>Upgrade Package Alert Text</label>
-       	<input type="text" required value="<?php echo $row['package_alert']; ?>"  name="package_alert" class="form-control">
+       	<input type="text" required value="<?php echo html_escape($row['package_alert']); ?>"  name="package_alert" class="form-control">
        </div>
 	   <?php 
   $showads=1;
@@ -351,7 +351,7 @@ input.primary:checked + .slider {
 										</div>		
 
 									</div>									
-<input type="hidden" value="<?php echo $row['membership_id']; ?>" name="membership_id">      <!-- Modal footer -->
+<input type="hidden" value="<?php echo html_escape($row['membership_id']); ?>" name="membership_id">      <!-- Modal footer -->
       <div class="modal-footer">
       	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Save</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -405,7 +405,7 @@ input.primary:checked + .slider {
 								       $i=1;
 								    foreach($category as $row){ 
 								       	 ?>
-        	    <option value="<?php echo $row['cat_id']; ?>"><?php echo $row['cat_title']; ?></option>
+        	    <option value="<?php echo html_escape($row['cat_id']); ?>"><?php echo html_escape($row['cat_title']); ?></option>
         	   <?php } ?>
         	</select>
             <input id="chkall" type="checkbox" >Select All

@@ -56,7 +56,7 @@ include_once('include/header.php');
                         <td>
 
                            <?php if($row['image']!='') { ?>
-                           <img style="width: 50px;" src="<?php echo base_url();?>assets/session_images/<?php echo $row['image'];?>">
+                           <img style="width: 50px;" src="<?php echo base_url();?>assets/session_images/<?php echo html_escape($row['image']);?>">
                            <?php }else{ ?>
                           <img src="<?php echo base_url();  ?>/assets/site/images/default.jpg" height="50" width="50">
                            <?php } ?>
@@ -75,7 +75,7 @@ include_once('include/header.php');
                         <td><?php echo $row['currency'].$row['session_price'];?></td>
                         <td><?php echo $row['session_duration'] ; ?></td>
                         <td><?php echo date("d-m-Y h:i", strtotime($row['session_date'].' '.$row['session_time']));?></td>
-                        <!-- <td><?php //echo $row['session_time'];?></td> -->
+                        <!-- <td><?php //echo html_escape($row['session_time']);?></td> -->
                          <td>0/<?php echo $row['number_of_students'] ; ?></td>
                          <td>
                          <?php

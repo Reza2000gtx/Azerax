@@ -46,7 +46,7 @@ include_once('include/header.php');
 								foreach($ads as $row){ ?>
 								<tr id="<?php echo $row['ads_id'] ?>">
 									<td><?php echo $i; ?></td>
-									<td><img src="<?php echo base_url();  ?>/assets/admin/ads/<?php echo $row['ads_image']; ?>" style=" width: 800px;"></td>
+									<td><img src="<?php echo base_url();  ?>/assets/admin/ads/<?php echo html_escape($row['ads_image']); ?>" style=" width: 800px;"></td>
 									<td>
 									<?php
 									if($row['category']==0){
@@ -93,26 +93,35 @@ include_once('include/header.php');
 									<td>
 									<?php if($admin_permission_single && $admin_permission_single['edit']=='YES') { ?>
 
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['ads_id']; ?>"><i class="fa fa-edit"></i></button>
+										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['ads_id']); ?>"><i class="fa fa-edit"></i></button>
 										<?php	} ?>
 										<?php if($admin_permission_single && $admin_permission_single['delete']=='YES') { ?>
 
-										<a onclick="return confirm('Are you sure want to delete this Advertisement?');" href="<?php echo base_url(); ?>Admin/delete_advertisement/<?php echo $row['ads_id']; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<form method="post" action="<?php echo base_url(); ?>Admin/delete_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this Advertisement?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+									<button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash" aria-hidden="true"></i></button>
+									</form>
 										<?php	} ?>
 										<?php if($admin_permission_single && $admin_permission_single['active_deactive']=='YES') { ?>
 
 									
 										<?php		if($row['status']==1){ ?>
-									<a onclick="return confirm('Are you sure want to Deactivate this Advertisement?');" href="<?php echo base_url(); ?>Admin/deactivate_advertisement/<?php echo $row['ads_id']; ?>" class="btn btn-danger btn-xs">Deactivate</a>
+									<form method="post" action="<?php echo base_url(); ?>Admin/deactivate_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Deactivate this Advertisement?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+								<button type="submit" class="btn btn-danger btn-xs" style="border:none;">Deactivate</button>
+								</form>
 							<?php		}else{ ?>
-								<a onclick="return confirm('Are you sure want to Activate this Advertisement?');" href="<?php echo base_url(); ?>Admin/activate_advertisement/<?php echo $row['ads_id']; ?>" class="btn btn-success btn-xs">Activate</a>
+								<form method="post" action="<?php echo base_url(); ?>Admin/activate_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Activate this Advertisement?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+							<button type="submit" class="btn btn-success btn-xs" style="border:none;">Activate</button>
+							</form>
 							<?php		}							
 								?>
 								<?php	} ?>
 									</td>
 								</tr>
 								<!-- The Modal -->
-								<div class="modal" id="myModal<?php echo $row['ads_id']; ?>">
+								<div class="modal" id="myModal<?php echo html_escape($row['ads_id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -131,7 +140,7 @@ include_once('include/header.php');
 
 								       	<label>Advertisement Image<br/><span style="color:red;"> Note: Image size should be 1140*140</span></label>
 								       	<input type="file" name="ads_image" accept="image/*" style="margin-bottom: 10px;">
-								       	<img src="<?php echo base_url();  ?>/assets/admin/ads/<?php echo $row['ads_image']; ?>" height="50" width="50">
+								       	<img src="<?php echo base_url();  ?>/assets/admin/ads/<?php echo html_escape($row['ads_image']); ?>" height="50" width="50">
 								       </div>
 
 								       <div class="form-group">
@@ -152,10 +161,10 @@ include_once('include/header.php');
 							       	     	
 							       	     </select>
 							         </div>
-							         <div class="form-group" id="subcatdiv<?php echo $row['ads_id']; ?>">
+							         <div class="form-group" id="subcatdiv<?php echo html_escape($row['ads_id']); ?>">
 							         	
 							         		<label>Select Subcategory</label>
-									       	<select class="form-control" name="subcategory" required id="subcatoption<?php echo $row['ads_id']; ?>">
+									       	<select class="form-control" name="subcategory" required id="subcatoption<?php echo html_escape($row['ads_id']); ?>">
 									       	     	<option value="0">Select Option</option>
 									       	     	<?php 
 									       	     	$selectAllSubCatquery = $this->common_model->GetAllData('subcategory',array('cat_id'=>$row['category']));
@@ -175,7 +184,7 @@ include_once('include/header.php');
 							       	
 							         </div>
 
-								      <input type="hidden" name="ads_id" value="<?php echo $row['ads_id']; ?>">
+								      <input type="hidden" name="ads_id" value="<?php echo html_escape($row['ads_id']); ?>">
 								      <!-- Modal footer -->
 											</div>
 								      <div class="modal-footer">

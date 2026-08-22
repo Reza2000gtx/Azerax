@@ -117,10 +117,10 @@ input.primary:checked + .slider {
 								<?php 
 								$i=1;
 								foreach($expire_devices as $row){ 
-                 $user = $this->db->query("SELECT * from users where user_id = '".$row['user_id']."'")->row_array();
+                 $user = $this->db->query("SELECT * from users where user_id = ".$this->db->escape($row['user_id']))->row_array();
 									?>
-								<tr class="delete_mem<?php echo $row['id']; ?>">
-									<td><?php echo $row['id']; ?></td>
+								<tr class="delete_mem<?php echo html_escape($row['id']); ?>">
+									<td><?php echo html_escape($row['id']); ?></td>
 									<td><?php echo substr($row['device_model'],0,50); ?></td>
 									<td><?php echo substr($row['device_brand'],0,50); ?></td>
 									<td><?php echo $user['fname']; ?></td>
@@ -140,11 +140,11 @@ $image = $this->common_model->GetSingleData('product_gallery_image',array('produ
 								<?php } ?>
 										
 										</td>	
-										<td><?php echo $row['approve_date']; ?></td>
-										<td><?php echo $row['expiry_date']; ?></td>
+										<td><?php echo html_escape($row['approve_date']); ?></td>
+										<td><?php echo html_escape($row['expiry_date']); ?></td>
 									<td>
 
-										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo $row['id']; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a href="<?php echo base_url(); ?>Admin/edit-product/<?php echo html_escape($row['id']); ?>" class="btn btn-success btn-xs"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>

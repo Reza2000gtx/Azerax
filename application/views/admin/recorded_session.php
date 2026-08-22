@@ -46,13 +46,13 @@ include_once('include/header.php');
                         <td>
 
                            <?php if($row['session_picture']!='') { ?>
-                           <img style="width: 50px;" src="<?php echo base_url();?>assets/session_images/<?php echo $row['session_picture'];?>">
+                           <img style="width: 50px;" src="<?php echo base_url();?>assets/session_images/<?php echo html_escape($row['session_picture']);?>">
                            <?php }else{ ?>
                           <img src="<?php echo base_url();  ?>/assets/site/images/default.jpg" height="50" width="50">
                            <?php } ?>
 
                         </td>  
-                        <td><?php echo $row['price'] ; //echo $row['currency'];?></td>  
+                        <td><?php echo $row['price'] ; //echo html_escape($row['currency']);?></td>  
                         <td><?php echo $teacherdata['fname'];?> <?php echo $teacherdata['lname'];?></td>
                         <td><?php echo '+'.$teacherdata['phonecode'].$teacherdata['phone'];?></td>
                         <td><?php echo $teacherdata['email'];?></td>

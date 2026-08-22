@@ -163,20 +163,20 @@ body {font-family: Arial;}
 								$i=1;
 								foreach($ipolist as $row){ 
 								?>
-								<tr  class="delete_mem<?php echo $row['id']; ?>">
+								<tr  class="delete_mem<?php echo html_escape($row['id']); ?>">
 								<td><?php echo $i; ?></td>
-								<td><?php echo $row['input_conn']; ?></td>
-								<td><?php echo $row['input_process_stand']; ?></td>
-								<td><?php echo $row['process_connection']; ?></td>
+								<td><?php echo html_escape($row['input_conn']); ?></td>
+								<td><?php echo html_escape($row['input_process_stand']); ?></td>
+								<td><?php echo html_escape($row['process_connection']); ?></td>
 								<td>
-									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalView<?php echo $row['id']; ?>"><i class="fa fa-eye"></i></button>
-									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEdit<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
-									<a onclick="confirm('Are you sure want to delete this Product ?'); deleteinput(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalView<?php echo html_escape($row['id']); ?>"><i class="fa fa-eye"></i></button>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEdit<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
+									<a onclick="confirm('Are you sure want to delete this Product ?'); deleteinput(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
 								</td>
 								</tr>
 								
 								<!-- The Modal -->
-                        <div class="modal" id="myModalEdit<?php echo $row['id']; ?>">
+                        <div class="modal" id="myModalEdit<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -187,25 +187,25 @@ body {font-family: Arial;}
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-input" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Input Name</label>
-                                 <input type="text" required name="input_conn" class="form-control" value="<?php echo $row['input_conn']; ?>">
+                                 <input type="text" required name="input_conn" class="form-control" value="<?php echo html_escape($row['input_conn']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Input Standarad</label>
-                                 <input type="text" required name="input_process_stand" class="form-control" value="<?php echo $row['input_process_stand']; ?>">
+                                 <input type="text" required name="input_process_stand" class="form-control" value="<?php echo html_escape($row['input_process_stand']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Connection Type</label>
-                                 <input type="text" required name="process_connection" class="form-control" value="<?php echo $row['process_connection']; ?>">
+                                 <input type="text" required name="process_connection" class="form-control" value="<?php echo html_escape($row['process_connection']); ?>">
                                </div>
-								<input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+								<input type="hidden" name="user_id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->
@@ -220,7 +220,7 @@ body {font-family: Arial;}
 						
 						
 						<!-- The Modal -->
-                        <div class="modal" id="myModalView<?php echo $row['id']; ?>">
+                        <div class="modal" id="myModalView<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -231,25 +231,25 @@ body {font-family: Arial;}
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-input" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Input Name</label>
-                                 <input type="text" readonly name="input_conn" class="form-control" value="<?php echo $row['input_conn']; ?>">
+                                 <input type="text" readonly name="input_conn" class="form-control" value="<?php echo html_escape($row['input_conn']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Input Standarad</label>
-                                 <input type="text" readonly name="input_process_stand" class="form-control" value="<?php echo $row['input_process_stand']; ?>">
+                                 <input type="text" readonly name="input_process_stand" class="form-control" value="<?php echo html_escape($row['input_process_stand']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Connection Type</label>
-                                 <input type="text"readonly name="process_connection" class="form-control" value="<?php echo $row['process_connection']; ?>">
+                                 <input type="text"readonly name="process_connection" class="form-control" value="<?php echo html_escape($row['process_connection']); ?>">
                                </div>
-								<input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+								<input type="hidden" name="user_id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->
@@ -296,20 +296,20 @@ body {font-family: Arial;}
 								$i=1;
 								foreach($ipolist as $row){ 
 								?>
-								<tr  class="delete_mem<?php echo $row['id']; ?>">
+								<tr  class="delete_mem<?php echo html_escape($row['id']); ?>">
 								<td><?php echo $i; ?></td>
-								<td><?php echo $row['out_conn']; ?></td>
-								<td><?php echo $row['out_process_stand']; ?></td>
-								<td><?php echo $row['out_process_connection']; ?></td>
+								<td><?php echo html_escape($row['out_conn']); ?></td>
+								<td><?php echo html_escape($row['out_process_stand']); ?></td>
+								<td><?php echo html_escape($row['out_process_connection']); ?></td>
 								<td>
-									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalViewoutput<?php echo $row['id']; ?>"><i class="fa fa-eye"></i></button>
-									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEditoutput<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
-									<a onclick="confirm('Are you sure want to delete this Product ?'); deleteoutput(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalViewoutput<?php echo html_escape($row['id']); ?>"><i class="fa fa-eye"></i></button>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEditoutput<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
+									<a onclick="confirm('Are you sure want to delete this Product ?'); deleteoutput(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>
 								
-								<div class="modal" id="myModalEditoutput<?php echo $row['id']; ?>">
+								<div class="modal" id="myModalEditoutput<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -320,25 +320,25 @@ body {font-family: Arial;}
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-output" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Output Name</label>
-                                 <input type="text" required name="out_conn" class="form-control" value="<?php echo $row['out_conn']; ?>">
+                                 <input type="text" required name="out_conn" class="form-control" value="<?php echo html_escape($row['out_conn']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Output Standarad</label>
-                                 <input type="text" required name="out_process_stand" class="form-control" value="<?php echo $row['out_process_stand']; ?>">
+                                 <input type="text" required name="out_process_stand" class="form-control" value="<?php echo html_escape($row['out_process_stand']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Connection Type</label>
-                                 <input type="text" required name="out_process_connection" class="form-control" value="<?php echo $row['out_process_connection']; ?>">
+                                 <input type="text" required name="out_process_connection" class="form-control" value="<?php echo html_escape($row['out_process_connection']); ?>">
                                </div>
-								<input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+								<input type="hidden" name="user_id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->
@@ -351,7 +351,7 @@ body {font-family: Arial;}
                           </div>
                         </div>
 						
-						<div class="modal" id="myModalViewoutput<?php echo $row['id']; ?>">
+						<div class="modal" id="myModalViewoutput<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -362,25 +362,25 @@ body {font-family: Arial;}
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-output" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Output Name</label>
-                                 <input type="text" readonly name="out_conn" class="form-control" value="<?php echo $row['out_conn']; ?>">
+                                 <input type="text" readonly name="out_conn" class="form-control" value="<?php echo html_escape($row['out_conn']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Output Standarad</label>
-                                 <input type="text" readonly name="out_process_stand" class="form-control" value="<?php echo $row['out_process_stand']; ?>">
+                                 <input type="text" readonly name="out_process_stand" class="form-control" value="<?php echo html_escape($row['out_process_stand']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Connection Type</label>
-                                 <input type="text" readonly name="out_process_connection" class="form-control" value="<?php echo $row['out_process_connection']; ?>">
+                                 <input type="text" readonly name="out_process_connection" class="form-control" value="<?php echo html_escape($row['out_process_connection']); ?>">
                                </div>
-								<input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+								<input type="hidden" name="user_id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->
@@ -429,19 +429,19 @@ body {font-family: Arial;}
 								$i=1;
 								foreach($ipolist as $row){ 
 								?>
-								<tr  class="delete_mem<?php echo $row['id']; ?>">
+								<tr  class="delete_mem<?php echo html_escape($row['id']); ?>">
 								<td><?php echo $i; ?></td>
-								<td><?php echo $row['process']; ?></td>
-								<td><?php echo $row['process_stand']; ?></td>
+								<td><?php echo html_escape($row['process']); ?></td>
+								<td><?php echo html_escape($row['process_stand']); ?></td>
 								<td>
-									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalViewprocess<?php echo $row['id']; ?>"><i class="fa fa-eye"></i></button>
-									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEditprocess<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
-								    <a onclick="confirm('Are you sure want to delete this Product ?'); deleteprocess(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalViewprocess<?php echo html_escape($row['id']); ?>"><i class="fa fa-eye"></i></button>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalEditprocess<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
+								    <a onclick="confirm('Are you sure want to delete this Product ?'); deleteprocess(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>
 								
-								<div class="modal" id="myModalEditprocess<?php echo $row['id']; ?>">
+								<div class="modal" id="myModalEditprocess<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -452,21 +452,21 @@ body {font-family: Arial;}
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-process" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Process Name</label>
-                                 <input type="text" required name="process" class="form-control" value="<?php echo $row['process']; ?>">
+                                 <input type="text" required name="process" class="form-control" value="<?php echo html_escape($row['process']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Process Standarad</label>
-                                 <input type="text" required name="process_stand" class="form-control" value="<?php echo $row['process_stand']; ?>">
+                                 <input type="text" required name="process_stand" class="form-control" value="<?php echo html_escape($row['process_stand']); ?>">
                                </div>
 
-                              <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                              <input type="hidden" name="user_id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->
@@ -479,7 +479,7 @@ body {font-family: Arial;}
                           </div>
                         </div>
 						
-						<div class="modal" id="myModalViewprocess<?php echo $row['id']; ?>">
+						<div class="modal" id="myModalViewprocess<?php echo html_escape($row['id']); ?>">
                           <div class="modal-dialog">
                             <div class="modal-content">
 
@@ -490,21 +490,21 @@ body {font-family: Arial;}
                               </div>
 
                               <!-- Modal body -->
-                              <div id="error<?php echo $row['id']; ?>"></div>
+                              <div id="error<?php echo html_escape($row['id']); ?>"></div>
                              <form method="post" action="<?php echo base_url();?>Admin/edit-process" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                               <div class="modal-body">
                                <div class="form-group">
                                  <label>Process Name</label>
-                                 <input type="text" readonly name="process" class="form-control" value="<?php echo $row['process']; ?>">
+                                 <input type="text" readonly name="process" class="form-control" value="<?php echo html_escape($row['process']); ?>">
                                </div>
 
                                <div class="form-group">
                                  <label>Process Standarad</label>
-                                 <input type="text" readonly name="process_stand" class="form-control" value="<?php echo $row['process_stand']; ?>">
+                                 <input type="text" readonly name="process_stand" class="form-control" value="<?php echo html_escape($row['process_stand']); ?>">
                                </div>
 
-                              <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                              <input type="hidden" name="user_id" value="<?php echo html_escape($row['id']); ?>">
                               </div>
 
                               <!-- Modal footer -->

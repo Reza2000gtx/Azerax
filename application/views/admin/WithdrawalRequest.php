@@ -41,9 +41,9 @@ include_once('include/header.php');
                         <td><?php echo $i;?></td>
                        
                         <td><?php echo $user['fname'].''.$user['lname'] ;?></td>
-                        <td><?php echo $row['payment_type'];?></td>
-                        <td>PI/$<?php echo $row['amount'];?></td>
-                        <td>Account Name:<?php echo $row['account_name'];?><br/>Account Number-<?php echo $row['account_number'];?><br/>Code: <?php echo $row['IFSC_code'];?></td>
+                        <td><?php echo html_escape($row['payment_type']);?></td>
+                        <td>PI/$<?php echo html_escape($row['amount']);?></td>
+                        <td>Account Name:<?php echo html_escape($row['account_name']);?><br/>Account Number-<?php echo html_escape($row['account_number']);?><br/>Code: <?php echo html_escape($row['IFSC_code']);?></td>
                         
 
                         <td><?php 

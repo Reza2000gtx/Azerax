@@ -43,8 +43,8 @@ include_once('include/header.php');
                        
                         <td><?php echo $user['fname'].''.$user['lname'] ;?></td>
                         <td><?php echo $post['name'];?></td>
-                        <td><?php echo $row['payment_method'];?></td>
-                        <td>PI/$<?php echo $row['payment'];?></td>
+                        <td><?php echo html_escape($row['payment_method']);?></td>
+                        <td>PI/$<?php echo html_escape($row['payment']);?></td>
 
 
                         <td><?php 

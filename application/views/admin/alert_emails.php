@@ -39,9 +39,12 @@ include_once('include/header.php');
 									?>
 								<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $row['email']; ?></td>
+									<td><?php echo html_escape($row['email']); ?></td>
 									<td>
-										<a onclick="return confirm('Are you sure want to delete this email address?');" href="<?php echo base_url(); ?>Admin/alert_emails_delete/<?php echo $row['id']; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<form method="post" action="<?php echo base_url(); ?>Admin/alert_emails_delete/<?php echo html_escape($row['id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this email address?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+										<button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash" aria-hidden="true"></i></button>
+										</form>
 									</td>
 								</tr>
 							

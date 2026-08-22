@@ -55,33 +55,33 @@ include_once('include/header.php');
                                 ?>
 								<tr>
 									<td><?php echo $i; ?></td>
-									<td>#<?php echo $row['ticket_id']; ?></td>
-									<td><?php echo $row['name']; ?></td>
-								    <td><?php echo $row['email']; ?></td>
-                                    <td><?php echo $row['subject']; ?></td>
+									<td>#<?php echo html_escape($row['ticket_id']); ?></td>
+									<td><?php echo html_escape($row['name']); ?></td>
+								    <td><?php echo html_escape($row['email']); ?></td>
+                                    <td><?php echo html_escape($row['subject']); ?></td>
                                     <td><?php echo date('d-m-Y H:i a', strtotime($row['created_at'])); ?></td>
                                     <td>
-                                        <a class="btn btn-success" onclick="" href="<?php echo base_url();?>Admin/chat-box/?ticket_id=<?php echo $row['ticket_id']; ?>">REPLY
+                                        <a class="btn btn-success" onclick="" href="<?php echo base_url();?>Admin/chat-box/?ticket_id=<?php echo html_escape($row['ticket_id']); ?>">REPLY
                                             <?php if(count($count)) { ?>
                                          <span class="badge rounded-pill badge-notification bg-danger"><?php echo count($count);} ?></span>
                                         </a>
                                     </td>
 								</tr>
 								
-                                <div class="modal fade" id="replyModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="replyModal<?php echo html_escape($row['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form action ="<?php echo base_url();?>Admin/Home/update_contact" method="POST">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
                                 <div class="modal-dialog cancel-btn" role="document" class="cancel-model">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="replyModal><?php echo $row['id']; ?>"></h5>
+                                            <h5 class="modal-title" id="replyModal><?php echo html_escape($row['id']); ?>"></h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                         </div>
-                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                        <input type="hidden" name="email" value="<?php echo $row['email']; ?>">
-                                        <input type="hidden" name="name" value="<?php echo $row['name']; ?>">
+                                        <input type="hidden" name="id" value="<?php echo html_escape($row['id']); ?>">
+                                        <input type="hidden" name="email" value="<?php echo html_escape($row['email']); ?>">
+                                        <input type="hidden" name="name" value="<?php echo html_escape($row['name']); ?>">
                                         <div class="modal-body">
                                             <h4 style="color:#14213D;">Write Your Reply</h4><br>
                                                 <textarea name="reply"  rows="3" maxlength="3000" class="form-control"></textarea>

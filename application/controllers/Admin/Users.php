@@ -700,7 +700,7 @@ foreach ($users as $key => $user) {
     $user_id = $this->uri->segment(3);
     $data['user_detail'] = $this->common_model->GetSingleData('users',array('user_id'=>$user_id));
     
-    $data['transaction_detail'] = $this->db->query("SELECT * from transactions where tr_userid = '".$user_id."'")->result();
+    $data['transaction_detail'] = $this->db->query("SELECT * from transactions where tr_userid = ".$this->db->escape($user_id))->result();
 
     $this->load->view('admin/user_profile',$data);
   }

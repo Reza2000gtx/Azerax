@@ -40,16 +40,16 @@ include_once('include/header.php');
 								foreach($messages as $row){ ?>
 								<tr>
 									<td><?php echo $i; ?></td>
-									<td><?php echo $row['message_title']; ?></td>
+									<td><?php echo html_escape($row['message_title']); ?></td>
 
-									<td><?php echo $row['message']; ?></td>
+									<td><?php echo html_escape($row['message']); ?></td>
 									
 									<td>
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['message_id']; ?>"><i class="fa fa-edit"></i></button>
+										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['message_id']); ?>"><i class="fa fa-edit"></i></button>
 									</td>
 								</tr>
 								<!-- The Modal -->
-								<div class="modal" id="myModal<?php echo $row['message_id']; ?>">
+								<div class="modal" id="myModal<?php echo html_escape($row['message_id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -65,11 +65,11 @@ include_once('include/header.php');
 								      <div class="modal-body">
 								       <div class="form-group">
 								       	<label>Message </label>
-												 <textarea name="message"  class="form-control"><?php echo $row['message']; ?></textarea>
+												 <textarea name="message"  class="form-control"><?php echo html_escape($row['message']); ?></textarea>
 								       </div>
 
 								    
-								      <input type="hidden" name="message_id" value="<?php echo $row['message_id']; ?>">
+								      <input type="hidden" name="message_id" value="<?php echo html_escape($row['message_id']); ?>">
 								      <!-- Modal footer -->
 								      <div class="modal-footer">
 								      	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Save</button>

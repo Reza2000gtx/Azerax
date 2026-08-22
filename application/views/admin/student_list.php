@@ -47,7 +47,7 @@ include_once('include/header.php');
                               if($row['profile']!='')
                               {
                               	?>
-                           <img style="width: 50px;" src="<?php echo base_url();?>assets/profile/<?php echo $row['profile'];?>">
+                           <img style="width: 50px;" src="<?php echo base_url();?>assets/profile/<?php echo html_escape($row['profile']);?>">
                            <?php
                               }else{
                               	?>
@@ -57,8 +57,8 @@ include_once('include/header.php');
                               ?>
                         </td>
                         <td><?php echo $row['fname'].' '.$row['lname'] ;?></td>
-                        <td><?php echo $row['email'];?></td>
-                        <td>+<?php echo $row['phone'];?></td>
+                        <td><?php echo html_escape($row['email']);?></td>
+                        <td>+<?php echo html_escape($row['phone']);?></td>
                          <td><?php echo date("d-m-Y g:i A", strtotime($row['last_logged_in_time']));?></td>
                          <td>
                            <?php 

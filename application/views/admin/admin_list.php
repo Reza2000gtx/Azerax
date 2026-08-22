@@ -58,7 +58,7 @@ include_once('include/header.php');
                               if($row['admin_image']!='')
                               {
                               	?>
-                           <img style="width: 50px;" src="<?php echo base_url();?>assets/admin_profiles/<?php echo $row['admin_image'];?>">
+                           <img style="width: 50px;" src="<?php echo base_url();?>assets/admin_profiles/<?php echo html_escape($row['admin_image']);?>">
                            <?php
                               }else{
                               	?>
@@ -68,19 +68,22 @@ include_once('include/header.php');
                               ?>									
 									</td>
 
-									<td><?php echo $row['admin_name']; ?></td>
-									<td><?php echo $row['admin_email']; ?></td>
+									<td><?php echo html_escape($row['admin_name']); ?></td>
+									<td><?php echo html_escape($row['admin_email']); ?></td>
 
 									<td>
-									<!--<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalpermission<?php echo $row['id']; ?>"><i class="fa fa-lock"></i></button>-->
+									<!--<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModalpermission<?php echo html_escape($row['id']); ?>"><i class="fa fa-lock"></i></button>-->
 
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['id']; ?>"><i class="fa fa-edit"></i></button>
-										<a onclick="return confirm('Are you sure want to delete this admin?');" href="<?php echo base_url(); ?>Admin/delete/<?php echo $row['id']; ?>" class="btn btn-danger btn-xs"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
+										<form method="post" action="<?php echo base_url(); ?>Admin/delete/<?php echo html_escape($row['id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this admin?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+										<button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash" aria-hidden="true"></i></button>
+										</form>
 									</td>
 								</tr>
 
 																
-								 <div class="modal" id="myModal<?php echo $row['id']; ?>">
+								 <div class="modal" id="myModal<?php echo html_escape($row['id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -91,18 +94,18 @@ include_once('include/header.php');
 								      </div>
 
 								      
-								      <div id="error<?php echo $row['id']; ?>"></div>
+								      <div id="error<?php echo html_escape($row['id']); ?>"></div>
 											<form method="post" action="<?php echo base_url();?>Admin/update" id="addadmin" enctype="multipart/form-data">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
 								       <div class="form-group">
 								       	<label>Admin Name</label>
-								       	<input type="text" required name="admin_name" value="<?php echo $row['admin_name']; ?>" class="form-control">
+								       	<input type="text" required name="admin_name" value="<?php echo html_escape($row['admin_name']); ?>" class="form-control">
 								       </div>
 
 								       <div class="form-group">
 								       	<label>Admin Email</label>
-								       	<input type="email" required name="admin_email" value="<?php echo $row['admin_email']; ?>" class="form-control">
+								       	<input type="email" required name="admin_email" value="<?php echo html_escape($row['admin_email']); ?>" class="form-control">
 								       </div>
 
 								      <div class="form-group">
@@ -117,7 +120,7 @@ include_once('include/header.php');
                               if($row['admin_image']!='')
                               {
                               	?>
-                           <img style="width: 50px;" src="<?php echo base_url();?>assets/admin_profiles/<?php echo $row['admin_image'];?>">
+                           <img style="width: 50px;" src="<?php echo base_url();?>assets/admin_profiles/<?php echo html_escape($row['admin_image']);?>">
                            <?php
                               }else{
                               	?>
@@ -126,7 +129,7 @@ include_once('include/header.php');
                               }
                               ?>								       </div>
 								      </div>
-								      <input type="hidden" name="admin_id" value="<?php echo $row['id']; ?>">
+								      <input type="hidden" name="admin_id" value="<?php echo html_escape($row['id']); ?>">
 								    
 								      <div class="modal-footer">
 								      	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Update</button>

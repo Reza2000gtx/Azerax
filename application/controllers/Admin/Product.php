@@ -845,11 +845,11 @@ $(".processsuggestionStand<?php echo $classid;?>").select2({ tags: true, tokenSe
   $run = $this->db->query($sql);
 if($run){
 	
-	$qry = $this->db->query("SELECT * FROM fav_device_list WHERE device_id = '".$id."'")->row_array();
+	$qry = $this->db->query("SELECT * FROM fav_device_list WHERE device_id = ".$this->db->escape($id))->row_array();
 	if($qry)
 	{
         $uid = $qry["user_id"];
-		$qry1 = $this->db->query("SELECT * FROM users WHERE user_id = '".$uid."'")->row_array();
+		$qry1 = $this->db->query("SELECT * FROM users WHERE user_id = ".$this->db->escape($uid))->row_array();
 		if($qry1)
 		{
 			$email = $qry1["email"];

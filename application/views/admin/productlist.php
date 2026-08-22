@@ -119,10 +119,10 @@ input.primary:checked + .slider {
 								<?php 
 								$i=1;
 								foreach($productlist as $row){ 
-                 $user = $this->db->query("SELECT * from users where user_id = '".$row['user_id']."'")->row_array();
+                 $user = $this->db->query("SELECT * from users where user_id = ".$this->db->escape($row['user_id']))->row_array();
 									?>
-								<tr class="delete_mem<?php echo $row['id']; ?>">
-									<td><?php echo $row['id']; ?></td>
+								<tr class="delete_mem<?php echo html_escape($row['id']); ?>">
+									<td><?php echo html_escape($row['id']); ?></td>
 									<td><?php echo substr($row['device_model'],0,50); ?></td>
 									<td><?php echo substr($row['device_brand'],0,50); ?></td>
 									<td><?php echo $user['fname']; ?></td>
@@ -145,7 +145,7 @@ $image = $this->common_model->GetSingleData('product_gallery_image',array('produ
 										<td><?php
 if($row['approve_date'] && $row['approve_date'] !='0000-00-00'){
 
-										echo $row['approve_date']; 
+										echo html_escape($row['approve_date']); 
 
 									}?></td>
 										<td>
@@ -156,10 +156,10 @@ if($row['status'] != 0){
 <?php
 if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 
-										echo $row['expiry_date']; 
+										echo html_escape($row['expiry_date']); 
 
 									}?>
-<a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal<?php echo $row['id']; ?>"> Change Expiry
+<a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['id']); ?>"> Change Expiry
 								</a>
 </div>
 <?php } ?>
@@ -195,7 +195,7 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
       </div>
       <div class="modal-body">
         <?php
-			$res = $this->db->query("SELECT * from request where device_id = '".$row['id']."'")->row_array();
+			$res = $this->db->query("SELECT * from request where device_id = ".$this->db->escape($row['id']))->row_array();
 		?>	
 			<textarea   rows="3" maxlength="3000" class="form-control"><?php echo $res['survey'];?></textarea>
 			<textarea   rows="3" maxlength="3000" class="form-control"><?php echo $res['feedback'];?></textarea>
@@ -218,7 +218,7 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 							</td>
 									<td>
 
-										<a class="btn btn-primary btn-xs" href="<?php echo base_url();?>Admin/edit-product/<?php echo $row['id']; ?>"><i class="fa fa-edit" aria-hidden="true"></i></a>
+										<a class="btn btn-primary btn-xs" href="<?php echo base_url();?>Admin/edit-product/<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit" aria-hidden="true"></i></a>
 
 
 					       <?php if($row['status']==1){ ?>
@@ -231,13 +231,13 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
                         
                               ?> 
 
-										<a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo $row['id']; ?>);" href="javascript:void(0)" class="btn btn-xs" style="background:#DC2626;color:#fff;margin-left:4px;"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-xs" style="background:#DC2626;color:#fff;margin-left:4px;"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>
 								
 								<!-- The Modal -->
-								<div class="modal" id="myModal<?php echo $row['id']; ?>">
+								<div class="modal" id="myModal<?php echo html_escape($row['id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
 
@@ -248,17 +248,17 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
 								      </div>
 
 								      <!-- Modal body -->
-								      <div id="error<?php echo $row['id']; ?>"></div>
-								     <form method="post" action="<?php echo base_url(); ?>Admin/edit_expiry_date/<?php echo $row['id'];?>">
+								      <div id="error<?php echo html_escape($row['id']); ?>"></div>
+								     <form method="post" action="<?php echo base_url(); ?>Admin/edit_expiry_date/<?php echo html_escape($row['id']);?>">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
 								       <div class="form-group">
 								       	<label>Expiry Date</label>
-								       	<input type="date" name="expiry_date" value="<?php echo $row['expiry_date'];?>" class="form-control">
+								       	<input type="date" name="expiry_date" value="<?php echo html_escape($row['expiry_date']);?>" class="form-control">
 								       </div>
 
 							      
-								      <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+								      <input type="hidden" name="product_id" value="<?php echo html_escape($row['id']); ?>">
 								      <!-- Modal footer -->
 								      <div class="modal-footer">
 								      	  <button type="submit" class="btn btn-info btn-prop" ><i style="display:none;" class="fa fa-spinner fa-spin fa-fw btn-load" id="btn-load"> </i>Save</button>

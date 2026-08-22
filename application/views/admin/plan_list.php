@@ -51,9 +51,9 @@ include_once('include/header.php');
                     ?>
                      <tr>
                         <td><?php echo $i;?></td>
-                        <td><?php echo $row['title'];?></td>
-                        <td><?php echo $row['description'];?></td>
-                        <td><?php echo $row['price'];?></td>
+                        <td><?php echo html_escape($row['title']);?></td>
+                        <td><?php echo html_escape($row['description']);?></td>
+                        <td><?php echo html_escape($row['price']);?></td>
                         <td>
                            <?php 
                               if($row['responsive_display']==1){
