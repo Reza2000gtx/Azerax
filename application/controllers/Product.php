@@ -1616,6 +1616,8 @@ public function processsuggestion()
 	    
 		$this->form_validation->set_rules('email','email','required|valid_email');
         $this->form_validation->set_rules('rating','Rating','trim|required');
+        $this->form_validation->set_rules('name','Name','trim|strip_tags');
+        $this->form_validation->set_rules('message','Message','trim|strip_tags');
        
        	if($this->form_validation->run()==true)
     	{

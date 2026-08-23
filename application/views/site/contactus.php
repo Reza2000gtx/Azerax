@@ -151,6 +151,30 @@
     font-family: 'Inter', sans-serif;
     margin-top: 4px;
 }
+
+/* Submit loading state - lets the user know the message is genuinely
+   being sent, since the actual email send takes a few real seconds */
+.az-submit-btn:disabled {
+    opacity: 0.75;
+    cursor: default;
+}
+.az-submit-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(20,33,61,0.3);
+    border-top-color: #14213D;
+    border-radius: 50%;
+    animation: az-spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: -2px;
+}
+@keyframes az-spin {
+    to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .az-submit-spinner { animation: none; }
+}
 </style>
 
 <!-- Hero Band -->
@@ -197,7 +221,7 @@
         <div class="az-contact-form">
             <h3>Send us a message</h3>
             <?php echo $this->session->flashdata('msg'); ?>
-            <form action="<?php echo base_url(); ?>contact-us-action" method="post">
+            <form id="az-contact-form" action="<?php echo base_url(); ?>contact-us-action" method="post">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -225,12 +249,24 @@
                     <div class="errorMessage"><?php echo form_error('message'); ?></div>
                 </div>
                 <div class="text-right">
-                    <button type="submit" class="az-submit-btn">Send message →</button>
+                    <button type="submit" id="az-contact-submit" class="az-submit-btn"><span id="az-contact-submit-label">Send message →</span></button>
                 </div>
             </form>
         </div>
 
     </div>
 </div>
+
+<script>
+document.getElementById('az-contact-form').addEventListener('submit', function(){
+    // Give immediate visual feedback that something is genuinely
+    // happening - the actual email send takes a few real seconds, and
+    // without this it can look like the click did nothing at all.
+    var btn = document.getElementById('az-contact-submit');
+    var label = document.getElementById('az-contact-submit-label');
+    btn.disabled = true;
+    label.innerHTML = '<span class="az-submit-spinner"></span>Sending...';
+});
+</script>
 
 <?php include_once 'include/footer2.php' ; ?>

@@ -19,10 +19,6 @@ include_once('include/header.php');
 				<div class="box">
 					<div class="box-header">
 						<h3 class="box-title">Contact us</h3>
-            <?php if($admin_permission_single && $admin_permission_single['edit']=='YES') { ?>
-
-						 <a  href="javascript:void(0);" style="float: right;"  onclick="return OpenModel();" class="btn btn-info">Reply</a>
-            <?php	} ?>
 						
 					</div>
    
@@ -150,54 +146,9 @@ include_once('include/header.php');
     </section>
 </div>
 
-<div class="modal" id="assign">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Reply </h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <!-- Modal body -->
-      <form method="post" id="f3" action="<?php echo base_url(); ?>Admin/Footer_content/replyrequest">
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-      <div class="modal-body">
-         <input type="hidden" id="arrayid" value="" name="id[]">
-        <div class="form-group">
-         <label for="">Reply</label>
-         <textarea name="reply" class="from-control ckeditor" ></textarea>
-        <div id="error1"></div>
-      </div>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-         <button type="submit" class="btn btn-primary" >submit</button>
-      </div>
-   </form>
-    </div>
-  </div>
-</div>
 
 <?php include_once('include/footer.php'); ?>
 <script type="text/javascript">
-  function OpenModel(){
-       var id = [];
-   $(':checkbox:checked').each(function(i){
-     id[i] = $(this).val();
-    });
-     if(id.length === 0) //tell you if the array is empty
-    {
-     alert("Please Select atleast one contact request.");
-    } else {
-       $('#assign').modal('show');
-       $('#arrayid').attr('value',id);
-        return false;
-   }
-   }
 </script>
 <script>
  $(document).ready(function(){

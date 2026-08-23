@@ -218,11 +218,11 @@ public function fee_charges(){
    }
 	public function contact_us_action()
 	{
-      $this->form_validation->set_rules('username','Username','required');
+      $this->form_validation->set_rules('username','Username','required|trim|strip_tags');
       $this->form_validation->set_rules('email','Email','required|valid_email|regex_match[/^[^\s@]+@[^\s@]+\.[^\s@]+$/]');
     //$this->form_validation->set_rules('phone','Phone','required|numeric');
-      $this->form_validation->set_rules('subject','Subject','required');
-      $this->form_validation->set_rules('message','Message','required');
+      $this->form_validation->set_rules('subject','Subject','required|trim|strip_tags');
+      $this->form_validation->set_rules('message','Message','required|trim|strip_tags');
 	
 	 if($this->form_validation->run()==true)
 	 {
@@ -271,11 +271,11 @@ public function fee_charges(){
 	
 	public function about_us_action()
 	{
-      $this->form_validation->set_rules('username','Username','required');
+      $this->form_validation->set_rules('username','Username','required|trim|strip_tags');
       $this->form_validation->set_rules('email','Email','required|valid_email|regex_match[/^[^\s@]+@[^\s@]+\.[^\s@]+$/]');
     //$this->form_validation->set_rules('phone','Phone','required|numeric');
-      $this->form_validation->set_rules('subject','Subject','required');
-      $this->form_validation->set_rules('message','Message','required');
+      $this->form_validation->set_rules('subject','Subject','required|trim|strip_tags');
+      $this->form_validation->set_rules('message','Message','required|trim|strip_tags');
 	
 	 if($this->form_validation->run()==true)
 	 {

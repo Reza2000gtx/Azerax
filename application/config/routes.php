@@ -75,7 +75,6 @@ $route['Admin/edit-product/(:any)'] = 'Admin/Product/edit_product';
 $route['Admin/delete-product/(:any)'] = 'Admin/Product/delete_product';
 $route['Admin/detail-product/(:any)'] = 'Admin/Product/detail_product';
 $route['Admin/manufacturerlist'] = 'Admin/Manufacturer';
-$route['Admin/brandlist/(:any)'] = 'Admin/Manufacturer/brandlist';
 $route['Admin/about'] = 'Admin/contentManagement/aboutUs';
 
 
@@ -231,7 +230,6 @@ $route['Admin/user/send_sms'] = 'Admin/Users/send_sms';
 $route['Admin/user/send_sms_all'] = 'Admin/Users/send_sms_all';
 
 
-$route['Admin/listbrand'] = 'Admin/Brand';
 $route['Admin/posts'] = 'Admin/post';
 $route['Admin/posts/activate/(:any)'] = 'Admin/post/activate';
 $route['Admin/posts/activate/(:any)/(:any)'] = 'Admin/post/activate';

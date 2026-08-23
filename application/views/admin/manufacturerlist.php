@@ -100,7 +100,7 @@ input.primary:checked + .slider {
 								
 									<td class="row-index"><?php echo $i; ?></td>
 								
-									<td><a href="<?php echo base_url() ?>Admin/brandlist/<?php echo html_escape($row['id']); ?>" class="small-box-footer "><?php echo html_escape($row['name']); ?></a></td>
+									<td><?php echo html_escape($row['name']); ?></td>
 									<td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['id']); ?>"><i class="fa fa-edit"></i></button>
 								     	<a href="javascript:void(0)" data-id="<?php echo html_escape($row['id']); ?>" data-nid="<?php echo $i; ?>" class="btn btn-danger btn-xs delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
 									</td>
