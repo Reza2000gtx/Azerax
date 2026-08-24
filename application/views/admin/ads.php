@@ -19,10 +19,7 @@ include_once('include/header.php');
 				<div class="box">
 					<div class="box-header">
 						<h3 class="box-title">All Advertisement </h3>
-						<?php if($admin_permission_single && $admin_permission_single['add']=='YES') { ?>
-
 						<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Add Advertisement</button>
-						<?php	} ?>
 					</div>
    
 					<div class="box-body">
@@ -65,8 +62,8 @@ include_once('include/header.php');
 										echo "-";
 									}else{
 
-										$selectCatquery = $this->common_model->GetSingleData('category',array('cat_id' =>$row['category']));
-										echo $selectCatquery['cat_title'];
+										$selectCatquery = $this->common_model->GetSingleData('category',array('id' =>$row['category']));
+										echo $selectCatquery['name'];
 									}
 
 									?>	
@@ -91,36 +88,39 @@ include_once('include/header.php');
 									}
 									 ?></td>
 									<td>
-									<?php if($admin_permission_single && $admin_permission_single['edit']=='YES') { ?>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['ads_id']); ?>"><i class="fa fa-edit"></i></button>
 
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['ads_id']); ?>"><i class="fa fa-edit"></i></button>
-										<?php	} ?>
-										<?php if($admin_permission_single && $admin_permission_single['delete']=='YES') { ?>
-
-										<form method="post" action="<?php echo base_url(); ?>Admin/delete_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this Advertisement?');">
+									<form method="post" action="<?php echo base_url(); ?>Admin/delete_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this Advertisement?');">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 									<button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash" aria-hidden="true"></i></button>
 									</form>
-										<?php	} ?>
-										<?php if($admin_permission_single && $admin_permission_single['active_deactive']=='YES') { ?>
 
-									
-										<?php		if($row['status']==1){ ?>
-									<form method="post" action="<?php echo base_url(); ?>Admin/deactivate_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Deactivate this Advertisement?');">
+									<?php		if($row['status']==1){ ?>
+								<form method="post" action="<?php echo base_url(); ?>Admin/deactivate_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Deactivate this Advertisement?');">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-								<button type="submit" class="btn btn-danger btn-xs" style="border:none;">Deactivate</button>
-								</form>
-							<?php		}else{ ?>
-								<form method="post" action="<?php echo base_url(); ?>Admin/activate_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Activate this Advertisement?');">
-<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
-							<button type="submit" class="btn btn-success btn-xs" style="border:none;">Activate</button>
+							<button type="submit" class="btn btn-danger btn-xs" style="border:none;">Deactivate</button>
 							</form>
-							<?php		}							
-								?>
-								<?php	} ?>
+						<?php		}else{ ?>
+							<form method="post" action="<?php echo base_url(); ?>Admin/activate_advertisement/<?php echo html_escape($row['ads_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to Activate this Advertisement?');">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+						<button type="submit" class="btn btn-success btn-xs" style="border:none;">Activate</button>
+						</form>
+						<?php		}							
+							?>
 									</td>
 								</tr>
-								<!-- The Modal -->
+								<?php $i++;} ?>
+							</tbody>
+						</table>
+						<?php
+						// Edit modals are rendered separately, after the table closes.
+						// A div is not valid as a direct child of tbody/tr - having
+						// them nested inside the table previously caused the browser to
+						// silently "repair" the invalid HTML by relocating these divs in
+						// the DOM, which was breaking the separate Add Advertisement
+						// modal defined further down the page whenever at least one row
+						// (and therefore one embedded modal) was present.
+						foreach($ads as $row){ ?>
 								<div class="modal" id="myModal<?php echo html_escape($row['ads_id']); ?>">
 								  <div class="modal-dialog">
 								    <div class="modal-content">
@@ -152,7 +152,7 @@ include_once('include/header.php');
 							       	     	
 							       	     	foreach ($selectAllCatquery as  $category) {
 							       	     		?>
-							       	     		<option <?php if($row['category']==$category['cat_id']){echo 'selected';}?> value="<?=$category['cat_id']?>"><?=$category['cat_title']?></option>
+							       	     		<option <?php if($row['category']==$category['id']){echo 'selected';}?> value="<?=$category['id']?>"><?=$category['name']?></option>
 							       	     		<?php
 							       	     	}
 							       	     	
@@ -195,9 +195,7 @@ include_once('include/header.php');
 								    </div>
 								  </div>
 								</div>
-								<?php $i++;} ?>
-							</tbody>
-						</table>
+						<?php } ?>
 						</div>
 					</div>
 				</div>
@@ -235,7 +233,7 @@ include_once('include/header.php');
        	     	
        	     	foreach ($selectAllCatquery as  $category) {
        	     		?>
-       	     		<option value="<?=$category['cat_id']?>"><?=$category['cat_title']?></option>
+       	     		<option value="<?=$category['id']?>"><?=$category['name']?></option>
        	     		<?php
        	     	}
        	     	

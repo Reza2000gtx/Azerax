@@ -38,6 +38,12 @@ $page=$this->uri->segment(2);
 				</a>
 			</li>
 
+			<li class="<?php if($page=='categorylist' || $page=='listcat' || $page=='listsubcat' || $page=='listsubsubcat'){echo 'active';}?>">
+				<a href="<?php echo base_url(); ?>Admin/categorylist">
+					<i class="fa fa-sitemap"></i> <span>Categories</span>
+				</a>
+			</li>
+
 			<li class="<?php if($page=='about'){echo 'active';}?>">
 				<a href="<?php echo base_url(); ?>Admin/about">
 					<i class="fa fa-file-text-o"></i> <span>About</span>

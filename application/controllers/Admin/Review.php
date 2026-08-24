@@ -34,7 +34,7 @@
 
 		$update['read_review']=1;
 		$run = $this->common_model->UpdateData('review','',$update);
-		$data['reviewlist'] = $this->common_model->GetAllData('review');
+		$data['reviewlist'] = $this->common_model->GetAllData('review','','created_at','desc');
 
 		$this->load->view('admin/reviewlist',$data);
 

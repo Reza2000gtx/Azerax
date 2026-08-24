@@ -79,6 +79,7 @@ input.primary:checked + .slider {
 						<h3 class="box-title">All  Categories </h3>
 
 						<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModaladd">Add  Category</button>
+						<a href="<?php echo base_url(); ?>Admin/listsubcat" class="btn btn-default pull-right" style="margin-right:8px;">View Subcategories &rarr;</a>
 					</div>
    
 					<div class="box-body">
@@ -184,3 +185,38 @@ input.primary:checked + .slider {
   </div>
 </div>
 <?php include_once('include/footer.php'); ?>
+<script type="text/javascript">
+function addcategory(){
+    var form = $('#addcategory');
+    $.ajax({
+        url: "<?php echo base_url(); ?>Admin/Category/add_category",
+        type: 'post',
+        data: form.serialize(),
+        success: function(response){
+            if(response.trim() == "1"){
+                location.reload();
+            } else {
+                $('#error').html(response);
+            }
+        }
+    });
+    return false;
+}
+
+function editcategory(id){
+    var form = $('#editcategory'+id);
+    $.ajax({
+        url: "<?php echo base_url(); ?>Admin/Category/edit_category",
+        type: 'post',
+        data: form.serialize(),
+        success: function(response){
+            if(response.trim() == "1"){
+                location.reload();
+            } else {
+                $('#error'+id).html(response);
+            }
+        }
+    });
+    return false;
+}
+</script>

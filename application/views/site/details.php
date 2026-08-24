@@ -435,12 +435,13 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                 ?>
                 <div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:2px solid #EBEBEB;margin-bottom:16px;">
                     <div style="font-family:'Inter',sans-serif;font-size:48px;font-weight:700;color:#14213D;line-height:1;"><?php echo $avg; ?></div>
-                    <div>
+                    <div style="flex:1;">
                         <div style="color:#FCA311;font-size:24px;"><?php echo str_repeat('★', $avgRounded) . str_repeat('☆', 5 - $avgRounded); ?></div>
                         <div style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">Based on <?php echo $total; ?> review<?php echo $total > 1 ? 's' : ''; ?></div>
                     </div>
+                    <button type="button" id="az-toggle-reviews" style="background:#fff;color:#14213D;border:1.5px solid #EBEBEB;padding:9px 20px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap;">Show all reviews</button>
                 </div>
-                <div style="padding:20px 0;">
+                <div id="az-reviews-list" style="display:none;padding:20px 0;">
                     <?php foreach($reviews as $review){ ?>
                     <div style="border-bottom:1px solid #F0F0F0;padding:16px 0;">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -455,15 +456,22 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                 <p style="font-family:'Inter',sans-serif;font-size:14px;color:#999;padding:20px 0;">No reviews yet — be the first to review this product.</p>
                 <?php } ?>
                 <!-- Add Review Form -->
-                <div style="margin-top:24px;padding-top:24px;border-top:2px solid #EBEBEB;">
+                <div style="margin-top:24px;padding-top:24px;">
                     <h4 style="font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:#14213D;margin-bottom:16px;">Add a Review</h4>
+                    <?php $review_msg = $this->session->flashdata('msg'); ?>
+                    <?php if($review_msg){ ?>
+                    <div id="az-review-msg"><?php echo $review_msg; ?></div>
+                    <?php } ?>
                     <?php if(!$this->session->userdata('user_id')){ ?>
                     <p style="font-family:'Inter',sans-serif;font-size:14px;color:#999;">Please <a href="<?php echo base_url(); ?>login" style="color:#FCA311;font-weight:500;">log in</a> to leave a review.</p>
                     <?php } else { ?>
                     <form method="post" action="<?php echo base_url(); ?>Product/add_review/<?php echo $product_detail['id']; ?>">
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
                             <input type="text" name="name" placeholder="Your name" class="form-control">
-                            <input type="email" name="email" placeholder="Email address" class="form-control" required>
+                            <div>
+                            <input type="email" id="az-review-email" name="email" placeholder="Email address" class="form-control" required>
+                            <div id="az-review-email-error" style="display:none;color:#dc3545;font-size:12px;font-family:'Inter',sans-serif;margin-top:4px;">A review for this product has been submitted from this email address.</div>
+                            </div>
                         </div>
                         <div style="margin-bottom:16px;">
                             <select name="rating" class="form-control" style="max-width:200px;" required>
@@ -478,7 +486,7 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                         <div style="margin-bottom:16px;">
                             <textarea name="message" placeholder="Write your review..." class="form-control" rows="4"></textarea>
                         </div>
-                        <button type="submit" style="background:#FCA311;color:#14213D;border:none;padding:10px 28px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;">Submit Review</button>
+                        <button type="submit" id="az-review-submit" style="background:#FCA311;color:#14213D;border:none;padding:10px 28px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;">Submit Review</button>
                     </form>
                     <?php } ?>
                 </div>
@@ -486,5 +494,76 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
         </div>
     </div>
 </div>
+
+<?php if(isset($review_msg) && $review_msg){ ?>
+<script>
+// A review submission redirects back to this page, but the Reviews tab
+// isn't active by default - without this, the success/error message would
+// be sitting in an inactive tab the person has no reason to click into.
+document.addEventListener('DOMContentLoaded', function(){
+    var tabEl = document.getElementById('review-tab');
+    if(tabEl && typeof $ !== 'undefined'){
+        $(tabEl).tab('show');
+    }
+    var msgEl = document.getElementById('az-review-msg');
+    if(msgEl){
+        msgEl.scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+});
+</script>
+<?php } ?>
+
+<script>
+// Checks for a duplicate review as soon as the person leaves the email
+// field, rather than only after they submit and get redirected back.
+(function(){
+    var emailField = document.getElementById('az-review-email');
+    var errorEl = document.getElementById('az-review-email-error');
+    var submitBtn = document.getElementById('az-review-submit');
+    if(!emailField || typeof $ === 'undefined') return;
+
+    var deviceId = <?php echo json_encode($product_detail['id']); ?>;
+
+    function checkEmail(){
+        var email = emailField.value.trim();
+        if(!email){
+            errorEl.style.display = 'none';
+            if(submitBtn) submitBtn.disabled = false;
+            return;
+        }
+        $.ajax({
+            url: "<?php echo base_url(); ?>Product/check_review_email",
+            type: 'post',
+            data: {email: email, device_id: deviceId},
+            dataType: 'json',
+            success: function(response){
+                if(response.duplicate){
+                    errorEl.style.display = 'block';
+                    if(submitBtn) submitBtn.disabled = true;
+                } else {
+                    errorEl.style.display = 'none';
+                    if(submitBtn) submitBtn.disabled = false;
+                }
+            }
+        });
+    }
+
+    emailField.addEventListener('blur', checkEmail);
+})();
+</script>
+
+<script>
+(function(){
+    var toggleBtn = document.getElementById('az-toggle-reviews');
+    var reviewsList = document.getElementById('az-reviews-list');
+    if(!toggleBtn || !reviewsList) return;
+
+    toggleBtn.addEventListener('click', function(){
+        var isHidden = reviewsList.style.display === 'none';
+        reviewsList.style.display = isHidden ? 'block' : 'none';
+        toggleBtn.textContent = isHidden ? 'Hide reviews' : 'Show all reviews';
+    });
+})();
+</script>
 
 <?php include_once 'include/footer2.php' ; ?>

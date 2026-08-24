@@ -19,10 +19,9 @@ include_once('include/header.php');
 				<div class="box">
 					<div class="box-header">
 						<h3 class="box-title">All Sub categories </h3>
-						<?php if($admin_permission_single && $admin_permission_single['add']=='YES') { ?>
-
 						<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Add Sub category</button>
-						<?php	} ?>
+						<a href="<?php echo base_url(); ?>Admin/listsubsubcat" class="btn btn-default pull-right" style="margin-right:8px;">View Sub-subcategories &rarr;</a>
+						<a href="<?php echo base_url(); ?>Admin/categorylist" class="btn btn-default pull-right" style="margin-right:8px;">&larr; Categories</a>
 					</div>
    
 					<div class="box-body">
@@ -51,16 +50,11 @@ include_once('include/header.php');
 									<td><?php echo $cat['cat_title']; ?></td>
 									
 									<td>
-									<?php if($admin_permission_single && $admin_permission_single['edit']=='YES') { ?>
-
-										<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['sub_cat_id']); ?>"><i class="fa fa-edit"></i></button>
-										<?php	} ?>
-										<?php if($admin_permission_single && $admin_permission_single['delete']=='YES') { ?>
+									<button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal<?php echo html_escape($row['sub_cat_id']); ?>"><i class="fa fa-edit"></i></button>
 										<form method="post" action="<?php echo base_url(); ?>Admin/Subcategory/deletesubcat/<?php echo html_escape($row['sub_cat_id']); ?>" style="display:inline;" onsubmit="return confirm('Are you sure want to delete this subcategory?');">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 										<button type="submit" class="btn btn-danger btn-xs" style="border:none;"><i class="fa fa-trash" aria-hidden="true"></i></button>
 										</form>
-										<?php	} ?>
 									</td>
 								</tr>
 								<!-- The Modal -->
@@ -75,7 +69,7 @@ include_once('include/header.php');
 								      </div>
 
 								      <!-- Modal body -->
-								      <div id="error<?php echo html_escape($row['cat_id']); ?>"></div>
+								      <div id="error<?php echo html_escape($row['sub_cat_id']); ?>"></div>
 								     <form method="post" onsubmit="return editsubcategory(<?php echo html_escape($row['sub_cat_id']); ?>);" id="editsubcategory<?php echo html_escape($row['sub_cat_id']); ?>">
 <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
 								      <div class="modal-body">
@@ -168,3 +162,38 @@ include_once('include/header.php');
   </div>
 </div>
 <?php include_once('include/footer.php'); ?>
+<script type="text/javascript">
+function addsubcategory(){
+    var form = $('#addsubcategory');
+    $.ajax({
+        url: "<?php echo base_url(); ?>Admin/Subcategory/add_subcategory",
+        type: 'post',
+        data: form.serialize(),
+        success: function(response){
+            if(response.trim() == "1"){
+                location.reload();
+            } else {
+                $('#error').html(response);
+            }
+        }
+    });
+    return false;
+}
+
+function editsubcategory(id){
+    var form = $('#editsubcategory'+id);
+    $.ajax({
+        url: "<?php echo base_url(); ?>Admin/Subcategory/edit_subcategory",
+        type: 'post',
+        data: form.serialize(),
+        success: function(response){
+            if(response.trim() == "1"){
+                location.reload();
+            } else {
+                $('#error'+id).html(response);
+            }
+        }
+    });
+    return false;
+}
+</script>

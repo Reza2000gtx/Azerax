@@ -21,6 +21,7 @@ include_once('include/header.php');
 						<h3 class="box-title">All Sub Sub categories </h3>
 						
 						<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Add Sub Sub category</button>
+						<a href="<?php echo base_url(); ?>Admin/listsubcat" class="btn btn-default pull-right" style="margin-right:8px;">&larr; Subcategories</a>
 						
 					</div>
    
@@ -189,3 +190,38 @@ include_once('include/header.php');
   </div>
 </div>
 <?php include_once('include/footer.php'); ?>
+<script type="text/javascript">
+function addsubsubcategory(){
+    var form = $('#addsubsubcategory');
+    $.ajax({
+        url: "<?php echo base_url(); ?>Admin/SubSubcategory/add_subsubcategory",
+        type: 'post',
+        data: form.serialize(),
+        success: function(response){
+            if(response.trim() == "1"){
+                location.reload();
+            } else {
+                $('#error').html(response);
+            }
+        }
+    });
+    return false;
+}
+
+function editsubsubcategory(id){
+    var form = $('#editsubsubcategory'+id);
+    $.ajax({
+        url: "<?php echo base_url(); ?>Admin/SubSubcategory/edit_subsubcategory",
+        type: 'post',
+        data: form.serialize(),
+        success: function(response){
+            if(response.trim() == "1"){
+                location.reload();
+            } else {
+                $('#error'+id).html(response);
+            }
+        }
+    });
+    return false;
+}
+</script>

@@ -1612,6 +1612,27 @@ public function processsuggestion()
   }
   
   
+    // Called via AJAX as the person fills the review form, so they see
+    // the duplicate-email message immediately rather than only after
+    // submitting and being redirected back.
+    public function check_review_email(){
+        $email = $this->input->post('email');
+        $device_id = $this->input->post('device_id');
+
+        if(empty($email) || empty($device_id)){
+            echo json_encode(array('duplicate' => false));
+            return;
+        }
+
+        $existing_review = $this->common_model->GetSingleData('review',array('email'=>$email,'device_id'=>$device_id));
+
+        if($existing_review){
+            echo json_encode(array('duplicate' => true));
+        } else {
+            echo json_encode(array('duplicate' => false));
+        }
+    }
+
     public function add_review(){
 	    
 		$this->form_validation->set_rules('email','email','required|valid_email');
@@ -1624,6 +1645,13 @@ public function processsuggestion()
     	    
 		$user_id = $this->session->userdata('user_id');
         $id = $this->uri->segment(3);
+
+        $existing_review = $this->common_model->GetSingleData('review',array('email'=>$this->input->post('email'),'device_id'=>$id));
+        if($existing_review){
+            $this->session->set_flashdata('msg','<div class="alert alert-danger">A review for this product has been submitted from this email address.</div>');
+            redirect('details/'.$this->uri->segment(3));
+            return;
+        }
         
         if(!empty($this->input->post('name')))
     	$insert['name'] = $this->input->post('name');
@@ -1641,7 +1669,7 @@ public function processsuggestion()
             
         $run = $this->common_model->InsertData('review',$insert);
 		if($run){
-			 $this->session->set_flashdata('msg','<div class="alert alert-success">Thanks for sharing your  opinion with us!.</div>');
+			 $this->session->set_flashdata('msg','<div class="alert alert-success">Thanks for sharing your opinion with us! Your review will be shown after admin approval.</div>');
 			 redirect('details/'.$this->uri->segment(3));
 			 }
 			 else {
