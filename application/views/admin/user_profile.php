@@ -154,6 +154,56 @@ input.primary:checked + .slider {
                 </div>
                     </div>
 
+                    <div class="row">
+                    	<div class="col-md-12">
+                                <h4 class="no-mtop mrg3">Free Product Demo Grant</h4>
+                    </div>
+
+                    <hr/>
+                    <div class="col-md-12">
+                        <?php echo $this->session->flashdata('msg'); ?>
+                        <?php
+                        $has_grant = !empty($user_detail['free_product_limit']);
+                        if($has_grant){
+                            $expired = $user_detail['free_product_expiry'] && strtotime($user_detail['free_product_expiry']) < strtotime(date('Y-m-d'));
+                            $used = (int)$user_detail['free_product_used'];
+                            $limit = (int)$user_detail['free_product_limit'];
+                        ?>
+                        <p style="margin-bottom:16px;">
+                            <b>Current grant:</b> <?php echo $used; ?> of <?php echo $limit; ?> free listings used
+                            <?php if($user_detail['free_product_expiry']){ ?>
+                            &mdash; expires <?php echo html_escape($user_detail['free_product_expiry']); ?>
+                            <?php if($expired){ ?><span style="color:#dc3545;font-weight:600;"> (expired)</span><?php } ?>
+                            <?php } ?>
+                        </p>
+                        <?php } else { ?>
+                        <p style="margin-bottom:16px;color:#999;">This vendor has no free product grant set - they pay for every listing as normal.</p>
+                        <?php } ?>
+
+                        <form method="post" action="<?php echo base_url(); ?>Admin/set_free_product_grant" style="max-width:420px;">
+                        <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                        <input type="hidden" name="user_id" value="<?php echo html_escape($user_detail['user_id']); ?>">
+                        <div class="form-group">
+                            <label>Number of free products</label>
+                            <input type="number" min="0" name="free_product_limit" class="form-control" placeholder="e.g. 5" value="<?php echo $has_grant ? html_escape($user_detail['free_product_limit']) : ''; ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Grant duration (days from today)</label>
+                            <input type="number" min="1" name="grant_duration_days" class="form-control" placeholder="e.g. 30">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Grant</button>
+                        </form>
+                        <?php if($has_grant){ ?>
+                        <form method="post" action="<?php echo base_url(); ?>Admin/set_free_product_grant" style="display:inline-block;margin-top:8px;" onsubmit="return confirm('Clear this vendor\'s free product grant?');">
+                        <input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                        <input type="hidden" name="user_id" value="<?php echo html_escape($user_detail['user_id']); ?>">
+                        <input type="hidden" name="free_product_limit" value="">
+                        <button type="submit" class="btn btn-default">Clear Grant</button>
+                        </form>
+                        <?php } ?>
+                    </div>
+                    </div>
+
                 <div class="row">
                 	<div class="col-md-12">
                             <h4 class="no-mtop mrg3">Related Devices</h4>

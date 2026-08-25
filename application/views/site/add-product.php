@@ -2005,49 +2005,47 @@ $('#sub_cat_b').on('change', function(){
  </section>
 
     <div id="testmodal" class="modal fade">
-     
+
     <div class="modal-dialog" >
-         
-        <div class="modal-content">
+
+        <div class="modal-content" style="border-radius:14px;border:none;overflow:hidden;font-family:'Inter',sans-serif;">
              <form id="addform">
-            <div class="modal-header">
+            <div style="background:#14213D;padding:28px 32px;">
                 <?php
                 $seing = $this->common_model->GetSingleData('setting','id=1');
                 $amtt=$seing['actual_amount'];
                 ?>
-                <h3 class="text"></i> Total: <span> $<?php echo $amtt;?></span> </h3>
-                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div>
+                        <div style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;margin-bottom:4px;">Listing fee</div>
+                        <div style="font-size:32px;font-weight:700;color:#fff;">$<?php echo $amtt;?></div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:#fff;opacity:0.7;font-size:24px;">&times;</button>
+                </div>
             </div>
-                <div class="modal-body" style="text-align: center;">
-                    
-                <div class="form-group">
+                <div class="modal-body" style="padding:32px;text-align:center;background:#fff;">
+                    <div style="font-size:13px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">Choose a payment method</div>
+
+                <div class="form-group" style="margin-bottom:16px;">
                 <span id="paypal-button-container"></span>
-               </div> 
-                <div class="form-group">
-                <button type="submit" name="submit" class="" value="" 
-                
-                
-                style="
-   height: 45px;
-    width: 75%;
-    overflow: hidden;
-    min-width: 34px;
-    color: #fff;
-    background: #000;
-    border: #000;
-    border-radius: 5px;
-" >Debit or Credit Card</button>
+               </div>
 
+                <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:#999;font-size:12px;font-weight:600;">
+                    <div style="flex:1;height:1px;background:#EBEBEB;"></div>
+                    OR
+                    <div style="flex:1;height:1px;background:#EBEBEB;"></div>
+                </div>
 
+                <div class="form-group" style="margin-bottom:0;">
+                <button type="submit" name="submit" value=""
+                style="height:48px;width:100%;color:#14213D;background:#FCA311;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#e8940a'" onmouseout="this.style.background='#FCA311'">Pay with Debit or Credit Card</button>
+               </div>
 
-
-               </div> 
-               
             </div>
             <!--<div class="modal-footer">
             </div>-->
              </form>
+
         </div>
       </div>
     </div>
@@ -2961,43 +2959,51 @@ $(document).ready(function(){
 <div class="modal fade" id="latest_stripe_modal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content stripe">
-            <div class="modal-header">
-                
-                <h4 class="modal-title">Pay with card  </h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-content stripe" style="border-radius:14px;border:none;overflow:hidden;font-family:'Inter',sans-serif;">
+            <div style="background:#14213D;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;">
+                <h4 class="modal-title" style="color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:18px;margin:0;">Pay with Card</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff;opacity:0.7;">
             <span aria-hidden="true">×</span>
             </button>
             </div>
             <form id="latest-stipe-from">
-                <div class="modal-body">
+                <div class="modal-body" style="padding:32px;background:#fff;">
                     <div class="latest_stripe_err"></div>
                     <div class="man_box_walt">
-                        <div class="wollt1"> 
-                            <h3 class="text"></i> Total: <span> $<span class="latest-strip-deposit-amount"></span>.00</span> </h3>
-                            <div id="card-element-card-number" class="margin-bottom20 col-md-12 form-control" style="
-    margin: 10px;
-    width: 45%;
-" ></div>
- <div id="card-element-card-expiry" class="margin-bottom20 col-md-6 form-control" style="width:45%;margin: 10px;" ></div>
- <div id="card-element-card-cvc"    class="margin-bottom20 col-md-6 form-control" style="width:45%;margin: 10px;" ></div>
-                        <p id="latest-stripe-card-error" class="text-danger" role="alert"></p>
-                        <div class="form-group">
-                            <button class="btn submit_btn btn-block btn-lg" id="latest-stipe-submit">
+                        <div class="wollt1">
+                            <div style="text-align:center;margin-bottom:24px;">
+                                <div style="font-size:13px;color:#999;font-weight:500;margin-bottom:4px;">Total</div>
+                                <div style="font-size:28px;font-weight:700;color:#14213D;">$<span class="latest-strip-deposit-amount"></span>.00</div>
+                            </div>
+
+                            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#666;display:block;margin-bottom:6px;">Card number</label>
+                            <div id="card-element-card-number" class="form-control" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:11px 14px;margin-bottom:14px;"></div>
+
+                            <div style="display:flex;gap:12px;margin-bottom:6px;">
+                                <div style="flex:1;">
+                                    <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#666;display:block;margin-bottom:6px;">Expiry</label>
+                                    <div id="card-element-card-expiry" class="form-control" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:11px 14px;"></div>
+                                </div>
+                                <div style="flex:1;">
+                                    <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#666;display:block;margin-bottom:6px;">CVC</label>
+                                    <div id="card-element-card-cvc" class="form-control" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:11px 14px;"></div>
+                                </div>
+                            </div>
+                        <p id="latest-stripe-card-error" class="text-danger" role="alert" style="font-family:'Inter',sans-serif;font-size:13px;margin-top:10px;"></p>
+                        <div class="form-group" style="margin-top:18px;margin-bottom:0;">
+                            <button class="btn submit_btn btn-block btn-lg" id="latest-stipe-submit" style="background:#FCA311;color:#14213D;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;height:48px;">
                                 <span class="fa fa-spin fa-spinner" style="display:none;" id="latest-stipe-spinner"></span>
                                 <span id="button-text">Pay</span>
                             </button>
-<!--                            <img id="mpbutton" src="https://src.mastercard.com/assets/img/acc/global/src_mark_hor_blk.svg?locale=en_us&paymentmethod={acceptedCardBrands}&checkoutid={checkoutId}"/>                        </div>
--->                        </div> 
+                        </div> 
                    </div> 
                 </div>  
             </form>
+
+        <div class="modal-footer" style="border-top:1px solid #F0F0F0;padding:16px 32px;text-align:center;">
+<img src="<?php echo base_url();?>assets/secure.png" style="width: 220px;">
         </div>
-        <div class="modal-footer">
-<img src="<?php echo base_url();?>assets/secure.png" style="width: 300px;">
-            
         </div>
-    </div>
 </div>
 </div>
 
@@ -3684,8 +3690,6 @@ function payment_process_paypal(paymentType,actual_amt,paymentIntent_id){
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 <script type="text/javascript">
             function show_payment_option(){
-    jQuery.noConflict(); 
-
       $('#testmodal').modal('show');
 }
 </script>
@@ -3701,7 +3705,7 @@ function payment_process_paypal(paymentType,actual_amt,paymentIntent_id){
 <script type="text/javascript">
    $(document).on('click','.next3',function(){
    $(".Error3").html('');
-   add_function();
+   show_payment_option();
   }); 
 
   // Scrollspy: since this is now a single scrolling page (not separate tabs),

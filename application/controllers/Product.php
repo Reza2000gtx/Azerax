@@ -163,6 +163,29 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   
   $session_id = $this->session->userdata('user_id');
 
+  // Free-product grant check. A vendor with free_product_limit still NULL
+  // was never given a grant at all, so behaves exactly as before (no
+  // change). A vendor who WAS given one gets blocked once it's expired or
+  // fully used - at that point they pay for listings like anyone else,
+  // same as the plan for launch once real payment is wired up.
+  $grant_user = $this->common_model->GetSingleData('users',array('user_id'=>$session_id));
+  $using_free_grant = false;
+  if(!empty($grant_user['free_product_limit'])){
+      $limit = (int)$grant_user['free_product_limit'];
+      $used = (int)$grant_user['free_product_used'];
+      $expiry = $grant_user['free_product_expiry'];
+      $expired = $expiry && strtotime($expiry) < strtotime(date('Y-m-d'));
+      $exhausted = $used >= $limit;
+      if($expired || $exhausted){
+          $response['message'] = $expired
+              ? 'Your free product allowance has expired. Please contact us to continue adding products.'
+              : 'You have used all of your free product allowance. Please contact us to continue adding products.';
+          echo json_encode($response);
+          return;
+      }
+      $using_free_grant = true;
+  }
+
 
   //// Group 1: Device ////
   $product_type = htmlentities($_REQUEST['product_type'], ENT_QUOTES);
@@ -303,8 +326,14 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
                }   
        $where =" user_id='".$session_id."' ";
        $user_type = $this->common_model->UpdateData('users',$where,array('user_type'=>1));
+
+       if($using_free_grant){
+           $this->common_model->UpdateData('users',array('user_id'=>$session_id),array('free_product_used'=>$grant_user['free_product_used']+1));
+       }
        
-       $response['message'] = 'Payment successful! Your item will be added shortly.';
+       $response['message'] = $using_free_grant
+           ? 'Success! Your item will be added shortly (used '.($grant_user['free_product_used']+1).' of '.$grant_user['free_product_limit'].' free listings).'
+           : 'Payment successful! Your item will be added shortly.';
        $response['url'] = base_url().'my-product-listing';
 
 
@@ -943,7 +972,10 @@ public function get_category_attributes(){
     
 
     $device_name = $this->input->post('device_name'); 
-    $where =  " where product.status = 1 ";
+    // status 1 = active, 2 = expired. Expired listings still appear in
+    // search (masked in the view) rather than disappearing entirely - only
+    // fully removed/rejected listings (any other status) are excluded here.
+    $where =  " where product.status in (1,2) ";
     
     $whereorder ='ORDER by product.device_model ASC';
     //keyword///

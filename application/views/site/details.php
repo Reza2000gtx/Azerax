@@ -303,10 +303,15 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
             <!-- RIGHT COL: Name, Brand, Description, Favourites -->
             <div class="col-lg-6">
                 <div class="az-detail-info">
+                    <?php if ($product_detail['status'] == 2) { ?>
+                    <h2 class="az-detail-model" style="color:#999;">Details hidden - listing expired</h2>
+                    <div class="az-detail-brand" style="color:#999;">This vendor's listing for this device has expired. <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
+                    <?php } else { ?>
                     <h2 class="az-detail-model"><?php echo $product_detail['device_model']; ?></h2>
                     <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?> <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
+                    <?php } ?>
 
-                    <?php if ($product_detail['dealer_notes']) { ?>
+                    <?php if ($product_detail['status'] != 2 && $product_detail['dealer_notes']) { ?>
                     <div class="az-detail-notes">
                         <div class="az-detail-label" style="margin-bottom:8px;">Description</div>
                         <p><?php echo $product_detail['dealer_notes']; ?></p>
@@ -327,7 +332,9 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                     </div>
 
                     <div style="margin-top:16px;">
-                        <?php if (!$this->session->userdata('user_id')) { ?>
+                        <?php if ($product_detail['status'] == 2) { ?>
+                        <p style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">This listing has expired and can no longer be requested.</p>
+                        <?php } elseif (!$this->session->userdata('user_id')) { ?>
                         <p style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">Please <a href="<?php echo base_url(); ?>login" style="color:#FCA311;font-weight:500;">log in</a> to request a purchase.</p>
                         <?php } elseif (!$this->session->userdata('email_verified')) { ?>
                         <p style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">Please verify your email address to request a purchase.</p>
@@ -360,8 +367,13 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                 <div class="table-responsive">
                     <table class="table">
                         <tbody>
+    <?php if ($product_detail['status'] == 2) { ?>
+    <tr><td>Device Model</td><td><h5 style="color:#999;">Hidden - listing expired</h5></td></tr>
+    <tr><td>Device Brand</td><td><h5 style="color:#999;">Hidden - listing expired</h5></td></tr>
+    <?php } else { ?>
     <tr><td>Device Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
     <tr><td>Device Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>
+    <?php } ?>
     <?php if($product_detail['latest_firmware_version']){ ?>
     <tr><td>Latest Firmware</td><td><h5><?php echo $product_detail['latest_firmware_version']; ?></h5></td></tr>
     <?php } ?>

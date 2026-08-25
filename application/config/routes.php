@@ -68,7 +68,7 @@ $route['support'] = 'Home/support';
 //Admin
 $route['Admin/contact-us'] = 'Admin/Home/contact_us';
 $route['Admin/ticket'] = 'Admin/Home/ticket';
-
+$route['Admin/set_free_product_grant'] = 'Admin/Users/set_free_product_grant';
 $route['Admin/productlist'] = 'Admin/Product';
 $route['Admin/add-product'] = 'Admin/Product/add_product';
 $route['Admin/edit-product/(:any)'] = 'Admin/Product/edit_product';

@@ -705,6 +705,39 @@ foreach ($users as $key => $user) {
     $this->load->view('admin/user_profile',$data);
   }
 
+    // Sets (or clears) a vendor's free-product demo allowance: X free
+    // listings, valid for the next Y days from today. Enforced in the
+    // main site's Product::add_product_action().
+    public function set_free_product_grant(){
+
+        $user_id = $this->input->post('user_id');
+        $limit = $this->input->post('free_product_limit');
+        $duration_days = $this->input->post('grant_duration_days');
+
+        if($limit === '' || $limit === null){
+            // Clearing the grant entirely
+            $update['free_product_limit'] = null;
+            $update['free_product_used'] = 0;
+            $update['free_product_expiry'] = null;
+        } else {
+            $update['free_product_limit'] = (int)$limit;
+            $update['free_product_used'] = 0;
+            $update['free_product_expiry'] = !empty($duration_days)
+                ? date('Y-m-d', strtotime('+'.(int)$duration_days.' days'))
+                : null;
+        }
+
+        $run = $this->common_model->UpdateData('users',array('user_id'=>$user_id),$update);
+
+        if($run){
+            $this->session->set_flashdata('msg','<div class="alert alert-success">Free product grant updated successfully.</div>');
+        } else {
+            $this->session->set_flashdata('msg','<div class="alert alert-danger">Something went wrong.</div>');
+        }
+
+        redirect('Admin/user-profile/'.$user_id);
+    }
+
 
 }
  ?>

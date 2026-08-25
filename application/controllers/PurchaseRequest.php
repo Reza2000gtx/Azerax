@@ -29,6 +29,17 @@ class PurchaseRequest extends CI_Controller {
             return;
         }
 
+        // A request is tied to the device (device_id), not this one vendor's
+        // specific listing - other vendors may still actively offer the same
+        // device even if this particular listing has expired. Only block
+        // when NO vendor currently offers it at all.
+        $active_offer = $this->common_model->GetSingleData('product', array('device_id' => $product_detail['device_id'], 'status' => 1));
+        if (!$active_offer) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger">This device is not currently available from any vendor.</div>');
+            redirect('details/'.$product_id);
+            return;
+        }
+
         $data['product_detail'] = $product_detail;
         $this->load->view('site/request-to-buy', $data);
     }

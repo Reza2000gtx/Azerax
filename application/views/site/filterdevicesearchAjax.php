@@ -399,16 +399,28 @@ body {
 								<!-- ?php $manufacturer = $this->common_model->GetSingleData('manufacturer',array('id'=>$row['manufacturer_id']));  ?> -->
 							<!-- <h4><a href="<?php echo base_url();?>details/<?=$row['id']?>"><?=$manufacturer['name']?></a></h4> -->
 							<h4>
+								<?php if($row['status']==2){ ?>
+								<span style="color:#999;">Details hidden - listing expired</span>
+								<?php } else { ?>
 								<a href="<?php echo base_url();?>details/<?=$row['id']?>"><?=$row['device_model']?></a>
+								<?php } ?>
 								
 							</h4>
 							<div class="setseardata">
 							<div class="row">
 							    	<div class="col-sm-4">
+									<?php if($row['status']==2){ ?>
+									<span class="card-label">Brand: </span><span class="card-value" style="color:#999;">Hidden</span>
+									<?php } else { ?>
 									<?php echo '<span class="card-label">Brand: </span><span class="card-value">'. $row['device_brand'].'</span>' ; ?>
+									<?php } ?>
 								</div>
 								<div class="col-sm-4">
+									<?php if($row['status']==2){ ?>
+									<span class="card-label">Model: </span><span class="card-value" style="color:#999;">Hidden</span>
+									<?php } else { ?>
 									<?php echo '<span class="card-label">Model: </span><span class="card-value">'. $row['device_model'].'</span>' ; ?>
+									<?php } ?>
 								</div>
 								<div class="col-sm-4">										
 									<?php echo '<span class="card-label">Release Date: </span><span class="card-value">'. $row['date_released'].'</span>' ;?>

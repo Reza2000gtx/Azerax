@@ -184,6 +184,20 @@
         <div class="alert alert-success print-success-msg"><ul></ul></div>
 
         <?php if(!empty($productlist)): ?>
+
+        <!-- Filter tabs -->
+        <div class="az-listing-filters" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+            <button type="button" class="az-filter-btn active" data-filter="all">All</button>
+            <button type="button" class="az-filter-btn" data-filter="active">Active</button>
+            <button type="button" class="az-filter-btn" data-filter="pending">Pending Approval</button>
+            <button type="button" class="az-filter-btn" data-filter="expiring">Expiring Soon</button>
+        </div>
+        <style>
+        .az-filter-btn { background:#fff; color:#14213D; border:1.5px solid #EBEBEB; padding:8px 18px; border-radius:6px; font-family:'Inter',sans-serif; font-weight:600; font-size:13px; cursor:pointer; }
+        .az-filter-btn.active { background:#14213D; color:#fff; border-color:#14213D; }
+        .az-expiry-countdown { display:inline-flex !important; width:auto !important; max-width:max-content !important; flex:0 0 auto !important; font-family:'Inter',sans-serif; font-size:12px; font-weight:600; color:#dc3545; background:#FCEBEB; padding:2px 10px; border-radius:12px; margin-left:6px; white-space:nowrap; }
+        </style>
+
         <?php foreach ($productlist as $row):
             // Show the vendor's chosen main image if one is set; otherwise
             // fall back to whatever gallery image happens to exist first.
@@ -196,8 +210,25 @@
             $date = $row['approve_date'];
             $date1 = date('Y-m-d', strtotime('+14 days', strtotime($date)));
             $date2 = date('Y-m-d');
+
+            // Expiring Soon: active listing whose expiry falls within the
+            // next 2 months, matching the same window the existing expiry
+            // email system already warns at.
+            $days_to_expiry = null;
+            $is_expiring_soon = false;
+            if($row['status'] == 1 && !empty($row['expiry_date'])){
+                $days_to_expiry = ceil((strtotime($row['expiry_date']) - strtotime($date2)) / 86400);
+                if($days_to_expiry >= 0 && $days_to_expiry <= 60){
+                    $is_expiring_soon = true;
+                }
+            }
+
+            $filter_group = 'all';
+            if($row['status'] == 0) $filter_group = 'pending';
+            elseif($is_expiring_soon) $filter_group = 'expiring';
+            elseif($row['status'] == 1) $filter_group = 'active';
         ?>
-        <div class="col-sm-12 list_page<?php echo $row['id']; ?>" style="padding:0;">
+        <div class="col-sm-12 list_page<?php echo $row['id']; ?>" style="padding:0;" data-az-filter-group="<?php echo $filter_group; ?>">
             <div class="boder_image">
                 <div class="f_p_img">
                     <?php if($thumbnailImage): ?>
@@ -209,7 +240,12 @@
                 <div class="contt">
                     <h4>
                         <?php if($row['status'] == 1): ?>
+                        <span style="display:flex;align-items:center;white-space:nowrap;margin-bottom:8px;">
                         <span class="status-badge is-active"><i class="fa fa-check-circle" aria-hidden="true"></i>Active</span>
+                        <?php if($is_expiring_soon): ?>
+                        <span class="az-expiry-countdown"><?= $days_to_expiry ?> day<?= $days_to_expiry == 1 ? '' : 's' ?> until expiry</span>
+                        <?php endif; ?>
+                        </span>
                         <?php
                         if($date2 <= $date1){
                             $days_left = ceil((strtotime($date1) - strtotime($date2)) / 86400);
@@ -438,6 +474,20 @@ function deleteproduct(id){
         }
     });
 }
+</script>
+
+<script>
+document.querySelectorAll('.az-filter-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        document.querySelectorAll('.az-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        var filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('[data-az-filter-group]').forEach(function(card){
+            var group = card.getAttribute('data-az-filter-group');
+            card.style.display = (filter === 'all' || group === filter) ? '' : 'none';
+        });
+    });
+});
 </script>
 
 <!-- Payment Option Modal -->
