@@ -140,6 +140,7 @@
 
 /* Modal */
 .modal-dialog { width: 60% !important; max-width: 100%; }
+#paymentOption .modal-dialog, #latest_stripe_modal .modal-dialog { width: 480px !important; }
 .close { float: right; font-size: 30px; font-weight: 700; color: #000 !important; opacity: 1 !important; }
 
 /* Payment */
@@ -158,12 +159,28 @@
 }
 .btn_cus:hover, .btn_cus:focus { box-shadow: 0 0 0 2px white, 0 0 0 3px #14213D; }
 #latest_stripe_modal.modal.fade .modal-dialog { transform: translate(0, 15%); }
-#testmodal.modal.fade .modal-dialog { transform: translate(0, 40%); }
-#testmodal, #latest_stripe_modal { z-index: +11111; }
+#paymentOption.modal.fade .modal-dialog { transform: translate(0, 40%); }
+#paymentOption, #latest_stripe_modal { z-index: +11111; }
 #latest_stripe_modal .form-group { position: static; }
 .modal-backdrop { position: fixed !important; }
 .modal-backdrop.fade.show { opacity: 0.1; }
 .paypal-button:not(.paypal-button-card) { width: 100px; }
+
+/* Cancel-listing submit button loading state */
+.az-cancel-submit-btn:disabled { opacity: 0.75; cursor: default; }
+.az-cancel-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(20,33,61,0.3);
+    border-top-color: #14213D;
+    border-radius: 50%;
+    animation: az-cancel-spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: -2px;
+}
+@keyframes az-cancel-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .az-cancel-spinner { animation: none; } }
 </style>
 
 <!-- Hero -->
@@ -286,7 +303,7 @@
 
                     <!-- Cancel Modal -->
                     <div class="modal fade" id="exampleModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
-                        <form action="<?php echo base_url(); ?>Product/cancel_my_product" method="POST">
+                        <form class="az-cancel-form" action="<?php echo base_url(); ?>Product/cancel_my_product" method="POST">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -309,8 +326,10 @@
                                     <textarea name="feedback" rows="3" maxlength="3000" class="form-control"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-info">Save</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="az-cancel-submit-btn" style="background:#FCA311;color:#14213D;border:none;padding:10px 24px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;">
+                                        <span class="az-cancel-spinner" style="display:none;"></span><span class="az-cancel-btn-label">Submit</span>
+                                    </button>
+                                    <button type="button" class="btn" data-dismiss="modal" style="background:#fff;color:#14213D;border:1.5px solid #EBEBEB;padding:10px 24px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -347,24 +366,30 @@ function paymentOption(pID){
 function renewProduct(pID=0){
     var pID = $('#relistProdId').val();
     $('#productRenewId').val(pID);
+    // Wait for #paymentOption to genuinely finish closing (including its
+    // backdrop) before showing the next modal - showing one immediately
+    // while the other is still mid-transition can leave a stale backdrop
+    // that visually blocks the new modal even though it's technically open.
+    $('#paymentOption').one('hidden.bs.modal', function(){
+        show_lates_stripe_popup1(<?php echo $paymentinfo['amount']; ?>, <?php echo $paymentinfo['amount']; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, 'purchasesession<?php echo $user_id; ?>', '');
+    });
     $('#paymentOption').modal('hide');
-    show_lates_stripe_popup1(<?php echo $paymentinfo['amount']; ?>, <?php echo $paymentinfo['amount']; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, 'purchasesession<?php echo $user_id; ?>', '');
 }
 
-function add_function(){
+function add_function(id, paymentIntent_id){
     var pID = $('#relistProdId').val();
     $.ajax({
         method: "POST",
         url: "<?php echo base_url(); ?>Product/renew_product_action?action=renew",
-        data: {pID: pID},
+        data: {pID: pID, paymentIntent_id: paymentIntent_id},
         dataType: 'JSON',
         beforeSend: function(){ $(".submitBtn").prop('disabled', true); },
-        fail: function(){ alert("Try again later."); },
-        done: function(response){
+        error: function(){ alert("Try again later."); },
+        success: function(response){
             if(response.status == 2){ $("#Error").html(response.message).show(); }
             if(response.status == 1 || response.status == 0) location.href = response.url;
         },
-        always: function(){ $(".submitBtn").prop('disabled', false); }
+        complete: function(){ $(".submitBtn").prop('disabled', false); }
     });
 }
 
@@ -384,6 +409,10 @@ function show_lates_stripe_popup1(amount, actual_amt, onSuccess=null, onError=nu
             invalid: { color: '#E25950', '::placeholder': { color: '#FFCCA5' } }
         };
         var elementClasses = { focus: 'focused', empty: 'empty', invalid: 'invalid' };
+        // Clear these first - if the modal was opened before in this same
+        // page session, they'd still contain the previous mount's content,
+        // which is what Stripe's "contains child nodes" warning is about.
+        $('#card-element-card-number, #card-element-card-expiry, #card-element-card-cvc').empty();
         var cardNumber = elements.create('cardNumber', { style: elementStyles, classes: elementClasses });
         cardNumber.mount('#card-element-card-number');
         var cardExpiry = elements.create('cardExpiry', { style: elementStyles, classes: elementClasses });
@@ -398,26 +427,34 @@ function show_lates_stripe_popup1(amount, actual_amt, onSuccess=null, onError=nu
         var form = document.getElementById("latest-stipe-from");
         form.addEventListener("submit", function(event){
             event.preventDefault();
-            payWithCard(actual_amt, stripe, card, data.clientSecret, data.customerID, onSuccess, onError, onCancel, id);
+            payWithCard(actual_amt, stripe, card, data.clientSecret, data.customerID, data.paymentIntent_id, onSuccess, onError, onCancel, id);
         });
     });
 }
 
-var payWithCard = function(actual_amt, stripe, card, clientSecret, customerID, onSuccess=null, onError=null, onCancel=null, id){
+var payWithCard = function(actual_amt, stripe, card, clientSecret, customerID, paymentIntent_id, onSuccess=null, onError=null, onCancel=null, id){
     loading(true);
     stripe.confirmCardPayment(clientSecret, { payment_method: { card: card } }).then(function(result){
         if(result.error){ showError(result.error.message, result, onSuccess, onError, onCancel); }
-        else { orderComplete(actual_amt, result, customerID, onSuccess, onError, onCancel, id); }
+        else { orderComplete(actual_amt, result, customerID, paymentIntent_id, onSuccess, onError, onCancel, id); }
+    }).catch(function(err){
+        // Without this, an unexpected rejection (rather than a normal
+        // result.error) left the Pay button stuck indefinitely with no
+        // feedback at all.
+        showError('Something went wrong processing your card. Please try again.', err, onSuccess, onError, onCancel);
     });
 };
 
-var orderComplete = function(actual_amt, result, customerID, onSuccess=null, onError=null, onCancel=null, id){
+var orderComplete = function(actual_amt, result, customerID, paymentIntent_id, onSuccess=null, onError=null, onCancel=null, id){
     $.ajax({
         type: 'post', url: 'Product/pay_product', dataType: 'JSON',
-        data: { data: result, customerID: customerID, actual_amt: actual_amt },
+        data: { data: result, customerID: customerID, actual_amt: actual_amt, paymentIntent_id: paymentIntent_id },
         success: function(res){
-            if(res.status == 1){ add_function(id); }
-            else { loading(false); swal('Some problem occurred, please try again.'); }
+            if(res.status == 1){ add_function(id, paymentIntent_id); }
+            else { showError('Some problem occurred, please try again.', res, onSuccess, onError, onCancel); }
+        },
+        error: function(){
+            showError('Some problem occurred recording your payment. Please try again.', null, onSuccess, onError, onCancel);
         }
     });
 };
@@ -434,6 +471,7 @@ var loading = function(isLoading){
 </script>
 
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script async src="https://js.stripe.com/v3/"></script>
 <?php
 $paypal_status = 1;
 $paypal_type = ($paypal_status == 0) ? 'sandbox' : 'production';
@@ -493,26 +531,110 @@ document.querySelectorAll('.az-filter-btn').forEach(function(btn){
 <!-- Payment Option Modal -->
 <div id="paymentOption" class="modal fade">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="border-radius:14px;border:none;overflow:hidden;font-family:'Inter',sans-serif;">
             <form id="addform">
-            <div class="modal-header">
+            <div style="background:#14213D;padding:28px 32px;">
                 <?php
                 $seing = $this->common_model->GetSingleData('setting', 'id=1');
                 $amtt = $seing['actual_amount'];
                 ?>
-                <h3 style="color:#000;">Total: <span>$<?php echo $amtt; ?></span></h3>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div>
+                        <div style="font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;margin-bottom:4px;">Relisting fee</div>
+                        <div style="font-size:32px;font-weight:700;color:#fff;">$<?php echo $amtt; ?></div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" style="color:#fff !important;opacity:0.7 !important;font-size:24px;">&times;</button>
+                </div>
             </div>
-            <div class="modal-body" style="text-align:center;">
-                <div class="form-group">
+            <div class="modal-body" style="padding:32px;text-align:center;background:#fff;">
+                <div style="font-size:13px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">Choose a payment method</div>
+
+                <div class="form-group" style="margin-bottom:16px;">
                     <span class="relist-paypal" id="paypal-button-container"></span>
                     <input type="hidden" id="relistProdId" value="">
                 </div>
-                <div class="form-group">
-                    <button type="button" onclick="renewProduct()" style="height:45px;max-width:350px;color:#fff;background:#000;border:#000;width:100%;display:inline-block;">Debit or Credit Card</button>
+
+                <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:#999;font-size:12px;font-weight:600;">
+                    <div style="flex:1;height:1px;background:#EBEBEB;"></div>
+                    OR
+                    <div style="flex:1;height:1px;background:#EBEBEB;"></div>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <button type="button" onclick="renewProduct()" style="height:48px;width:100%;color:#14213D;background:#FCA311;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;" onmouseover="this.style.background='#e8940a'" onmouseout="this.style.background='#FCA311'">Pay with Debit or Credit Card</button>
                 </div>
             </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Stripe card-entry modal - this was entirely missing before, even
+     though the CSS and JS on this page already referenced it. That's why
+     clicking "Debit or Credit Card" did nothing: it tried to open a modal
+     that didn't exist. -->
+<div class="modal fade" id="latest_stripe_modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content stripe" style="border-radius:14px;border:none;overflow:hidden;font-family:'Inter',sans-serif;">
+            <div style="background:#14213D;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;">
+                <h4 class="modal-title" style="color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:18px;margin:0;">Pay with Card</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff !important;opacity:0.7 !important;">
+            <span aria-hidden="true">×</span>
+            </button>
+            </div>
+            <form id="latest-stipe-from">
+                <div class="modal-body" style="padding:32px;background:#fff;">
+                    <div class="latest_stripe_err"></div>
+                    <div class="man_box_walt">
+                        <div class="wollt1">
+                            <div style="text-align:center;margin-bottom:24px;">
+                                <div style="font-size:13px;color:#999;font-weight:500;margin-bottom:4px;">Total</div>
+                                <div style="font-size:28px;font-weight:700;color:#14213D;">$<span class="latest-strip-deposit-amount"></span>.00</div>
+                            </div>
+
+                            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#666;display:block;margin-bottom:6px;">Card number</label>
+                            <div id="card-element-card-number" class="form-control" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:11px 14px;margin-bottom:14px;"></div>
+
+                            <div style="display:flex;gap:12px;margin-bottom:6px;">
+                                <div style="flex:1;">
+                                    <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#666;display:block;margin-bottom:6px;">Expiry</label>
+                                    <div id="card-element-card-expiry" class="form-control" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:11px 14px;"></div>
+                                </div>
+                                <div style="flex:1;">
+                                    <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#666;display:block;margin-bottom:6px;">CVC</label>
+                                    <div id="card-element-card-cvc" class="form-control" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:11px 14px;"></div>
+                                </div>
+                            </div>
+                        <p id="latest-stripe-card-error" class="text-danger" role="alert" style="font-family:'Inter',sans-serif;font-size:13px;margin-top:10px;"></p>
+                        <div class="form-group" style="margin-top:18px;margin-bottom:0;">
+                            <button class="btn submit_btn btn-block btn-lg" id="latest-stipe-submit" style="background:#FCA311;color:#14213D;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;height:48px;">
+                                <span class="fa fa-spin fa-spinner" style="display:none;" id="latest-stipe-spinner"></span>
+                                <span id="button-text">Pay</span>
+                            </button>
+                        </div>
+                   </div>
+                </div>
+            </form>
+
+        <div class="modal-footer" style="border-top:1px solid #F0F0F0;padding:16px 32px;text-align:center;">
+<img src="<?php echo base_url();?>assets/secure.png" style="width: 220px;">
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// Each product row has its own cancel form/modal, all sharing this class -
+// wiring this once covers all of them.
+document.querySelectorAll('.az-cancel-form').forEach(function(form){
+    form.addEventListener('submit', function(){
+        var btn = form.querySelector('.az-cancel-submit-btn');
+        var spinner = form.querySelector('.az-cancel-spinner');
+        var label = form.querySelector('.az-cancel-btn-label');
+        if(btn) btn.disabled = true;
+        if(spinner) spinner.style.display = 'inline-block';
+        if(label) label.textContent = 'Submitting...';
+    });
+});
+</script>

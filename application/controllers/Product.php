@@ -365,16 +365,6 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 		 	
 			 $user_id = $this->session->userdata('user_id');
 			 
-			
-			if($session_detail['validity']==1){
-			       $month = $session_detail['validity'].' month';
-					} else if($session_detail['validity'] > 1 and $session_detail['validity'] < 12){
-						$month = $session_detail['validity'].' month';
-				   	} else {
-						$month = $session_detail['validity'].' month';
-						}
-			
-		
 			$currency = 'AUD';
 			$status = 1;
 			$traId = md5(rand(1000,999).time());
@@ -404,16 +394,6 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
     {
          $user_id = $this->session->userdata('user_id');
 			 
-			
-			if($session_detail['validity']==1){
-			       $month = $session_detail['validity'].' month';
-					} else if($session_detail['validity'] > 1 and $session_detail['validity'] < 12){
-						$month = $session_detail['validity'].' month';
-				   	} else {
-						$month = $session_detail['validity'].' month';
-						}
-			
-		
 			$currency = 'AUD';
 			$status = 1;
 			$traId = md5(rand(1000,999).time());
@@ -494,6 +474,37 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 	$p_id=$this->input->post('cancel_id'); 
     
     $qry = $this->db->query("SELECT * FROM product WHERE id = ".$this->db->escape($p_id))->row_array();
+
+    if(!$qry){
+        $this->session->set_flashdata('msg','<div class="alert alert-danger">Product not found.</div>');
+        redirect('my-product-listing');
+        return;
+    }
+
+    // Ownership check - without this, any logged-in user could cancel and
+    // refund a different vendor's listing just by passing another ID.
+    if($qry['user_id'] != $this->session->userdata('user_id')){
+        $this->session->set_flashdata('msg','<div class="alert alert-danger">You do not have permission to cancel this listing.</div>');
+        redirect('my-product-listing');
+        return;
+    }
+
+    // Already cancelled - don't attempt a second refund on the same listing.
+    if($qry['status'] == 3){
+        $this->session->set_flashdata('msg','<div class="alert alert-danger">This listing has already been cancelled.</div>');
+        redirect('my-product-listing');
+        return;
+    }
+
+    // 14-day cooling-off window - the frontend already hides the Cancel
+    // button once this has passed, but that alone doesn't stop a direct
+    // request to this endpoint after the window has closed.
+    $cooling_off_end = date('Y-m-d', strtotime('+14 days', strtotime($qry['approve_date'])));
+    if(date('Y-m-d') > $cooling_off_end){
+        $this->session->set_flashdata('msg','<div class="alert alert-danger">The 14-day cooling-off period for this listing has ended, so it can no longer be cancelled for a refund.</div>');
+        redirect('my-product-listing');
+        return;
+    }
 	
 		require_once('application/libraries/stripe-php-7.49.0/init.php');
         header('Content-Type: application/json');
@@ -510,15 +521,15 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 
 $success = 1;
 
-} catch(Stripe_CardError $e) {
+} catch(\Stripe\Exception\CardException $e) {
   $error1 = $e->getMessage();
-} catch (Stripe_InvalidRequestError $e) {
+} catch (\Stripe\Exception\InvalidRequestException $e) {
   $error1 = $e->getMessage();
-} catch (Stripe_AuthenticationError $e) {
+} catch (\Stripe\Exception\AuthenticationException $e) {
   $error1 = $e->getMessage();
-} catch (Stripe_ApiConnectionError $e) {
+} catch (\Stripe\Exception\ApiConnectionException $e) {
   $error1 = $e->getMessage();
-} catch (Stripe_Error $e) {
+} catch (\Stripe\Exception\ApiErrorException $e) {
   $error1 = $e->getMessage();
 } catch (Exception $e) {
   $error1 = $e->getMessage();
@@ -1623,13 +1634,25 @@ public function processsuggestion()
             $update['daily_mail'] = 0;
             $update['weekly_mail'] = 0;
             $update['monthly_mail'] = 0;
-            $update['approve_date'] = date('Y-m-d');
+            // approve_date is intentionally left untouched here - it stays
+            // as the original listing date, so the 14-day cooling-off
+            // window (calculated from this field) doesn't restart on
+            // relist/renewal. The vendor already had their cooling-off
+            // chance the first time; there's no new "buyer's remorse" risk
+            // on a listing they've already had before.
             $update['expiry_date'] = '';
+            // Save the NEW charge from this relist/renewal payment. Without
+            // this, cancelling later would try to refund the old, original
+            // charge again - which Stripe correctly rejects since it was
+            // already refunded the first time this listing was cancelled.
+            if(!empty($_REQUEST['paymentIntent_id'])){
+                $update['paymentIntent_id'] = $_REQUEST['paymentIntent_id'];
+            }
             $update= $this->common_model->UpdateData('product',array('id'=>$product_id),$update);
 
         if($update){
  		$response['url'] = base_url().'my-product-listing';
-      	$response['message'] = 'Your Product amount will be paid successfully. And your product will be relisted successfully.';
+      	$response['message'] = 'The payment was successful, your product is now relisted!';
 
 
       
@@ -1916,7 +1939,7 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 
     $payload = array(
         'model' => 'claude-haiku-4-5-20251001',
-        'max_tokens' => 1024,
+        'max_tokens' => 4096,
         'messages' => array(
             array('role' => 'user', 'content' => $content_blocks)
         )
@@ -1972,7 +1995,15 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
     $extracted = json_decode($ai_text, true);
 
     if(!is_array($extracted)){
-        echo json_encode(array('status' => 0, 'message' => 'AI response could not be understood. Please try again or fill the form manually.'));
+        // If the response was cut off for hitting max_tokens, say so
+        // specifically - this is a genuinely different, actionable problem
+        // (the source document was too detailed) rather than a generic
+        // parse failure that gives no clue what actually went wrong.
+        if(isset($result['stop_reason']) && $result['stop_reason'] == 'max_tokens'){
+            echo json_encode(array('status' => 0, 'message' => 'The product information was too detailed to process in one go. Please try again, or fill the form manually.'));
+        } else {
+            echo json_encode(array('status' => 0, 'message' => 'AI response could not be understood. Please try again or fill the form manually.'));
+        }
         return;
     }
 
