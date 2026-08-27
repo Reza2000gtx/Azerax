@@ -363,6 +363,31 @@ input.primary:checked + .slider {
 <?php include_once('include/footer.php'); ?>
 
 <script type="text/javascript">
+// The site-wide DataTables default sorts ascending by whichever column
+// comes first (Device ID here), showing oldest devices first. Re-init
+// this specific table sorted by Device ID descending instead, so newest
+// pending listings show at the top - matching the same fix already
+// applied to the main Product List page.
+$(document).ready(function(){
+    if($.fn.DataTable.isDataTable('#bootstrap-data-table')){
+        $('#bootstrap-data-table').DataTable().destroy();
+    }
+    $('#bootstrap-data-table').DataTable({
+        "order": [[0, "desc"]],
+        "stateSave": true,
+        "initComplete": function(){
+            var scrollKey = 'az-scroll-' + window.location.pathname;
+            var saved = sessionStorage.getItem(scrollKey);
+            if(saved !== null){
+                window.scrollTo(0, parseInt(saved, 10));
+                sessionStorage.removeItem(scrollKey);
+            }
+        }
+    });
+});
+</script>
+
+<script type="text/javascript">
 
 	function deleteproduct(id){  
 

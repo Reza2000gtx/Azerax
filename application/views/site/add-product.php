@@ -3532,7 +3532,7 @@ button.addEventListener('click', (ev) =>
 //for sandbox
     $paypal_status=0;
    // for live
-    $paypal_status=1;
+    //$paypal_status=1;
     
     if($paypal_status==0){
     
@@ -3544,7 +3544,7 @@ button.addEventListener('click', (ev) =>
 
     }
 
-    $paypal_sandbox_key='AbFUHHDTEQG4EteC3ZRMK7DoKryECW8hzEWHiLd8d0DODYLo3DyZ8GI81pjXiHjTB23X8juloXOIV3BQ';
+    $paypal_sandbox_key='AevHD51QH5gWvGly6z0OH3pj0duo6jvYnvLXUDJx7btRx6UIZwbizP-vvC1vHzC3xRV2z4cw_ohJxUnV';
 
     $paypal_live_key='ASyCXreF_KPKY40QGH_x4isffV60_oL5rbv7XIStPu1fbht871k4uih8BmA06OVe37OQhxxCeJsJpHOp';
 ?>
