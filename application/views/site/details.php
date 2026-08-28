@@ -297,6 +297,12 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                         <div class="az-detail-value"><?php echo $product_detail['rack_unit']; ?></div>
                     </div>
                     <?php } ?>
+                    <?php if (!empty($product_detail['power_consumption'])) { ?>
+                    <div class="az-detail-row">
+                        <div class="az-detail-label">Power Consumption</div>
+                        <div class="az-detail-value"><?php echo $product_detail['power_consumption']; ?></div>
+                    </div>
+                    <?php } ?>
                 </div>
             </div>
 
@@ -382,6 +388,9 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
     <?php } ?>
     <?php if($product_detail['rack_unit']){ ?>
     <tr><td>Rack Units</td><td><h5><?php echo $product_detail['rack_unit']; ?></h5></td></tr>
+    <?php } ?>
+    <?php if(!empty($product_detail['power_consumption'])){ ?>
+    <tr><td>Power Consumption</td><td><h5><?php echo $product_detail['power_consumption']; ?></h5></td></tr>
     <?php } ?>
     <?php if($vendor_contact_combined){ ?>
     <tr><td>Vendor Contact &amp; Ordering Info</td><td><h5 style="white-space:pre-line;"><?php echo htmlspecialchars($vendor_contact_combined); ?></h5></td></tr>

@@ -32,6 +32,13 @@
     overflow-x: hidden;
     border-radius: 0 0 32px 32px;
     margin-top: 0;
+    /* Hide the scrollbar visually - mouse wheel and keyboard navigation
+       still work fine, since overflow-y:auto above is untouched. */
+    scrollbar-width: none;      /* Firefox */
+    -ms-overflow-style: none;   /* old Edge/IE */
+}
+.autocomplete-items::-webkit-scrollbar {
+    display: none;              /* Chrome, Safari, new Edge */
 }
 
 .autocomplete-items > div {

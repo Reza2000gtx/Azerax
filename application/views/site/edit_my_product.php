@@ -592,6 +592,7 @@ section.add_product #msform fieldset#menu3 {
                                   if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
                                   if(d.order_code) $('#dealer_contact').val(d.order_code);
                                   if(d.rack_unit) $('#sendNewSms1').val(d.rack_unit).trigger('change');
+                                  if(d.power_consumption) $('input[name="power_consumption"]').val(d.power_consumption);
                                   if(d.short_description) $('#short_description').val(d.short_description);
                                   if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
                                   if(d.warranty_detail) $('textarea[name="warranty_detail"]').val(d.warranty_detail);
@@ -744,6 +745,12 @@ section.add_product #msform fieldset#menu3 {
                       <?php } ?>
                       <option <?php if($product_detail['rack_unit']== "10+ RU" ){echo 'selected';}?> value="10+ RU">10+ RU</option>
                     </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="title">Power Consumption</label>
+                    <input type="text" class="form-control" name="power_consumption" placeholder="e.g. 45W typical, 65W max" value="<?php echo html_escape($product_detail['power_consumption']); ?>">
                   </div>
                 </div>
               </div>

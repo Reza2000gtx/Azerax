@@ -668,6 +668,12 @@ section.add_product #msform fieldset#menu3 {
                     </select>
                   </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="title">Power Consumption</label>
+                    <input type="text" class="form-control" name="power_consumption" placeholder="e.g. 45W typical, 65W max" value="<?php echo html_escape($product_detail['power_consumption']); ?>">
+                  </div>
+                </div>
               </div>
 
               <div id="category-attributes-box" style="display:<?= !empty($category_attribute_values) ? 'block' : 'none' ?>;border:1.5px solid #FCA311;border-radius:10px;padding:16px 20px;background:#FFF8E8;margin-bottom:20px;">
@@ -1237,6 +1243,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
                                   if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
                                   if(d.order_code) $('#dealer_contact').val(d.order_code);
                                   if(d.rack_unit) $('#sendNewSms1').val(d.rack_unit).trigger('change');
+                                  if(d.power_consumption) $('input[name="power_consumption"]').val(d.power_consumption);
                                   if(d.short_description) $('#short_description').val(d.short_description);
                                   if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
                                   if(d.warranty_detail) $('textarea[name="warranty_detail"]').val(d.warranty_detail);

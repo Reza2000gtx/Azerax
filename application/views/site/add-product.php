@@ -1361,6 +1361,7 @@ document.addEventListener('DOMContentLoaded', function(){
                         if(d.rack_unit){
                             $('select[name="rack_unit"]').val(d.rack_unit).trigger('change');
                         }
+                        if(d.power_consumption) $('input[name="power_consumption"]').val(d.power_consumption);
                         // note: this field's name has a pre-existing trailing space in the HTML
                         if(d.short_description) $('#short_description').val(d.short_description);
                         if(d.dealer_notes) $('textarea[name="dealer_notes "]').val(d.dealer_notes);
@@ -1532,6 +1533,12 @@ document.addEventListener('DOMContentLoaded', function(){
      <?php } ?>
      <option value="10+ RU">10+ RU</option>
     </select>
+   </div>
+  </div>
+  <div class="col-md-6 set-44">
+   <div class="form-group">
+    <label for="title">Power Consumption</label>
+    <input type="text" class="form-control" name="power_consumption" placeholder="e.g. 45W typical, 65W max">
    </div>
   </div>
  </div>

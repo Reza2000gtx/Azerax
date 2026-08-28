@@ -196,7 +196,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
   $mechanical_demension_mounting = htmlentities($_REQUEST['mechanical_demension_mounting'], ENT_QUOTES);
   $paymentIntent_id = $_POST['paymentIntent_id'];
   $rack_unit = $_REQUEST['rack_unit'];
-
+  $power_consumption = isset($_REQUEST['power_consumption']) ? htmlentities($_REQUEST['power_consumption'], ENT_QUOTES) : '';
 
   //// Group 2: IOP ////
 
@@ -249,7 +249,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
        // paymentIntent_id previously had ZERO escaping at all.
        // Release Date / Release Notes fields removed (Stage A cleanup).
        // order_code / dealer_web_cont merged into dealer_contact (Stage cleanup).
-       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
+       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`power_consumption`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
       VALUES(
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($session_id) .",
@@ -260,6 +260,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         " .$this->db->escape($device_manual_brochure) .",
         " .$this->db->escape($mechanical_demension_mounting) .",
         " .$this->db->escape($rack_unit) .",
+        " .$this->db->escape($power_consumption) .",
         " .$this->db->escape($dealer_notes) .",
         " .$this->db->escape($warranty_detail) .",
         " .$this->db->escape($support_detail) .",
@@ -599,6 +600,7 @@ $success = 1;
   $latest_firmware_version = htmlentities($_REQUEST['latest_firmware_version'], ENT_QUOTES);
   $mechanical_demension_mounting = htmlentities($_REQUEST['mechanical_demension_mounting'], ENT_QUOTES);
   $rack_unit = $_REQUEST['rack_unit'];
+  $power_consumption = isset($_REQUEST['power_consumption']) ? htmlentities($_REQUEST['power_consumption'], ENT_QUOTES) : '';
 
 
   $input_conn1 = isset($_REQUEST['input_conn']) ? $_REQUEST['input_conn'] : array();
@@ -652,7 +654,7 @@ $success = 1;
         // rack_unit previously had zero escaping.
         // Release Date / Release Notes fields removed (Stage A cleanup).
         // order_code / dealer_web_cont merged into dealer_contact (Stage cleanup).
-        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`description` = ".$this->db->escape($description)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact).",`updated_at` = ".$this->db->escape($update)." ";
+        $sql = "UPDATE `product` SET  `device_model` = ".$this->db->escape($device_model).",`device_brand` = ".$this->db->escape($device_brand)." ,`description` = ".$this->db->escape($description)." ,`latest_firmware_version` = ".$this->db->escape($latest_firmware_version)." ,`mechanical_demension_mounting` = ".$this->db->escape($mechanical_demension_mounting)." ,`rack_unit` = ".$this->db->escape($rack_unit)." ,`power_consumption` = ".$this->db->escape($power_consumption)." ,`manufacturer_part_no` = ".$this->db->escape($manufacturer_part_no)." ,`dealer_notes` = ".$this->db->escape($dealer_notes)." ,`warranty_detail` = ".$this->db->escape($warranty_detail)." ,`support_detail` = ".$this->db->escape($support_detail)."  ,`dealer_contact` = ".$this->db->escape($dealer_contact).",`updated_at` = ".$this->db->escape($update)." ";
 
         if(!empty($_FILES["product_image"]['name'])){
           $uploadImage = false;
@@ -993,8 +995,17 @@ public function get_category_attributes(){
     if(isset($_REQUEST['keyword']) && $_REQUEST['keyword']!='' ){
       $kw = $this->db->escape_like_str($_REQUEST['keyword']);
       $where.=" and (
-        product.device_model LIKE '".$kw."%' OR product.device_model LIKE '%".$kw."' OR product.device_model LIKE '%".$kw."%'
-        OR product.device_brand LIKE '".$kw."%' OR product.device_brand LIKE '%".$kw."' OR product.device_brand LIKE '%".$kw."%'
+        product.device_model LIKE '%".$kw."%'
+        OR product.device_brand LIKE '%".$kw."%'
+        OR product.input_type LIKE '%".$kw."%'
+        OR product.input_standard LIKE '%".$kw."%'
+        OR product.input_connection_type LIKE '%".$kw."%'
+        OR product.output_type LIKE '%".$kw."%'
+        OR product.output_standard LIKE '%".$kw."%'
+        OR product.output_connection_type LIKE '%".$kw."%'
+        OR product.process_type LIKE '%".$kw."%'
+        OR product.process_standard LIKE '%".$kw."%'
+        OR product.features LIKE '%".$kw."%'
       )  ";
 
           $whereorder ='ORDER by product.device_model DESC';
@@ -1898,6 +1909,7 @@ Otherwise, extract broadcast/media industry product information from the above. 
   "device_brand": "",
   "mechanical_demension_mounting": "",
   "rack_unit": "",
+  "power_consumption": "",
   "order_code": "",
   "short_description": "",
   "dealer_notes": "",
@@ -1921,14 +1933,16 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 - device_brand: the company or vendor name behind the product (e.g. "Layercake", "Grass Valley") - always fill this in if the company name is findable, even for software/cloud products.
 - mechanical_demension_mounting and rack_unit: ONLY applicable to physical hardware - leave empty for pure software/cloud products.
 - rack_unit should be a plain number like "1" or "2" if a rack unit height is mentioned, otherwise empty string.
+- power_consumption: ONLY applicable to physical hardware - leave empty for pure software/cloud products. Extract the figure(s) exactly as stated, including units (typically Watts) - e.g. "45W typical, 65W max", "12V DC, 2A", "<50W". Do not calculate or estimate a value that is not directly stated in the source.
 - dealer_notes should be a short product description/summary in your own words, not copied verbatim.
 - short_description: a single, concise one-line summary of the product (max ~120 characters) - shorter and punchier than dealer_notes, suitable for display in a list view.
 - input_type / output_type: the BROAD signal category only. In almost all cases this should be one of: "Audio", "Video", or "Data/Control" (Data/Control covers things like SCTE-35 triggers/cues, GPI/GPIO, tally, timecode, genlock - control and metadata signals that are not audio or video content themselves). Do NOT put a specific named standard here (e.g. do not put "SDI" or "AES67" here - those belong in the standard field below).
 - input_standard / output_standard: the SPECIFIC, NAMED technical standard or protocol that carries that signal - e.g. for Audio: AES67, Dante, MADI. For Video: SDI, ST2110, NDI. For Data/Control: SCTE-35, GPI/GPIO, LTC, genlock. Use this test: if the term references one specific, official technical spec (something with a governing body, version number, or formal definition), it belongs here, not in type.
+- CRITICAL for input vs output direction: the same standard name (e.g. DVB-T/T2, ATSC, ISDB-T, HLS, RTMP) can belong to EITHER input or output depending on what THIS specific product does with it - never assume a standard is input just because it is described as "supported". Reason about actual signal flow for this product: a transmitter or encoder that broadcasts/generates a standard puts it in output_standard (that standard is what leaves the device, going out to air/network). A receiver, demodulator, or decoder that receives/decodes that same standard puts it in input_standard (it is coming into the device to be processed). If the source describes the product as transmitting, broadcasting, encoding, or outputting a standard, it is OUTPUT. If it describes receiving, demodulating, decoding, or accepting a standard as input, it is INPUT.
 - input_connection_type / output_connection_type: ONLY the physical connector itself (hardware only) - e.g. BNC, RJ45, XLR. Leave empty for software/cloud products, since there is no physical connector.
 - process_type: the function or action being performed - what the product actually DOES with the signal or data as it passes through. Examples: Switching, Encoding, Mixing, Multiplexing, Graphics insertion, Playback control. This is open-ended (not restricted to a short fixed list like the input/output types above), since what a product does varies widely by category.
 - process_standard: the specific named technology, codec, or protocol that enables that function. Examples: for Encoding - H.264, HEVC, AV1. For an integration or control-type process - REST API, gRPC, ONVIF. Use the same test as input/output standard: does this reference one specific, official named technology, rather than a generic description of the action itself.
-- features: high-level capabilities/benefits that are NOT about signal flow at all - this is a separate concept from input/output/process. Examples: "High availability", "Auto-scaling", "REST API integration", "Multi-tenant support", "Automatic failover", "Remote monitoring". The test: if a term describes how signal enters or leaves the device, it is input/output. If it describes what the device does to that signal, it is process. If it is a broader capability that exists independent of any specific signal, it is a feature. This applies to ANY product type, including hardware, whenever the source genuinely lists capability-style features distinct from its technical specifications (e.g. a hardware product with an explicit "Features" or "Benefits" section on its page). Leave empty if the source only has raw specs with nothing capability-level to extract, or if this field would just duplicate what belongs in process_type/process_standard.'
+- features: high-level capabilities/benefits that are NOT about signal flow at all - this is a separate concept from input/output/process. Examples: "High availability", "Auto-scaling", "REST API integration", "Multi-tenant support", "Automatic failover", "Remote monitoring". The test: if a term describes how signal enters or leaves the device, it is input/output. If it describes what the device does to that signal, it is process. If it is a broader capability that exists independent of any specific signal, it is a feature. This applies to ANY product type, including hardware, whenever the source genuinely lists capability-style features distinct from its technical specifications (e.g. a hardware product with an explicit "Features" or "Benefits" section on its page). Also use this field for genuinely useful marketing-listed specs that do not cleanly fit input/output/process at all - e.g. form factor/size options ("Compact 1RU, 2RU, and 3RU designs"), a power output capacity range ("Output power up to 400W"), redundancy configuration options ("1+1 and N+1 redundancy"), or hot-swappable components. Do not leave a genuinely useful, explicitly-listed capability out entirely just because it does not fit input/output/process - put it here instead. Leave empty only if the source has nothing capability-level to extract at all.'
     );
 
     $api_key = $this->config->item('anthropic_api_key');
