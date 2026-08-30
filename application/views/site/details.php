@@ -219,6 +219,18 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
 .tab-content table tbody tr:first-child td {
     border-top: none !important;
 }
+/* Spec table label column - was wrapping to two lines on longer labels
+   like "Vendor Contact & Ordering Info" since it had no explicit width,
+   borrowing space from the value column next to it instead. */
+.tab-content table tbody tr td:first-child {
+    width: 240px;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #14213D;
+    vertical-align: middle;
+}
 </style>
 
 <div style="background:#fff;padding:40px 0;">

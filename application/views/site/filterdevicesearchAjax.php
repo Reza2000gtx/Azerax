@@ -422,9 +422,6 @@ body {
 									<?php echo '<span class="card-label">Model: </span><span class="card-value">'. $row['device_model'].'</span>' ; ?>
 									<?php } ?>
 								</div>
-								<div class="col-sm-4">										
-									<?php echo '<span class="card-label">Release Date: </span><span class="card-value">'. $row['date_released'].'</span>' ;?>
-								</div>
 							
 							</div>
 							

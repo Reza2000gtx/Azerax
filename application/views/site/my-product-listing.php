@@ -1,4 +1,5 @@
 <?php include_once 'include/header2.php'; ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 <style>
 /* ── MY PRODUCT LISTING ── */
@@ -358,7 +359,20 @@ $user_id = $this->session->userdata('user_id');
 ?>
 
 <script>
+var azProductNames = {
+    <?php foreach ($productlist as $row): ?>
+    <?php echo $row['id']; ?>: <?php echo json_encode($row['device_model']); ?>,
+    <?php endforeach; ?>
+};
+
 function paymentOption(pID){
+    $('#az-relist-summary-device').text(azProductNames[pID] || 'Untitled device');
+
+    var expiry = new Date();
+    expiry.setFullYear(expiry.getFullYear() + 1);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    $('#az-relist-summary-expiry').text(months[expiry.getMonth()] + ' ' + expiry.getDate() + ', ' + expiry.getFullYear());
+
     $('#paymentOption').modal('show');
     $('#relistProdId').val(pID);
 }
@@ -545,12 +559,24 @@ document.querySelectorAll('.az-filter-btn').forEach(function(btn){
                     </div>
                     <button type="button" class="close" data-dismiss="modal" style="color:#fff !important;opacity:0.7 !important;font-size:24px;">&times;</button>
                 </div>
+                <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.15);">
+                    <div style="display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:6px;">
+                        <span>Device</span>
+                        <span id="az-relist-summary-device" style="color:#fff;font-weight:600;text-align:right;max-width:220px;">-</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.6);">
+                        <span>Listed until</span>
+                        <span id="az-relist-summary-expiry" style="color:#fff;font-weight:600;">-</span>
+                    </div>
+                </div>
             </div>
             <div class="modal-body" style="padding:32px;text-align:center;background:#fff;">
                 <div style="font-size:13px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;">Choose a payment method</div>
 
+                <div style="max-width:350px;margin:0 auto;">
+
                 <div class="form-group" style="margin-bottom:16px;">
-                    <span class="relist-paypal" id="paypal-button-container"></span>
+                    <span class="relist-paypal" id="paypal-button-container" style="display:block;width:100%;"></span>
                     <input type="hidden" id="relistProdId" value="">
                 </div>
 
@@ -561,8 +587,21 @@ document.querySelectorAll('.az-filter-btn').forEach(function(btn){
                 </div>
 
                 <div class="form-group" style="margin-bottom:0;">
-                    <button type="button" onclick="renewProduct()" style="height:48px;width:100%;color:#14213D;background:#FCA311;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;" onmouseover="this.style.background='#e8940a'" onmouseout="this.style.background='#FCA311'">Pay with Debit or Credit Card</button>
+                    <button type="button" onclick="renewProduct()" style="height:48px;width:100%;color:#14213D;background:#FCA311;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer;" onmouseover="this.style.background='#e8940a'" onmouseout="this.style.background='#FCA311'">Pay with Debit or Credit Card</button>
                 </div>
+
+                </div>
+
+                <div style="margin-top:24px;display:flex;align-items:center;justify-content:center;gap:6px;color:#999;font-size:12px;">
+                    <i class="ti ti-lock" style="font-size:14px;"></i>
+                    <span>Secure, encrypted payment</span>
+                </div>
+                <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px;">
+                    <svg width="34" height="22" viewBox="0 0 34 22"><rect width="34" height="22" rx="4" fill="#EBEBEB"/><text x="17" y="15" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" font-style="italic" fill="#1A1F71">VISA</text></svg>
+                    <svg width="34" height="22" viewBox="0 0 34 22"><rect width="34" height="22" rx="4" fill="#EBEBEB"/><circle cx="14" cy="11" r="6" fill="#EB001B"/><circle cx="20" cy="11" r="6" fill="#F79E1B" opacity="0.85"/></svg>
+                    <svg width="34" height="22" viewBox="0 0 34 22"><rect width="34" height="22" rx="4" fill="#2E77BC"/><text x="17" y="15" text-anchor="middle" font-family="Arial,sans-serif" font-size="7.5" font-weight="700" fill="#fff">AMEX</text></svg>
+                </div>
+
             </div>
             </form>
         </div>

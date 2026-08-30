@@ -2,6 +2,84 @@
    $id = $_REQUEST['id'];
     ?>
 <style type="text/css">
+.az-extract-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: #FCA311;
+    color: #14213D;
+    border: none;
+    border-radius: 6px;
+    padding: 11px 26px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 0 0 rgba(20,33,61,0.35);
+    animation: az-extract-idle-glow 2.6s ease-in-out infinite;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.az-extract-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(252,163,17,0.35), 0 0 0 3px rgba(20,33,61,0.15);
+    animation: none;
+}
+.az-extract-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
+}
+.az-extract-btn:disabled {
+    opacity: 0.85;
+    cursor: default;
+    animation: none;
+}
+/* Signal sweep - a diagonal light band that crosses the button on hover,
+   evoking a broadcast signal scan (this is the signature element) */
+.az-extract-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,0.65), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
+}
+.az-extract-btn:hover:not(:disabled)::before {
+    left: 130%;
+}
+@keyframes az-extract-idle-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(20,33,61,0.35); }
+    50% { box-shadow: 0 0 0 6px rgba(20,33,61,0); }
+}
+.az-extract-icon {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.az-extract-icon .az-spark {
+    transition: opacity 0.15s ease;
+}
+.az-extract-btn.az-is-loading .az-spark {
+    animation: az-extract-spin 0.9s linear infinite;
+    transform-origin: center;
+}
+@keyframes az-extract-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .az-extract-btn, .az-extract-btn::before, .az-extract-icon .az-spark {
+        animation: none !important;
+        transition: none !important;
+    }
+}
    .az-page-section {
        background: #fff;
        border: 1px solid #EBEBEB;
@@ -532,7 +610,12 @@ section.add_product #msform fieldset#menu3 {
                     <label style="font-size:12px;">Or upload a brochure/spec PDF (this will also be saved as your product's downloadable brochure)</label>
                     <input type="file" id="ai_source_pdf" name="device_manual_brochure" accept="application/pdf" class="form-control" style="height:auto;padding:10px 12px;line-height:normal;">
                   </div>
-                  <button type="button" id="ai_extract_btn" class="btn btn-warning" style="background:#FCA311;border-color:#FCA311;color:#14213D;font-weight:600;">Extract Info</button>
+                  <button type="button" id="ai_extract_btn" class="az-extract-btn">
+                    <svg class="az-extract-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path class="az-spark" d="M12 2L14.2 9.2L21.5 11.5L14.2 13.8L12 21L9.8 13.8L2.5 11.5L9.8 9.2L12 2Z" fill="#14213D"/>
+                    </svg>
+                    <span class="az-extract-label">Extract Info</span>
+                  </button>
                   <span id="ai_extract_status" style="margin-left:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;"></span>
                   <div style="font-size:12px;color:#999;margin-top:8px;">This only fills in the fields below for you to review — nothing is saved until you check everything and click Submit.</div>
                 </div>
@@ -573,12 +656,12 @@ section.add_product #msform fieldset#menu3 {
                       formData.append('source_url', url);
                       if(pdfFile){ formData.append('source_pdf', pdfFile); }
                       $('#ai_extract_status').text('Reading and extracting... this can take a few seconds.').css('color','#666');
-                      $('#ai_extract_btn').prop('disabled', true);
+                      $('#ai_extract_btn').prop('disabled', true).addClass('az-is-loading');
                       $.ajax({
                           url: '<?php echo base_url(); ?>Product/ai_extract',
                           type: 'POST', data: formData, processData: false, contentType: false, dataType: 'json',
                           success: function(res){
-                              $('#ai_extract_btn').prop('disabled', false);
+                              $('#ai_extract_btn').prop('disabled', false).removeClass('az-is-loading');
                               if(res.status == 1){
                                   var d = res.data;
                                   if(d.product_type){
@@ -612,7 +695,7 @@ section.add_product #msform fieldset#menu3 {
                               }
                           },
                           error: function(){
-                              $('#ai_extract_btn').prop('disabled', false);
+                              $('#ai_extract_btn').prop('disabled', false).removeClass('az-is-loading');
                               $('#ai_extract_status').text('Request failed. Please try again.').css('color','#dc3545');
                           }
                       });
@@ -639,7 +722,7 @@ section.add_product #msform fieldset#menu3 {
                           foreach($data as $k){
                             if($k){
                               $sel = ($k == $existing_cat_a) ? 'selected' : '';
-                              echo '<option '.$sel.'>'.$k.'</option>';
+                              echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                             }
                           }
                           $data=array();
@@ -860,7 +943,7 @@ $connections = $this->common_model->GetAllData('input_output',array('product_id'
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_input_conn)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   }
                $data=array(); ?>
@@ -896,7 +979,7 @@ $connections = $this->common_model->GetAllData('input_output',array('product_id'
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_input_stand)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -938,7 +1021,7 @@ $connections = $this->common_model->GetAllData('input_output',array('product_id'
                 $data=array_unique(array_merge($data, $existing_input_conn_type));
                foreach($data as $k){
                    if($k){
-                   $sel = in_array(trim($k), array_map('trim', $existing_input_conn_type)) ? 'selected' : ''; echo '<option '.$sel.'>'.$k.'</option>';
+                   $sel = in_array(trim($k), array_map('trim', $existing_input_conn_type)) ? 'selected' : ''; echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -987,7 +1070,7 @@ $out_connections = $this->common_model->GetAllData('input_output',array('product
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_out_conn)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -1031,7 +1114,7 @@ $out_connections = $this->common_model->GetAllData('input_output',array('product
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_out_stand)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -1077,7 +1160,7 @@ $out_connections = $this->common_model->GetAllData('input_output',array('product
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_out_conn_type)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -1142,7 +1225,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_process_type)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -1187,7 +1270,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
                foreach($data as $k){
                    if($k){
                    $sel = in_array(trim($k), array_map('trim', $existing_process_standard)) ? 'selected' : '';
-                   echo '<option '.$sel.'>'.$k.'</option>';
+                   echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
                    }
                   
                }
@@ -1217,6 +1300,7 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
      <label>Features</label>
       <select id="io_features" name="features[0][]" class="typeahead tm-input form-control" multiple="multiple" style="width:300px">
        <?php     
+        $existing_features = !empty($connections[0]['features']) ? explode(',', $connections[0]['features']) : array();
         $Input = $this->common_model->GetAllData('input_output','','features','asc','','','','features'); 
         foreach($Input as $InputSugg){
         if(empty($InputSugg['features'])) continue;
@@ -1227,10 +1311,11 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
         $data[] =$k ;  
         }  
          }
-        $data=array_unique($data);
+        $data=array_unique(array_merge($data, $existing_features));
         foreach($data as $k){
         if($k){
-        echo '<option>'.$k.'</option>';
+        $sel = in_array(trim($k), array_map('trim', $existing_features)) ? 'selected' : '';
+        echo '<option '.$sel.' value="'.htmlspecialchars($k, ENT_QUOTES).'">'.$k.'</option>';
         }
          }
         $data=array();
@@ -1354,11 +1439,12 @@ $process_conn = $this->common_model->GetAllData('input_output',array('product_id
       alert( "Try again later." );
     })
     .done(function(response) {
-      if(response.status == 2){
-        $("#editError").html(response.message);
+      if(response.status == 1){
+        location.href=response.url;
+      } else {
+        $("#editError").html(response.message || response.msg || 'Something went wrong. Please try again.');
         $("#editError").show();
       }
-      if(response.status == 1) location.href=response.url;
     })
     .always(function() {
       $(".submitBtn").html('Update');

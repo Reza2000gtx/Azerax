@@ -467,6 +467,13 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
     // Existing category-specific attribute values (if any), joined with their definitions
     $data['category_attribute_values'] = $this->db->query("SELECT pav.category_attribute_id, pav.value, ca.attribute_name, ca.cat_c FROM product_attribute_values pav JOIN category_attributes ca ON ca.id = pav.category_attribute_id WHERE pav.product_id = ?", array($product_id))->result_array();
 
+    // Existing input/output/process/features values (if any) - the view
+    // reads this same data under three different variable names depending
+    // on which section of the form it's populating. Was previously never
+    // fetched at all, so none of these fields ever showed a product's
+    // existing saved values when editing.
+    $data['connections'] = $data['out_connections'] = $data['process_conn'] = $this->common_model->GetAllData('input_output',array('product_id'=>$product_id));
+
     $this->load->view('site/edit_my_product',$data);
   }
 
@@ -640,7 +647,7 @@ $success = 1;
   // to the currently logged-in user, even if they craft the request
   // directly rather than going through the edit form/page.
   $session_id = $this->session->userdata('user_id');
-  if(!empty($product_detail) && $product_detail[0]['user_id'] != $session_id){
+  if(!empty($product_detail) && $product_detail['user_id'] != $session_id){
       $response['status'] = 0;
       $response['msg'] = 'You do not have permission to edit this product.';
       echo json_encode($response);
@@ -648,8 +655,7 @@ $success = 1;
   }
 
   if(!empty($product_detail)){
-    $product_detail = $product_detail[0];
-   
+
         // SECURITY FIX: every value escaped via $this->db->escape().
         // rack_unit previously had zero escaping.
         // Release Date / Release Notes fields removed (Stage A cleanup).
@@ -997,15 +1003,15 @@ public function get_category_attributes(){
       $where.=" and (
         product.device_model LIKE '%".$kw."%'
         OR product.device_brand LIKE '%".$kw."%'
-        OR product.input_type LIKE '%".$kw."%'
-        OR product.input_standard LIKE '%".$kw."%'
-        OR product.input_connection_type LIKE '%".$kw."%'
-        OR product.output_type LIKE '%".$kw."%'
-        OR product.output_standard LIKE '%".$kw."%'
-        OR product.output_connection_type LIKE '%".$kw."%'
-        OR product.process_type LIKE '%".$kw."%'
-        OR product.process_standard LIKE '%".$kw."%'
-        OR product.features LIKE '%".$kw."%'
+        OR input_output.input_conn LIKE '%".$kw."%'
+        OR input_output.input_process_stand LIKE '%".$kw."%'
+        OR input_output.process_connection LIKE '%".$kw."%'
+        OR input_output.out_conn LIKE '%".$kw."%'
+        OR input_output.out_process_stand LIKE '%".$kw."%'
+        OR input_output.out_process_connection LIKE '%".$kw."%'
+        OR input_output.process LIKE '%".$kw."%'
+        OR input_output.process_stand LIKE '%".$kw."%'
+        OR input_output.features LIKE '%".$kw."%'
       )  ";
 
           $whereorder ='ORDER by product.device_model DESC';
@@ -1651,7 +1657,7 @@ public function processsuggestion()
             // relist/renewal. The vendor already had their cooling-off
             // chance the first time; there's no new "buyer's remorse" risk
             // on a listing they've already had before.
-            $update['expiry_date'] = '';
+            $update['expiry_date'] = date('Y-m-d', strtotime('+1 year'));
             // Save the NEW charge from this relist/renewal payment. Without
             // this, cancelling later would try to refund the old, original
             // charge again - which Stripe correctly rejects since it was
@@ -1929,6 +1935,7 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 - For any field that can hold multiple comma-separated values (input_type, input_standard, input_connection_type, output_type, output_standard, output_connection_type, process_type, process_standard, features): never repeat the same value twice within that field, even if the source page mentions it more than once. Each distinct value should appear only once.
 - product_type: must be EXACTLY one of these 5 values (no others): "Hardware", "Software", "Cloud Service", "AI Tool", "Hybrid". Choose "Hardware" for physical equipment, "Software" for installed applications, "Cloud Service" for browser-based/SaaS platforms, "AI Tool" if AI/ML is the core feature, "Hybrid" if it combines physical hardware with software/cloud components. If genuinely unclear, use "Hardware" as the default.
 - main_category: must be EXACTLY one of these 8 values (no others), or empty string "" if genuinely none fit: "Connect" (routing, switching, transport, transmission), "Consume" (playback, viewing, streaming to end users), "Create" (cameras, production, editing, graphics), "Manage" (asset management, workflow, MAM/traffic systems), "Monetize" (ad insertion, monetization, analytics), "Publish" (playout, distribution, CDN delivery), "Support" (monitoring, testing, support tools), "Store" (storage, archive, backup). Pick the single best fit based on what the product is mainly used for.
+- Create vs Manage disambiguation: a tool that actively works with the live video/audio signal itself during production (replay systems, live editing, switching within a production, graphics insertion) is Create, even if it also involves organizing clips or has a workflow component - the deciding question is whether it touches the signal directly during live production. A tool whose main job is organizing, cataloguing, or moving already-created assets between systems (MAM, traffic, scheduling) is Manage, even if it is used in a production environment - the deciding question is whether it is managing finished/existing content rather than actively producing it.
 - device_model: the product or service name itself (e.g. "Streamcake", "AMPP Edge Live", "EDIUS 11") - always fill this in if a clear product name is mentioned, even for software/cloud products.
 - device_brand: the company or vendor name behind the product (e.g. "Layercake", "Grass Valley") - always fill this in if the company name is findable, even for software/cloud products.
 - mechanical_demension_mounting and rack_unit: ONLY applicable to physical hardware - leave empty for pure software/cloud products.
@@ -1954,6 +1961,12 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
     $payload = array(
         'model' => 'claude-haiku-4-5-20251001',
         'max_tokens' => 4096,
+        // This is structured data extraction/classification, not creative
+        // writing - temperature 0 makes the model consistently pick its
+        // most confident answer for fields like main_category, rather than
+        // the default randomness causing the same product to get a
+        // different category each time it's extracted.
+        'temperature' => 0,
         'messages' => array(
             array('role' => 'user', 'content' => $content_blocks)
         )
