@@ -104,8 +104,8 @@ input.primary:checked + .slider {
 							<thead>
 								<tr>
 									<th>Device ID</th>
-									<th>Device model</th>
-									<th>Device brand</th>
+									<th>Model</th>
+									<th>Brand</th>
 									<th>Owner</th>
 									<th>Product Image</th>
 									<th>Date listed</th>

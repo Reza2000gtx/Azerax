@@ -194,6 +194,20 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
     letter-spacing: 0.5px;
     width: 200px;
 }
+/* No horizontal scrolling - the table must stay within its container's
+   width, growing taller (wrapping long lines) rather than wider. */
+.tab-content .table-responsive {
+    overflow-x: hidden;
+}
+.tab-content table {
+    table-layout: fixed;
+    width: 100%;
+}
+.tab-content table td:last-child {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
 
 .carousel-item img {
     max-height: 350px;
@@ -219,12 +233,13 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
 .tab-content table tbody tr:first-child td {
     border-top: none !important;
 }
-/* Spec table label column - was wrapping to two lines on longer labels
-   like "Vendor Contact & Ordering Info" since it had no explicit width,
-   borrowing space from the value column next to it instead. */
+/* Spec table label column - fixed width so it doesn't shift around, but
+   long labels like "Vendor Contact & Ordering Info" wrap onto a second
+   line within that width rather than overflowing into the value column
+   next to it. */
 .tab-content table tbody tr td:first-child {
     width: 240px;
-    white-space: nowrap;
+    white-space: normal;
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -386,11 +401,11 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                     <table class="table">
                         <tbody>
     <?php if ($product_detail['status'] == 2) { ?>
-    <tr><td>Device Model</td><td><h5 style="color:#999;">Hidden - listing expired</h5></td></tr>
-    <tr><td>Device Brand</td><td><h5 style="color:#999;">Hidden - listing expired</h5></td></tr>
+    <tr><td>Model</td><td><h5 style="color:#999;">Hidden - listing expired</h5></td></tr>
+    <tr><td>Brand</td><td><h5 style="color:#999;">Hidden - listing expired</h5></td></tr>
     <?php } else { ?>
-    <tr><td>Device Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
-    <tr><td>Device Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>
+    <tr><td>Model</td><td><h5><?php echo $product_detail['device_model']; ?></h5></td></tr>
+    <tr><td>Brand</td><td><h5><?php echo $product_detail['device_brand']; ?></h5></td></tr>
     <?php } ?>
     <?php if($product_detail['latest_firmware_version']){ ?>
     <tr><td>Latest Firmware</td><td><h5><?php echo $product_detail['latest_firmware_version']; ?></h5></td></tr>
