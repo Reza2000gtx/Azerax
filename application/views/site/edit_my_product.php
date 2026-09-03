@@ -669,7 +669,7 @@ section.add_product #msform fieldset#menu3 {
                                       $('.pt-pill-btn[data-value="'+d.product_type+'"]').addClass('active');
                                       $('#product_type').val(d.product_type);
                                   }
-                                  if(d.main_category) $('#main_cat_select').val(d.main_category).trigger('change');
+                                  if(d.main_category !== undefined) $('#main_cat_select').val(d.main_category).trigger('change');
                                   if(d.device_model) $('#device_name').val(d.device_model);
                                   if(d.device_brand) $('#device_brand').val(d.device_brand);
                                   if(d.mechanical_demension_mounting) $('#sendNewSms').val(d.mechanical_demension_mounting);
