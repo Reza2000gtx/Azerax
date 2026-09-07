@@ -1,4 +1,5 @@
 <?php include_once 'include/header2.php' ; ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <?php
 // Vendor Contact & Ordering Info: the Add/Edit Product form now saves this as
 // one combined field (dealer_contact). Older listings may still only have the
@@ -340,7 +341,22 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                     <h2 class="az-detail-model" style="color:#999;">Details hidden - listing expired</h2>
                     <div class="az-detail-brand" style="color:#999;">This vendor's listing for this device has expired. <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
                     <?php } else { ?>
-                    <h2 class="az-detail-model"><?php echo $product_detail['device_model']; ?></h2>
+                    <h2 class="az-detail-model">
+                        <?php echo $product_detail['device_model']; ?>
+                        <?php
+                        $az_type_icons = array(
+                            'Hardware' => 'ti-cpu',
+                            'Software' => 'ti-code',
+                            'Cloud Service' => 'ti-cloud',
+                            'AI Tool' => 'ti-sparkles',
+                            'Hybrid' => 'ti-layers-intersect',
+                        );
+                        $az_type = $product_detail['product_type'];
+                        if(!empty($az_type) && isset($az_type_icons[$az_type])){
+                        ?>
+                        <i class="ti <?php echo $az_type_icons[$az_type]; ?>" title="<?php echo html_escape($az_type); ?>" style="font-size:20px;color:#999;vertical-align:middle;margin-left:8px;"></i>
+                        <?php } ?>
+                    </h2>
                     <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?> <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
                     <?php } ?>
 

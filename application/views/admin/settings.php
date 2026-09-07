@@ -182,6 +182,29 @@ display:none;
 			<div class="col-xs-8">
 				<div class="box">
 					<div class="box-header">
+						<h3 class="box-title">Listing Fee Option</h3>
+						
+					</div>
+                 <form method="post" action="<?php echo base_url() ?>Admin/update_settings_option" name="f3" id="f3">
+<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                 <div class="box-body">
+
+                 <div class="form-group">
+								<label class=" form-control-label">Listing Fee (charged when a vendor adds or relists a product)</label>
+								<input type="number" step="0.01" min="0" name="actual_amount" id="actual_amount" value="<?php echo $setting['actual_amount'];?>" class="form-control valid" aria-invalid="false">
+							</div>
+
+                            <input type="hidden" name="listing_fee_option" value="listing_fee_option">
+						<button type="submit" class="btn btn-success">Submit</button>
+					</div>
+                 </form>
+					
+				</div>
+			</div>
+
+			<div class="col-xs-8">
+				<div class="box">
+					<div class="box-header">
 						<h3 class="box-title">Home Page Post section option</h3>
 						
 					</div>

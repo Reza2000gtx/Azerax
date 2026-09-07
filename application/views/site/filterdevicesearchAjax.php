@@ -1,4 +1,5 @@
 <?php include_once 'include/header2.php' ; ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style type="text/css">
 	.banner_name_page{
 		width: 100%;
@@ -403,6 +404,19 @@ body {
 								<span style="color:#999;">Details hidden - listing expired</span>
 								<?php } else { ?>
 								<a href="<?php echo base_url();?>details/<?=$row['id']?>"><?=$row['device_model']?></a>
+								<?php
+								$az_type_icons = array(
+								    'Hardware' => 'ti-cpu',
+								    'Software' => 'ti-code',
+								    'Cloud Service' => 'ti-cloud',
+								    'AI Tool' => 'ti-sparkles',
+								    'Hybrid' => 'ti-layers-intersect',
+								);
+								$az_type = $row['product_type'];
+								if(!empty($az_type) && isset($az_type_icons[$az_type])){
+								?>
+								<i class="ti <?php echo $az_type_icons[$az_type]; ?>" title="<?php echo html_escape($az_type); ?>" style="font-size:15px;color:#999;vertical-align:middle;margin-left:6px;"></i>
+								<?php } ?>
 								<?php } ?>
 								
 							</h4>

@@ -278,6 +278,7 @@ $insert['commission'] = $this->input->post('commission');
 	  
 	  	public function settings(){
 		$data['admin'] = $this->common_model->GetAllData('admin');
+		$data['setting'] = $this->common_model->GetSingleData('setting',array('id'=>1));
 		//print_r($data['admin']);
 		$this->load->view('admin/settings',$data);
  
@@ -442,7 +443,18 @@ public function update_settings_option(){
 			$insert['facebook_pixcel_script'] = $this->input->post('facebook_pixcel_script');
 
 		}
-		$run = $this->common_model->UpdateData('admin',array('id'=>1),$insert);
+		if($this->input->post('listing_fee_option')){
+			// Saves to the separate 'setting' table (not 'admin', unlike
+			// every other option here) - this is where add-product.php and
+			// my-product-listing.php actually read actual_amount from when
+			// showing the payment modal.
+			$fee_update['actual_amount'] = $this->input->post('actual_amount');
+			$run = $this->common_model->UpdateData('setting',array('id'=>1),$fee_update);
+		} else if(!empty($insert)){
+			$run = $this->common_model->UpdateData('admin',array('id'=>1),$insert);
+		} else {
+			$run = false;
+		}
 
 		if($run){
 
