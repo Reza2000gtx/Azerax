@@ -279,6 +279,19 @@
                         <span class="status-badge is-pending"><i class="fa fa-clock-o" aria-hidden="true"></i>Pending approval</span>
                         <?php endif; ?>
                         <a href="<?php echo base_url(); ?>details/<?=$row['id']?>"><?=$row['device_model']?></a>
+                        <?php
+                        $az_type_icons = array(
+                            'Hardware' => 'ti-cpu',
+                            'Software' => 'ti-code',
+                            'Cloud Service' => 'ti-cloud',
+                            'AI Tool' => 'ti-sparkles',
+                            'Hybrid' => 'ti-layers-intersect',
+                        );
+                        $az_type = $row['product_type'];
+                        if(!empty($az_type) && isset($az_type_icons[$az_type])){
+                        ?>
+                        <i class="ti <?php echo $az_type_icons[$az_type]; ?>" title="<?php echo html_escape($az_type); ?>" style="font-size:15px;color:#999;vertical-align:middle;margin-left:6px;"></i>
+                        <?php } ?>
                         <span><?=$row['device_brand']?></span>
                         <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;">ID: <?=$row['id']?></span>
                     </h4>

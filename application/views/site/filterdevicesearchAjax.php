@@ -560,7 +560,7 @@ body {
 							</div>
 							</div>
 							<p class="nomargin">
-								<?php if(!empty($row['dealer_notes'])){ ?>
+								<?php if($row['status'] != 2 && !empty($row['dealer_notes'])){ ?>
 								<p style="color:#666;font-size:13px;font-family:'Inter',sans-serif;line-height:1.6;margin:8px 0 0 0;"><?=substr($row['dealer_notes'],0,120)?>...</p>
 								<?php } ?>
 							</p>

@@ -40,6 +40,18 @@ class Product extends CI_Controller
 
 
   $data['product_detail'] = $this->common_model->GetSingleData('product',array('id'=>$product_id));
+
+  // Expired listings are no longer offered by any vendor and have been
+  // removed from search entirely - if someone reaches one directly (an
+  // old bookmark, a shared link, a search engine cache), show a simple
+  // "no longer available" message rather than the full details page.
+  // Same treatment for a product_id that doesn't exist at all - both
+  // cases share the same real outcome for the visitor.
+  if(empty($data['product_detail']) || $data['product_detail']['status'] == 2){
+      $this->load->view('site/listing_unavailable',$data);
+      return;
+  }
+
   $data['inputOutput'] = $this->common_model->GetAllData('input_output',array('product_id'=>$product_id));
   $data['reviews'] = $this->common_model->GetAllData('review',array('device_id'=>$product_id,'status'=>1));
      	$this->load->view('site/details',$data);
@@ -994,7 +1006,7 @@ public function get_category_attributes(){
     // status 1 = active, 2 = expired. Expired listings still appear in
     // search (masked in the view) rather than disappearing entirely - only
     // fully removed/rejected listings (any other status) are excluded here.
-    $where =  " where product.status in (1,2) ";
+    $where =  " where product.status = 1 ";
     
     $whereorder ='ORDER by product.device_model ASC';
     //keyword///
