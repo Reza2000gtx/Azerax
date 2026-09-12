@@ -324,6 +324,19 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
                    $run21 = $this->db->query($sqlInsert1);
 }
 
+      // Combine only Description, Features, and Process into the embedded
+      // text - device model/brand and input/output fields are deliberately
+      // excluded, since semantic search here is scoped specifically to
+      // these three fields, not the product as a whole.
+      $az_flat_values = array();
+      $az_io_source = array($process, $process_stand, $features);
+      array_walk_recursive(
+          $az_io_source,
+          function($v) use (&$az_flat_values){ $az_flat_values[] = $v; }
+      );
+      $az_embed_text = $description.' '.implode(' ', $az_flat_values);
+      $this->az_generate_and_save_embedding($product_id, $az_embed_text);
+
       if (isset($_FILES['gallery-image-orignal']['name'])) {
                  for ($i=0; $i < count($_FILES['gallery-image-orignal']['name']) ; $i++) { 
                    $filename = rand(100, 500) .time() .rand(100, 500) ."." .ltrim(strstr($_FILES['gallery-image-orignal']['name'][$i], '.'), '.');
@@ -764,6 +777,17 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($id).
 
                    $run21 = $this->db->query($sqlInsert1);
 }
+
+      // Same as add_product_action - scoped to only Description, Features,
+      // and Process, since editing can change any of these fields.
+      $az_flat_values = array();
+      $az_io_source = array($process, $process_stand, $features);
+      array_walk_recursive(
+          $az_io_source,
+          function($v) use (&$az_flat_values){ $az_flat_values[] = $v; }
+      );
+      $az_embed_text = $description.' '.implode(' ', $az_flat_values);
+      $this->az_generate_and_save_embedding($id, $az_embed_text);
 
 
 
@@ -2055,6 +2079,141 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
     }
 
     echo json_encode(array('status' => 1, 'data' => $extracted));
+  }
+
+  // Generates a semantic "embedding" for a product's combined text (via
+  // Voyage AI) and saves it to product.embedding for later similarity
+  // search. This is a best-effort enhancement, not part of the critical
+  // save path - on any failure (missing key, network issue, bad
+  // response), it silently does nothing and never echoes a response or
+  // interrupts the calling function, so a product always still saves
+  // successfully even if this fails.
+  private function az_generate_and_save_embedding($product_id, $text){
+
+    if(empty(trim($text))) return;
+    if(!defined('VOYAGE_API_KEY') || empty(VOYAGE_API_KEY)) return;
+
+    $payload = array(
+        'input' => array($text),
+        'model' => 'voyage-4',
+        'input_type' => 'document',
+    );
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.voyageai.com/v1/embeddings');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    // Same local-XAMPP CA bundle issue as the other API calls in this file.
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Authorization: Bearer '.VOYAGE_API_KEY,
+        'content-type: application/json',
+    ));
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if($response === false || $http_code != 200) return;
+
+    $result = json_decode($response, true);
+    if(empty($result['data'][0]['embedding'])) return;
+
+    $this->common_model->UpdateData('product', array('id'=>$product_id), array(
+        'embedding' => json_encode($result['data'][0]['embedding'])
+    ));
+  }
+
+  // TEST ENDPOINT for Phase 3 - not yet wired into the real search page.
+  // Takes a plain text query, embeds it, and returns the products whose
+  // stored embeddings are closest in meaning, ranked by similarity score
+  // (1.0 = identical meaning, 0 = unrelated, negative = opposite meaning).
+  // Visit directly as: Product/semantic_search?keyword=your search here
+  public function semantic_search(){
+
+    $keyword = isset($_REQUEST['keyword']) ? trim($_REQUEST['keyword']) : '';
+    if(empty($keyword)){
+        echo json_encode(array('status' => 0, 'message' => 'Provide a keyword, e.g. ?keyword=your search here'));
+        return;
+    }
+
+    if(!defined('VOYAGE_API_KEY') || empty(VOYAGE_API_KEY)){
+        echo json_encode(array('status' => 0, 'message' => 'VOYAGE_API_KEY is not set in secrets.php.'));
+        return;
+    }
+
+    // Embed the search query itself. input_type is 'query' here, not
+    // 'document' - Voyage optimizes each differently, matching how a
+    // product listing's own text was embedded when it was saved.
+    $payload = array(
+        'input' => array($keyword),
+        'model' => 'voyage-4',
+        'input_type' => 'query',
+    );
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.voyageai.com/v1/embeddings');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Authorization: Bearer '.VOYAGE_API_KEY,
+        'content-type: application/json',
+    ));
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if($response === false || $http_code != 200){
+        echo json_encode(array('status' => 0, 'message' => 'Could not reach Voyage AI to embed the search query.'));
+        return;
+    }
+
+    $result = json_decode($response, true);
+    if(empty($result['data'][0]['embedding'])){
+        echo json_encode(array('status' => 0, 'message' => 'Voyage AI did not return an embedding for the query.'));
+        return;
+    }
+    $query_embedding = $result['data'][0]['embedding'];
+
+    // Compare the query against every product that has a stored embedding.
+    $products = $this->db->query("SELECT id, device_model, device_brand, embedding FROM product WHERE embedding IS NOT NULL AND status = 1")->result_array();
+
+    $scored = array();
+    foreach($products as $p){
+        $product_embedding = json_decode($p['embedding'], true);
+        if(empty($product_embedding)) continue;
+        $scored[] = array(
+            'id' => $p['id'],
+            'device_model' => $p['device_model'],
+            'device_brand' => $p['device_brand'],
+            'similarity' => $this->az_cosine_similarity($query_embedding, $product_embedding),
+        );
+    }
+
+    usort($scored, function($a, $b){ return $b['similarity'] <=> $a['similarity']; });
+
+    echo json_encode(array('status' => 1, 'query' => $keyword, 'results' => array_slice($scored, 0, 10)));
+  }
+
+  // Cosine similarity between two embedding vectors - the standard way to
+  // measure how close two pieces of text are in meaning (1.0 = identical
+  // meaning, 0 = unrelated, negative = opposite meaning).
+  // Voyage's embeddings are already normalized to length 1, so cosine
+  // similarity simplifies to a plain dot product - no need to divide by
+  // each vector's magnitude, since both are already exactly 1.
+  private function az_cosine_similarity($vec_a, $vec_b){
+    $dot_product = 0;
+    $count = min(count($vec_a), count($vec_b));
+    for($i = 0; $i < $count; $i++){
+        $dot_product += $vec_a[$i] * $vec_b[$i];
+    }
+    return $dot_product;
   }
 
 }

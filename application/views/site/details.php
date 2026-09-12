@@ -413,6 +413,8 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
 
            <!-- Specification Tab -->
             <div class="tab-pane fade show active" id="profile" role="tabpanel">
+
+                <div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#14213D;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 4px;padding:0 0 8px;border-bottom:2px solid #FCA311;">Device</div>
                 <div class="table-responsive">
                     <table class="table">
                         <tbody>
@@ -435,6 +437,72 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
     <?php if(!empty($product_detail['power_consumption'])){ ?>
     <tr><td>Power Consumption</td><td><h5><?php echo $product_detail['power_consumption']; ?></h5></td></tr>
     <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#14213D;text-transform:uppercase;letter-spacing:0.5px;margin:28px 0 4px;padding:0 0 8px;border-bottom:2px solid #FCA311;">Input / Output / Process / Features</div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+    <?php
+    $input_conn = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'input_conn')))));
+    $input_stand = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'input_process_stand')))));
+    $input_conn_type = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'process_connection')))));
+    if(!empty($input_conn) || !empty($input_stand) || !empty($input_conn_type)){ ?>
+    <tr><td colspan="2" style="background:#FAFAFA;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;padding:6px 16px;">Input</td></tr>
+    <?php } ?>
+    <?php if(!empty($input_conn)){ ?>
+    <tr><td>Input Details</td><td><h5><?php foreach($input_conn as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php if(!empty($input_stand)){ ?>
+    <tr><td>Input Standard</td><td><h5><?php foreach($input_stand as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php if(!empty($input_conn_type)){ ?>
+    <tr><td>Input Connection Type</td><td><h5><?php foreach($input_conn_type as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $out_conn = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_conn')))));
+    $out_stand = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_process_stand')))));
+    $out_conn_type = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_process_connection')))));
+    if(!empty($out_conn) || !empty($out_stand) || !empty($out_conn_type)){ ?>
+    <tr><td colspan="2" style="background:#FAFAFA;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;padding:6px 16px;border-top:2px solid #EBEBEB;">Output</td></tr>
+    <?php } ?>
+    <?php if(!empty($out_conn)){ ?>
+    <tr><td>Output Details</td><td><h5><?php foreach($out_conn as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php if(!empty($out_stand)){ ?>
+    <tr><td>Output Standard</td><td><h5><?php foreach($out_stand as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php if(!empty($out_conn_type)){ ?>
+    <tr><td>Output Connection Type</td><td><h5><?php foreach($out_conn_type as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $process_stand = array_filter(array_map('trim', explode(",", $product_detail['process_stand'])));
+    $process = array_filter(array_map('trim', explode(",", $product_detail['process'])));
+    if(!empty($process_stand) || !empty($process)){ ?>
+    <tr><td colspan="2" style="background:#FAFAFA;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;padding:6px 16px;border-top:2px solid #EBEBEB;">Process</td></tr>
+    <?php } ?>
+    <?php if(!empty($process_stand)){ ?>
+    <tr><td>Process Standard</td><td><h5><?php foreach($process_stand as $s){ echo $s."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php if(!empty($process)){ ?>
+    <tr><td>Process</td><td><h5><?php foreach($process as $p){ echo $p."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+    <?php
+    $features_list = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'features')))));
+    if(!empty($features_list)){ ?>
+    <tr><td style="border-top:2px solid #EBEBEB;">Features</td><td style="border-top:2px solid #EBEBEB;"><h5><?php foreach($features_list as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <?php if($vendor_contact_combined || $product_detail['warranty_detail'] || $product_detail['support_detail']){ ?>
+                <div style="font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#14213D;text-transform:uppercase;letter-spacing:0.5px;margin:28px 0 4px;padding:0 0 8px;border-bottom:2px solid #FCA311;">Vendor &amp; Support</div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
     <?php if($vendor_contact_combined){ ?>
     <tr><td>Vendor Contact &amp; Ordering Info</td><td><h5 style="white-space:pre-line;"><?php echo htmlspecialchars($vendor_contact_combined); ?></h5></td></tr>
     <?php } ?>
@@ -444,49 +512,10 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
     <?php if($product_detail['support_detail']){ ?>
     <tr><td>Support</td><td><h5><?php echo $product_detail['support_detail']; ?></h5></td></tr>
     <?php } ?>
-    <?php
-    $process_stand = array_filter(array_map('trim', explode(",", $product_detail['process_stand'])));
-    if(!empty($process_stand)){ ?>
-    <tr><td>Process Standard</td><td><h5><?php foreach($process_stand as $s){ echo $s."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $process = array_filter(array_map('trim', explode(",", $product_detail['process'])));
-    if(!empty($process)){ ?>
-    <tr><td>Process</td><td><h5><?php foreach($process as $p){ echo $p."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $input_conn = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'input_conn')))));
-    if(!empty($input_conn)){ ?>
-    <tr><td>Input Details</td><td><h5><?php foreach($input_conn as $v){ echo $v."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $input_stand = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'input_process_stand')))));
-    if(!empty($input_stand)){ ?>
-    <tr><td>Input Standard</td><td><h5><?php foreach($input_stand as $v){ echo $v."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $input_conn_type = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'process_connection')))));
-    if(!empty($input_conn_type)){ ?>
-    <tr><td>Input Connection Type</td><td><h5><?php foreach($input_conn_type as $v){ echo $v."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $out_conn = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_conn')))));
-    if(!empty($out_conn)){ ?>
-    <tr><td>Output Details</td><td><h5><?php foreach($out_conn as $v){ echo $v."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $out_stand = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_process_stand')))));
-    if(!empty($out_stand)){ ?>
-    <tr><td>Output Standard</td><td><h5><?php foreach($out_stand as $v){ echo $v."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-    <?php
-    $out_conn_type = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'out_process_connection')))));
-    if(!empty($out_conn_type)){ ?>
-    <tr><td>Output Connection Type</td><td><h5><?php foreach($out_conn_type as $v){ echo $v."<br>"; } ?></h5></td></tr>
-    <?php } ?>
-</tbody>
+                        </tbody>
                     </table>
                 </div>
+                <?php } ?>
             </div>
  <!-- Reviews Tab -->
             <div class="tab-pane fade" id="review" role="tabpanel">
