@@ -182,6 +182,9 @@
     padding: 0 4px;
     margin-bottom: 0 !important;
 }
+#advSearchPanel .form-group {
+    margin-bottom: 6px !important;
+}
 #advSearchPanel .search_new_des2 {
     width: 100% !important;
 }
@@ -690,6 +693,7 @@
 						<div class="adv-search-wrap"><a href="javascript:void(0);" id="advSearchToggle" onclick="var p=document.getElementById('advSearchPanel'); var d=document.getElementById('divShowHide'); if(p.style.display==='none'){p.style.display='block';d.style.display='block';}else{p.style.display='none';d.style.display='none';} return false;" style="display:inline-block;margin-top:2px;padding:8px 22px;border:1.5px solid #FCA311;border-radius:20px;color:#FCA311;font-size:13px;font-weight:500;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:0.3px;">
 					
 					Advanced Search — filter by I/O type, standards, connectors and more →
+					<span id="advFilterBadge" style="display:none;margin-left:8px;background:#FCA311;color:#14213D;border-radius:10px;padding:1px 8px;font-size:11px;font-weight:700;"></span>
 						</a></div>
 
                         <!-- CAPABILITY CRAWLER -->
@@ -745,7 +749,7 @@
           <div style="margin:5px;border:2px solid #14213D;border-radius:12px;padding:24px;position:relative;width:calc(100% - 10px);">
           <a href="javascript:void(0);" onclick="document.getElementById('advSearchPanel').style.display='none';document.getElementById('divShowHide').style.display='none';" style="position:absolute;top:1px;right:9px;color:#14213D;font-size:22px;font-weight:700;text-decoration:none;line-height:1;">×</a>
 					<!--<nav class="search-channel-container">-->
-					   <form method="get" action="<?php echo base_url();?>search-listing">
+					   <form method="get" action="<?php echo base_url();?>search-listing" id="advSearchForm">
                           <div class="search_new_des2" id="divShowHide" style="display:block;">
 							 <div class="anim">
 					  		 	<ul class="list">
@@ -832,6 +836,28 @@
         </div><!-- /.row (category) -->
           </div><!-- /.loop_inp (category) -->
         </li><!-- /Category row -->
+
+	    <li class="">
+	      <div class="btn_usch">
+				<div class="">
+         <i class="ti ti-star"></i> Features
+        </div>
+        <label class="row-toggle">
+            <input type="checkbox" class="row-toggle-input" data-row="feature_search">
+            <span class="row-toggle-slider"></span>
+        </label>
+				</div>
+
+<div class="loop_inp" data-row-content="feature_search">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="form-group">
+					<input type="text" name="feature_search" placeholder="Describe a capability, e.g. &quot;real-time collaboration&quot; or &quot;automatic scene detection&quot;" class="form-control">
+				</div>
+			</div>
+		</div>
+</div>
+</li>
 
 <li class="">
   <div class="btn_usch" >
@@ -1507,13 +1533,39 @@ function setRowState(rowName, enabled){
     }
 }
 
+function updateFilterBadge(){
+    var count = $('.row-toggle-input:checked').length;
+    var $badge = $('#advFilterBadge');
+    if(count > 0){
+        $badge.text(count + (count === 1 ? ' filter active' : ' filters active')).show();
+    } else {
+        $badge.hide();
+    }
+}
+
 $('.row-toggle-input').on('change', function(){
     setRowState($(this).data('row'), this.checked);
+    updateFilterBadge();
 });
 
-// default state: all 4 rows start OFF/greyed until switched on
+// Reflect each row's ACTUAL checkbox state on load - including a browser
+// back-navigation restore, where a checkbox can come back checked. Forcing
+// everything to "off" here (regardless of the real checked state) is what
+// caused the toggle to visually look on while its content stayed hidden.
 $('.row-toggle-input').each(function(){
-    setRowState($(this).data('row'), false);
+    setRowState($(this).data('row'), this.checked);
+});
+updateFilterBadge();
+
+// pageshow fires on both a fresh load and a back/forward-cache restore
+// (unlike normal ready/load handlers, which only fire on a fresh load) -
+// re-sync everything either way, so the toggle switches, their content,
+// and the badge always agree with each other.
+window.addEventListener('pageshow', function(){
+    $('.row-toggle-input').each(function(){
+        setRowState($(this).data('row'), this.checked);
+    });
+    updateFilterBadge();
 });
 </script> 
 

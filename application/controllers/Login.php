@@ -21,7 +21,18 @@ class Login extends CI_Controller
 	
 	public function index(){
 		 $this->check_login();
-		$this->load->view('site/login');
+		 // Capture where the user was trying to go, so do_login() (which
+		 // already knows how to redirect back to a posted redirect_url)
+		 // can send them back there instead of always landing on home.
+		 // Guard against looping back to the login page itself if someone
+		 // reloads it directly.
+		 $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+		 if(!empty($referer) && strpos($referer, 'login') === false){
+		 	$data['redirect_url'] = $referer;
+		 } else {
+		 	$data['redirect_url'] = '';
+		 }
+		$this->load->view('site/login', $data);
 	}
 	public function do_login(){
 
@@ -90,8 +101,8 @@ class Login extends CI_Controller
 			}
 		} else {
 			//$this->session->set_flashdata('msg','<div class="alert alert-danger">'.validation_errors().'</div>');
-			
-		$this->load->view('site/login');
+			$data['redirect_url'] = $this->input->post('redirect_url');
+		$this->load->view('site/login', $data);
 		}
 	}
 

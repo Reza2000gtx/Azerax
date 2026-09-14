@@ -52,6 +52,10 @@ class Product extends CI_Controller
       return;
   }
 
+  // Simple view counter - increments on every page load, so vendors can
+  // see how much interest their listing is getting.
+  $this->db->query("UPDATE product SET view_count = view_count + 1 WHERE id = ".$this->db->escape($product_id));
+
   $data['inputOutput'] = $this->common_model->GetAllData('input_output',array('product_id'=>$product_id));
   $data['reviews'] = $this->common_model->GetAllData('review',array('device_id'=>$product_id,'status'=>1));
      	$this->load->view('site/details',$data);
@@ -1050,8 +1054,40 @@ public function get_category_attributes(){
         OR input_output.features LIKE '%".$kw."%'
       )  ";
 
-          $whereorder ='ORDER by product.device_model DESC';
+          $whereorder ="ORDER by (CASE WHEN product.device_model LIKE '%".$kw."%' OR product.device_brand LIKE '%".$kw."%' THEN 0 ELSE 1 END) ASC, product.device_model DESC";
 
+    }
+
+    // Features (semantic search) - narrows results to products whose
+    // Description/Features/Process are closest in meaning to the typed
+    // phrase, ranked by relevance. If the embedding call itself fails
+    // (network/key issue), the filter is silently ignored so a Voyage
+    // outage never breaks the rest of the search. But if the call
+    // succeeds and genuinely finds nothing above the relevance threshold,
+    // that is an honest "no matches" - shown as zero results, not treated
+    // the same as a failure and quietly ignored.
+    $az_feature_search_active = false;
+    if(isset($_REQUEST['feature_search']) && trim($_REQUEST['feature_search']) != ''){
+        $feature_query_embedding = $this->az_embed_query(trim($_REQUEST['feature_search']));
+        if($feature_query_embedding !== null){
+            $feature_matches = $this->az_rank_products_by_embedding($feature_query_embedding);
+            $az_feature_search_active = true;
+            if(!empty($feature_matches)){
+                $top_matches = array_slice($feature_matches, 0, 50);
+                $match_ids = array();
+                foreach($top_matches as $m){ $match_ids[] = (int)$m['id']; }
+                $where .= " and product.id IN (".implode(',', $match_ids).") ";
+                // Relevance ranking takes priority over any other sort
+                // order when Features search is active, since matching by
+                // meaning is the whole point of this filter.
+                $whereorder = "ORDER by FIELD(product.id, ".implode(',', $match_ids).")";
+            } else {
+                // Genuinely nothing matched above the threshold - force
+                // zero results rather than falling through to showing
+                // every active product.
+                $where .= " and product.id IN (0) ";
+            }
+        }
     }
 
       $where1='';
@@ -1300,7 +1336,9 @@ if(!empty($_REQUEST['main_cat']) || !empty($_REQUEST['sub1_cat']) || !empty($_RE
     $where .= $cat_where;
 }
 
-if(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
+if($az_feature_search_active){
+    $where.=$whereorder;
+  }elseif(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==1){
     $where.='ORDER by product.id DESC';
   }elseif(isset($_REQUEST['sortby']) && $_REQUEST['sortby']==2){
      $where.='ORDER by date(product.date_released) desc';
@@ -2139,16 +2177,38 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
         return;
     }
 
-    if(!defined('VOYAGE_API_KEY') || empty(VOYAGE_API_KEY)){
-        echo json_encode(array('status' => 0, 'message' => 'VOYAGE_API_KEY is not set in secrets.php.'));
+    $query_embedding = $this->az_embed_query($keyword);
+    if($query_embedding === null){
+        echo json_encode(array('status' => 0, 'message' => 'Could not embed the search query - check VOYAGE_API_KEY and network access.'));
         return;
     }
 
-    // Embed the search query itself. input_type is 'query' here, not
-    // 'document' - Voyage optimizes each differently, matching how a
-    // product listing's own text was embedded when it was saved.
+    $scored = $this->az_rank_products_by_embedding($query_embedding);
+    $named = array();
+    foreach(array_slice($scored, 0, 10) as $s){
+        $p = $this->common_model->GetSingleData('product', array('id'=>$s['id']));
+        $named[] = array('id'=>$s['id'], 'device_model'=>$p['device_model'], 'device_brand'=>$p['device_brand'], 'similarity'=>$s['similarity']);
+    }
+
+    echo json_encode(array('status' => 1, 'query' => $keyword, 'results' => $named));
+  }
+
+  // Embeds any given text via Voyage AI and returns the raw embedding
+  // array, or null on any failure (missing key, network issue, bad
+  // response). Shared by semantic_search (testing) and the real Features
+  // search integration in devicefilter.
+  private function az_embed_query($text){
+
+    if(!defined('VOYAGE_API_KEY') || empty(VOYAGE_API_KEY)){
+        log_message('error', 'Semantic search: VOYAGE_API_KEY is not set in secrets.php.');
+        return null;
+    }
+
+    // input_type is 'query' here, not 'document' - Voyage optimizes each
+    // differently, matching how a product listing's own text was embedded
+    // when it was saved.
     $payload = array(
-        'input' => array($keyword),
+        'input' => array($text),
         'model' => 'voyage-4',
         'input_type' => 'query',
     );
@@ -2166,39 +2226,56 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
         'content-type: application/json',
     ));
     $response = curl_exec($ch);
+    $curl_error = curl_error($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    if($response === false || $http_code != 200){
-        echo json_encode(array('status' => 0, 'message' => 'Could not reach Voyage AI to embed the search query.'));
-        return;
+    if($response === false){
+        log_message('error', 'Semantic search: curl request failed for query "'.$text.'" - '.$curl_error);
+        return null;
+    }
+    if($http_code != 200){
+        log_message('error', 'Semantic search: Voyage AI returned HTTP '.$http_code.' for query "'.$text.'" - response: '.substr($response, 0, 500));
+        return null;
     }
 
     $result = json_decode($response, true);
     if(empty($result['data'][0]['embedding'])){
-        echo json_encode(array('status' => 0, 'message' => 'Voyage AI did not return an embedding for the query.'));
-        return;
+        log_message('error', 'Semantic search: Voyage AI response had no embedding for query "'.$text.'" - response: '.substr($response, 0, 500));
+        return null;
     }
-    $query_embedding = $result['data'][0]['embedding'];
 
-    // Compare the query against every product that has a stored embedding.
-    $products = $this->db->query("SELECT id, device_model, device_brand, embedding FROM product WHERE embedding IS NOT NULL AND status = 1")->result_array();
+    return $result['data'][0]['embedding'];
+  }
+
+  // Compares a query embedding against every active product's stored
+  // embedding, returning id+similarity pairs ranked highest first.
+  // Only genuinely related matches are returned - a bare "top N" with no
+  // quality floor would force-return whatever exists even for a totally
+  // unrelated query, once the candidate pool is small.
+  // 0.25 is a starting point based on limited testing so far (our own
+  // "playlist" test scored ~0.29-0.34 against genuinely related products),
+  // not a precisely tuned figure - worth revisiting once there is more
+  // real search usage to observe.
+  private function az_rank_products_by_embedding($query_embedding, $min_similarity = 0.25){
+
+    $products = $this->db->query("SELECT id, embedding FROM product WHERE embedding IS NOT NULL AND status = 1")->result_array();
 
     $scored = array();
     foreach($products as $p){
         $product_embedding = json_decode($p['embedding'], true);
         if(empty($product_embedding)) continue;
+        $similarity = $this->az_cosine_similarity($query_embedding, $product_embedding);
+        if($similarity < $min_similarity) continue;
         $scored[] = array(
             'id' => $p['id'],
-            'device_model' => $p['device_model'],
-            'device_brand' => $p['device_brand'],
-            'similarity' => $this->az_cosine_similarity($query_embedding, $product_embedding),
+            'similarity' => $similarity,
         );
     }
 
     usort($scored, function($a, $b){ return $b['similarity'] <=> $a['similarity']; });
 
-    echo json_encode(array('status' => 1, 'query' => $keyword, 'results' => array_slice($scored, 0, 10)));
+    return $scored;
   }
 
   // Cosine similarity between two embedding vectors - the standard way to

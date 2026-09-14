@@ -248,7 +248,7 @@ section.add_product {
     background: #14213D;
     min-height: calc(100vh - 220px);
     padding: 32px 24px;
-    position: sticky;
+    position: sticky !important;
     top: 32px;
     border-radius: 16px !important;
 }
@@ -643,7 +643,14 @@ section.add_product #msform fieldset#menu3 {
 }
 
 body {
-    overflow-x: hidden;
+    /* overflow-x: hidden here was silently breaking position:sticky for
+       every element on this page (including the navy guidance sidebar) -
+       setting either overflow axis to non-visible forces the other axis
+       to stop being visible too, turning body into a scroll container
+       that never actually scrolls, which sticky positioning breaks
+       against. overflow: clip prevents horizontal scrolling the same way,
+       without this side effect. */
+    overflow-x: clip;
 }
 section.add_product {
     min-height: calc(100vh - 280px) !important;
@@ -1146,6 +1153,22 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('scroll', update, { passive: true });
     document.addEventListener('scroll', update, { passive: true, capture: true });
     setInterval(update, 300);
+
+    // The navy guidance sidebar (.col-lg-2) is also sticky, but needs to
+    // sit BELOW the step bar once both are pinned, not underneath it. Its
+    // "top" value is set here dynamically from the step bar's own real,
+    // measured height, rather than a guessed static number - stays
+    // correct even if the step bar's height changes (e.g. wrapping onto a
+    // second line on a narrower screen).
+    var guidanceBox = document.querySelector('.col-lg-2');
+    function updateGuidanceBoxOffset(){
+        if(!guidanceBox) return;
+        guidanceBox.style.top = (PINNED_TOP + stepBar.getBoundingClientRect().height + 16) + 'px';
+    }
+    updateGuidanceBoxOffset();
+    window.addEventListener('load', updateGuidanceBoxOffset);
+    window.addEventListener('resize', updateGuidanceBoxOffset);
+    setInterval(updateGuidanceBoxOffset, 300);
 });
 </script>
 <section class="Progress">

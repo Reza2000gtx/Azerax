@@ -227,7 +227,7 @@ body {
             <?php echo $this->session->flashdata('msg'); ?>
 
             <form action="<?php echo base_url(); ?>do-login" method="post">
-                <input type="hidden" name="redirect_url" value="<?php echo $this->session->userdata('redirect_after_login'); ?>">
+                <input type="hidden" name="redirect_url" value="<?php echo html_escape($redirect_url); ?>">
 
                 <div class="form-group">
                     <label>Email</label>

@@ -294,6 +294,7 @@
                         <?php } ?>
                         <span><?=$row['device_brand']?></span>
                         <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;">ID: <?=$row['id']?></span>
+                        <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;"><i class="ti ti-eye" style="vertical-align:-1px;"></i> <?= (int)$row['view_count'] ?> view<?= ((int)$row['view_count'] == 1 ? '' : 's') ?></span>
                     </h4>
 
                     <!-- Edit button -->

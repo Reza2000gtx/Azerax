@@ -569,7 +569,13 @@ body {
 						
 					</div>
 <?php } } else {  ?>
-<center><img src="<?php echo base_url(); ?>assets/site/img/no_data.png" style="width:550px;"></center>
+<div style="max-width:440px;margin:60px auto;padding:0 20px;text-align:center;">
+    <i class="ti ti-box-off" style="font-size:56px;color:#BCC0C4;"></i>
+    <h3 style="font-family:'Inter',sans-serif;font-weight:700;color:#14213D;margin:20px 0 10px;">No matches found</h3>
+    <p style="font-family:'Inter',sans-serif;color:#666;font-size:15px;line-height:1.6;margin-bottom:0;">
+        Try a different search term, check for typos, or remove some filters to broaden your results.
+    </p>
+</div>
 <?php } ?>
 
 <div class="product_top_bar">
@@ -594,6 +600,18 @@ body {
 					<aside class="left_widgets cat_widgets side_bar_nw">
 						<div class="widgets_inner">
 							<ul class="list">
+						<li class="chex_li"><input type="checkbox" name="by_feature" value=1 <?php if($_GET['by_feature'] == 1) { echo 'checked'; } ?>>
+							<a href="javascript:void(0);" class="listClick0" onclick="toggleClose('list0','listClick0')">
+							By Features
+						   <span class="lnr lnr-chevron-down"></span></a>
+                           <ul class="list list0" style="display: block;">
+
+		<li class="d-flex justify-content-between align-items-center">
+					<input type="text" name="feature_search" value="<?php if(!empty($_GET['feature_search'])){ echo html_escape($_GET['feature_search']); } ?>" placeholder="Describe a capability, e.g. &quot;real-time collaboration&quot;" class="form-control">
+				</li>
+
+                           </ul>
+						</li>
 						<li class="chex_li"><input type="checkbox" name="by_input" value=1 <?php if($_GET['by_input'] == 1) { echo 'checked'; } ?>> 
 							<a href="javascript:void(0);" class="listClick1" onclick="toggleClose('list1','listClick1')">							
 							 
