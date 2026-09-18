@@ -643,6 +643,7 @@ body {
                foreach($data as $k){
                 if($k){
                 
+                  $input_name_set = isset($_GET['input_name']) ? $_GET['input_name'] : array();
                   if(in_array($k, $input_name_set))
                   {
                     $selected = 'selected';
@@ -683,6 +684,7 @@ body {
                 $data=array_unique($data);
                foreach($data as $k){
 
+               	$input_stand_set = isset($_GET['input_stand']) ? $_GET['input_stand'] : array();
                	if(in_array($k, $input_stand_set))
                   {
                     $selected = 'selected';
@@ -727,6 +729,7 @@ body {
                 $selected = '';
                foreach($data as $k){
 
+               	$input_conn_set = isset($_GET['input_conn']) ? $_GET['input_conn'] : array();
                	if(in_array($k, $input_conn_set))
                   {
                     $selected = 'selected';
@@ -787,6 +790,7 @@ body {
                 $data=array_unique($data);
                foreach($data as $k){
 
+               	$out_conn_set = isset($_GET['out_conn']) ? $_GET['out_conn'] : array();
                	if(in_array($k, $out_conn_set))
                   {
                     $selected = 'selected';
@@ -831,6 +835,7 @@ body {
                 $data=array_unique($data);
                 $selected = '';
                foreach($data as $k){
+               	$out_process_stand_set = isset($_GET['out_process_stand']) ? $_GET['out_process_stand'] : array();
                	if(in_array($k, $out_process_stand_set))
                   {
                     $selected = 'selected';
@@ -874,6 +879,7 @@ body {
                 $selected = '';
                foreach($data as $k){
                   
+               	$out_process_connection_set = isset($_GET['out_process_connection']) ? $_GET['out_process_connection'] : array();
                	if(in_array($k, $out_process_connection_set))
                   {
                     $selected = 'selected';
@@ -933,6 +939,7 @@ body {
                 $selected = '';
                foreach($data as $k){
 
+               	$process_set = isset($_GET['process']) ? $_GET['process'] : array();
                	if(in_array($k, $process_set))
                   {
                     $selected = 'selected';
@@ -980,6 +987,7 @@ body {
                 $selected = '';
                foreach($data as $k){
 
+               	$process_stand_set = isset($_GET['process_stand']) ? $_GET['process_stand'] : array();
                	if(in_array($k, $process_stand_set))
                   {
                     $selected = 'selected';

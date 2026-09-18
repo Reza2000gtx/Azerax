@@ -2152,14 +2152,14 @@ if($connections){
    }
 </style>
 <?php 
-$paymentinfo = $this->db->query("SELECT * FROM `setting` ")->row_array();
+$paymentinfo = $this->common_model->GetSingleData('setting', 'id=1');
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <script>
    $('#addform').on('submit', function(ev) {
        //alert();
        ev.preventDefault();
-      show_lates_stripe_popup(<?php echo $paymentinfo['amount']; ?>,<?php echo $paymentinfo['amount']; ?>,<?php echo $user_id;?>,<?php echo $user_id;?>,<?php echo $user_id;?>,'purchasesession<?php echo $user_id;?>',''); 
+      show_lates_stripe_popup(<?php echo $paymentinfo['actual_amount']; ?>,<?php echo $paymentinfo['actual_amount']; ?>,<?php echo $user_id;?>,<?php echo $user_id;?>,<?php echo $user_id;?>,'purchasesession<?php echo $user_id;?>',''); 
    
        
    });

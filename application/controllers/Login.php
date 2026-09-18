@@ -24,10 +24,14 @@ class Login extends CI_Controller
 		 // Capture where the user was trying to go, so do_login() (which
 		 // already knows how to redirect back to a posted redirect_url)
 		 // can send them back there instead of always landing on home.
-		 // Guard against looping back to the login page itself if someone
-		 // reloads it directly.
+		 // Guard against looping back to the login page itself, and
+		 // against capturing signup - a fresh registration redirects here
+		 // on success, and the browser's referrer for this page load
+		 // reflects "signup" (the actual page shown in the address bar),
+		 // not the "-action" POST target - sending a newly-registered user
+		 // straight back to "create an account" makes no sense.
 		 $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-		 if(!empty($referer) && strpos($referer, 'login') === false){
+		 if(!empty($referer) && strpos($referer, 'login') === false && strpos($referer, '-action') === false && strpos($referer, 'signup') === false){
 		 	$data['redirect_url'] = $referer;
 		 } else {
 		 	$data['redirect_url'] = '';

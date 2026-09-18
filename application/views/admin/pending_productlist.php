@@ -275,7 +275,7 @@ input.primary:checked + .slider {
 										
 
 										</td>
-										<td><?php echo date('d M Y', strtotime($row['created_at'])); ?></td>
+										<td data-order="<?php echo strtotime($row['created_at']); ?>"><?php echo date('d M Y', strtotime($row['created_at'])); ?></td>
 										<td>	
 											<a class="btn btn-warning btn-xs" href="#">Pending</a>
 										</td>									

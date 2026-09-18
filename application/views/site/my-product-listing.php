@@ -368,7 +368,7 @@
 <input type="hidden" id="productRenewId" value="0">
 
 <?php
-$paymentinfo = $this->db->query("SELECT * FROM `setting`")->row_array();
+$paymentinfo = $this->common_model->GetSingleData('setting', 'id=1');
 $user_id = $this->session->userdata('user_id');
 ?>
 
@@ -399,7 +399,7 @@ function renewProduct(pID=0){
     // while the other is still mid-transition can leave a stale backdrop
     // that visually blocks the new modal even though it's technically open.
     $('#paymentOption').one('hidden.bs.modal', function(){
-        show_lates_stripe_popup1(<?php echo $paymentinfo['amount']; ?>, <?php echo $paymentinfo['amount']; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, 'purchasesession<?php echo $user_id; ?>', '');
+        show_lates_stripe_popup1(<?php echo $paymentinfo['actual_amount']; ?>, <?php echo $paymentinfo['actual_amount']; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, <?php echo $user_id; ?>, 'purchasesession<?php echo $user_id; ?>', '');
     });
     $('#paymentOption').modal('hide');
 }
@@ -513,7 +513,7 @@ paypal.Button.render({
     env: '<?php echo $paypal_type; ?>',
     client: { sandbox: '<?php echo $paypal_sandbox_key; ?>', production: '<?php echo $paypal_live_key; ?>' },
     payment: function(data, actions){
-        return actions.payment.create({ payment: { transactions: [{ amount: { total: <?php echo $paymentinfo['amount']; ?>, currency: 'AUD' } }] } });
+        return actions.payment.create({ payment: { transactions: [{ amount: { total: <?php echo $paymentinfo['actual_amount']; ?>, currency: 'AUD' } }] } });
     },
     onAuthorize: function(data, actions){
         return actions.payment.execute().then(function(){

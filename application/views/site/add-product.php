@@ -277,53 +277,6 @@ section.add_product {
     margin-bottom: 8px;
 }
 
-/* Sidebar step mini indicators */
-.az-sidebar-steps {
-    margin-top: 40px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 24px;
-}
-.az-sidebar-step {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    opacity: 0.4;
-}
-.az-sidebar-step.active { opacity: 1; }
-.az-sidebar-step.done { opacity: 0.7; }
-.az-sidebar-step-dot {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.5);
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.az-sidebar-step.active .az-sidebar-step-dot {
-    background: #FCA311;
-    color: #14213D;
-}
-.az-sidebar-step.done .az-sidebar-step-dot {
-    background: rgba(255,255,255,0.3);
-    color: #fff;
-}
-.az-sidebar-step-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
-}
-.az-sidebar-step.active .az-sidebar-step-label {
-    color: #fff;
-    font-weight: 600;
-}
-
 /* Form area */
 .container-ipo {
     flex: 1;
@@ -1215,22 +1168,6 @@ document.addEventListener('DOMContentLoaded', function(){
         <p>This information will appear on your product page for architects to view.</p>
     </div>
     <div class="col-box" id="box4" style="display:none;"></div>
-
-    <!-- Mini step tracker in sidebar -->
-    <div class="az-sidebar-steps">
-        <div class="az-sidebar-step active" id="sidebar-step1">
-            <div class="az-sidebar-step-dot">1</div>
-            <div class="az-sidebar-step-label">Device Details</div>
-        </div>
-        <div class="az-sidebar-step" id="sidebar-step2">
-            <div class="az-sidebar-step-dot">2</div>
-            <div class="az-sidebar-step-label">I/O &amp; Process</div>
-        </div>
-        <div class="az-sidebar-step" id="sidebar-step3">
-            <div class="az-sidebar-step-dot">3</div>
-            <div class="az-sidebar-step-label">Vendor Info</div>
-        </div>
-    </div>
   </div>
   <div class="container-ipo">
     <div class="container">
@@ -3083,9 +3020,6 @@ display: block;
 
 
 </style>
-<?php 
-$paymentinfo = $this->db->query("SELECT * FROM `setting` ")->row_array();
-?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 <script>
@@ -3095,7 +3029,7 @@ $('#addform').on('submit', function(ev) {
     //ev.preventDefault();
     
      $('#testmodal').modal('hide');
-   show_lates_stripe_popup(<?php echo $paymentinfo['amount'];?>,<?php echo $paymentinfo['amount']; ?>,<?php echo $user_id;?>,<?php echo $user_id;?>,<?php echo $user_id;?>,'purchasesession<?php echo $user_id;?>',''); 
+   show_lates_stripe_popup(<?php echo $amtt;?>,<?php echo $amtt; ?>,<?php echo $user_id;?>,<?php echo $user_id;?>,<?php echo $user_id;?>,'purchasesession<?php echo $user_id;?>',''); 
 
     return false;
 });

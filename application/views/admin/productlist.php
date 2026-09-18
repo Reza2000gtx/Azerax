@@ -231,7 +231,7 @@ if($row['expiry_date'] && $row['expiry_date'] !='0000-00-00'){
                         
                               ?> 
 
-										<a onclick="confirm('Are you sure want to delete this Product ?'); deleteproduct(<?php echo html_escape($row['id']); ?>);" href="javascript:void(0)" class="btn btn-xs" style="background:#DC2626;color:#fff;margin-left:4px;"><i class="fa fa-trash" aria-hidden="true"></i></a>
+										<a onclick="if(confirm('Are you sure want to delete this Product ?')){ deleteproduct(<?php echo html_escape($row['id']); ?>); } return false;" href="javascript:void(0)" class="btn btn-xs" style="background:#DC2626;color:#fff;margin-left:4px;"><i class="fa fa-trash" aria-hidden="true"></i></a>
 
 									</td>
 								</tr>

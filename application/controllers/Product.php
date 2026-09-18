@@ -417,8 +417,6 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 			);
 			 
 
-			$this->session->set_flashdata('msg','<p class="alert alert-success">Your Product amount will be paid successfully. And your product will be add successfully.</p>');
-			
     }
     elseif($paymenttype=='Paypal')
     {
@@ -446,8 +444,6 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 			);
 			 
 
-			$this->session->set_flashdata('msg','<p class="alert alert-success">Your Product amount will be paid successfully. And your product will be add successfully.</p>');
-			
     }
     
     else {
