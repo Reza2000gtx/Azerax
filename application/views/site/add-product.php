@@ -1458,6 +1458,50 @@ document.addEventListener('DOMContentLoaded', function(){
  </div>
 </div>
 
+<div class="row">
+ <div class="col-sm-12">
+  <div class="form-group">
+   <label>Does this product belong to a family of products?</label>
+   <div style="display:flex;gap:20px;margin-bottom:12px;">
+    <label style="font-weight:400;display:flex;align-items:center;gap:6px;cursor:pointer;">
+     <input type="radio" name="has_family" value="1" id="has_family_yes"> Yes
+    </label>
+    <label style="font-weight:400;display:flex;align-items:center;gap:6px;cursor:pointer;">
+     <input type="radio" name="has_family" value="0" id="has_family_no" checked> No
+    </label>
+   </div>
+   <div id="family_fields" style="display:none;">
+    <?php
+    $vendor_id = $this->session->userdata('user_id');
+    $existing_families = $this->common_model->GetAllData('product_family', array('vendor_id' => $vendor_id));
+    ?>
+    <select class="form-control" name="product_family_id" id="product_family_id" style="margin-bottom:10px;">
+     <option value="">Select a family...</option>
+     <?php if(!empty($existing_families)){ foreach($existing_families as $fam){ ?>
+     <option value="<?php echo $fam['id']; ?>"><?php echo html_escape($fam['family_name']); ?></option>
+     <?php } } ?>
+     <option value="new">+ Create new family</option>
+    </select>
+    <input type="text" class="form-control" name="new_family_name" id="new_family_name" placeholder="New family name, e.g. Evrideo Broadcast Suite" style="display:none;">
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+document.getElementById('has_family_yes').addEventListener('change', function(){
+    document.getElementById('family_fields').style.display = 'block';
+});
+document.getElementById('has_family_no').addEventListener('change', function(){
+    document.getElementById('family_fields').style.display = 'none';
+    document.getElementById('new_family_name').style.display = 'none';
+    document.getElementById('new_family_name').value = '';
+});
+document.getElementById('product_family_id').addEventListener('change', function(){
+    document.getElementById('new_family_name').style.display = (this.value === 'new') ? 'block' : 'none';
+});
+</script>
+
 <!--   <div class="col-sm-6">
 <div class="form-group">
 <label for="title">Manual/Brochure (PDF)</label>

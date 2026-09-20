@@ -103,6 +103,7 @@
     <div class="az-profile-card">
         <h3>Account Details</h3>
 
+        <?php echo $this->session->flashdata('msg'); ?>
         <?php
         if(isset($_SESSION['success'])){ echo $_SESSION['success']; unset($_SESSION['success']); }
         if(isset($_SESSION['error'])){ echo $_SESSION['error']; unset($_SESSION['error']); }
@@ -138,6 +139,39 @@
             <div class="form-group">
                 <label>Company / Organisation</label>
                 <input type="text" name="company" value="<?php echo $user['company']; ?>" placeholder="e.g. BBC, ITV, Grass Valley" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Company Logo</label>
+                <div style="display:flex;align-items:center;gap:14px;">
+                    <?php if(!empty($user['company_logo'])): ?>
+                    <img id="company-logo-preview" src="<?php echo base_url(); ?>assets/profile/<?php echo $user['company_logo']; ?>" style="height:48px;max-width:140px;object-fit:contain;border:1.5px solid #EBEBEB;border-radius:8px;padding:6px;background:#fff;" alt="Company logo">
+                    <input type="hidden" name="oldcompanylogo" value="<?php echo $user['company_logo']; ?>">
+                    <?php else: ?>
+                    <div id="company-logo-placeholder" style="height:48px;width:80px;border:1.5px dashed #EBEBEB;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fa fa-image" style="font-size:18px;color:#999;"></i>
+                    </div>
+                    <img id="company-logo-preview" style="display:none;height:48px;max-width:140px;object-fit:contain;border:1.5px solid #EBEBEB;border-radius:8px;padding:6px;background:#fff;" alt="Company logo">
+                    <?php endif; ?>
+                    <label for="company-logo-upload" style="border:1.5px solid #EBEBEB;border-radius:8px;padding:8px 16px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:#14213D;cursor:pointer;">Choose file</label>
+                    <input type="file" name="company_logo" id="company-logo-upload" accept="image/*" style="display:none;">
+                </div>
+                <p style="font-family:'Inter',sans-serif;font-size:12px;color:#999;margin:6px 0 0;">Shown next to your listings in search results. Optional.</p>
+                <script>
+                document.getElementById('company-logo-upload').addEventListener('change', function(e){
+                    var file = e.target.files[0];
+                    if(!file) return;
+                    var reader = new FileReader();
+                    reader.onload = function(evt){
+                        var preview = document.getElementById('company-logo-preview');
+                        preview.src = evt.target.result;
+                        preview.style.display = 'block';
+                        var placeholder = document.getElementById('company-logo-placeholder');
+                        if(placeholder) placeholder.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                });
+                </script>
             </div>
 
             <div class="form-group">

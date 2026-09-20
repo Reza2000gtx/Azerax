@@ -56,6 +56,20 @@ class Product extends CI_Controller
   // see how much interest their listing is getting.
   $this->db->query("UPDATE product SET view_count = view_count + 1 WHERE id = ".$this->db->escape($product_id));
 
+  // If this listing belongs to a product family, fetch the family's name
+  // and its other active listings (excluding this one), so the detail
+  // page can show "Part of [Family Name]" with links to the rest.
+  $data['product_family'] = null;
+  $data['family_products'] = array();
+  if(!empty($data['product_detail']['family_id'])){
+      $data['product_family'] = $this->common_model->GetSingleData('product_family', array('id' => $data['product_detail']['family_id']));
+      if(!empty($data['product_family'])){
+          $data['family_products'] = $this->db->query(
+              "SELECT id, device_model, device_brand FROM product WHERE family_id = ".$this->db->escape($data['product_detail']['family_id'])." AND status = 1 AND id != ".$this->db->escape($product_id)
+          )->result_array();
+      }
+  }
+
   $data['inputOutput'] = $this->common_model->GetAllData('input_output',array('product_id'=>$product_id));
   $data['reviews'] = $this->common_model->GetAllData('review',array('device_id'=>$product_id,'status'=>1));
      	$this->load->view('site/details',$data);
@@ -260,12 +274,33 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
       $device_manual_brochure = $filename;
 
 }
+       // Product family - create a new family row if the vendor chose to
+       // start one, or just use the id of an existing one they selected.
+       // Left NULL entirely if they said No, or left the dropdown blank.
+       $family_id = null;
+       if(isset($_REQUEST['has_family']) && $_REQUEST['has_family'] == '1'){
+           $selected_family = isset($_REQUEST['product_family_id']) ? $_REQUEST['product_family_id'] : '';
+           if($selected_family === 'new'){
+               $new_family_name = isset($_REQUEST['new_family_name']) ? trim($_REQUEST['new_family_name']) : '';
+               if(!empty($new_family_name)){
+                   $family_insert = array(
+                       'vendor_id' => $session_id,
+                       'family_name' => $new_family_name,
+                   );
+                   $this->common_model->InsertData('product_family', $family_insert);
+                   $family_id = $this->db->insert_id();
+               }
+           } elseif(!empty($selected_family)){
+               $family_id = (int)$selected_family;
+           }
+       }
+
        // SECURITY FIX: every value now passed through $this->db->escape()
        // instead of raw string concatenation. rack_unit and
        // paymentIntent_id previously had ZERO escaping at all.
        // Release Date / Release Notes fields removed (Stage A cleanup).
        // order_code / dealer_web_cont merged into dealer_contact (Stage cleanup).
-       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`power_consumption`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
+       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`power_consumption`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`,`family_id`)
       VALUES(
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($session_id) .",
@@ -283,7 +318,8 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($dealer_contact) .",
         " .$this->db->escape($paymentIntent_id) .",
-        " .$this->db->escape($product_type) ."
+        " .$this->db->escape($product_type) .",
+        " .$this->db->escape($family_id) ."
       )";
   
     $run = $this->db->query($sql);
@@ -1977,6 +2013,8 @@ public function processsuggestion()
         'type' => 'text',
         'text' => 'IMPORTANT FIRST CHECK: does the content above describe ONE specific product in detail, or does it list/mention MULTIPLE different products (a catalog page, category listing, "shop all" page, or search results)? If it lists multiple distinct products rather than describing one in depth, respond with EXACTLY this and nothing else: {"error": "multiple_products"}
 
+SECOND CHECK: does the content above describe an actual, purchasable product (something with a model/version, specifications, and a defined feature set) - or does it describe a managed/professional SERVICE performed by human staff (consulting, managed operations, "our team of experts", remote-operated services, staffing, support contracts)? A managed service is NOT a product, even if it runs "in the cloud" or has a product-sounding name. If it describes a staffed service rather than a purchasable product, respond with EXACTLY this and nothing else: {"error": "managed_service"}
+
 Otherwise, extract broadcast/media industry product information from the above. This may be physical hardware, software, a cloud/SaaS service, or a hybrid product - it does NOT need to be physical equipment. Return ONLY a valid JSON object (no markdown fencing, no explanation) with exactly these keys - use an empty string "" for anything not found:
 {
   "product_type": "",
@@ -2109,6 +2147,11 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 
     if(isset($extracted['error']) && $extracted['error'] === 'multiple_products'){
         echo json_encode(array('status' => 0, 'message' => 'This page lists multiple different products (a catalog or category page), not one specific product. Please find and paste the link for the individual product page instead.'));
+        return;
+    }
+
+    if(isset($extracted['error']) && $extracted['error'] === 'managed_service'){
+        echo json_encode(array('status' => 0, 'message' => 'This page describes a managed/professional service performed by staff, not a purchasable product. Please fill the form manually, or find a product-specific page instead.'));
         return;
     }
 

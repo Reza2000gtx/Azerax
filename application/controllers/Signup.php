@@ -348,6 +348,12 @@ public function signup_success(){
 	   } 
 	   else
 	   {
+	    // Loaded once here, unconditionally - both uploads below use
+	    // initialize() rather than loading the library again, since
+	    // either field alone (just the photo, just the logo, or neither)
+	    // must still work correctly.
+	    $this->load->library("upload");
+
 	    if($_FILES['profile']['name'])
 	    {
            $query_get_image=   $this->common_model->GetSingleData('users',array('user_id'=>$user));
@@ -361,7 +367,7 @@ public function signup_success(){
   		$config['upload_path']="assets/profile";
 		$config['allowed_types'] = '*';
 		$config['encrypt_name']=true;
-		$this->load->library("upload",$config);
+		$this->upload->initialize($config);
 				
 		if ($this->upload->do_upload('profile'))
 		{
@@ -373,6 +379,30 @@ public function signup_success(){
   	   else
   	   {
             $update['profile']= $this->input->post('oldprofile');
+        }
+
+	    if($_FILES['company_logo']['name'])
+	    {
+           $query_get_logo = $this->common_model->GetSingleData('users',array('user_id'=>$user));
+            $logo_path="./assets/profile/" ;
+            $old_logo_filename = $logo_path . $query_get_logo['company_logo'];
+            if (file_exists($old_logo_filename)) unlink($old_logo_filename);
+
+		$logo_config['upload_path']="assets/profile";
+		$logo_config['allowed_types'] = '*';
+		$logo_config['encrypt_name']=true;
+		$this->upload->initialize($logo_config);
+
+		if ($this->upload->do_upload('company_logo'))
+		{
+		$u_logo=$this->upload->data("file_name");
+		$update['company_logo'] = $u_logo;
+
+		}
+  	   }
+  	   else
+  	   {
+            $update['company_logo']= $this->input->post('oldcompanylogo');
         }
   	   
 			$update['fname'] = $this->input->post('username');

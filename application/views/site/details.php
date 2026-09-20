@@ -360,6 +360,19 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                     <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?> <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
                     <?php } ?>
 
+                    <?php if(!empty($product_family) && !empty($family_products)){ ?>
+                    <div style="margin-top:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;">
+                        Part of <strong style="color:#14213D;"><?php echo html_escape($product_family['family_name']); ?></strong>:
+                        <?php
+                        $family_links = array();
+                        foreach($family_products as $fp){
+                            $family_links[] = '<a href="'.base_url().'details/'.$fp['id'].'" style="color:#FCA311;text-decoration:none;">'.html_escape($fp['device_model']).'</a>';
+                        }
+                        echo implode(', ', $family_links);
+                        ?>
+                    </div>
+                    <?php } ?>
+
                     <?php if ($product_detail['status'] != 2 && $product_detail['dealer_notes']) { ?>
                     <div class="az-detail-notes">
                         <div class="az-detail-label" style="margin-bottom:8px;">Description</div>
