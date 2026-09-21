@@ -529,18 +529,6 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-// $config['stripe_key'] = 'pk_test_W56h3t3zAkLzNOCv4jsmzA2X00dDbXObQJ';
-// $config['stripe_secret'] = 'sk_test_r7F0kBSgRpW6TsuqiObiDW5800tb7nYrYm';
-
-//$config['stripe_key'] ='pk_test_51J96DzCOEqWrTNIP157Sr2aEPECz4BQnNvBZ9EJapJKDJi1x2QidhRJfEN4jXppcIUCk8mW9i5L9BGTJqKicAxLw00wmnkqneg' ;
-//$config['stripe_secret'] = 'sk_test_51J96DzCOEqWrTNIPHoTSUPrizobQsNo1UNTEBWAY4AIrTjQ7p6LXe8LuM03wtN0wa5GVrA98SHkEDMjzDzOckaFt00YRK3caZS';
-//lived
-// $config['stripe_key'] ='pk_live_51F3KfEL2d8exbArB4lXgeSdevjGjSDDTzFQ0HptyyowJklz6RYnws4E3J5Q6rmkIMhvyjYlfdm4Swm9VlZyLZZk200I2Ck9wbF' ;
-// $config['stripe_secret'] = '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';
-
-
-$config['stripe_key'] ='pk_test_51F3KfEL2d8exbArBVLVRWcj5fSJZwin145kpxUgAcojGOJafN5O6JiodpiA4lrzdmJBKrJGoVwJyvJHNnAhVJgS500OBJl0cDE' ;
-$config['stripe_secret'] = 'sk_test_51F3KfEL2d8exbArBGxKZ7ntvgwajz1Tgn4ha2tNM7BpFNGPJHM2H0ws3inEh3o9qyj51Xgt7BPTsT5dQN45clfEF00lAzuoWiL';
 
 if(file_exists(APPPATH.'config/secrets.php')){
     include(APPPATH.'config/secrets.php');

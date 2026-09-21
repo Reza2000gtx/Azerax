@@ -3563,9 +3563,9 @@ button.addEventListener('click', (ev) =>
 <?php
 
 //for sandbox
-    $paypal_status=0;
+    //$paypal_status=0;
    // for live
-    //$paypal_status=1;
+    $paypal_status=1;
     
     if($paypal_status==0){
     
