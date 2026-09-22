@@ -15,6 +15,73 @@ if(!empty($product_detail['order_code'])){
     $vendor_contact_parts[] = $product_detail['order_code'];
 }
 $vendor_contact_combined = implode("\n", $vendor_contact_parts);
+
+// Features grouping/expand support.
+// Splits on commas EXCEPT inside parentheses - the raw features string can
+// itself contain a comma-separated list inside a single feature's own
+// parentheses (e.g. a long list of supported languages), and a naive
+// explode(",", ...) would wrongly break that into many fake, separate
+// features. This keeps any such group intact as one item.
+function az_split_features_respecting_parens($str){
+    $parts = array();
+    $depth = 0;
+    $current = '';
+    $len = strlen($str);
+    for($i = 0; $i < $len; $i++){
+        $char = $str[$i];
+        if($char === '(') $depth++;
+        if($char === ')') $depth--;
+        if($char === ',' && $depth <= 0){
+            $parts[] = trim($current);
+            $current = '';
+        } else {
+            $current .= $char;
+        }
+    }
+    if(trim($current) !== '') $parts[] = trim($current);
+    return array_filter($parts, function($p){ return $p !== ''; });
+}
+
+// Parses the raw features text into groups (from the AI's "Group Name:
+// feature text" prefix) and detects a long parenthetical sub-list on each
+// feature, marking it for expand-on-click rather than showing everything
+// inline. Ungrouped features (no prefix) land together under a blank
+// group name, rendered with no heading.
+function az_parse_grouped_features($raw){
+    $items = az_split_features_respecting_parens($raw);
+    $groups = array();
+    $group_order = array();
+    foreach($items as $item){
+        $group_name = '';
+        $feature_text = $item;
+        $colon_pos = strpos($item, ':');
+        $paren_pos = strpos($item, '(');
+        if($colon_pos !== false && ($paren_pos === false || $colon_pos < $paren_pos)){
+            $group_name = trim(substr($item, 0, $colon_pos));
+            $feature_text = trim(substr($item, $colon_pos + 1));
+        }
+        $summary = $feature_text;
+        $detail = null;
+        if(preg_match('/^(.*?)\(([^)]+)\)\s*$/', $feature_text, $m)){
+            $inside = $m[2];
+            $inside_parts = array_filter(array_map('trim', explode(',', $inside)));
+            if(count($inside_parts) >= 5){
+                $summary = trim($m[1]);
+                $detail = $inside;
+            }
+        }
+        if(!isset($groups[$group_name])){
+            $groups[$group_name] = array();
+            $group_order[] = $group_name;
+        }
+        $groups[$group_name][] = array('summary' => $summary, 'detail' => $detail);
+    }
+    $result = array();
+    foreach($group_order as $name){
+        $result[] = array('name' => $name, 'items' => $groups[$name]);
+    }
+    return $result;
+}
 ?>
 <?php if($this->session->userdata('user_id')){ ?>
 <div style="background:#F5F5F5;padding:10px 40px;border-bottom:1px solid #EBEBEB;">
@@ -175,7 +242,7 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
 }
 .tab-content table h5 {
     font-family: 'Inter', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     color: #14213D;
     margin: 0;
 }
@@ -299,14 +366,6 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                         <div class="az-detail-value"><?php echo $product_detail['latest_firmware_version']; ?></div>
                     </div>
                     <?php } ?>
-                    <div class="az-detail-row">
-                        <div class="az-detail-label">Manual / Brochure</div>
-                        <div class="az-detail-value">
-                            <?php if ($product_detail['device_manual_brochure']) { ?>
-                            <a href="<?php echo base_url(); ?>assets/pdf/<?php echo $product_detail['device_manual_brochure']; ?>" download style="color:#FCA311;font-weight:500;">Download</a>
-                            <?php } else { echo '<span style="color:#999;">Not available</span>'; } ?>
-                        </div>
-                    </div>
                     <?php if ($vendor_contact_combined) { ?>
                     <div class="az-detail-row">
                         <div class="az-detail-label">Vendor Contact &amp; Ordering Info</div>
@@ -358,19 +417,6 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
                         <?php } ?>
                     </h2>
                     <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?> <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
-                    <?php } ?>
-
-                    <?php if(!empty($product_family) && !empty($family_products)){ ?>
-                    <div style="margin-top:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;">
-                        Part of <strong style="color:#14213D;"><?php echo html_escape($product_family['family_name']); ?></strong>:
-                        <?php
-                        $family_links = array();
-                        foreach($family_products as $fp){
-                            $family_links[] = '<a href="'.base_url().'details/'.$fp['id'].'" style="color:#FCA311;text-decoration:none;">'.html_escape($fp['device_model']).'</a>';
-                        }
-                        echo implode(', ', $family_links);
-                        ?>
-                    </div>
                     <?php } ?>
 
                     <?php if ($product_detail['status'] != 2 && $product_detail['dealer_notes']) { ?>
@@ -441,6 +487,9 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
     <?php if($product_detail['latest_firmware_version']){ ?>
     <tr><td>Latest Firmware</td><td><h5><?php echo $product_detail['latest_firmware_version']; ?></h5></td></tr>
     <?php } ?>
+    <?php if($product_detail['device_manual_brochure']){ ?>
+    <tr><td>Manual / Brochure</td><td><h5><a href="<?php echo base_url(); ?>assets/pdf/<?php echo $product_detail['device_manual_brochure']; ?>" download style="color:#FCA311;font-weight:500;">Download</a></h5></td></tr>
+    <?php } ?>
     <?php if($product_detail['mechanical_demension_mounting']){ ?>
     <tr><td>Dimensions</td><td><h5><?php echo $product_detail['mechanical_demension_mounting']; ?></h5></td></tr>
     <?php } ?>
@@ -503,9 +552,27 @@ $vendor_contact_combined = implode("\n", $vendor_contact_parts);
     <tr><td>Process</td><td><h5><?php foreach($process as $p){ echo $p."<br>"; } ?></h5></td></tr>
     <?php } ?>
     <?php
-    $features_list = array_filter(array_map('trim', explode(",", implode(",", array_column($inputOutput, 'features')))));
-    if(!empty($features_list)){ ?>
-    <tr><td style="border-top:2px solid #EBEBEB;">Features</td><td style="border-top:2px solid #EBEBEB;"><h5><?php foreach($features_list as $v){ echo $v."<br>"; } ?></h5></td></tr>
+    $features_raw = implode(",", array_column($inputOutput, 'features'));
+    $feature_groups = az_parse_grouped_features($features_raw);
+    if(!empty($feature_groups)){ ?>
+    <tr><td colspan="2" style="background:#FAFAFA;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:0.5px;padding:6px 16px;border-top:2px solid #EBEBEB;">Features</td></tr>
+    <tr><td colspan="2" style="padding:16px;">
+        <?php foreach($feature_groups as $group){ ?>
+            <?php if($group['name'] !== ''){ ?>
+            <div style="font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#14213D;margin:14px 0 6px;"><?php echo html_escape($group['name']); ?></div>
+            <?php } ?>
+            <?php foreach($group['items'] as $item){ ?>
+                <?php if($item['detail'] !== null){ ?>
+                <div class="az-feature-expandable" style="margin-bottom:8px;">
+                    <span class="az-feature-toggle" style="cursor:pointer;color:#14213D;font-family:'Inter',sans-serif;font-size:14px;display:inline-flex;align-items:center;gap:6px;" onclick="var d=this.nextElementSibling; d.style.display = d.style.display==='block' ? 'none' : 'block'; this.querySelector('.az-feature-arrow').textContent = d.style.display==='block' ? '\u25be' : '\u25b8';"><span class="az-feature-arrow" style="color:#FCA311;font-size:18px;line-height:1;">&#9656;</span><?php echo html_escape($item['summary']); ?></span>
+                    <div style="display:none;margin:6px 0 0 24px;font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;color:#666;"><?php echo html_escape($item['detail']); ?></div>
+                </div>
+                <?php } else { ?>
+                <div style="margin-bottom:8px;font-family:'Inter',sans-serif;font-size:14px;color:#333;"><?php echo html_escape($item['summary']); ?></div>
+                <?php } ?>
+            <?php } ?>
+        <?php } ?>
+    </td></tr>
     <?php } ?>
                         </tbody>
                     </table>

@@ -56,20 +56,6 @@ class Product extends CI_Controller
   // see how much interest their listing is getting.
   $this->db->query("UPDATE product SET view_count = view_count + 1 WHERE id = ".$this->db->escape($product_id));
 
-  // If this listing belongs to a product family, fetch the family's name
-  // and its other active listings (excluding this one), so the detail
-  // page can show "Part of [Family Name]" with links to the rest.
-  $data['product_family'] = null;
-  $data['family_products'] = array();
-  if(!empty($data['product_detail']['family_id'])){
-      $data['product_family'] = $this->common_model->GetSingleData('product_family', array('id' => $data['product_detail']['family_id']));
-      if(!empty($data['product_family'])){
-          $data['family_products'] = $this->db->query(
-              "SELECT id, device_model, device_brand FROM product WHERE family_id = ".$this->db->escape($data['product_detail']['family_id'])." AND status = 1 AND id != ".$this->db->escape($product_id)
-          )->result_array();
-      }
-  }
-
   $data['inputOutput'] = $this->common_model->GetAllData('input_output',array('product_id'=>$product_id));
   $data['reviews'] = $this->common_model->GetAllData('review',array('device_id'=>$product_id,'status'=>1));
      	$this->load->view('site/details',$data);
@@ -274,33 +260,12 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
       $device_manual_brochure = $filename;
 
 }
-       // Product family - create a new family row if the vendor chose to
-       // start one, or just use the id of an existing one they selected.
-       // Left NULL entirely if they said No, or left the dropdown blank.
-       $family_id = null;
-       if(isset($_REQUEST['has_family']) && $_REQUEST['has_family'] == '1'){
-           $selected_family = isset($_REQUEST['product_family_id']) ? $_REQUEST['product_family_id'] : '';
-           if($selected_family === 'new'){
-               $new_family_name = isset($_REQUEST['new_family_name']) ? trim($_REQUEST['new_family_name']) : '';
-               if(!empty($new_family_name)){
-                   $family_insert = array(
-                       'vendor_id' => $session_id,
-                       'family_name' => $new_family_name,
-                   );
-                   $this->common_model->InsertData('product_family', $family_insert);
-                   $family_id = $this->db->insert_id();
-               }
-           } elseif(!empty($selected_family)){
-               $family_id = (int)$selected_family;
-           }
-       }
-
        // SECURITY FIX: every value now passed through $this->db->escape()
        // instead of raw string concatenation. rack_unit and
        // paymentIntent_id previously had ZERO escaping at all.
        // Release Date / Release Notes fields removed (Stage A cleanup).
        // order_code / dealer_web_cont merged into dealer_contact (Stage cleanup).
-       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`power_consumption`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`,`family_id`)
+       $sql = "INSERT INTO `product`(`approve_date`,`user_id`, `device_model`,`device_brand`,`description`,`latest_firmware_version`,`device_manual_brochure`,`mechanical_demension_mounting`,`rack_unit`,`power_consumption`,`dealer_notes`,`warranty_detail`,`support_detail`,`created_at`,`dealer_contact`,`paymentIntent_id`,`product_type`)
       VALUES(
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($session_id) .",
@@ -318,8 +283,7 @@ if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addNew'){
         " .$this->db->escape($cdate) .",
         " .$this->db->escape($dealer_contact) .",
         " .$this->db->escape($paymentIntent_id) .",
-        " .$this->db->escape($product_type) .",
-        " .$this->db->escape($family_id) ."
+        " .$this->db->escape($product_type) ."
       )";
   
     $run = $this->db->query($sql);
@@ -453,6 +417,8 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 			);
 			 
 
+			$this->session->set_flashdata('msg','<p class="alert alert-success">Your Product amount will be paid successfully. And your product will be add successfully.</p>');
+			
     }
     elseif($paymenttype=='Paypal')
     {
@@ -480,6 +446,8 @@ $sqlInsert1="insert into input_output set product_id = ".$this->db->escape($prod
 			);
 			 
 
+			$this->session->set_flashdata('msg','<p class="alert alert-success">Your Product amount will be paid successfully. And your product will be add successfully.</p>');
+			
     }
     
     else {
@@ -2013,8 +1981,6 @@ public function processsuggestion()
         'type' => 'text',
         'text' => 'IMPORTANT FIRST CHECK: does the content above describe ONE specific product in detail, or does it list/mention MULTIPLE different products (a catalog page, category listing, "shop all" page, or search results)? If it lists multiple distinct products rather than describing one in depth, respond with EXACTLY this and nothing else: {"error": "multiple_products"}
 
-SECOND CHECK: does the content above describe an actual, purchasable product (something with a model/version, specifications, and a defined feature set) - or does it describe a managed/professional SERVICE performed by human staff (consulting, managed operations, "our team of experts", remote-operated services, staffing, support contracts)? A managed service is NOT a product, even if it runs "in the cloud" or has a product-sounding name. If it describes a staffed service rather than a purchasable product, respond with EXACTLY this and nothing else: {"error": "managed_service"}
-
 Otherwise, extract broadcast/media industry product information from the above. This may be physical hardware, software, a cloud/SaaS service, or a hybrid product - it does NOT need to be physical equipment. Return ONLY a valid JSON object (no markdown fencing, no explanation) with exactly these keys - use an empty string "" for anything not found:
 {
   "product_type": "",
@@ -2060,7 +2026,8 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 - input_connection_type / output_connection_type: ONLY the physical connector itself (hardware only) - e.g. BNC, RJ45, XLR. Leave empty for software/cloud products, since there is no physical connector.
 - process_type: the function or action being performed - what the product actually DOES with the signal or data as it passes through. Examples: Switching, Encoding, Mixing, Multiplexing, Graphics insertion, Playback control. This is open-ended (not restricted to a short fixed list like the input/output types above), since what a product does varies widely by category.
 - process_standard: the specific named technology, codec, or protocol that enables that function. Examples: for Encoding - H.264, HEVC, AV1. For an integration or control-type process - REST API, gRPC, ONVIF. Use the same test as input/output standard: does this reference one specific, official named technology, rather than a generic description of the action itself.
-- features: high-level capabilities/benefits that are NOT about signal flow at all - this is a separate concept from input/output/process. Examples: "High availability", "Auto-scaling", "REST API integration", "Multi-tenant support", "Automatic failover", "Remote monitoring". The test: if a term describes how signal enters or leaves the device, it is input/output. If it describes what the device does to that signal, it is process. If it is a broader capability that exists independent of any specific signal, it is a feature. This applies to ANY product type, including hardware, whenever the source genuinely lists capability-style features distinct from its technical specifications (e.g. a hardware product with an explicit "Features" or "Benefits" section on its page). Also use this field for genuinely useful marketing-listed specs that do not cleanly fit input/output/process at all - e.g. form factor/size options ("Compact 1RU, 2RU, and 3RU designs"), a power output capacity range ("Output power up to 400W"), redundancy configuration options ("1+1 and N+1 redundancy"), or hot-swappable components. Do not leave a genuinely useful, explicitly-listed capability out entirely just because it does not fit input/output/process - put it here instead. Leave empty only if the source has nothing capability-level to extract at all.'
+- features: high-level capabilities/benefits that are NOT about signal flow at all - this is a separate concept from input/output/process. Examples: "High availability", "Auto-scaling", "REST API integration", "Multi-tenant support", "Automatic failover", "Remote monitoring". The test: if a term describes how signal enters or leaves the device, it is input/output. If it describes what the device does to that signal, it is process. If it is a broader capability that exists independent of any specific signal, it is a feature. This applies to ANY product type, including hardware, whenever the source genuinely lists capability-style features distinct from its technical specifications (e.g. a hardware product with an explicit "Features" or "Benefits" section on its page). Also use this field for genuinely useful marketing-listed specs that do not cleanly fit input/output/process at all - e.g. form factor/size options ("Compact 1RU, 2RU, and 3RU designs"), a power output capacity range ("Output power up to 400W"), redundancy configuration options ("1+1 and N+1 redundancy"), or hot-swappable components. Do not leave a genuinely useful, explicitly-listed capability out entirely just because it does not fit input/output/process - put it here instead. Leave empty only if the source has nothing capability-level to extract at all.
+  Group each feature under a short, natural category name that makes sense for THIS specific product - do not use a fixed, universal list of categories, since every product is different. Decide the groups fresh, based only on what the actual features of this specific product are. Prefix each feature with its group name and a colon, e.g. "Language & Transcription: Multi-lingual language detection (20+ languages including English, Arabic, French, German, Hindi, Japanese, Mandarin, Spanish, ...)", "Editing Tools: Undo/redo functionality", "Licensing & Compatibility: Compatible with Media Composer 2023.12 and later". A product with only a handful of unrelated features can use one group for all of them, or even skip grouping (no prefix) if grouping would be artificial - only group when it genuinely helps organize a longer list. When a feature has many specific sub-items (like a long list of supported languages, formats, or standards), keep the group-prefixed summary concise and put the full, detailed list in parentheses right after it, exactly as in the language example above - this lets the detail page show a short summary that expands to the full list on click, rather than dumping dozens of items flat into the list.'
     );
 
     $api_key = $this->config->item('anthropic_api_key');
@@ -2147,11 +2114,6 @@ Field meanings (apply to ANY product type - hardware, software, or cloud service
 
     if(isset($extracted['error']) && $extracted['error'] === 'multiple_products'){
         echo json_encode(array('status' => 0, 'message' => 'This page lists multiple different products (a catalog or category page), not one specific product. Please find and paste the link for the individual product page instead.'));
-        return;
-    }
-
-    if(isset($extracted['error']) && $extracted['error'] === 'managed_service'){
-        echo json_encode(array('status' => 0, 'message' => 'This page describes a managed/professional service performed by staff, not a purchasable product. Please fill the form manually, or find a product-specific page instead.'));
         return;
     }
 
