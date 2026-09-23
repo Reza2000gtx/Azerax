@@ -316,7 +316,7 @@ function az_parse_grouped_features($raw){
 }
 </style>
 
-<div style="background:#fff;padding:40px 0;">
+<div id="az-product-content" style="background:#fff;padding:40px 0;">
     <div class="container-fluid" style="padding:0 40px;max-width:1400px;margin:0 auto;">
         <div class="row">
 
@@ -417,6 +417,19 @@ function az_parse_grouped_features($raw){
                         <?php } ?>
                     </h2>
                     <div class="az-detail-brand"><?php echo $product_detail['device_brand']; ?> <span style="color:#BCC0C4;font-size:11px;font-weight:500;letter-spacing:0.5px;margin-left:8px;">ID: <?php echo $product_detail['id']; ?></span></div>
+                    <?php } ?>
+
+                    <?php if(!empty($product_family) && !empty($family_products)){ ?>
+                    <div style="margin-top:10px;font-family:'Inter',sans-serif;font-size:13px;color:#666;">
+                        Part of <strong style="color:#14213D;"><?php echo html_escape($product_family['family_name']); ?></strong>:
+                        <?php
+                        $family_links = array();
+                        foreach($family_products as $fp){
+                            $family_links[] = '<a href="'.base_url().'details/'.$fp['id'].'" style="color:#FCA311;text-decoration:none;">'.html_escape($fp['device_model']).'</a>';
+                        }
+                        echo implode(', ', $family_links);
+                        ?>
+                    </div>
                     <?php } ?>
 
                     <?php if ($product_detail['status'] != 2 && $product_detail['dealer_notes']) { ?>
@@ -735,6 +748,44 @@ document.addEventListener('DOMContentLoaded', function(){
         var isHidden = reviewsList.style.display === 'none';
         reviewsList.style.display = isHidden ? 'block' : 'none';
         toggleBtn.textContent = isHidden ? 'Hide reviews' : 'Show all reviews';
+    });
+})();
+</script>
+
+<script>
+// Highlights the search term (?q=...) carried over from the search
+// results page, wherever it appears in the product content - so someone
+// arriving from a search can immediately see why this result matched.
+// Scoped to #az-product-content specifically, so it never touches the
+// header, nav, or footer even if the term happens to match something there.
+(function(){
+    var params = new URLSearchParams(window.location.search);
+    var term = params.get('q');
+    if(!term || term.trim() === '') return;
+
+    var container = document.getElementById('az-product-content');
+    if(!container) return;
+
+    var escaped = term.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var testRegex = new RegExp(escaped, 'i');
+    var replaceRegex = new RegExp('(' + escaped + ')', 'gi');
+
+    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+        acceptNode: function(node){
+            var parentTag = node.parentNode.tagName;
+            if(parentTag === 'SCRIPT' || parentTag === 'STYLE' || parentTag === 'MARK') return NodeFilter.FILTER_REJECT;
+            return testRegex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+    });
+
+    var matches = [];
+    var node;
+    while(node = walker.nextNode()){ matches.push(node); }
+
+    matches.forEach(function(textNode){
+        var span = document.createElement('span');
+        span.innerHTML = textNode.nodeValue.replace(replaceRegex, '<mark style="background:#FFF3D6;color:#14213D;padding:0 2px;border-radius:2px;">$1</mark>');
+        textNode.parentNode.replaceChild(span, textNode);
     });
 })();
 </script>
