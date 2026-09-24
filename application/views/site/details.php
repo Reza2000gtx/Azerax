@@ -83,7 +83,10 @@ function az_parse_grouped_features($raw){
     return $result;
 }
 ?>
-<?php if($this->session->userdata('user_id')){ ?>
+<?php
+$came_from_my_products = isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'my-product-listing') !== false;
+if($came_from_my_products){
+?>
 <div style="background:#F5F5F5;padding:10px 40px;border-bottom:1px solid #EBEBEB;">
     <a href="<?php echo base_url(); ?>my-product-listing" style="font-family:'Inter',sans-serif;font-size:13px;color:#14213D;text-decoration:none;">← Back to My Products</a>
 </div>
@@ -471,7 +474,7 @@ function az_parse_grouped_features($raw){
 </div>
 
 <!-- TABS SECTION -->
-<div class="az-tabs-section">
+<div class="az-tabs-section" id="az-tabs-content">
     <div class="container-fluid" style="padding:0 40px;max-width:1400px;margin:0 auto;">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
@@ -763,29 +766,34 @@ document.addEventListener('DOMContentLoaded', function(){
     var term = params.get('q');
     if(!term || term.trim() === '') return;
 
-    var container = document.getElementById('az-product-content');
-    if(!container) return;
+    var containers = [
+        document.getElementById('az-product-content'),
+        document.getElementById('az-tabs-content')
+    ].filter(function(c){ return !!c; });
+    if(containers.length === 0) return;
 
     var escaped = term.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     var testRegex = new RegExp(escaped, 'i');
     var replaceRegex = new RegExp('(' + escaped + ')', 'gi');
 
-    var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
-        acceptNode: function(node){
-            var parentTag = node.parentNode.tagName;
-            if(parentTag === 'SCRIPT' || parentTag === 'STYLE' || parentTag === 'MARK') return NodeFilter.FILTER_REJECT;
-            return testRegex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-        }
-    });
+    containers.forEach(function(container){
+        var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+            acceptNode: function(node){
+                var parentTag = node.parentNode.tagName;
+                if(parentTag === 'SCRIPT' || parentTag === 'STYLE' || parentTag === 'MARK') return NodeFilter.FILTER_REJECT;
+                return testRegex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+            }
+        });
 
-    var matches = [];
-    var node;
-    while(node = walker.nextNode()){ matches.push(node); }
+        var matches = [];
+        var node;
+        while(node = walker.nextNode()){ matches.push(node); }
 
-    matches.forEach(function(textNode){
-        var span = document.createElement('span');
-        span.innerHTML = textNode.nodeValue.replace(replaceRegex, '<mark style="background:#FFF3D6;color:#14213D;padding:0 2px;border-radius:2px;">$1</mark>');
-        textNode.parentNode.replaceChild(span, textNode);
+        matches.forEach(function(textNode){
+            var span = document.createElement('span');
+            span.innerHTML = textNode.nodeValue.replace(replaceRegex, '<mark style="background:#FFF3D6;color:#14213D;padding:0 2px;border-radius:2px;">$1</mark>');
+            textNode.parentNode.replaceChild(span, textNode);
+        });
     });
 })();
 </script>

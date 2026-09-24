@@ -1699,6 +1699,46 @@ $process_2 = $this->db->query('SELECT device_brand FROM `product` GROUP BY devic
 $array[]=$brand_sugg['device_brand'];
     }
 
+// Also suggest individual features, so the dropdown doesn't go empty
+// partway through typing a real feature term (like "transcript") just
+// because it isn't a device name or brand - the normal search already
+// checks Features, this just keeps suggestions available while typing.
+function az_split_features_for_suggestions($str){
+    $parts = array();
+    $depth = 0;
+    $current = '';
+    $len = strlen($str);
+    for($i = 0; $i < $len; $i++){
+        $char = $str[$i];
+        if($char === '(') $depth++;
+        if($char === ')') $depth--;
+        if($char === ',' && $depth <= 0){
+            $parts[] = trim($current);
+            $current = '';
+        } else {
+            $current .= $char;
+        }
+    }
+    if(trim($current) !== '') $parts[] = trim($current);
+    return array_filter($parts, function($p){ return $p !== ''; });
+}
+$process_3 = $this->db->query("SELECT features FROM input_output WHERE features IS NOT NULL AND features != ''")->result_array();
+foreach($process_3 as $feature_row){
+    $feature_items = az_split_features_for_suggestions($feature_row['features']);
+    foreach($feature_items as $feature_item){
+        // Strip a "Group Name: " prefix if present - only the actual
+        // feature text itself is useful as a search suggestion.
+        $colon_pos = strpos($feature_item, ':');
+        $paren_pos = strpos($feature_item, '(');
+        if($colon_pos !== false && ($paren_pos === false || $colon_pos < $paren_pos)){
+            $feature_item = trim(substr($feature_item, $colon_pos + 1));
+        }
+        if($feature_item !== ''){
+            $array[] = $feature_item;
+        }
+    }
+}
+
 $array = array_values(array_unique(array_filter($array)));
 $deviceModelJson=json_encode($array);
 ?>
@@ -1776,13 +1816,18 @@ function autocomplete(inp, arr) {
         /*and and make the current item more visible:*/
         addActive(x);
       } else if (e.keyCode == 13) {
-        /*If the ENTER key is pressed, prevent the form from being submitted */
-        if (currentFocus == -1){
-        e.preventDefault();}
+        /*If the ENTER key is pressed while a suggestion is highlighted
+        (via arrow keys), select that suggestion instead of submitting -
+        the click() below fills the field and triggers its own search.
+        If the field is genuinely empty, block submission (an empty
+        search isn't useful). Otherwise (a real term typed, no
+        suggestion highlighted - the normal case), let the form submit.*/
         if (currentFocus > -1) {
-        /*and simulate a click on the "active" item:*/
+          e.preventDefault();
           if (x) x[currentFocus].click();
-        }  
+        } else if (inp.value.trim() === '') {
+          e.preventDefault();
+        }
       }
   }); 
     

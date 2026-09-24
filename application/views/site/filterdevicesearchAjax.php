@@ -388,7 +388,7 @@ body {
 						<div class="col-sm-12">
 						<div class="boder_image" style="display:flex;flex-direction:row;align-items:center;gap:20px;">
 							<div class="f_p_img" style="flex-shrink:0;">
-								<a href="<?php echo base_url();?>details/<?=$row['id']?>">
+								<a href="<?php echo base_url();?>details/<?=$row['id']?><?php if(!empty($_REQUEST['keyword'])){ echo '?q='.urlencode($_REQUEST['keyword']); } ?>">
 								<?php if($imageFirst['gallery_image']){ ?>
 								<img class="img-fluid" src="<?php echo base_url(); ?>assets/product_image/<?=$imageFirst['gallery_image']?>" alt="">
 								<?php } else { ?>
@@ -403,7 +403,7 @@ body {
 								<?php if($row['status']==2){ ?>
 								<span style="color:#999;">Details hidden - listing expired</span>
 								<?php } else { ?>
-								<a href="<?php echo base_url();?>details/<?=$row['id']?>"><?=$row['device_model']?></a>
+								<a href="<?php echo base_url();?>details/<?=$row['id']?><?php if(!empty($_REQUEST['keyword'])){ echo '?q='.urlencode($_REQUEST['keyword']); } ?>"><?=$row['device_model']?></a>
 								<?php
 								$az_type_icons = array(
 								    'Hardware' => 'ti-cpu',
