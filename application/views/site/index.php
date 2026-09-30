@@ -655,8 +655,189 @@
 
  
 
+      <style>
+/* Hero background - broadcast monitor overlay. Purely decorative: sits behind
+   the hero content (see z-index on the .container below), ignores clicks, and
+   is hidden in pieces on smaller screens so it never crowds the search box. */
+.az-hero-bg{--az-top:max(24px,calc(94px - var(--az-lift,80px)));position:absolute;top:0;right:0;bottom:0;left:0;z-index:0;pointer-events:none;overflow:hidden;-webkit-user-select:none;user-select:none;font-family:'JetBrains Mono','SF Mono',Consolas,Menlo,monospace;font-size:11px;line-height:14px;letter-spacing:1px;background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:40px 40px;}
+.az-br{position:absolute;width:28px;height:28px;border:0 solid rgba(255,255,255,0.3);}
+.az-br-tl{top:var(--az-top);left:24px;border-top-width:1.5px;border-left-width:1.5px;}
+.az-br-tr{top:var(--az-top);right:24px;border-top-width:1.5px;border-right-width:1.5px;}
+.az-br-bl{bottom:calc(24px + var(--az-lift,80px));left:24px;border-bottom-width:1.5px;border-left-width:1.5px;}
+.az-br-br{bottom:calc(24px + var(--az-lift,80px));right:24px;border-bottom-width:1.5px;border-right-width:1.5px;}
+.az-hud{position:absolute;top:var(--az-top);white-space:nowrap;color:rgba(255,255,255,0.35);}
+.az-hud-l{left:64px;}
+.az-hud-r{right:64px;color:rgba(252,163,17,0.7);}
+.az-meters{position:absolute;top:calc(38% - var(--az-lift,80px));display:flex;gap:3px;}
+.az-meters-l{left:40px;}
+.az-meters-r{right:40px;}
+.az-meter{position:relative;display:block;width:5px;height:112px;background:repeating-linear-gradient(to top,rgba(255,255,255,0.07) 0,rgba(255,255,255,0.07) 6px,transparent 6px,transparent 8px);}
+.az-lit{position:absolute;display:block;left:0;bottom:0;width:5px;background:repeating-linear-gradient(to top,rgba(255,255,255,0.3) 0,rgba(255,255,255,0.3) 6px,transparent 6px,transparent 8px);}
+.az-peak{position:absolute;display:block;left:0;width:5px;height:6px;background:#FCA311;opacity:0.75;}
+.az-ruler{position:absolute;left:64px;right:64px;bottom:calc(10px + var(--az-lift,80px));height:44px;overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,#000 48px,#000 calc(100% - 90px),transparent);mask-image:linear-gradient(to right,transparent,#000 48px,#000 calc(100% - 90px),transparent);}
+.az-ruler-ticks{position:absolute;left:0;right:0;top:0;height:21px;box-sizing:border-box;border-bottom:1px solid rgba(255,255,255,0.2);background-image:linear-gradient(to right,rgba(255,255,255,0.3) 1px,transparent 1px),linear-gradient(to right,rgba(255,255,255,0.3) 1px,transparent 1px),linear-gradient(to right,rgba(255,255,255,0.3) 1px,transparent 1px);background-size:8px 4px,40px 7px,80px 11px;background-repeat:repeat-x;background-position:0 100%,0 100%,0 100%;}
+.az-ruler-head{position:absolute;left:320px;top:6px;width:1.5px;height:14px;background:#FCA311;}
+.az-ruler-tri{position:absolute;left:315px;top:0;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #FCA311;}
+.az-tc-track{position:absolute;left:0;top:0;width:0;height:0;will-change:transform;}
+.az-tc{position:absolute;top:27px;white-space:nowrap;color:rgba(255,255,255,0.3);transition:color .25s,opacity .25s;}
+.az-tc-hot{color:#FCA311;opacity:0.85;}
+@media (max-width:999px){.az-meters{display:none;}}
+@media (max-width:767px){.az-hud,.az-br,.az-ruler,.az-meters{display:none;}}
+/* background-attachment:fixed is unreliable on iOS Safari - fall back to a
+   normal scrolling background on small screens rather than risk it breaking. */
+@media (max-width:767px){#what{background-attachment:scroll !important;}}
+</style>
       <section class="home_banner_area" style="background:#14213D;position:relative;min-height:100vh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-				<div class="container" style="text-align:center;margin-top:-240px;">
+				<div class="az-hero-bg" aria-hidden="true">
+					<span class="az-br az-br-tl"></span><span class="az-br az-br-tr"></span><span class="az-br az-br-bl"></span><span class="az-br az-br-br"></span>
+					<span class="az-hud az-hud-l">CAM 01 &middot; 1080p50</span>
+					<span class="az-hud az-hud-r">TC 01:00:21:10</span>
+					<div class="az-meters az-meters-l">
+						<span class="az-meter"><span class="az-lit" style="height:62px;"></span><span class="az-peak" style="bottom:64px;"></span></span>
+						<span class="az-meter"><span class="az-lit" style="height:46px;"></span><span class="az-peak" style="bottom:48px;"></span></span>
+					</div>
+					<div class="az-meters az-meters-r">
+						<span class="az-meter"><span class="az-lit" style="height:70px;"></span><span class="az-peak" style="bottom:72px;"></span></span>
+						<span class="az-meter"><span class="az-lit" style="height:54px;"></span><span class="az-peak" style="bottom:56px;"></span></span>
+					</div>
+					<div class="az-ruler" id="azRuler">
+						<span class="az-ruler-ticks"></span>
+						<span class="az-ruler-head"></span><span class="az-ruler-tri"></span>
+						<div class="az-tc-track">
+						<?php for($az_k = -1; $az_k < 34; $az_k++){ $az_t = max(0, $az_k * 5); ?>
+						<span class="az-tc<?php echo ($az_k == 4) ? ' az-tc-hot' : ''; ?>" style="left:<?php echo ($az_k * 80) + 4; ?>px;">01:<?php echo sprintf('%02d', intdiv($az_t, 60)); ?>:<?php echo sprintf('%02d', $az_t % 60); ?></span>
+						<?php } ?>
+					</div>
+					</div>
+				</div>
+				<script>
+// Keeps the bottom of the viewfinder (corner brackets + timeline ruler) on screen.
+// On some layouts the hero ends below the fold by roughly the header height, so
+// measure how far it overhangs the visible screen and lift the bottom elements
+// by that amount. If this script doesn't run, CSS falls back to an 80px lift.
+(function(){
+    var bg = document.querySelector('.az-hero-bg');
+    if(!bg) return;
+    var section = bg.parentNode;
+    function fit(){
+        var docBottom = section.getBoundingClientRect().bottom + (window.pageYOffset || document.documentElement.scrollTop || 0);
+        var lift = Math.round(docBottom - window.innerHeight);
+        bg.style.setProperty('--az-lift', Math.min(160, Math.max(0, lift)) + 'px');
+    }
+    fit();
+    window.addEventListener('load', fit);
+    window.addEventListener('resize', fit);
+})();
+</script>
+				<script>
+// Brings the viewfinder to life (purely visual): audio meters that bounce like a
+// real signal, a static timeline ruler with an amber playhead sweeping across it,
+// and a running timecode.
+// It pauses when the hero is scrolled off-screen and on small screens, and visitors
+// who have asked their system for reduced motion just get the still version.
+(function(){
+    var bg = document.querySelector('.az-hero-bg');
+    if(!bg) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var section = bg.parentNode;
+    var ticks = bg.querySelector('.az-ruler-ticks');
+    var ruler = bg.querySelector('#azRuler');
+    var track = bg.querySelector('.az-tc-track');
+    var labs = track ? [].slice.call(track.querySelectorAll('.az-tc')) : [];
+    var head = bg.querySelector('.az-ruler-head');
+    var tri = bg.querySelector('.az-ruler-tri');
+    var tcEl = bg.querySelector('.az-hud-r');
+    var meterEls = [].slice.call(bg.querySelectorAll('.az-meter'));
+    if(!ticks || !ruler || !track || !head || !tri || !tcEl || meterEls.length < 4) return;
+
+    var PX_PER_SEC = 60;                                 // how fast the playhead sweeps right
+    var TC_FPS = 25;
+    var TC_START = ((3600 + 21) * TC_FPS) + 10;          // 01:00:21:10
+
+    function pad(n){ return (n < 10 ? '0' : '') + n; }
+    function fmtTC(f){
+        var s = Math.floor(f / TC_FPS);
+        return pad(Math.floor(s / 3600) % 24) + ':' + pad(Math.floor(s / 60) % 60) + ':' + pad(s % 60) + ':' + pad(f % TC_FPS);
+    }
+
+    // Two stereo pairs (left side, right side). Each pair follows a jumpy "programme" level,
+    // and each channel rises fast, falls slowly, and holds a peak marker for a moment.
+    var meters = meterEls.map(function(el){
+        return { lit: el.querySelector('.az-lit'), peak: el.querySelector('.az-peak'), lvl: 6, pk: 6, hold: 0, off: 0, litN: -1, pkN: -1 };
+    });
+    var pairs = [
+        { ch: [meters[0], meters[1]], next: 0, target: 6 },
+        { ch: [meters[2], meters[3]], next: 0, target: 7 }
+    ];
+
+    var raf = 0, last = 0, D = 0, tcMs = 0, lastF = -1, visible = true;
+    var hotIdx = labs.indexOf(track.querySelector('.az-tc-hot'));
+
+    function frame(now){
+        raf = requestAnimationFrame(frame);
+        var dt = last ? Math.min(0.25, (now - last) / 1000) : 0;
+        last = now;
+
+        // playhead sweeps left to right across the static ruler, looping
+        var w = ruler.clientWidth || 800;
+        D += PX_PER_SEC * dt;
+        var pos = D % w;
+        head.style.left = pos.toFixed(2) + 'px';
+        tri.style.left = (pos - 5).toFixed(2) + 'px';
+        var h = Math.round((pos - 4) / 80);      // static label currently nearest the moving playhead
+        if(h !== hotIdx){
+            if(labs[hotIdx]) labs[hotIdx].classList.remove('az-tc-hot');
+            if(labs[h]) labs[h].classList.add('az-tc-hot');
+            hotIdx = h;
+        }
+
+        // running timecode (25 fps)
+        tcMs += dt * 1000;
+        var f = TC_START + Math.floor(tcMs / (1000 / TC_FPS));
+        if(f !== lastF){ lastF = f; tcEl.textContent = 'TC ' + fmtTC(f); }
+
+        // audio meters (14 segments each)
+        for(var p = 0; p < pairs.length; p++){
+            var pr = pairs[p];
+            if(now >= pr.next){
+                pr.next = now + 60 + Math.random() * 170;
+                var r = Math.random();
+                pr.target = r < 0.12 ? 1 + Math.random() * 3 : (r > 0.9 ? 11 + Math.random() * 3 : 4 + Math.random() * 7);
+                for(var q = 0; q < pr.ch.length; q++){ pr.ch[q].off = (Math.random() - 0.5) * 2.5; }
+            }
+            for(var k = 0; k < pr.ch.length; k++){
+                var c = pr.ch[k];
+                var t = Math.max(0, Math.min(14, pr.target + c.off + (Math.random() - 0.5) * 1.2));
+                if(t > c.lvl){ c.lvl += (t - c.lvl) * Math.min(1, dt * 28); }
+                else { c.lvl = Math.max(t, c.lvl - 11 * dt); }
+                if(c.lvl >= c.pk){ c.pk = c.lvl; c.hold = now + 650; }
+                else if(now > c.hold){ c.pk = Math.max(c.lvl, c.pk - 5 * dt); }
+                var n = Math.round(c.lvl), pn = Math.round(c.pk);
+                if(n !== c.litN){ c.litN = n; c.lit.style.height = (n > 0 ? n * 8 - 2 : 0) + 'px'; }
+                if(pn !== c.pkN){
+                    c.pkN = pn;
+                    if(pn > 0){ c.peak.style.display = 'block'; c.peak.style.bottom = ((pn - 1) * 8) + 'px'; }
+                    else { c.peak.style.display = 'none'; }
+                }
+            }
+        }
+    }
+
+    var small = window.matchMedia ? window.matchMedia('(max-width: 767px)') : { matches: false };
+    function canRun(){ return visible && !small.matches; }
+    function start(){ if(!raf && canRun()){ last = 0; raf = requestAnimationFrame(frame); } }
+    function stop(){ if(raf){ cancelAnimationFrame(raf); raf = 0; } }
+    function sync(){ if(canRun()) start(); else stop(); }
+    if(small.addEventListener){ small.addEventListener('change', sync); }
+    else if(small.addListener){ small.addListener(sync); }
+    if('IntersectionObserver' in window){
+        new IntersectionObserver(function(entries){ visible = entries[0].isIntersecting; sync(); }).observe(section);
+    }
+    sync();
+})();
+</script>
+				<div class="container" style="text-align:center;margin-top:-240px;position:relative;z-index:1;">
 			<div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
     <span style="font-family:'Outfit',sans-serif;font-size:62px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1;display:flex;align-items:center;user-select:none;-webkit-user-select:none;-moz-user-select:none;cursor:default;"><span style="color:#FCA311;">a</span>zera<span style="color:#FCA311;">X</span></span>
 </div>
@@ -1235,12 +1416,12 @@ window.addEventListener('load', function(){
      ══════════════════════════════════════════════════════════ -->
 
 <!-- SECTION 2 — WHAT YOU CAN SEARCH -->
-<section style="padding:72px 60px;background:#F5F5F5;" id="what">
+<section style="padding:72px 60px;position:relative;background-image:linear-gradient(rgba(14,26,44,0.82),rgba(14,26,44,0.82)),url('<?php echo base_url();?>assets/site/img/parallax-broadcast-studio.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;" id="what">
   <div style="text-align:center;">
     <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">What you can search</div>
     <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
-    <h2 style="color:#14213D;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Everything broadcast. In one place.</h2>
-    <p style="color:#666;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">Hardware, software, cloud platforms, and AI tools — all searchable by real technical criteria, maintained directly by the vendors themselves.</p>
+    <h2 style="color:#fff;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Everything broadcast. In one place.</h2>
+    <p style="color:rgba(255,255,255,0.75);font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">Hardware, software, cloud platforms, and AI tools — all searchable by real technical criteria, maintained directly by the vendors themselves.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;">
     <div class="az-fcard">
