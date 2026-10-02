@@ -4,7 +4,7 @@
 
 <?php
 // Load fees content from database
-$content = $this->common_model->GetSingleData('ContentManagement', array('id' => 1));
+$content = $this->common_model->GetSingleData('contentmanagement', array('id' => 1));
 
 $vendor_price      = !empty($content['fees_vendor_price'])      ? $content['fees_vendor_price']      : 'TBC';
 $vendor_price_note = !empty($content['fees_vendor_price_note']) ? $content['fees_vendor_price_note'] : '';

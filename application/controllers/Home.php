@@ -80,12 +80,6 @@ public function services(){
 
 		$this->load->view('site/contactus',$data);
 	}
-	public function support(){
-
-		$data['help_support'] = '';
-
-		$this->load->view('site/support',$data);
-	}
 	public function legal(){
 
 		$data['help_support'] = '';

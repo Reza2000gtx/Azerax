@@ -276,7 +276,7 @@
             <div class="az-about-divider"></div>
             <h2>Why <?php echo $azerax_brand; ?>?</h2>
             <?php
-            $resultFooter = $this->common_model->GetAllData('ContentManagement');
+            $resultFooter = $this->common_model->GetAllData('contentmanagement');
             foreach ($resultFooter as $valueFoo) {
                 echo $valueFoo["who_we_are"];
             }
