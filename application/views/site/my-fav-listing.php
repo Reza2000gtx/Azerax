@@ -120,7 +120,7 @@ body {
             $imageFirst = $this->common_model->GetSingleData('product_gallery_image', array('product_id' => $row['device_id']));
         ?>
         <div class="col-sm-12 list_page<?php echo $row['id']; ?>" style="padding:0;">
-            <div class="boder_image">
+            <div class="boder_image az-press">
                 <div class="f_p_img">
                     <a href="<?php echo base_url(); ?>details/<?=$product['id']?>">
                     <?php if($imageFirst['gallery_image']): ?>

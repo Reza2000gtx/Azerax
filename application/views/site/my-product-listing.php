@@ -247,7 +247,7 @@
             elseif($row['status'] == 1) $filter_group = 'active';
         ?>
         <div class="col-sm-12 list_page<?php echo $row['id']; ?>" style="padding:0;" data-az-filter-group="<?php echo $filter_group; ?>">
-            <div class="boder_image">
+            <div class="boder_image az-press">
                 <div class="f_p_img">
                     <?php if($thumbnailImage): ?>
                     <img src="<?php echo base_url(); ?>assets/product_image/<?=$thumbnailImage?>" alt="">

@@ -371,7 +371,6 @@
 }
 .az-fcard:hover {
     border-color: #FCA311;
-    transform: translateY(-2px);
 }
 .az-fcard-icon {
     width: 48px;
@@ -1468,7 +1467,7 @@ window.addEventListener('load', function(){
     <p style="color:rgba(255,255,255,0.75);font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">Hardware, software, cloud platforms, and AI tools — all searchable by real technical criteria, maintained directly by the vendors themselves.</p>
   </div>
   <div class="az-grid-3">
-    <div class="az-fcard">
+    <div class="az-fcard az-press">
       <div class="az-fcard-icon"><i class="ti ti-cpu"></i></div>
       <h3>Hardware devices</h3>
       <p>Routers, encoders, frame synchronisers, multiviewers, audio processors and more — searchable by I/O type, connector, rack units and broadcast standards.</p>
@@ -1479,7 +1478,7 @@ window.addEventListener('load', function(){
         <span class="az-ftag">BNC / SFP</span>
       </div>
     </div>
-    <div class="az-fcard">
+    <div class="az-fcard az-press">
       <div class="az-fcard-icon"><i class="ti ti-cloud"></i></div>
       <h3>Software &amp; cloud platforms</h3>
       <p>SaaS tools, virtualised systems, and cloud-native broadcast platforms — searchable by deployment model, API type, and integration protocols.</p>
@@ -1490,7 +1489,7 @@ window.addEventListener('load', function(){
         <span class="az-ftag">NDI / SRT</span>
       </div>
     </div>
-    <div class="az-fcard">
+    <div class="az-fcard az-press">
       <div class="az-fcard-icon"><i class="ti ti-brain"></i></div>
       <h3>AI tools</h3>
       <p>Captioning, transcription, upscaling, content moderation, automated QC and more — searchable by capability, processing mode and language support.</p>

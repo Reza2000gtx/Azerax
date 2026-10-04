@@ -109,8 +109,8 @@
 	display: block;
 }
 
-.mobile-show {
-    display: none !important;
+@media (min-width: 992px) {
+    .mobile-show { display: none !important; }
 }
 
 body {
@@ -313,6 +313,51 @@ body {
 }
 
 
+/* ── RESPONSIVE: results page ─────────────────────────────────────────────────
+   (Between 992px and 1199px the sort/page bar and the sidebar's 300px-wide filters were also too wide.) */
+@media (max-width: 1199px) {
+    .product_top_bar { flex-wrap: wrap !important; gap: 10px 16px; }
+    .product_top_bar .pagination { flex-wrap: wrap; max-width: 100%; }
+    .left_sidebar_area .select2-container { width: 100% !important; max-width: 100%; }
+}
+
+/* Desktop (992px+) is unchanged. Tablets and phones get a slide-in filter drawer
+   (the sidebar used to sit off-screen with its open button hidden), wrapping
+   pagination, and stacked cards on small phones. */
+@media (max-width: 991px) {
+    .cat_product_area .row.flex-row-reverse.Search_list_page > .col-lg-3 { order: -1 !important; padding-bottom: 0; }
+    .Search_list_page .filter-show { margin: 0 0 16px; text-align: left; font-size: 14px; }
+    .Search_list_page .filter-show .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; }
+    .Search_list_page .left_sidebar_area {
+        position: fixed; top: 0; right: -100%; left: auto; width: 380px; max-width: 100%; height: 100%;
+        margin: 0; padding: 0 16px 24px; background: #fff; z-index: 100000;
+        overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+        transition: right .3s ease, box-shadow .3s ease; box-shadow: none;
+    }
+    .Search_list_page .left_sidebar_area.show-filterdiv { right: 0; box-shadow: -12px 0 32px rgba(0,0,0,0.22); }
+    .Search_list_page .close-filter {
+        display: flex !important; align-items: center; justify-content: space-between;
+        position: sticky; top: 0; z-index: 2; margin: 0 -16px 16px; padding: 14px 16px;
+        background: #14213D; color: #fff; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+    .Search_list_page .close-filter i { font-size: 20px; }
+    .az-drawer-backdrop { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0,0,0,0.45); z-index: 99999; opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease; }
+    .az-drawer-backdrop.show { opacity: 1; visibility: visible; }
+    .left_sidebar_area .select2-container { width: 100% !important; max-width: 100%; }
+    .left_sidebar_area select, .left_sidebar_area input[type=text] { max-width: 100%; }
+    .pagination { flex-wrap: wrap; justify-content: center; max-width: 100%; }
+}
+@media (max-width: 575px) {
+    .product_top_bar .left_dorp, .product_top_bar .left_dorp form { width: 100%; }
+    .product_top_bar .left_dorp form { flex-wrap: wrap; }
+    .product_top_bar .item_drop1, .product_top_bar .item_drop2 { display: flex !important; align-items: center; gap: 10px; flex: 0 0 100%; width: 100%; margin: 0 0 10px !important; }
+    .product_top_bar .item_drop1 label, .product_top_bar .item_drop2 label { margin: 0; flex-shrink: 0; min-width: 104px; }
+    .product_top_bar .left_dorp .sorting { flex: 1; min-width: 0; width: auto !important; margin: 0 !important; }
+    .product_top_bar .pagination { justify-content: center; width: 100%; }
+    .boder_image { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
+    .boder_image .f_p_img { width: 100% !important; height: 180px !important; margin-left: 0 !important; }
+    .boder_image .contt { overflow: visible !important; }
+}
 </style>
 
 <section class="cat_product_area p_120" >
@@ -386,7 +431,7 @@ body {
 					
 					
 						<div class="col-sm-12">
-						<div class="boder_image" style="display:flex;flex-direction:row;align-items:center;gap:20px;">
+						<div class="boder_image az-press" style="display:flex;flex-direction:row;align-items:center;gap:20px;">
 							<div class="f_p_img" style="flex-shrink:0;">
 								<a href="<?php echo base_url();?>details/<?=$row['id']?><?php if(!empty($_REQUEST['keyword'])){ echo '?q='.urlencode($_REQUEST['keyword']); } ?>">
 								<?php if($imageFirst['gallery_image']){ ?>
@@ -1187,4 +1232,41 @@ $(document).ready(function(){
     $(".processsuggestion").select2({placeholder: "Process Type", tags: true, width: '100%'});
     $(".processsuggestionStand").select2({placeholder: "Process Standard", tags: true, width: '100%'});
 });
+</script>
+
+<script>
+// AZ-FILTER-DRAWER: opens and closes the filter sidebar on tablets and phones
+(function(){
+    var area = document.querySelector('.left_sidebar_area');
+    if(!area) return;
+    var backdrop = document.createElement('div');
+    backdrop.className = 'az-drawer-backdrop';
+    document.body.appendChild(backdrop);
+    var locked = false, savedY = 0;
+    function lock(){
+        if(locked) return; locked = true;
+        savedY = window.pageYOffset || 0;
+        var b = document.body;
+        b.style.position = 'fixed'; b.style.top = (-savedY) + 'px'; b.style.left = '0'; b.style.right = '0'; b.style.width = '100%';
+    }
+    function unlock(){
+        if(!locked) return; locked = false;
+        var b = document.body, de = document.documentElement;
+        b.style.position = ''; b.style.top = ''; b.style.left = ''; b.style.right = ''; b.style.width = '';
+        var prev = de.style.scrollBehavior; de.style.scrollBehavior = 'auto';
+        window.scrollTo(0, savedY); de.style.scrollBehavior = prev;
+    }
+    function openDrawer(){ area.classList.add('show-filterdiv'); backdrop.classList.add('show'); lock(); }
+    function closeDrawer(){ area.classList.remove('show-filterdiv'); backdrop.classList.remove('show'); unlock(); }
+    document.addEventListener('click', function(e){
+        if(e.target.closest && e.target.closest('.filter-show .btn')){ e.preventDefault(); openDrawer(); }
+        else if(e.target === backdrop || (e.target.closest && e.target.closest('.close-filter'))){ closeDrawer(); }
+    });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeDrawer(); } });
+    if(window.matchMedia){
+        var mq = window.matchMedia('(min-width: 992px)');
+        var onChange = function(){ if(mq.matches){ closeDrawer(); } };
+        if(mq.addEventListener){ mq.addEventListener('change', onChange); } else if(mq.addListener){ mq.addListener(onChange); }
+    }
+})();
 </script>
