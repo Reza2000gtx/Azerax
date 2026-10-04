@@ -683,11 +683,55 @@
 .az-tc-hot{color:#FCA311;opacity:0.85;}
 @media (max-width:999px){.az-meters{display:none;}}
 @media (max-width:767px){.az-hud,.az-br,.az-ruler,.az-meters{display:none;}}
-/* background-attachment:fixed is unreliable on iOS Safari - fall back to a
-   normal scrolling background on small screens rather than risk it breaking. */
-@media (max-width:767px){#what{background-attachment:scroll !important;}}
+/* background-attachment:fixed is unreliable on iOS Safari/iPad - fall back to a
+   normal scrolling background on phones, tablets and any touch device. */
+@media (max-width:991px), (hover:none){#what{background-attachment:scroll !important;}}
+
+/* ── RESPONSIVE: homepage sections ───────────────────────────────────────────
+   Desktop (992px+) is exactly as before; these only adapt smaller screens. */
+.az-sec{padding:72px 60px;}
+.az-h2{font-size:32px;}
+.az-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;}
+.az-grid-3.az-steps{gap:32px;margin-top:8px;}
+@media (max-width:991px){
+  .az-sec{padding:64px 40px;}
+}
+@media (max-width:767px){
+  .az-sec{padding:48px 20px;}
+  .az-h2{font-size:26px;}
+  .az-grid-3{grid-template-columns:1fr;gap:16px;margin-top:28px;}
+  .az-grid-3.az-steps{gap:0;margin-top:0;}
+}
+
+/* ── RESPONSIVE: Advanced Search panel ───────────────────────────────────────
+   The panel is fixed 400px from the top of the screen. On shorter screens (laptops,
+   once the browser toolbars are subtracted) its bottom - and the Search button - fell
+   off the screen. Sit higher when the screen is short; unchanged whenever it is tall
+   enough (>=~790px of page height). (!important needed: the position is set inline.) */
+#advSearchPanel{top:clamp(72px, calc(100vh - 400px), 400px) !important;}
+
+/* Phones: a full-width sheet that scrolls, with every filter stacked one per line. */
+@media (max-width:767px){
+  #advSearchPanel{
+    top:68px !important; left:8px !important; right:8px !important; transform:none !important;
+    width:auto !important; max-width:none !important; min-height:0 !important;
+    max-height:calc(100vh - 80px) !important; max-height:calc(100dvh - 80px) !important;
+    overflow-y:auto !important; overflow-x:hidden !important; -webkit-overflow-scrolling:touch;
+  }
+  #advSearchPanel > div:first-child{padding:38px 14px 14px !important;}
+  #advSearchPanel li{flex-direction:column !important; align-items:stretch !important; gap:8px !important; margin-bottom:16px !important;}
+  #advSearchPanel .btn_usch{width:100% !important; margin-bottom:0 !important;}
+  #advSearchPanel .loop_inp{width:100% !important; flex:none !important; margin-left:0 !important;}
+  #advSearchPanel .loop_inp .row{margin:0 !important;}
+  #advSearchPanel .loop_inp .col-sm-4,
+  #advSearchPanel .loop_inp .col-sm-12{width:100% !important; max-width:100% !important; flex:0 0 100% !important; padding:0 !important; margin-bottom:8px !important;}
+  #advSearchPanel .select2-container,
+  #advSearchPanel select{width:100% !important;}
+  #advSearchPanel .btn_serch_bo1{text-align:center !important;}
+  #advSearchPanel .btn_serch_bo1 .btn{width:100%;}
+}
 </style>
-      <section class="home_banner_area" style="background:#14213D;position:relative;min-height:100vh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <section class="home_banner_area" style="background:#14213D;position:relative;min-height:100vh;min-height:100svh;padding:70px 20px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
 				<div class="az-hero-bg" aria-hidden="true">
 					<span class="az-br az-br-tl"></span><span class="az-br az-br-tr"></span><span class="az-br az-br-bl"></span><span class="az-br az-br-br"></span>
 					<span class="az-hud az-hud-l">CAM 01 &middot; 1080p50</span>
@@ -1416,14 +1460,14 @@ window.addEventListener('load', function(){
      ══════════════════════════════════════════════════════════ -->
 
 <!-- SECTION 2 — WHAT YOU CAN SEARCH -->
-<section style="padding:72px 60px;position:relative;background-image:linear-gradient(rgba(14,26,44,0.82),rgba(14,26,44,0.82)),url('<?php echo base_url();?>assets/site/img/parallax-broadcast-studio.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;" id="what">
+<section class="az-sec" style="position:relative;background-image:linear-gradient(rgba(14,26,44,0.82),rgba(14,26,44,0.82)),url('<?php echo base_url();?>assets/site/img/parallax-broadcast-studio.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;" id="what">
   <div style="text-align:center;">
     <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">What you can search</div>
     <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
-    <h2 style="color:#fff;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Everything broadcast. In one place.</h2>
+    <h2 class="az-h2" style="color:#fff;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Everything broadcast. In one place.</h2>
     <p style="color:rgba(255,255,255,0.75);font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">Hardware, software, cloud platforms, and AI tools — all searchable by real technical criteria, maintained directly by the vendors themselves.</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;">
+  <div class="az-grid-3">
     <div class="az-fcard">
       <div class="az-fcard-icon"><i class="ti ti-cpu"></i></div>
       <h3>Hardware devices</h3>
@@ -1461,14 +1505,14 @@ window.addEventListener('load', function(){
 </section>
 
 <!-- SECTION 3 — HOW IT WORKS -->
-<section style="padding:72px 60px;background:#14213D;" id="how">
+<section class="az-sec" style="background:#14213D;" id="how">
   <div style="text-align:center;">
     <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">How it works</div>
     <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
-    <h2 style="color:#fff;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">From search to specification in seconds</h2>
+    <h2 class="az-h2" style="color:#fff;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">From search to specification in seconds</h2>
     <p style="color:#9AAFC4;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 40px;font-family:'Inter',sans-serif;">No more trawling vendor websites. No more outdated PDFs. Just accurate, searchable product intelligence — exactly when you need it.</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:8px;">
+  <div class="az-grid-3 az-steps">
     <div class="az-step">
       <div class="az-step-num">1</div>
       <h3>Search by what matters</h3>
@@ -1488,10 +1532,10 @@ window.addEventListener('load', function(){
 </section>
 
 <!-- SECTION 4 — TRUSTED VENDORS -->
-<section style="padding:72px 60px;background:#F5F5F5;text-align:center;" id="vendors">
+<section class="az-sec" style="background:#F5F5F5;text-align:center;" id="vendors">
   <div style="color:#FCA311;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">Founding vendors</div>
   <div style="width:48px;height:3px;background:#FCA311;border-radius:2px;margin:0 auto 24px;"></div>
-  <h2 style="color:#14213D;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Trusted by broadcast industry leaders</h2>
+  <h2 class="az-h2" style="color:#14213D;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Trusted by broadcast industry leaders</h2>
   <p style="color:#666;font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 8px;font-family:'Inter',sans-serif;">Leading manufacturers list their products directly on AzeraX — so architects always get specs straight from the source.</p>
   <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:32px;">
     <div class="az-vendor-pill">AJA Video</div>
@@ -1507,15 +1551,34 @@ window.addEventListener('load', function(){
 </section>
 
 <!-- SECTION 5 — CTA AMBER -->
-<section style="padding:72px 60px;background:#FCA311;text-align:center;">
+<section class="az-sec" style="background:#FCA311;text-align:center;">
   <div style="color:rgba(20,33,61,0.55);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-family:'Inter',sans-serif;">Get started</div>
-  <h2 style="color:#14213D;font-size:32px;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Ready to find your next broadcast solution?</h2>
+  <h2 class="az-h2" style="color:#14213D;font-weight:700;letter-spacing:-0.6px;line-height:1.2;margin-bottom:12px;font-family:'Inter',sans-serif;">Ready to find your next broadcast solution?</h2>
   <p style="color:rgba(20,33,61,0.65);font-size:15px;line-height:1.75;max-width:540px;margin:0 auto 32px;font-family:'Inter',sans-serif;">Search free. List your products and reach broadcast architects worldwide.</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
     <a href="<?php echo base_url(); ?>search-listing" class="az-cta-btn-dark">Search devices now</a>
     <a href="<?php echo base_url(); ?>signup" class="az-cta-btn-outline">List your product &rarr;</a>
   </div>
 </section>
+
+<script>
+// The full search placeholder gets cut off mid-word on phones (the box has icon padding
+// either side), so use shorter wording as the screen gets narrower.
+(function(){
+    var inp = document.getElementById('device_name');
+    if(!inp || !window.matchMedia) return;
+    var full = inp.getAttribute('placeholder');
+    var mid = window.matchMedia('(max-width: 539px)');
+    var small = window.matchMedia('(max-width: 379px)');
+    function apply(){
+        inp.setAttribute('placeholder', small.matches ? 'Search devices\u2026' : (mid.matches ? 'Search devices, platforms\u2026' : full));
+    }
+    apply();
+    [mid, small].forEach(function(q){
+        if(q.addEventListener){ q.addEventListener('change', apply); } else if(q.addListener){ q.addListener(apply); }
+    });
+})();
+</script>
 
 <?php include_once 'include/footer2.php' ; ?>
 

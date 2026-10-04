@@ -111,6 +111,19 @@ html {
     font-size: 16px !important;
     width: 18px !important;
 }
+
+/* ── MOBILE / TABLET HEADER (collapsed menu, below 992px) ── */
+@media (max-width: 991px) {
+    /* The template draws the menu button as navy lines (made for its own white header);
+       on this dark header they were invisible. White bars, sensible spacing. */
+    .header_area .navbar-toggler { margin: 0 !important; padding: 12px 10px !important; }
+    .header_area .navbar-toggler span { background: #fff !important; width: 22px; margin-bottom: 5px; }
+    .header_area .navbar-toggler span:last-child { margin-bottom: 0; }
+    .header_area .navbar-collapse { overflow-y: auto; }
+    /* Log in / List your product: stack full-width instead of splitting left and right */
+    .header_area .navbar .nav .nav-item.az-nav-cta { display: block !important; margin: 10px 0 0 !important; width: 100%; }
+    .header_area .navbar .nav .nav-item.az-nav-cta .btn { display: block; width: 100%; text-align: center; margin: 0 !important; padding: 13px 20px !important; }
+}
 </style>
 
 	<script type="text/javascript"> 
@@ -146,8 +159,8 @@ html {
                     <span style="font-family:'Outfit',sans-serif;font-size:24px;font-weight:600;letter-spacing:-0.5px;color:#fff;">azera<span style="color:#FCA311;">X</span></span>
                 </a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Menu">
+                    <span></span><span></span><span></span>
                 </button>
 
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
@@ -158,8 +171,8 @@ html {
 						<li class="nav-item <?php if($page=='contact-us'){echo 'active';}?>"><a class="nav-link" href="<?php echo base_url();?>contact-us">Contact</a></li>
 
                         <?php if(!$this->session->userdata('user_id')) { ?>
-                            <li class="nav-item" style="display:flex;align-items:center;margin-left:auto;"><a class="btn" href="<?php echo base_url();?>login" style="border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:10px 20px;color:#fff;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color 0.15s;line-height:1;">Log in</a></li>
-							<li class="nav-item" style="display:flex;align-items:center;margin-left:8px;"><a class="btn spance_nav" href="<?php echo base_url();?>signup" style="background:#FCA311;color:#14213D;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;margin-left:8px;line-height:1;">List your product</a></li>
+                            <li class="nav-item az-nav-cta" style="display:flex;align-items:center;margin-left:auto;"><a class="btn" href="<?php echo base_url();?>login" style="border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:10px 20px;color:#fff;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color 0.15s;line-height:1;">Log in</a></li>
+							<li class="nav-item az-nav-cta" style="display:flex;align-items:center;margin-left:8px;"><a class="btn spance_nav" href="<?php echo base_url();?>signup" style="background:#FCA311;color:#14213D;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;margin-left:8px;line-height:1;">List your product</a></li>
                         <?php } else {
                             $user = $this->common_model->GetSingleData('users',array('user_id' =>$this->session->userdata('user_id')));
                         ?>

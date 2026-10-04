@@ -50,6 +50,20 @@
 .list_foo a:hover {
     color: rgba(255,255,255,0.85);
 }
+
+/* Footer layout: one row on desktop (as before); wraps and centres on tablets and phones */
+.az-foot { display:flex; align-items:center; justify-content:space-between; padding:24px 40px; flex-wrap:nowrap; gap:24px; max-width:100%; }
+.az-foot-brand { font-family:'Outfit',sans-serif; font-size:18px; font-weight:600; color:#fff; text-decoration:none; }
+.az-foot-links { display:flex; gap:14px; flex-wrap:nowrap; margin:0; flex:0 1 auto; min-width:0; }
+.az-foot-copy { margin:0; color:rgba(255,255,255,0.3); font-size:12px; white-space:nowrap; }
+@media (max-width: 991px) {
+  .az-foot { flex-wrap:wrap; justify-content:center; text-align:center; padding:24px 20px; gap:16px 28px; }
+  .az-foot-links { flex-wrap:wrap; justify-content:center; gap:8px 18px; }
+}
+@media (max-width: 575px) {
+  .az-foot { flex-direction:column; gap:14px; }
+  .az-foot-copy { white-space:normal; }
+}
 </style>
 <?php 
 $product1 = $this->common_model->GetAllData('product',array('status'=>1));
@@ -71,10 +85,10 @@ $result=$active+$pending;
   </div>
 </div>-->
 	<footer class="footer-area">
-		<div style="display:flex;align-items:center;justify-content:space-between;padding:24px 40px;flex-wrap:nowrap;gap:24px;max-width:100%;">
-			<a href="<?php echo base_url();?>" style="font-family:'Outfit',sans-serif;font-size:18px;font-weight:600;color:#fff;text-decoration:none;">azera<span style="color:#FCA311;">X</span></a>
+		<div class="az-foot">
+			<a href="<?php echo base_url();?>" class="az-foot-brand">azera<span style="color:#FCA311;">X</span></a>
 
-			<ul class="list list_foo" style="display:flex;gap:14px;flex-wrap:nowrap;margin:0;flex:0 1 auto;min-width:0;">
+			<ul class="list list_foo az-foot-links">
 				<li><a href="<?php echo base_url();?>about">About</a></li>
 				<li><a href="<?php echo base_url();?>fee-charges">Fees & charges</a></li>
 				<li><a href="<?php echo base_url();?>privacy">Terms of use</a></li>
@@ -82,7 +96,7 @@ $result=$active+$pending;
 				<li><a href="<?php echo base_url();?>contact-us">Contact</a></li>
 			</ul>
 
-			<p style="margin:0;color:rgba(255,255,255,0.3);font-size:12px;white-space:nowrap;">
+			<p class="az-foot-copy">
 				&copy; <?php echo date('Y'); ?> AzeraX. All rights reserved.
 			</p>
 		</div>
