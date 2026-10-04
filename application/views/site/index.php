@@ -716,7 +716,7 @@
     top:68px !important; left:8px !important; right:8px !important; transform:none !important;
     width:auto !important; max-width:none !important; min-height:0 !important;
     max-height:calc(100vh - 80px) !important; max-height:calc(100dvh - 80px) !important;
-    overflow-y:auto !important; overflow-x:hidden !important; -webkit-overflow-scrolling:touch;
+    overflow-y:auto !important; overflow-x:hidden !important; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
   }
   #advSearchPanel > div:first-child{padding:38px 14px 14px !important;}
   #advSearchPanel li{flex-direction:column !important; align-items:stretch !important; gap:8px !important; margin-bottom:16px !important;}
@@ -1577,6 +1577,41 @@ window.addEventListener('load', function(){
     [mid, small].forEach(function(q){
         if(q.addEventListener){ q.addEventListener('change', apply); } else if(q.addListener){ q.addListener(apply); }
     });
+})();
+</script>
+
+<script>
+// Phones: while the Advanced Search sheet is open, freeze the page behind it so a swipe at the
+// end of the sheet doesn't carry on scrolling the page. Watches the panel itself, so it works
+// however the panel is opened or closed. Desktop and tablets are untouched.
+(function(){
+    var panel = document.getElementById('advSearchPanel');
+    if(!panel || !window.MutationObserver || !window.matchMedia) return;
+    var mq = window.matchMedia('(max-width: 767px)');
+    var locked = false, savedY = 0;
+    function isOpen(){ return !!panel.style.display && panel.style.display !== 'none'; }
+    function lock(){
+        if(locked) return;
+        locked = true;
+        savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var b = document.body;
+        b.style.position = 'fixed'; b.style.top = (-savedY) + 'px';
+        b.style.left = '0'; b.style.right = '0'; b.style.width = '100%';
+    }
+    function unlock(){
+        if(!locked) return;
+        locked = false;
+        var b = document.body, de = document.documentElement;
+        b.style.position = ''; b.style.top = ''; b.style.left = ''; b.style.right = ''; b.style.width = '';
+        var prev = de.style.scrollBehavior;
+        de.style.scrollBehavior = 'auto';      // the site uses smooth scrolling; jump straight back
+        window.scrollTo(0, savedY);
+        de.style.scrollBehavior = prev;
+    }
+    function sync(){ if(isOpen() && mq.matches){ lock(); } else { unlock(); } }
+    new MutationObserver(sync).observe(panel, {attributes:true, attributeFilter:['style']});
+    if(mq.addEventListener){ mq.addEventListener('change', sync); } else if(mq.addListener){ mq.addListener(sync); }
+    sync();
 })();
 </script>
 
