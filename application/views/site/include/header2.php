@@ -1,4 +1,4 @@
-<?php $azerax_brand = 'azera<span style="color:#FCA311;">X</span>'; ?>
+<?php $azerax_brand = 'azera<span style="color:#FCA311;">X</span>'; require_once APPPATH.'helpers/az_image_helper.php'; ?>
 <!doctype html>
 <html lang="en">
 

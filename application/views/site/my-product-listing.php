@@ -250,7 +250,7 @@
             <div class="boder_image az-press">
                 <div class="f_p_img">
                     <?php if($thumbnailImage): ?>
-                    <img src="<?php echo base_url(); ?>assets/product_image/<?=$thumbnailImage?>" alt="">
+                    <img src="<?php echo az_img_url($thumbnailImage, 'thumb'); ?>" alt="" loading="lazy" decoding="async">
                     <?php else: ?>
                     <img src="<?php echo base_url(); ?>assets/product_image/no.jpg" alt="">
                     <?php endif; ?>

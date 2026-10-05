@@ -124,7 +124,7 @@ body {
                 <div class="f_p_img">
                     <a href="<?php echo base_url(); ?>details/<?=$product['id']?>">
                     <?php if($imageFirst['gallery_image']): ?>
-                    <img src="<?php echo base_url(); ?>assets/product_image/<?=$imageFirst['gallery_image']?>" alt="">
+                    <img src="<?php echo az_img_url($imageFirst['gallery_image'], 'thumb'); ?>" alt="" loading="lazy" decoding="async">
                     <?php else: ?>
                     <img src="<?php echo base_url(); ?>assets/product_image/no.jpg" alt="">
                     <?php endif; ?>

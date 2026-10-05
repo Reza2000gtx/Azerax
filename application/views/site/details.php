@@ -342,7 +342,7 @@ if($came_from_my_products){
                             if ($j == 1 || count($product_gallery) == 1) { $active1 = 'active'; }
                         ?>
                         <div class="carousel-item <?php echo $active1; ?>">
-                            <img class="d-block w-100" src="<?php echo base_url(); ?>assets/product_image/<?php echo $gallery['gallery_image']; ?>" alt="<?php echo $product_detail['device_model']; ?>">
+                            <img class="d-block w-100" src="<?php echo az_img_url($gallery['gallery_image'], 'medium'); ?>" alt="<?php echo $product_detail['device_model']; ?>">
                         </div>
                         <?php $j++; } } ?>
                     </div>
@@ -354,7 +354,7 @@ if($came_from_my_products){
                             if ($i == 1) { $active = 'active'; }
                         ?>
                         <li data-target="#carouselExampleIndicators" data-slide-to="<?= $i - 1; ?>" class="<?php echo $active; ?>">
-                            <img src="<?php echo base_url(); ?>assets/product_image/<?php echo $gallery['gallery_image']; ?>" alt="">
+                            <img src="<?php echo az_img_url($gallery['gallery_image'], 'thumb'); ?>" alt="" loading="lazy" decoding="async">
                         </li>
                         <?php $i++; } ?>
                     </ol>
