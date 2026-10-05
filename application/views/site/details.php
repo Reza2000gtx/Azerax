@@ -1,5 +1,4 @@
 <?php include_once 'include/header2.php' ; ?>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <?php
 // Vendor Contact & Ordering Info: the Add/Edit Product form now saves this as
 // one combined field (dealer_contact). Older listings may still only have the

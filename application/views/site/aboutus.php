@@ -1,5 +1,4 @@
 <?php include_once 'include/header2.php'; ?>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 <style>
 /* ── ABOUT PAGE ── */

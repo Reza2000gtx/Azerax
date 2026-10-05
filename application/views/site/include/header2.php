@@ -4,9 +4,9 @@
 
 <head>
 	<meta charset="utf-8">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="preload" href="<?php echo base_url();?>assets/site/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="<?php echo base_url();?>assets/site/fonts/outfit-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/az-fonts-icons.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/az-fonts-icons.css') ?: 1; ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.svg" type="image/svg+xml">
 	<link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.png" type="image/png">
