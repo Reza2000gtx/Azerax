@@ -410,18 +410,20 @@ span.select2.select2-container.select2-container--default[style="width: 50px;"] 
 }
 
 /* ── CARD HOVER: sink back and deepen the shade (clickable cards) ──────────────
-   Add class "az-press" to any clickable card. Change these three values to retune
+   Add class "az-press" to any clickable card. Change these four values to retune
    every card on the site at once. (transition has !important because some pages
-   set their own border-color-only transition on the same cards.) */
+   set their own border-color-only transition on the same cards, and some pages
+   still carry an old amber hover outline that border-color below overrides.) */
 :root{
-  --az-press-scale: 0.97;
+  --az-press-scale: 0.985;
   --az-press-bg: #F2F2F2;
   --az-press-shadow: 0 3px 8px rgba(0,0,0,0.24);
+  --az-press-border: #B5B5B5;
 }
 .az-press{ transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, border-color .2s ease !important; }
-.az-press:hover{ transform: scale(var(--az-press-scale)); background-color: var(--az-press-bg); box-shadow: var(--az-press-shadow); }
+.az-press:hover{ transform: scale(var(--az-press-scale)); background-color: var(--az-press-bg); box-shadow: var(--az-press-shadow); border-color: var(--az-press-border) !important; }
 @media (hover: none){
-  .az-press:active{ transform: scale(var(--az-press-scale)); background-color: var(--az-press-bg); box-shadow: var(--az-press-shadow); }
+  .az-press:active{ transform: scale(var(--az-press-scale)); background-color: var(--az-press-bg); box-shadow: var(--az-press-shadow); border-color: var(--az-press-border) !important; }
 }
 @media (prefers-reduced-motion: reduce){
   .az-press{ transition: none !important; }

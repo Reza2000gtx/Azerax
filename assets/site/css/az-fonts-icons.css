@@ -1,0 +1,150 @@
+/* Self-hosted fonts and icons (replaces Google Fonts and the Tabler icon CDN). */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:url("../fonts/inter-latin-ext-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src:url("../fonts/inter-latin-ext-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src:url("../fonts/inter-latin-ext-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:url("../fonts/inter-latin-ext-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:url("../fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src:url("../fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src:url("../fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:url("../fonts/inter-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:url("../fonts/outfit-latin-ext-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src:url("../fonts/outfit-latin-ext-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src:url("../fonts/outfit-latin-ext-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:url("../fonts/outfit-latin-ext-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:url("../fonts/outfit-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src:url("../fonts/outfit-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src:url("../fonts/outfit-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:url("../fonts/outfit-latin-700-normal.woff2") format("woff2");
+}
+@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:swap;src:url("../fonts/az-icons.woff2") format("woff2")}
+.ti{font-family:"tabler-icons" !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.ti-arrow-bar-right:before{content:"\ea0f"}
+.ti-arrow-bar-to-right:before{content:"\ec8a"}
+.ti-box-off:before{content:"\f102"}
+.ti-brain:before{content:"\f59f"}
+.ti-building:before{content:"\ea4f"}
+.ti-building-store:before{content:"\ea4e"}
+.ti-check:before{content:"\ea5e"}
+.ti-chevron-down:before{content:"\ea5f"}
+.ti-click:before{content:"\ebbc"}
+.ti-clock:before{content:"\ea70"}
+.ti-cloud:before{content:"\ea76"}
+.ti-code:before{content:"\ea77"}
+.ti-cpu:before{content:"\ef8e"}
+.ti-device-tv:before{content:"\ea8d"}
+.ti-eye:before{content:"\ea9a"}
+.ti-eye-off:before{content:"\ecf0"}
+.ti-folder:before{content:"\eaad"}
+.ti-heart:before{content:"\eabe"}
+.ti-inbox:before{content:"\eac4"}
+.ti-layers-intersect:before{content:"\eac9"}
+.ti-layout-grid:before{content:"\edba"}
+.ti-list:before{content:"\eb6b"}
+.ti-lock:before{content:"\eae2"}
+.ti-logout:before{content:"\eba8"}
+.ti-mail:before{content:"\eae5"}
+.ti-package-off:before{content:"\f16c"}
+.ti-plus:before{content:"\eb0b"}
+.ti-receipt:before{content:"\edfd"}
+.ti-search:before{content:"\eb1c"}
+.ti-select:before{content:"\ec9e"}
+.ti-settings:before{content:"\eb20"}
+.ti-shopping-cart:before{content:"\eb25"}
+.ti-sparkles:before{content:"\f6d7"}
+.ti-star:before{content:"\eb2e"}
+.ti-user:before{content:"\eb4d"}
