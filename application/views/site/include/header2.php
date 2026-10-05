@@ -21,7 +21,7 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/style2.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/style2.css') ?: 1; ?>">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/responsive.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/responsive.css') ?: 1; ?>">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/custom.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/custom.css') ?: 1; ?>">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/select2/select2.min.css?v=4.0.5">
 
 	<style type="text/css">
 .img_top {
@@ -129,7 +129,7 @@ html {
 <script src="<?php echo base_url();?>assets/site/js/jquery-3.2.1.min.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/popper.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js"></script>
+<script src="<?php echo base_url();?>assets/site/vendors/select2/select2.min.js?v=4.0.5"></script>
 </head>
 <body>
 
