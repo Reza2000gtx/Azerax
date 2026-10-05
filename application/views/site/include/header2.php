@@ -2,9 +2,11 @@
 <!doctype html>
 <html lang="en">
 
-<head><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<head>
 	<meta charset="utf-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.svg" type="image/svg+xml">
 	<link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.png" type="image/png">
@@ -15,15 +17,11 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/owl-carousel/owl.carousel.min.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/lightbox/simpleLightbox.css">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/nice-select/<?php echo base_url();?>assets/site/css/nice-select.css">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/animate-<?php echo base_url();?>assets/site/css/animate.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/jquery-ui/jquery-ui.css">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/style2.css?time=<?php echo time(); ?>">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/responsive.css?time=<?php echo time(); ?>">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/custom.css?time=<?php echo time(); ?>">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/style2.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/style2.css') ?: 1; ?>">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/responsive.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/responsive.css') ?: 1; ?>">
+	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/custom.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/custom.css') ?: 1; ?>">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
 
 	<style type="text/css">
 .img_top {
@@ -126,11 +124,7 @@ html {
 }
 </style>
 
-	<script type="text/javascript"> 
-		var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.trust-provider.com/" : "http://www.trustlogo.com/");
-		document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
-
-	</script>
+	<script>window.TrustLogo = window.TrustLogo || function(){};</script>
 
 <script src="<?php echo base_url();?>assets/site/js/jquery-3.2.1.min.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/popper.js"></script>

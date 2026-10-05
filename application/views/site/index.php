@@ -1963,7 +1963,12 @@ $(document).on('click','#processSugguestion li',function(){
 </style>
 
 <?php 
-
+// The suggestion lists (every model, brand and feature) were rebuilt from the database on every
+// homepage view. Cache them for 10 minutes; if the cache folder isn't writable it just rebuilds.
+$az_sugg_cache = APPPATH.'cache/az_suggestions.json';
+if(is_file($az_sugg_cache) && (time() - filemtime($az_sugg_cache)) < 600){
+    $deviceModelJson = file_get_contents($az_sugg_cache);
+} else {
 $process_1 = $this->db->query('SELECT device_model FROM `product`  GROUP BY device_model')->result_array();
    $array=array();
 
@@ -2019,6 +2024,8 @@ foreach($process_3 as $feature_row){
 
 $array = array_values(array_unique(array_filter($array)));
 $deviceModelJson=json_encode($array);
+@file_put_contents($az_sugg_cache, $deviceModelJson, LOCK_EX);
+}
 ?>
 
 <script>

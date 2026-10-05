@@ -65,25 +65,6 @@
   .az-foot-copy { white-space:normal; }
 }
 </style>
-<?php 
-$product1 = $this->common_model->GetAllData('product',array('status'=>1));
-$active=count($product1);
-$product2 = $this->common_model->GetAllData('product',array('status'=>0));
-$pending=count($product2);
-$result=$active+$pending;
-?>
-<!--<div class="above-footer footer-search">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="list-devices">
-         <!--<h4 style="text-align:right;">Listed Devices: <?php echo $result;?> </h4>
-		 <h4 style="text-align:right;"> </h4> 
-        </div>
-      </div>
-    </div>
-  </div>
-</div>-->
 	<footer class="footer-area">
 		<div class="az-foot">
 			<a href="<?php echo base_url();?>" class="az-foot-brand">azera<span style="color:#FCA311;">X</span></a>
@@ -106,7 +87,6 @@ $result=$active+$pending;
 
 						<script src="<?php echo base_url();?>assets/site/js/stellar.js"></script>
 						<script src="<?php echo base_url();?>assets/site/vendors//lightbox/simpleLightbox.min.js"></script>
-						<script src="<?php echo base_url();?>assets/site/vendors//nice-select/<?php echo base_url();?>assets/site/js/jquery.nice-select.min.js"></script>
 						<script src="<?php echo base_url();?>assets/site/vendors//isotope/imagesloaded.pkgd.min.js"></script>
 						<script src="<?php echo base_url();?>assets/site/vendors//isotope/isotope-min.js"></script>
 						<script src="<?php echo base_url();?>assets/site/vendors//owl-carousel/owl.carousel.min.js"></script>
