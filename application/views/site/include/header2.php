@@ -11,6 +11,7 @@
 	<link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.svg" type="image/svg+xml">
 	<link rel="icon" href="<?php echo base_url();?>assets/site/img/favicon.png" type="image/png">
 	<title>Azerax</title>
+	<meta name="description" content="Azerax is a marketplace and search platform for broadcast technology devices. Find, compare and request quotes for video, audio and streaming equipment.">
 
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/bootstrap.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/linericon/style.css">

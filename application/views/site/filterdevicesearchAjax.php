@@ -411,7 +411,9 @@ body {
 <?php 
 	if(!empty($productlist))
 	{
+  $az_i = 0;
   foreach ($productlist as $row) {
+  $az_i++;
   $imageFirst = $this->common_model->GetSingleData('product_gallery_image',array('product_id'=>$row['id']));
  //echo $this->db->last_query();  ?>
 				 <!--<div class="col-lg-4 col-md-4 col-sm-6">
@@ -434,7 +436,7 @@ body {
 							<div class="f_p_img" style="flex-shrink:0;">
 								<a href="<?php echo base_url();?>details/<?=$row['id']?><?php if(!empty($_REQUEST['keyword'])){ echo '?q='.urlencode($_REQUEST['keyword']); } ?>">
 								<?php if($imageFirst['gallery_image']){ ?>
-								<img class="img-fluid" src="<?php echo az_img_url($imageFirst['gallery_image'], 'thumb'); ?>" alt="" loading="lazy" decoding="async">
+								<img class="img-fluid" src="<?php echo az_img_url($imageFirst['gallery_image'], 'thumb'); ?>" alt="" <?php echo ($az_i === 1) ? 'fetchpriority="high"' : 'loading="lazy"'; ?> decoding="async">
 								<?php } else { ?>
 								<img class="img-fluid" src="<?php echo base_url(); ?>assets/product_image/no.jpg" alt="">
 								<?php } ?>
