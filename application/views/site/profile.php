@@ -90,6 +90,18 @@
     width: 100%;
 }
 .az-submit-btn:hover { background: #e8940a; }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 767px) {
+    .az-page-hero { padding: 28px 16px; }
+    .az-page-hero h1 { font-size: 24px; }
+    .az-profile-body { padding: 24px 16px; min-height: 0; }
+}
+@media (max-width: 575px) {
+    .az-profile-card { padding: 24px 18px; }
+    .az-profile-card .form-control { font-size: 16px; }
+    .az-profile-card .form-group > div[style*="display:flex"] { flex-wrap: wrap; }
+}
 </style>
 
 <!-- Hero -->

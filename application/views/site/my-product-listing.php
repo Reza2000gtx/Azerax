@@ -181,6 +181,30 @@
 }
 @keyframes az-cancel-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .az-cancel-spinner { animation: none; } }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 767px) {
+    .az-page-hero { padding: 28px 16px; }
+    .az-page-hero h1 { font-size: 24px; }
+    .az-listing-body { padding: 20px 16px; min-height: 0; }
+}
+@media (max-width: 575px) {
+    .boder_image { flex-direction: column !important; align-items: stretch !important; gap: 14px !important; }
+    .f_p_img { width: 100% !important; height: 180px !important; }
+    .contt { width: 100% !important; flex: none !important; }
+    .contt h4 > span[style*="display:flex"] { flex-wrap: wrap !important; white-space: normal !important; gap: 6px; }
+    .btn-edit, .btn-delete, .btn-relist, .btn-cancel-listing, .btn-remove { margin-bottom: 8px; }
+    .btn-remove { width: 100%; }
+    .modal-dialog { width: auto !important; margin: 12px !important; }
+    #paymentOption .modal-dialog, #latest_stripe_modal .modal-dialog { width: auto !important; max-width: none !important; margin: 12px !important; }
+    #paymentOption.modal.fade .modal-dialog, #latest_stripe_modal.modal.fade .modal-dialog { transform: none !important; }
+    #paymentOption form > div:first-child { padding: 20px !important; }
+    #paymentOption .modal-body { padding: 20px !important; }
+    #latest_stripe_modal .modal-content > div:first-child { padding: 18px 20px !important; }
+    #latest_stripe_modal .modal-body { padding: 20px !important; }
+    #latest_stripe_modal .modal-footer img { max-width: 100%; height: auto; }
+    .modal-title { font-size: 16px; line-height: 1.4; }
+}
 </style>
 
 <!-- Hero -->

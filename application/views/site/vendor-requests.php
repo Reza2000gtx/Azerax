@@ -80,6 +80,19 @@
     font-size: 14px;
     color: #999;
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 767px) {
+    .vr-wrap { padding: 28px 16px; min-height: 0; }
+}
+@media (max-width: 575px) {
+    .vr-card { padding: 18px 16px; }
+    .vr-title { font-size: 20px; }
+    .vr-quote-row { grid-template-columns: 1fr; align-items: stretch; }
+    .vr-submit-btn { width: 100%; padding: 12px 20px; }
+    .vr-quote-row .form-control { font-size: 16px; }
+    .vr-device { overflow-wrap: anywhere; }
+}
 </style>
 
 <div class="vr-wrap">

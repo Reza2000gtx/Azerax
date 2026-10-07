@@ -102,6 +102,22 @@
     font-size: 14px;
     color: #999;
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 767px) {
+    .mpr-wrap { padding: 28px 16px; min-height: 0; }
+}
+@media (max-width: 575px) {
+    .mpr-card { padding: 18px 16px; }
+    .mpr-title { font-size: 20px; }
+    /* Cancel / Purchase again / Delete links sit on their own line instead of floating over the title */
+    .mpr-card [style*="float:right"] { float: none !important; display: block; margin: 0 0 12px; }
+    .mpr-card div[style*="float:right"] { display: flex !important; flex-wrap: wrap; }
+    .mpr-quote-row { gap: 12px; }
+    .mpr-quote-row > div:first-child { min-width: 0; overflow-wrap: anywhere; }
+    .mpr-card div[style*="justify-content:space-between"][style*="padding:14px 0"] { flex-wrap: wrap; gap: 10px; }
+    [id^="quoteModal"] > div { padding: 24px 20px !important; max-height: 90vh; overflow-y: auto; }
+}
 </style>
 
 <div class="mpr-wrap">

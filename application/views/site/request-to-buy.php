@@ -69,6 +69,18 @@
     font-size: 14px;
     cursor: pointer;
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 767px) {
+    .rtb-wrap { padding: 28px 16px; min-height: 0; }
+}
+@media (max-width: 575px) {
+    .rtb-card { padding: 22px 18px; }
+    .rtb-row-2 { grid-template-columns: 1fr; }
+    .rtb-card .form-control { font-size: 16px; }
+    .rtb-submit-btn { width: 100%; padding: 13px 20px; }
+    .rtb-device-box { overflow-wrap: anywhere; }
+}
 </style>
 
 <div class="rtb-wrap">
