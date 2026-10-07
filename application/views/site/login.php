@@ -186,6 +186,28 @@ body {
     font-family: 'Inter', sans-serif;
     margin-top: 4px;
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 991px) {
+    .az-login-left, .az-login-right { padding: 44px 28px; }
+    .az-login-left h2 { font-size: 28px; }
+    .az-login-features { margin-top: 32px; }
+}
+@media (max-width: 767px) {
+    .az-login-body { flex-direction: column; min-height: 0; }
+    /* Form first on phones, the welcome panel becomes a banner underneath */
+    .az-login-right { order: -1; padding: 36px 20px; }
+    .az-login-left { order: 1; padding: 36px 20px; }
+    .az-login-form { max-width: 100%; }
+    .az-login-form h3 { font-size: 24px; }
+    /* 16px stops iPhones zooming into the field when tapped */
+    .az-login-form .form-control { font-size: 16px; }
+    .az-login-left h2 { font-size: 24px; }
+    .az-login-left p { margin-bottom: 24px; }
+    .az-login-features { margin-top: 28px; }
+    .az-login-feature { align-items: flex-start; }
+    .az-login-left-btn { padding: 12px 24px; }
+}
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">

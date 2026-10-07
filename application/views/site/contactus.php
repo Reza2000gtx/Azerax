@@ -175,6 +175,26 @@
 @media (prefers-reduced-motion: reduce) {
     .az-submit-spinner { animation: none; }
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 991px) {
+    .az-contact-hero { padding: 48px 24px; }
+    .az-contact-body { padding: 40px 24px; }
+    .az-contact-inner { grid-template-columns: 1fr; gap: 28px; }
+    .az-contact-inner > * { min-width: 0; }
+    .az-contact-info p { margin-bottom: 24px; }
+}
+@media (max-width: 575px) {
+    .az-contact-hero { padding: 36px 20px; }
+    .az-contact-hero h1 { font-size: 28px; }
+    .az-contact-hero p { font-size: 15px; }
+    .az-contact-body { padding: 24px 16px; }
+    .az-contact-info, .az-contact-form { padding: 24px 20px; }
+    .az-contact-item-text { min-width: 0; overflow-wrap: anywhere; }
+    /* 16px stops iPhones zooming into the field when tapped */
+    .az-contact-form .form-control { font-size: 16px; }
+    .az-submit-btn { width: 100%; }
+}
 </style>
 
 <!-- Hero Band -->
