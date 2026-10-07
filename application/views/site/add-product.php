@@ -1029,6 +1029,55 @@ select.form-control {
     height: 38px !important;
     line-height: 38px !important;
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 991px) {
+    /* The navy guidance panel is hidden on phones/tablets - each section already has its own title */
+    .col-lg-2 { display: none !important; }
+    .container-flex { display: block !important; width: 100% !important; min-height: 0 !important; }
+    .container-ipo { padding: 20px 12px !important; }
+    .az-steps-bar { position: static !important; }
+    /* The form had 30px side margins on top of 100% width, pushing it past the screen edge */
+    #msform { margin: 0 0 24px !important; }
+    /* Page banner (set inline) */
+    div[style*="background:#14213D"][style*="text-align:center"] { padding: 28px 16px !important; }
+    div[style*="background:#14213D"][style*="text-align:center"] h1 { font-size: 24px !important; }
+    /* The step bar: tighter, and scrolls with the page instead of pinning under the menu */
+    .az-steps-bar { padding: 0 8px !important; }
+    .az-steps-bar > div { padding: 10px 0 !important; max-width: none !important; }
+    .az-step { padding: 6px 4px !important; gap: 6px !important; }
+    .az-step-num { width: 28px !important; height: 28px !important; }
+    .az-page-section { padding: 18px 14px; }
+    .az-page-section .row > [class*="col-"] { min-width: 0; }
+    /* Sub-category and I/O boxes: two per row on tablets */
+    .col-md-3.set-44, .col-md-3.set-55, .col-md-3.set-22 { flex: 0 0 50%; max-width: 50%; }
+    #preview > [class*="col-md-"] { flex: 0 0 33.3333%; max-width: 33.3333%; margin-bottom: 12px; }
+    #preview img { max-width: 100%; object-fit: cover; }
+}
+@media (max-width: 767px) {
+    .col-md-3.set-44, .col-md-3.set-55, .col-md-3.set-22 { flex: 0 0 100%; max-width: 100%; }
+    #preview > [class*="col-md-"] { flex: 0 0 50%; max-width: 50%; }
+    #msform .form-control { font-size: 16px; }
+    .input_box { padding: 12px !important; }
+    #ai-autofill-box { padding: 14px 14px !important; }
+    #ai_extract_status { display: block; margin: 10px 0 0 0 !important; }
+}
+@media (max-width: 575px) {
+    .az-step:not(.active) .az-step-label { display: none; }
+    .az-steps-bar > div { justify-content: space-between; }
+    .az-page-section { padding: 16px 12px; border-left-width: 3px; }
+    /* Submit and Cancel: side by side, filling the width */
+    div[style*="padding:28px 0"] { flex-wrap: wrap; gap: 10px !important; padding: 20px 0 !important; }
+    div[style*="padding:28px 0"] .az-btn { width: auto; flex: 1 1 130px; }
+    /* Payment pop-ups */
+    .modal-dialog { width: auto !important; max-width: none !important; margin: 12px !important; }
+    #testmodal.modal.fade .modal-dialog, #latest_stripe_modal.modal.fade .modal-dialog { transform: none !important; }
+    #testmodal form > div:first-child { padding: 20px !important; }
+    #testmodal .modal-body, #latest_stripe_modal .modal-body { padding: 20px !important; }
+    #latest_stripe_modal .modal-content > div:first-child { padding: 18px 20px !important; }
+    #latest_stripe_modal .modal-footer { padding: 14px 20px !important; }
+    #latest_stripe_modal .modal-footer img { max-width: 100%; height: auto; }
+}
 </style>
 
 
