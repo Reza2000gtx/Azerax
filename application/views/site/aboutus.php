@@ -308,7 +308,7 @@
             ?>
         </div>
         <div class="az-about-img">
-            <img src="<?php echo base_url(); ?>assets/site/img/MCR.jpg" alt="About AzeraX">
+            <img src="<?php echo base_url(); ?>assets/site/img/mcr-1100.jpg" srcset="<?php echo base_url(); ?>assets/site/img/mcr-600.jpg 600w, <?php echo base_url(); ?>assets/site/img/mcr-1100.jpg 1100w" sizes="(max-width: 991px) 100vw, 550px" width="1100" height="521" loading="lazy" decoding="async" alt="About AzeraX">
         </div>
     </div>
 </div>
