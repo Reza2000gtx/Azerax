@@ -308,7 +308,7 @@
             ?>
         </div>
         <div class="az-about-img">
-            <img src="<?php echo base_url(); ?>assets/site/img/mcr.jpg" alt="About AzeraX">
+            <img src="<?php echo base_url(); ?>assets/site/img/MCR.jpg" alt="About AzeraX">
         </div>
     </div>
 </div>
