@@ -240,6 +240,25 @@ body {
     line-height: 1;
 }
 .az-password-toggle:hover { color: #14213D; }
+/* ── RESPONSIVE (phones & tablets only; desktop unchanged) ── */
+@media (max-width: 991px) {
+    .az-login-body { flex-direction: column; min-height: 0; }
+    .az-login-right { order: -1; padding: 36px 24px; }
+    .az-login-left { padding: 36px 24px; }
+    .az-login-form { max-width: 520px; }
+    .az-login-features { margin-top: 28px; max-width: 420px; }
+    .az-login-left h2 { font-size: 26px; }
+}
+@media (max-width: 575px) {
+    .az-login-right { padding: 28px 16px; }
+    .az-login-left { padding: 28px 16px; }
+    .az-login-form h3 { font-size: 22px; }
+    .az-login-form .form-control { font-size: 16px; }
+    .az-account-type { gap: 8px; }
+    .az-account-type-card { padding: 12px 8px; }
+    .az-account-type-card .az-account-type-sub { font-size: 10.5px; }
+    .az-login-left-btn { padding: 11px 20px; font-size: 13px; }
+}
 </style>
 
 <div class="az-login-body">

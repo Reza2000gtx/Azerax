@@ -1947,8 +1947,34 @@ public function processsuggestion()
         // means more of this is now real content)
         $text = substr($text, 0, 40000);
 
+        // Fallback: pages built with JavaScript (the server sends an almost empty
+        // page and the browser fills in the content) leave us with no text here.
+        // Ask a page-rendering service to load the page in a real browser and
+        // give us the text back. Only used when the normal fetch came up short.
         if(strlen($text) < 50){
-            echo json_encode(array('status' => 0, 'message' => 'That page did not have enough readable text to extract from.'));
+            $rch = curl_init();
+            curl_setopt($rch, CURLOPT_URL, 'https://r.jina.ai/' . $source_url);
+            curl_setopt($rch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($rch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($rch, CURLOPT_TIMEOUT, 45);
+            // same SSL note as above - re-enable verification along with the main fetch
+            curl_setopt($rch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($rch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($rch, CURLOPT_HTTPHEADER, array('Accept: text/plain'));
+            $rendered = curl_exec($rch);
+            $rendered_status = curl_getinfo($rch, CURLINFO_HTTP_CODE);
+            curl_close($rch);
+            if($rendered !== false && $rendered_status == 200){
+                $rendered = preg_replace('/\s+/', ' ', $rendered);
+                $rendered = trim($rendered);
+                if(strlen($rendered) >= 50){
+                    $text = substr($rendered, 0, 40000);
+                }
+            }
+        }
+
+        if(strlen($text) < 50){
+            echo json_encode(array('status' => 0, 'message' => 'We could not read that page - it loads its content with JavaScript or blocks automatic reading. Please upload the PDF datasheet instead, or try a different page.'));
             return;
         }
 

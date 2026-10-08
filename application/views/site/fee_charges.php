@@ -214,6 +214,26 @@ if(!empty($content['fees_faq'])){
     line-height: 1.7;
     margin: 0;
 }
+/* ── RESPONSIVE (phones & tablets only; desktop unchanged) ── */
+@media (max-width: 991px) {
+    .az-page-hero { padding: 44px 24px; }
+    .az-page-hero h1 { font-size: 30px; }
+    .az-fees-body { padding: 44px 24px; }
+}
+@media (max-width: 767px) {
+    .az-pricing-grid { grid-template-columns: 1fr; gap: 28px; margin-bottom: 36px; }
+    .az-founding-note { flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px 20px; margin-bottom: 36px; }
+}
+@media (max-width: 575px) {
+    .az-page-hero { padding: 36px 16px; }
+    .az-page-hero h1 { font-size: 26px; }
+    .az-page-hero p { font-size: 14px; }
+    .az-fees-body { padding: 32px 16px; }
+    .az-pricing-card { padding: 28px 20px; }
+    .az-price { font-size: 34px; }
+    .az-faq-section h2 { font-size: 21px; }
+    .az-faq-item { padding: 16px 18px; }
+}
 </style>
 
 <!-- Hero -->

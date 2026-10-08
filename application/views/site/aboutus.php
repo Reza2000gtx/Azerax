@@ -260,6 +260,32 @@
     font-family: 'Inter', sans-serif;
     margin-top: 4px;
 }
+/* ── RESPONSIVE (phones & tablets only; desktop unchanged) ── */
+@media (max-width: 991px) {
+    .az-page-hero { padding: 44px 24px; }
+    .az-page-hero h1 { font-size: 30px; }
+    .az-about-section { padding: 48px 24px; }
+    .az-about-inner, .az-about-inner.reverse { grid-template-columns: 1fr; gap: 32px; direction: ltr; }
+    .az-about-inner > * { min-width: 0; }
+    .az-about-text { overflow-wrap: anywhere; }
+    .az-about-text img, .az-about-text table, .az-about-text iframe { max-width: 100%; height: auto; }
+    .az-about-img img { height: 260px; }
+    .az-services-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .az-contact-inner { grid-template-columns: 1fr; gap: 24px; }
+    .az-about-text h2, .az-section-centered h2 { font-size: 26px; }
+}
+@media (max-width: 575px) {
+    .az-page-hero { padding: 36px 16px; }
+    .az-page-hero h1 { font-size: 26px; }
+    .az-page-hero p { font-size: 14px; }
+    .az-about-section { padding: 36px 16px; }
+    .az-about-img img { height: 200px; }
+    .az-services-grid { grid-template-columns: 1fr; }
+    .az-service-card { padding: 22px; }
+    .az-contact-info, .az-contact-form-panel { padding: 24px 18px; }
+    .az-contact-form-panel .form-control { font-size: 16px; }
+    .az-submit-btn { width: 100%; }
+}
 </style>
 
 <!-- Hero -->

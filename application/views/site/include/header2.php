@@ -16,8 +16,6 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/bootstrap.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/linericon/style.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/font-awesome.min.css">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/owl-carousel/owl.carousel.min.css">
-	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/lightbox/simpleLightbox.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/vendors/jquery-ui/jquery-ui.css">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/style2.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/style2.css') ?: 1; ?>">
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/site/css/responsive.css?v=<?php echo @filemtime(FCPATH.'assets/site/css/responsive.css') ?: 1; ?>">

@@ -316,6 +316,43 @@ if($came_from_my_products){
     color: #14213D;
     vertical-align: middle;
 }
+
+/* ── RESPONSIVE (phone + tablet only; desktop above 991px is unchanged) ── */
+@media (max-width: 991px) {
+    #carouselExampleIndicators { max-width: 100%; margin: 0 auto; }
+}
+@media (max-width: 767px) {
+    div[style*="padding:10px 40px"] { padding: 10px 16px !important; }
+    #az-product-content { padding: 24px 0 !important; }
+    .container-fluid[style*="padding:0 40px"] { padding: 0 16px !important; }
+    .az-tabs-section { padding: 24px 0; }
+    .az-detail-model { font-size: 22px; }
+    .tab-content { padding: 16px; }
+    #myTab { display: flex !important; width: 100%; }
+    #myTab .nav-item { flex: 1 1 0; text-align: center; }
+    #myTab .nav-item .nav-link { padding: 12px 8px !important; }
+    .carousel-item img { max-height: 280px; }
+}
+@media (max-width: 575px) {
+    /* Spec rows: label above the value instead of a fixed 160px/240px label column squeezing the value */
+    .az-detail-row { flex-direction: column; gap: 4px; padding: 10px 14px; }
+    .az-detail-label { width: auto; }
+    .tab-content table, .tab-content table tbody, .tab-content table tr, .tab-content table td { display: block; width: 100%; }
+    .tab-content table tbody tr td:first-child { width: 100% !important; padding: 12px 0 0; border-bottom: none; vertical-align: top; }
+    .tab-content table td { padding: 2px 0 12px; border-bottom: none; }
+    .tab-content table tr { border-bottom: 1px solid #F0F0F0; }
+    .tab-content table td[colspan] { padding: 6px 10px !important; }
+    .tab-content table tr:has(td[colspan="2"][style*="padding:16px"]) { border-bottom: none; }
+    .tab-content table td[colspan="2"][style*="padding:16px"] { padding: 12px 0 !important; }
+    /* Reviews */
+    #review div[style*="display:flex;align-items:center;gap:16px"] { flex-wrap: wrap; }
+    #review form div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    #review .form-control { font-size: 16px; }
+    #review select.form-control { max-width: 100% !important; }
+    #az-review-submit { width: 100%; }
+    /* Request to Buy button: full width */
+    a[href*="request-to-buy"] { display: block !important; text-align: center; }
+}
 </style>
 
 <div id="az-product-content" style="background:#fff;padding:40px 0;">

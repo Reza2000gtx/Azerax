@@ -3026,9 +3026,6 @@ $(document).ready(function(){
 <script src="<?php echo base_url();?>assets/site/vendors//owl-carousel/owl.carousel.min.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/jquery.ajaxchimp.min.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/mail-script.js"></script>
-<script src="<?php echo base_url();?>assets/site/vendors//counter-up/jquery.waypoints.min.js"></script>
-<script src="<?php echo base_url();?>assets/site/vendors//flipclock/timer.js"></script>
-<script src="<?php echo base_url();?>assets/site/vendors//counter-up/jquery.counterup.js"></script>
 <script src="<?php echo base_url();?>assets/site/js/theme.js"></script>
 
 
